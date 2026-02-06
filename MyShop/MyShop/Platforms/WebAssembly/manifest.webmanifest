@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "MyShop",
+  "display": "standalone",
+  "name": "MyShop",
+  "short_name": "MyShop",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}
