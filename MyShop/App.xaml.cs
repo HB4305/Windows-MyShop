@@ -1,15 +1,15 @@
 using System;
 using Microsoft.Extensions.Logging;
 using Uno.Resizetizer;
+using System.Diagnostics; // Để dùng Debug.WriteLine
+using System.Threading.Tasks; // Để dùng Task
+using Npgsql; // Thư viện kết nối Postgres
+using DotNetEnv; // Thư viện đọc file .env
 
 namespace MyShop;
 
 public partial class App : Application
 {
-    /// <summary>
-    /// Initializes the singleton application object. This is the first line of authored code
-    /// executed, and as such is the logical equivalent of main() or WinMain().
-    /// </summary>
     public App()
     {
         this.InitializeComponent();
@@ -24,33 +24,63 @@ public partial class App : Application
         MainWindow.UseStudio();
 #endif
 
+        // --- ĐOẠN CODE TEST KẾT NỐI BẮT ĐẦU TẠI ĐÂY ---
+        TestSupabaseConnection();
+        // --- ĐOẠN CODE TEST KẾT NỐI KẾT THÚC TẠI ĐÂY ---
 
-        // Do not repeat app initialization when the Window already has content,
-        // just ensure that the window is active
         if (MainWindow.Content is not Frame rootFrame)
         {
-            // Create a Frame to act as the navigation context and navigate to the first page
             rootFrame = new Frame();
-
-            // Place the frame in the current Window
             MainWindow.Content = rootFrame;
-
             rootFrame.NavigationFailed += OnNavigationFailed;
         }
 
         if (rootFrame.Content == null)
         {
-            // When the navigation stack isn't restored navigate to the first page,
-            // configuring the new page by passing required information as a navigation
-            // parameter
             rootFrame.Navigate(typeof(MainPage), args.Arguments);
         }
 
         MainWindow.SetWindowIcon();
-        // Ensure the current window is active
         MainWindow.Activate();
     }
 
+    /// <summary>
+    /// Hàm test kết nối nhanh tới Supabase
+    /// </summary>
+    private void TestSupabaseConnection()
+    {
+        Task.Run(async () =>
+        {
+            try
+            {
+                // 1. Load file .env
+                DotNetEnv.Env.Load();
+                var connectionString = DotNetEnv.Env.GetString("DATABASE_URL");
+
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    Console.WriteLine("❌ LỖI: Không tìm thấy DATABASE_URL trong file .env");
+                    return;
+                }
+
+                // 2. Thử mở kết nối
+                using var conn = new NpgsqlConnection(connectionString);
+                Console.WriteLine("⏳ Đang thử kết nối tới Supabase...");
+                await conn.OpenAsync();
+
+                // 3. Chạy thử 1 câu lệnh SQL đơn giản
+                using var cmd = new NpgsqlCommand("SELECT version();", conn);
+                var version = await cmd.ExecuteScalarAsync();
+
+                Console.WriteLine("✅ KẾT NỐI THÀNH CÔNG!");
+                Console.WriteLine($"ℹ️ Database Version: {version}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ KẾT NỐI THẤT BẠI: {ex.Message}");
+            }
+        });
+    }
     /// <summary>
     /// Invoked when Navigation to a certain page fails
     /// </summary>
