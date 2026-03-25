@@ -1,30 +1,39 @@
 using System;
-using Microsoft.Extensions.Logging;
-using Uno.Resizetizer;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using MyShop.Services;
+using DotNetEnv;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Supabase;
+using Uno.Resizetizer;
+using MyShop.Views;
 
 namespace MyShop;
 
 public partial class App : Application
 {
+    public static IServiceProvider Services { get; private set; } = null!;
+
+    /// <summary>Main application window.</summary>
+    protected Window? MainWindow { get; private set; }
+
     public App()
     {
         this.InitializeComponent();
     }
 
-    protected Window? MainWindow { get; private set; }
-
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+        // ── 1. Khởi tạo Dependency Injection ────────────────────
+        Services = MauiProgram.Build();
+
+        // ── 2. Khởi tạo Supabase Client (không blocking UI) ──────
+        _ = InitializeSupabaseAsync();
+
+        // ── 3. Cửa sổ chính ──────────────────────────────────────
         MainWindow = new Window();
 #if DEBUG
         MainWindow.UseStudio();
 #endif
-
-        // --- Khởi tạo Supabase ---
-        _ = InitializeSupabaseAsync();
 
         if (MainWindow.Content is not Frame rootFrame)
         {
@@ -35,7 +44,7 @@ public partial class App : Application
 
         if (rootFrame.Content == null)
         {
-            rootFrame.Navigate(typeof(MainPage), args.Arguments);
+            rootFrame.Navigate(typeof(CategoryPage), args.Arguments);
         }
 
         MainWindow.SetWindowIcon();
@@ -46,83 +55,34 @@ public partial class App : Application
     {
         try
         {
-            await SupabaseService.Instance.InitializeAsync();
+            var client = Services.GetRequiredService<Client>();
+            await client.InitializeAsync();
+            Debug.WriteLine("[App] Supabase client initialized successfully.");
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"[Supabase] Kết nối thất bại: {ex.Message}");
+            Debug.WriteLine($"[App] Supabase initialization failed: {ex.Message}");
         }
     }
-    /// <summary>
-    /// Invoked when Navigation to a certain page fails
-    /// </summary>
-    /// <param name="sender">The Frame which failed navigation</param>
-    /// <param name="e">Details about the navigation failure</param>
-    void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-    {
-        throw new InvalidOperationException($"Failed to load {e.SourcePageType.FullName}: {e.Exception}");
-    }
 
-    /// <summary>
-    /// Configures global Uno Platform logging
-    /// </summary>
+    void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        => throw new InvalidOperationException($"Failed to load {e.SourcePageType.FullName}: {e.Exception}");
+
     public static void InitializeLogging()
     {
 #if DEBUG
-        // Logging is disabled by default for release builds, as it incurs a significant
-        // initialization cost from Microsoft.Extensions.Logging setup. If startup performance
-        // is a concern for your application, keep this disabled. If you're running on the web or
-        // desktop targets, you can use URL or command line parameters to enable it.
-        //
-        // For more performance documentation: https://platform.uno/docs/articles/Uno-UI-Performance.html
-
         var factory = LoggerFactory.Create(builder =>
         {
 #if __WASM__
             builder.AddProvider(new global::Uno.Extensions.Logging.WebAssembly.WebAssemblyConsoleLoggerProvider());
 #elif __IOS__
             builder.AddProvider(new global::Uno.Extensions.Logging.OSLogLoggerProvider());
-
-            // Log to the Visual Studio Debug console
-            builder.AddConsole();
-#else
-            builder.AddConsole();
 #endif
-
-            // Exclude logs below this level
+            builder.AddConsole();
             builder.SetMinimumLevel(LogLevel.Information);
-
-            // Default filters for Uno Platform namespaces
             builder.AddFilter("Uno", LogLevel.Warning);
             builder.AddFilter("Windows", LogLevel.Warning);
             builder.AddFilter("Microsoft", LogLevel.Warning);
-
-            // Generic Xaml events
-            // builder.AddFilter("Microsoft.UI.Xaml", LogLevel.Debug );
-            // builder.AddFilter("Microsoft.UI.Xaml.VisualStateGroup", LogLevel.Debug );
-            // builder.AddFilter("Microsoft.UI.Xaml.StateTriggerBase", LogLevel.Debug );
-            // builder.AddFilter("Microsoft.UI.Xaml.UIElement", LogLevel.Debug );
-            // builder.AddFilter("Microsoft.UI.Xaml.FrameworkElement", LogLevel.Trace );
-
-            // Layouter specific messages
-            // builder.AddFilter("Microsoft.UI.Xaml.Controls", LogLevel.Debug );
-            // builder.AddFilter("Microsoft.UI.Xaml.Controls.Layouter", LogLevel.Debug );
-            // builder.AddFilter("Microsoft.UI.Xaml.Controls.Panel", LogLevel.Debug );
-
-            // builder.AddFilter("Windows.Storage", LogLevel.Debug );
-
-            // Binding related messages
-            // builder.AddFilter("Microsoft.UI.Xaml.Data", LogLevel.Debug );
-            // builder.AddFilter("Microsoft.UI.Xaml.Data", LogLevel.Debug );
-
-            // Binder memory references tracking
-            // builder.AddFilter("Uno.UI.DataBinding.BinderReferenceHolder", LogLevel.Debug );
-
-            // DevServer and HotReload related
-            // builder.AddFilter("Uno.UI.RemoteControl", LogLevel.Information);
-
-            // Debug JS interop
-            // builder.AddFilter("Uno.Foundation.WebAssemblyRuntime", LogLevel.Debug );
         });
 
         global::Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
