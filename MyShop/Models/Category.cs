@@ -1,19 +1,19 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Postgrest.Attributes;
+using Postgrest.Models;
 
-namespace MyShop.Api.Models;
+namespace MyShop.Models;
 
 [Table("categories")]
-public class Category
+public class Category : BaseModel
 {
-    [Key]
-    [Column("id")]
+    [PrimaryKey("id", false)]
     public int Id { get; set; }
 
     [Column("name")]
     [Required]
     [MaxLength(100)]
-    public string Name { get; set; } = "";
+    public string Name { get; set; } = string.Empty;
 
     [Column("description")]
     public string? Description { get; set; }
