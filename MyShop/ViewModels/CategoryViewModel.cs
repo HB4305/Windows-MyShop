@@ -8,9 +8,9 @@ namespace MyShop.ViewModels;
 
 public partial class CategoryViewModel : ObservableObject
 {
-    private readonly ICategoryService _service;
+    private readonly CategoryService _service;
 
-    public CategoryViewModel(ICategoryService service)
+    public CategoryViewModel(CategoryService service)
     {
         _service = service;
         // Tự động tải danh sách khi khởi tạo
