@@ -2,7 +2,7 @@ using MyShop.Models;
 
 namespace MyShop.Repositories;
 
-public class CategoryRepository : ICategoryRepository
+public class CategoryRepository : IRepo<Category>
 {
     private readonly Supabase.Client _client;
 

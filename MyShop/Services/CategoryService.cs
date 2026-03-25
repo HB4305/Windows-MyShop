@@ -3,11 +3,11 @@ using MyShop.Repositories;
 
 namespace MyShop.Services;
 
-public class CategoryService : ICategoryService
+public class CategoryService
 {
-    private readonly ICategoryRepository _repository;
+    private readonly IRepo<Category> _repository;
 
-    public CategoryService(ICategoryRepository repository) => _repository = repository;
+    public CategoryService(IRepo<Category> repository) => _repository = repository;
 
     public async Task<List<Category>> GetAllAsync()
     {
