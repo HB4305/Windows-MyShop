@@ -5,9 +5,9 @@ namespace MyShop.Services;
 
 public class CategoryService
 {
-    private readonly IRepo<Category> _repository;
+    private readonly CategoryRepository _repository;
 
-    public CategoryService(IRepo<Category> repository) => _repository = repository;
+    public CategoryService(CategoryRepository repository) => _repository = repository;
 
     public async Task<List<Category>> GetAllAsync()
     {

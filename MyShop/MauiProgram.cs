@@ -37,7 +37,7 @@ public static class MauiProgram
         });
 
         // ── Repositories ────────────────────────────────────────
-        Services.AddScoped<IRepo<Category>, CategoryRepository>();
+        Services.AddScoped<CategoryRepository>();
 
         // ── Services ────────────────────────────────────────────
         Services.AddScoped<CategoryService>();
