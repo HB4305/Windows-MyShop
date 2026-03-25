@@ -9,10 +9,10 @@ View (XAML)
 ViewModel (ObservableObject + RelayCommand)
     │  gọi Service qua DI
     ▼
-Service (Interface + Implementation)
+Service (concrete class)
     │  gọi Repository qua DI
     ▼
-Repository (Interface + Implementation)
+Repository (concrete class)
     │  gọi Supabase SDK
     ▼
 Supabase (Database)
@@ -23,19 +23,26 @@ Supabase (Database)
 ```
 MyShop/
 ├── Models/              ← Mô hình dữ liệu (POCO, map từ bảng DB)
-├── Repositories/        ← Giao tiếp Supabase SDK
-│   ├── I{Entity}Repository.cs    ← Interface
-│   └── {Entity}Repository.cs     ← Implementation
-├── Services/            ← Logic nghiệp vụ (gọi Repository)
-│   ├── I{Entity}Service.cs       ← Interface
-│   └── {Entity}Service.cs        ← Implementation
+├── Repositories/        ← Giao tiếp Supabase SDK (concrete class)
+├── Services/            ← Logic nghiệp vụ (concrete class)
 ├── ViewModels/          ← Logic + trạng thái UI (CommunityToolkit.Mvvm)
 ├── Views/               ← Giao diện XAML
 ├── Converters/          ← Helper chuyển đổi dữ liệu cho XAML
 ├── MauiProgram.cs       ← Đăng ký Dependency Injection
-└── App.xaml(.cs)       ← Entry point
+└── App.xaml(.cs)        ← Entry point
 ```
-```
+
+## Quy tắc đặt tên
+
+| Thành phần | Quy tắc | Ví dụ |
+|---|---|---|
+| Model | `PascalCase`, kế thừa `BaseModel` | `Product` |
+| Table attribute | `snake_case`, số nhiều | `[Table("products")]` |
+| Column attribute | `snake_case` | `[Column("category_id")]` |
+| Repository | `TênModel` + `Repository` | `ProductRepository` |
+| Service | `TênModel` + `Service` | `ProductService` |
+| ViewModel | `TênModel` + `ViewModel` | `ProductViewModel` |
+| View Page | `TênModel` + `Page` | `ProductPage.xaml` |
 
 ## Hướng dẫn thêm một tính năng mới
 
@@ -74,24 +81,7 @@ public class Product : BaseModel
 
 ### Bước 2 — Tạo Repository
 
-**Interface** — Tạo file: `Repositories/IProductRepository.cs`
-
-```csharp
-using MyShop.Models;
-
-namespace MyShop.Repositories;
-
-public interface IProductRepository
-{
-    Task<List<Product>> GetAllAsync();
-    Task<List<Product>> GetByCategoryAsync(int categoryId);
-    Task<int> AddAsync(Product product);
-    Task UpdateAsync(Product product);
-    Task DeleteAsync(int id);
-}
-```
-
-**Implementation** — Tạo file: `Repositories/ProductRepository.cs`
+Tạo file: `Repositories/ProductRepository.cs`
 
 ```csharp
 using MyShop.Models;
@@ -99,7 +89,7 @@ using Supabase;
 
 namespace MyShop.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository
 {
     private readonly Supabase.Client _client;
 
@@ -137,24 +127,7 @@ public class ProductRepository : IProductRepository
 
 ### Bước 3 — Tạo Service
 
-**Interface** — Tạo file: `Services/IProductService.cs`
-
-```csharp
-using MyShop.Models;
-
-namespace MyShop.Services;
-
-public interface IProductService
-{
-    Task<List<Product>> GetAllAsync();
-    Task<List<Product>> GetByCategoryAsync(int categoryId);
-    Task<int> AddAsync(Product product);
-    Task UpdateAsync(Product product);
-    Task DeleteAsync(int id);
-}
-```
-
-**Implementation** — Tạo file: `Services/ProductService.cs`
+Tạo file: `Services/ProductService.cs`
 
 ```csharp
 using MyShop.Models;
@@ -162,11 +135,11 @@ using MyShop.Repositories;
 
 namespace MyShop.Services;
 
-public class ProductService : IProductService
+public class ProductService
 {
-    private readonly IProductRepository _repository;
+    private readonly ProductRepository _repository;
 
-    public ProductService(IProductRepository repository) => _repository = repository;
+    public ProductService(ProductRepository repository) => _repository = repository;
 
     public async Task<List<Product>> GetAllAsync()
         => await _repository.GetAllAsync();
@@ -202,14 +175,10 @@ namespace MyShop.ViewModels;
 
 public partial class ProductViewModel : ObservableObject
 {
-    private readonly IProductService _service;
+    private readonly ProductService _service;
 
-    public ProductViewModel(IProductService service)
-    {
-        _service = service;
-    }
+    public ProductViewModel(ProductService service) => _service = service;
 
-    // Property → sinh ra "Products" và command "LoadProductsCommand"
     [ObservableProperty]
     private ObservableCollection<Product> _products = [];
 
@@ -226,7 +195,6 @@ public partial class ProductViewModel : ObservableObject
         {
             IsLoading = true;
             ErrorMessage = string.Empty;
-
             var result = await _service.GetAllAsync();
             Products = new ObservableCollection<Product>(result);
         }
@@ -332,45 +300,14 @@ public sealed partial class ProductPage : Page
 Mở `MauiProgram.cs`, thêm 2 dòng vào method `Build()`:
 
 ```csharp
-// Thêm 2 dòng này
-Services.AddScoped<IProductService, ProductService>();
+// ── Repositories ────────────────────────────────────────
+Services.AddScoped<ProductRepository>();
+
+// ── Services ────────────────────────────────────────────
+Services.AddScoped<ProductService>();
+
+// ── ViewModels ─────────────────────────────────────────
 Services.AddTransient<ProductViewModel>();
-```
-
-```csharp
-public static IServiceProvider Build()
-{
-    Env.Load();
-
-    // Supabase Client (giữ nguyên)
-    var url     = Environment.GetEnvironmentVariable("SUPABASE_URL")
-        ?? throw new InvalidOperationException("SUPABASE_URL not set");
-    var anonKey = Environment.GetEnvironmentVariable("SUPABASE_ANON_KEY")
-        ?? throw new InvalidOperationException("SUPABASE_ANON_KEY not set");
-
-    Services.AddSingleton(_ => new Supabase.Client(url, anonKey,
-        new SupabaseOptions { AutoRefreshToken = true }));
-
-    // ── Repositories ────────────────────────────────────────
-    Services.AddScoped<ICategoryRepository, CategoryRepository>();
-
-    // 👇 Thêm dòng này
-    Services.AddScoped<IProductRepository, ProductRepository>();
-
-    // ── Services ───────────────────────────────────────────
-    Services.AddScoped<ICategoryService, CategoryService>();
-
-    // 👇 Thêm dòng này
-    Services.AddScoped<IProductService, ProductService>();
-
-    // ── ViewModels ─────────────────────────────────────────
-    Services.AddTransient<CategoryViewModel>();
-
-    // 👇 Thêm dòng này
-    Services.AddTransient<ProductViewModel>();
-
-    return Services.BuildServiceProvider();
-}
 ```
 
 ---
@@ -395,22 +332,8 @@ await _client.From<T>().Where(x => x.CategoryId == catId).Get();  // Lọc theo 
 await _client.From<T>().Order(x => x.Name, Constants.Ordering.Ascending).Get(); // Sắp xếp
 await _client.From<T>().Insert(item);                              // Thêm mới
 await _client.From<T>().Update(item);                              // Cập nhật
-await _client.From<T>().Where(x => x.Id == id).Delete();           // Xóa theo ID
+await _client.From<T>().Where(x => x.Id == id).Delete();          // Xóa theo ID
 ```
-
-## Quy tắc đặt tên
-
-| Thành phần | Quy tắc | Ví dụ |
-|---|---|---|
-| Model | `PascalCase`, kế thừa `BaseModel` | `Product` |
-| Table attribute | `snake_case`, số nhiều | `[Table("products")]` |
-| Column attribute | `snake_case` | `[Column("category_id")]` |
-| Repository Interface | `I` + `TênModel` + `Repository` | `IProductRepository` |
-| Repository Impl | `TênModel` + `Repository` | `ProductRepository` |
-| Service Interface | `I` + `TênModel` + `Service` | `IProductService` |
-| Service Impl | `TênModel` + `Service` | `ProductService` |
-| ViewModel | `TênModel` + `ViewModel` | `ProductViewModel` |
-| View Page | `TênModel` + `Page` | `ProductPage.xaml` |
 
 ## Chạy ứng dụng
 
