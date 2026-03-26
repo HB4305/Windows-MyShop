@@ -17,7 +17,7 @@ public static class MauiProgram
     public static IServiceProvider Build()
     {
         // ── Đọc .env file (nằm trong thư mục MyShop/) ──────────
-        var envPath = Path.Combine(Directory.GetCurrentDirectory(), "MyShop", ".env");
+        var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
         Env.Load(envPath);
 
         // ── Supabase Client (Singleton) ──────────────────────────
