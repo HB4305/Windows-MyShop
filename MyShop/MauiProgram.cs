@@ -47,7 +47,6 @@ public static class MauiProgram
         Services.AddScoped<SportItemService>();
         Services.AddScoped<OrderService>();
         Services.AddScoped<SupplyService>();
-        Services.AddScoped<DashboardService>();
 
         // ── ViewModels ─────────────────────────────────────────
         Services.AddTransient<CategoryViewModel>();
