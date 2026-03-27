@@ -1,0 +1,18 @@
+<Page x:Class="MyShop.Views.DashBoardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:MyShop.Views.Controls"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+  <Grid Margin="24">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0" Text="Dashboard" FontSize="28" FontWeight="Bold" Margin="0,0,0,16"/>
+
+    <!-- SaleMonthlyChart component bounded to the SalesMonthlyVM instance inside DashBoardPageViewModel -->
+    <controls:SaleMonthlyChartView Grid.Row="1" DataContext="{Binding SaleMonthlyVM}" />
+  </Grid>
+</Page>
