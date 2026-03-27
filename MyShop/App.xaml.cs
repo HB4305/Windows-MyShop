@@ -31,6 +31,7 @@ public partial class App : Application
         }
         _rootFrame = rootFrame;
 
+        // Đăng ký event handlers cho authentication flow
         LoginPageEvents.OnLoginSuccess     += OnLoginSuccess;
         LoginPageEvents.OnNavigateToConfig += OnNavigateToConfig;
         ConfigPageEvents.OnConfigSaved     += OnConfigSaved;
@@ -38,6 +39,7 @@ public partial class App : Application
         LoginPageEvents.OnNavigateToSignUp += OnNavigateToSignUp;
         LoginPageEvents.OnNavigateToLogin  += OnNavigateToLogin;
 
+        // Luôn khởi đầu tại LoginPage — auth là bắt buộc
         rootFrame.Navigate(typeof(LoginPage), args.Arguments);
         MainWindow.SetWindowIcon();
         MainWindow.Activate();

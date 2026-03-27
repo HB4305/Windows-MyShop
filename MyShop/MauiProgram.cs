@@ -56,14 +56,22 @@ public static class MauiProgram
 
         // ── 5. Repositories ────────────────────────────────────
         Services.AddScoped<CategoryRepository>();
+        Services.AddScoped<SportItemRepository>();
+        Services.AddScoped<OrderRepository>();
+        Services.AddScoped<SupplyRepository>();
 
         // ── 6. Services ─────────────────────────────────────────
         Services.AddScoped<CategoryService>();
+        Services.AddScoped<SportItemService>();
+        Services.AddScoped<OrderService>();
+        Services.AddScoped<SupplyService>();
+        Services.AddScoped<DashboardService>();
 
         // ── 7. ViewModels ───────────────────────────────────────
         Services.AddTransient<LoginViewModel>();
         Services.AddTransient<ConfigViewModel>();
         Services.AddTransient<CategoryViewModel>();
+        Services.AddTransient<DashboardViewModel>();
 
         // ── 8. Build và lưu provider ────────────────────────────
         _provider = Services.BuildServiceProvider();

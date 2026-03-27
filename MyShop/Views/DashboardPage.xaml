@@ -1,0 +1,270 @@
+<Page x:Class="MyShop.Views.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="24"
+                Spacing="16">
+      <TextBlock Text="Dashboard Test"
+                 FontSize="28"
+                 FontWeight="Bold"/>
+
+      <StackPanel Orientation="Horizontal"
+                  Spacing="12">
+        <Button Content="Reload"
+                Command="{Binding LoadDashboardCommand}"/>
+        <TextBlock Text="Loading..."
+                   VerticalAlignment="Center"
+                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+      </StackPanel>
+
+      <Border Padding="12"
+              BorderThickness="1"
+              BorderBrush="Gray"
+              CornerRadius="6">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Overview"
+                     FontWeight="SemiBold"/>
+
+          <TextBlock>
+            <Run Text="Total products: "/>
+            <Run Text="{Binding TotalProducts}"/>
+          </TextBlock>
+
+          <TextBlock>
+            <Run Text="Today supplied products: "/>
+            <Run Text="{Binding TodaySuppliedProducts}"/>
+          </TextBlock>
+
+          <TextBlock>
+            <Run Text="Today orders: "/>
+            <Run Text="{Binding TotalTodayOrders}"/>
+          </TextBlock>
+
+          <TextBlock>
+            <Run Text="Average weekly orders: "/>
+            <Run Text="{Binding AvgWeeklyOrders}"/>
+          </TextBlock>
+
+          <TextBlock>
+            <Run Text="Today revenue: "/>
+            <Run Text="{Binding TodayRevenue}"/>
+          </TextBlock>
+
+          <TextBlock>
+            <Run Text="Previous day revenue: "/>
+            <Run Text="{Binding PrevDayRevenue}"/>
+          </TextBlock>
+        </StackPanel>
+      </Border>
+
+      <Border Padding="12"
+              BorderThickness="1"
+              BorderBrush="Gray"
+              CornerRadius="6">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Top Seller Revenue Compare"
+                     FontWeight="SemiBold"/>
+
+          <TextBlock Text="{Binding TopSellerSummary}"
+                     TextWrapping="Wrap"
+                     FontFamily="Consolas"/>
+        </StackPanel>
+      </Border>
+
+      <Border Padding="12"
+              BorderThickness="1"
+              BorderBrush="Gray"
+              CornerRadius="6">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Low Stock Products"
+                     FontWeight="SemiBold"/>
+
+          <ItemsControl ItemsSource="{Binding LowStockItems}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border BorderThickness="0,0,0,1"
+                        BorderBrush="LightGray"
+                        Padding="0,0,0,8"
+                        Margin="0,0,0,8">
+                  <StackPanel>
+                    <TextBlock FontWeight="SemiBold"
+                               Text="{Binding Name}"/>
+                    <TextBlock>
+                      <Run Text="Stock: "/>
+                      <Run Text="{Binding StockQuantity}"/>
+                    </TextBlock>
+                    <TextBlock>
+                      <Run Text="Image: "/>
+                      <Run Text="{Binding ImageUrl}"/>
+                    </TextBlock>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <Border Padding="12"
+              BorderThickness="1"
+              BorderBrush="Gray"
+              CornerRadius="6">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Top Seller Products"
+                     FontWeight="SemiBold"/>
+
+          <ItemsControl ItemsSource="{Binding TopSellerItems}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border BorderThickness="0,0,0,1"
+                        BorderBrush="LightGray"
+                        Padding="0,0,0,8"
+                        Margin="0,0,0,8">
+                  <StackPanel>
+                    <TextBlock FontWeight="SemiBold"
+                               Text="{Binding Name}"/>
+                    <TextBlock>
+                      <Run Text="Category: "/>
+                      <Run Text="{Binding CategoryName}"/>
+                    </TextBlock>
+                    <TextBlock>
+                      <Run Text="Selling price: "/>
+                      <Run Text="{Binding SellingPrice}"/>
+                    </TextBlock>
+                    <TextBlock>
+                      <Run Text="Quantity sold: "/>
+                      <Run Text="{Binding QuantitySold}"/>
+                    </TextBlock>
+                    <TextBlock>
+                      <Run Text="Current revenue: "/>
+                      <Run Text="{Binding CurrPeriodRevenue}"/>
+                    </TextBlock>
+                    <TextBlock>
+                      <Run Text="Previous revenue: "/>
+                      <Run Text="{Binding PrevPeriodRevenue}"/>
+                    </TextBlock>
+                    <TextBlock>
+                      <Run Text="Image: "/>
+                      <Run Text="{Binding ImageUrl}"/>
+                    </TextBlock>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <Border Padding="12"
+              BorderThickness="1"
+              BorderBrush="Gray"
+              CornerRadius="6">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Recent Orders"
+                     FontWeight="SemiBold"/>
+
+          <ItemsControl ItemsSource="{Binding RecentOrders}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border BorderThickness="0,0,0,1"
+                        BorderBrush="LightGray"
+                        Padding="0,0,0,8"
+                        Margin="0,0,0,8">
+                  <StackPanel Spacing="4">
+                    <TextBlock FontWeight="SemiBold">
+                      <Run Text="#"/>
+                      <Run Text="{Binding Id}"/>
+                      <Run Text=" - "/>
+                      <Run Text="{Binding CustomerName}"/>
+                    </TextBlock>
+
+                    <TextBlock>
+                      <Run Text="Created at: "/>
+                      <Run Text="{Binding CreatedAt}"/>
+                    </TextBlock>
+
+                    <TextBlock>
+                      <Run Text="Status: "/>
+                      <Run Text="{Binding Status}"/>
+                      <Run Text=" | Total: "/>
+                      <Run Text="{Binding TotalPrice}"/>
+                    </TextBlock>
+
+                    <ItemsControl ItemsSource="{Binding Details}">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <TextBlock Margin="12,4,0,0">
+                            <Run Text="- Detail #"/>
+                            <Run Text="{Binding Id}"/>
+                            <Run Text=" | Qty: "/>
+                            <Run Text="{Binding Quantity}"/>
+                            <Run Text=" | Unit Price: "/>
+                            <Run Text="{Binding UnitPrice}"/>
+                          </TextBlock>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <Border Padding="12"
+              BorderThickness="1"
+              BorderBrush="Gray"
+              CornerRadius="6">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Monthly Revenue Points"
+                     FontWeight="SemiBold"/>
+
+          <ItemsControl ItemsSource="{Binding DailyRevenuePoints}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border BorderThickness="0,0,0,1"
+                        BorderBrush="LightGray"
+                        Padding="0,0,0,8"
+                        Margin="0,0,0,8">
+                  <StackPanel>
+                    <TextBlock FontWeight="SemiBold"
+                               Text="{Binding Date}"/>
+                    <TextBlock>
+                      <Run Text="Total orders: "/>
+                      <Run Text="{Binding TotalOrders}"/>
+                    </TextBlock>
+                    <TextBlock>
+                      <Run Text="Gross revenue: "/>
+                      <Run Text="{Binding GrossRevenue}"/>
+                    </TextBlock>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+
+      <Border Padding="12"
+              BorderThickness="1"
+              BorderBrush="Gray"
+              CornerRadius="6">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Raw Output"
+                     FontWeight="SemiBold"/>
+
+          <TextBlock Text="{Binding Output}"
+                     TextWrapping="Wrap"
+                     FontFamily="Consolas"/>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Text="{Binding ErrorMessage}"
+                 Foreground="Red"
+                 TextWrapping="Wrap"/>
+    </StackPanel>
+  </ScrollViewer>
+</Page>
