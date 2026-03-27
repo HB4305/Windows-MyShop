@@ -57,3 +57,13 @@ public class StringToVisibilityConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
 }
+
+/// <summary>Chuyển string rỗng -> false, có nội dung -> true</summary>
+public class StringToBoolConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+        => !string.IsNullOrWhiteSpace(value?.ToString());
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
