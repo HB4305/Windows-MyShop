@@ -17,6 +17,7 @@
 					 Header="Tên danh mục"
 					 PlaceholderText="Nhập tên danh mục"
 					 TextChanged="CategoryNameTextBox_TextChanged"
+					 MaxLength="100"
 					 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 			<TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}"
@@ -29,6 +30,7 @@
 				 TextWrapping="Wrap"
 				 AcceptsReturn="True"
 				 MinHeight="90"
+				 MaxLength="300"
 				 Text="{x:Bind CategoryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 	</StackPanel>
 </ContentDialog>

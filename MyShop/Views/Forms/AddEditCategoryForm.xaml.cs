@@ -31,9 +31,21 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 
 	public string CategoryDescription { get; set; } = string.Empty;
 
-	public bool IsNameInvalid => string.IsNullOrWhiteSpace(CategoryName);
+	public bool IsNameEmpty => string.IsNullOrWhiteSpace(CategoryName);
 
-	public string NameValidationMessage => IsNameInvalid ? "Tên danh mục là bắt buộc" : string.Empty;
+	public bool IsNameTooLong => CategoryName?.Length > 100;
+
+	public bool IsNameInvalid => IsNameEmpty || IsNameTooLong;
+
+	public string NameValidationMessage
+	{
+		get
+		{
+			if (IsNameEmpty) return "Tên danh mục là bắt buộc";
+			if (IsNameTooLong) return "Tên danh mục không được vượt quá 100 ký tự";
+			return string.Empty;
+		}
+	}
 
 	public string NormalizedName => CategoryName.Trim();
 
