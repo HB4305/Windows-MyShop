@@ -6,8 +6,8 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 {
 	public AddEditCategoryForm(Category? category = null)
 	{
-		InitializeComponent();
 		Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+		InitializeComponent();
 
 
 		if (category is null)

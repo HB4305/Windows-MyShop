@@ -163,7 +163,7 @@ public partial class CategoryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Lỗi: {ex.Message}";
+            ErrorMessage = ex.Message;
             return false;
         }
         finally

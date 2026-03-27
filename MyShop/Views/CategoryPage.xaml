@@ -7,10 +7,6 @@
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Page.Resources>
-    <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-    <conv:StringToBoolConverter x:Key="StringToBoolConverter"/>
-    <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-
     <DataTemplate x:Key="CategoryItemTemplate"
                   x:DataType="m:Category">
       <Border Margin="0"

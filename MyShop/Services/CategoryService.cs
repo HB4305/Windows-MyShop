@@ -42,14 +42,14 @@ public class CategoryService
     {
         if (string.IsNullOrWhiteSpace(category.Name))
         {
-            throw new ArgumentException("Tên danh mục không được để trống.", nameof(category));
+            throw new ArgumentException("Tên danh mục không được để trống.");
         }
 
         category.Name = category.Name.Trim();
 
         if (category.Name.Length > 100)
         {
-            throw new ArgumentException("Tên danh mục không được vượt quá 100 ký tự.", nameof(category));
+            throw new ArgumentException("Tên danh mục không được vượt quá 100 ký tự.");
         }
     }
 }
