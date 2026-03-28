@@ -3,7 +3,9 @@ using DotNetEnv;
 using Microsoft.Extensions.DependencyInjection;
 using MyShop.Repositories;
 using MyShop.Services;
+using MyShop.Services.ReportStrategies;
 using MyShop.ViewModels;
+using MyShop.ViewModels.ReportViewModel;
 using Supabase;
 
 namespace MyShop;
@@ -59,18 +61,25 @@ public static class MauiProgram
         Services.AddScoped<SportItemRepository>();
         Services.AddScoped<OrderRepository>();
         Services.AddScoped<SupplyRepository>();
+        Services.AddScoped<ReportRepository>();
 
         // ── 6. Services ─────────────────────────────────────────
         Services.AddScoped<CategoryService>();
         Services.AddScoped<SportItemService>();
         Services.AddScoped<OrderService>();
         Services.AddScoped<SupplyService>();
+        Services.AddScoped<ReportService>();
+        Services.AddScoped<IProductSalesStrategy, DayProductSalesStrategy>();
+        Services.AddScoped<IProductSalesStrategy, WeekProductSalesStrategy>();
+        Services.AddScoped<IProductSalesStrategy, MonthProductSalesStrategy>();
+        Services.AddScoped<IProductSalesStrategy, YearProductSalesStrategy>();
 
         // ── 7. ViewModels ───────────────────────────────────────
         Services.AddTransient<LoginViewModel>();
         Services.AddTransient<ConfigViewModel>();
         Services.AddTransient<CategoryViewModel>();
         Services.AddTransient<DashboardViewModel>();
+        Services.AddTransient<ProductReportViewModel>();
 
         // ── 8. Build và lưu provider ────────────────────────────
         _provider = Services.BuildServiceProvider();
