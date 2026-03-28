@@ -221,6 +221,6 @@ as $$
       (p_product_name is null and p_category_name is null)
     )
   group by si.id, si.name, c.name, si.image_url
-  order by total_quantity_sold desc, gross_revenue desc, profit desc, si.name asc
+  order by profit desc, gross_revenue desc, total_quantity_sold desc, si.name asc
   limit p_limit;
 $$;
