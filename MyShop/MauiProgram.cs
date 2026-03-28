@@ -2,7 +2,9 @@ using DotNetEnv;
 using Microsoft.Extensions.DependencyInjection;
 using MyShop.Repositories;
 using MyShop.Services;
+using MyShop.Services.ReportStrategies;
 using MyShop.ViewModels;
+using MyShop.ViewModels.ReportViewModel;
 using Supabase;
 
 namespace MyShop;
@@ -38,12 +40,26 @@ public static class MauiProgram
 
         // ── Repositories ────────────────────────────────────────
         Services.AddScoped<CategoryRepository>();
+        Services.AddScoped<SportItemRepository>();
+        Services.AddScoped<OrderRepository>();
+        Services.AddScoped<SupplyRepository>();
+        Services.AddScoped<ReportRepository>();
 
         // ── Services ────────────────────────────────────────────
         Services.AddScoped<CategoryService>();
+        Services.AddScoped<SportItemService>();
+        Services.AddScoped<OrderService>();
+        Services.AddScoped<SupplyService>();
+        Services.AddScoped<ReportService>();
+        Services.AddScoped<IProductSalesStrategy, DayProductSalesStrategy>();
+        Services.AddScoped<IProductSalesStrategy, WeekProductSalesStrategy>();
+        Services.AddScoped<IProductSalesStrategy, MonthProductSalesStrategy>();
+        Services.AddScoped<IProductSalesStrategy, YearProductSalesStrategy>();
 
         // ── ViewModels ─────────────────────────────────────────
         Services.AddTransient<CategoryViewModel>();
+        Services.AddTransient<DashboardViewModel>();
+        Services.AddTransient<ProductReportViewModel>();
 
         return Services.BuildServiceProvider();
     }
