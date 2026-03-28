@@ -5,7 +5,7 @@ namespace MyShop;
 internal class Program
 {
     [STAThread]
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         App.InitializeLogging();
 
@@ -17,6 +17,6 @@ internal class Program
             .UseWin32()
             .Build();
 
-        host.Run();
+        await host.RunAsync();
     }
 }

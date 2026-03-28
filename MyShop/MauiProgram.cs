@@ -38,13 +38,17 @@ public static class MauiProgram
 
         // ── Repositories ────────────────────────────────────────
         Services.AddScoped<CategoryRepository>();
-
+        Services.AddScoped<CustomerOrderRepository>();
+        Services.AddScoped<OrderDetailRepository>();
         // ── Services ────────────────────────────────────────────
         Services.AddScoped<CategoryService>();
-
+        Services.AddScoped<CustomerOrderService>();
+        Services.AddScoped<OrderDetailService>();
         // ── ViewModels ─────────────────────────────────────────
         Services.AddTransient<CategoryViewModel>();
-
+        Services.AddTransient<CustomerOrderViewModel>();
+        Services.AddTransient<OrderDetailViewModel>();
+        
         return Services.BuildServiceProvider();
     }
 }

@@ -42,9 +42,13 @@ public partial class App : Application
             rootFrame.NavigationFailed += OnNavigationFailed;
         }
 
+        // if (rootFrame.Content == null)
+        // {
+        //     rootFrame.Navigate(typeof(CategoryPage), args.Arguments);
+        // }
         if (rootFrame.Content == null)
         {
-            rootFrame.Navigate(typeof(CategoryPage), args.Arguments);
+            rootFrame.Navigate(typeof(CustomerOrderPage), args.Arguments);
         }
 
         MainWindow.SetWindowIcon();
