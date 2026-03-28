@@ -8,6 +8,8 @@ public sealed partial class CategoryPage : Page
     public CategoryPage()
     {
         this.InitializeComponent();
-        DataContext = App.Services.GetRequiredService<CategoryViewModel>();
+        var vm = App.Services.GetRequiredService<CategoryViewModel>();
+        DataContext = vm;
+        _ = vm.LoadCategoriesAsync();
     }
 }

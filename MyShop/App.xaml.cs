@@ -18,6 +18,16 @@ public partial class App : Application
 
     public App()
     {
+        // Set global culture to Vietnamese for correct date and number formatting
+        var culture = new System.Globalization.CultureInfo("vi-VN");
+        System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
+        System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
+        System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+        System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+        
+        // Uno-specific primary language override
+        Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "vi-VN";
+
         this.InitializeComponent();
     }
 
@@ -44,7 +54,7 @@ public partial class App : Application
 
         if (rootFrame.Content == null)
         {
-            rootFrame.Navigate(typeof(CategoryPage), args.Arguments);
+            rootFrame.Navigate(typeof(ShellPage), args.Arguments);
         }
 
         MainWindow.SetWindowIcon();

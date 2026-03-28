@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Globalization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
@@ -53,6 +55,49 @@ public class StringToVisibilityConverter : IValueConverter
         => !string.IsNullOrWhiteSpace(value?.ToString())
             ? Visibility.Visible
             : Visibility.Collapsed;
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+/// <summary>Lấy ảnh đầu tiên trong danh sách ảnh (array text) để hiển thị thumbnail</summary>
+public class FirstImageConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is IEnumerable<string> list && list.Any())
+        {
+            var url = list.First();
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                try
+                {
+                    return new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new System.Uri(url));
+                }
+                catch { }
+            }
+        }
+        return null;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Chuyển string URL thành BitmapImage để dùng cho Image.Source trong DataTemplate</summary>
+public class StringToImageConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is string url && !string.IsNullOrWhiteSpace(url))
+        {
+            try
+            {
+                return new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new System.Uri(url));
+            }
+            catch { }
+        }
+        return null;
+    }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();

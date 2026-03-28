@@ -1,0 +1,17 @@
+<Page x:Class="MyShop.Views.ShellPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+  <NavigationView x:Name="NavView" 
+                  SelectionChanged="NavView_SelectionChanged"
+                  Header="MyShop Admin"
+                  IsBackButtonVisible="Collapsed">
+    <NavigationView.MenuItems>
+      <NavigationViewItem Content="Danh mục" Icon="List" Tag="Category"/>
+      <NavigationViewItem Content="Sản phẩm" Icon="Shop" Tag="SportItem"/>
+    </NavigationView.MenuItems>
+
+    <Frame x:Name="ContentFrame"/>
+  </NavigationView>
+</Page>

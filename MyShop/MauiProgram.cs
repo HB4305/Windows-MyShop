@@ -38,12 +38,16 @@ public static class MauiProgram
 
         // ── Repositories ────────────────────────────────────────
         Services.AddScoped<CategoryRepository>();
+        Services.AddScoped<SportItemRepository>();
 
         // ── Services ────────────────────────────────────────────
         Services.AddScoped<CategoryService>();
+        Services.AddScoped<SportItemService>();
 
         // ── ViewModels ─────────────────────────────────────────
         Services.AddTransient<CategoryViewModel>();
+        Services.AddTransient<SportItemViewModel>();
+        Services.AddTransient<SportItemDetailViewModel>();
 
         return Services.BuildServiceProvider();
     }
