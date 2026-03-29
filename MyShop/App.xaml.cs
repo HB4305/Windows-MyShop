@@ -1,10 +1,7 @@
-using System;
 using System.Diagnostics;
-using DotNetEnv;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Supabase;
-using Uno.Resizetizer;
+using MyShop.Services;
+using MyShop.ViewModels;
 using MyShop.Views;
 
 namespace MyShop;
@@ -12,24 +9,15 @@ namespace MyShop;
 public partial class App : Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
-
-    /// <summary>Main application window.</summary>
     protected Window? MainWindow { get; private set; }
+    private Frame? _rootFrame;
 
-    public App()
-    {
-        this.InitializeComponent();
-    }
+    public App() { this.InitializeComponent(); }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        // ── 1. Khởi tạo Dependency Injection ────────────────────
         Services = MauiProgram.Build();
 
-        // ── 2. Khởi tạo Supabase Client (không blocking UI) ──────
-        _ = InitializeSupabaseAsync();
-
-        // ── 3. Cửa sổ chính ──────────────────────────────────────
         MainWindow = new Window();
 #if DEBUG
         MainWindow.UseStudio();
@@ -41,32 +29,54 @@ public partial class App : Application
             MainWindow.Content = rootFrame;
             rootFrame.NavigationFailed += OnNavigationFailed;
         }
+        _rootFrame = rootFrame;
 
-        if (rootFrame.Content == null)
-        {
-            rootFrame.Navigate(typeof(CategoryPage), args.Arguments);
-        }
+        LoginPageEvents.OnLoginSuccess     += OnLoginSuccess;
+        LoginPageEvents.OnNavigateToConfig += OnNavigateToConfig;
+        ConfigPageEvents.OnConfigSaved     += OnConfigSaved;
+        ConfigPageEvents.OnBack            += OnConfigBack;
+        LoginPageEvents.OnNavigateToSignUp += OnNavigateToSignUp;
+        LoginPageEvents.OnNavigateToLogin  += OnNavigateToLogin;
 
+        rootFrame.Navigate(typeof(LoginPage), args.Arguments);
         MainWindow.SetWindowIcon();
         MainWindow.Activate();
     }
 
-    private async Task InitializeSupabaseAsync()
+    private void OnLoginSuccess() => NavigateToMain();
+
+    private void OnNavigateToConfig()
+        => _rootFrame?.Navigate(typeof(ConfigPage));
+
+
+    private void OnNavigateToSignUp()
+        => _rootFrame?.Navigate(typeof(SignUpPage));
+
+    private void OnNavigateToLogin()
+        => _rootFrame?.Navigate(typeof(LoginPage));
+
+    private void OnConfigSaved()
     {
-        try
-        {
-            var client = Services.GetRequiredService<Client>();
-            await client.InitializeAsync();
-            Debug.WriteLine("[App] Supabase client initialized successfully.");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"[App] Supabase initialization failed: {ex.Message}");
-        }
+        var credMgr = Services.GetRequiredService<CredentialManager>();
+        var url = credMgr.GetSupabaseUrl();
+        var key = credMgr.GetSupabaseAnonKey();
+        if (!string.IsNullOrEmpty(url) && !string.IsNullOrEmpty(key))
+            MauiProgram.RebuildSupabaseClient(url, key);
+        _rootFrame?.Navigate(typeof(LoginPage));
+    }
+
+    private void OnConfigBack()
+        => _rootFrame?.GoBack();
+
+    private void NavigateToMain()
+    {
+        if (_rootFrame == null) return;
+        _rootFrame.BackStack.Clear();
+        _rootFrame.Navigate(typeof(CategoryPage));
     }
 
     void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        => throw new InvalidOperationException($"Failed to load {e.SourcePageType.FullName}: {e.Exception}");
+        => throw new InvalidOperationException("Failed to load " + e.SourcePageType.FullName + ": " + e.Exception);
 
     public static void InitializeLogging()
     {
@@ -84,9 +94,7 @@ public partial class App : Application
             builder.AddFilter("Windows", LogLevel.Warning);
             builder.AddFilter("Microsoft", LogLevel.Warning);
         });
-
         global::Uno.Extensions.LogExtensionPoint.AmbientLoggerFactory = factory;
-
 #if HAS_UNO
         global::Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
 #endif
