@@ -10,7 +10,7 @@ returns table (
   name text,
   category_name text,
   selling_price numeric,
-  image_url text,
+  image_urls text[],
   quantity_sold int,
   curr_period_revenue numeric,
   prev_period_revenue numeric
@@ -45,7 +45,7 @@ as $$
     si.name,
     c.name as category_name,
     si.selling_price,
-    si.image_url,
+    coalesce(si.image_urls, '{}'::text[]) as image_urls,
     cp.quantity_sold,
     cp.curr_period_revenue,
     coalesce(pp.prev_period_revenue, 0) as prev_period_revenue

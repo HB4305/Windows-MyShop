@@ -28,7 +28,7 @@ public class SportItemRepository
         ItemId = item.Id,
         Name = item.Name,
         StockQuantity = item.StockQuantity ?? 0,
-        ImageUrl = item.ImageUrl
+        ImageUrls = item.ImageUrls
       })
       .ToList();
   }

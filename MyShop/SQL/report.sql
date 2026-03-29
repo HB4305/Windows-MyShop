@@ -191,7 +191,7 @@ returns table (
   id int,
   product_name text,
   category_name text,
-  image_url text,
+  image_urls text[],
   total_quantity_sold int,
   gross_revenue numeric(12, 2),
   profit numeric(12, 2)
@@ -202,7 +202,7 @@ as $$
     si.id,
     si.name as product_name,
     coalesce(c.name, '') as category_name,
-    coalesce(si.image_url, '') as image_url,
+    coalesce(si.image_urls, '{}'::text[]) as image_urls,
     sum(od.quantity)::int as total_quantity_sold,
     sum(od.quantity * od.unit_price)::numeric(12, 2) as gross_revenue,
     sum(od.quantity * (od.unit_price - coalesce(si.cost_price, 0)))::numeric(12, 2) as profit
@@ -220,7 +220,7 @@ as $$
       or
       (p_product_name is null and p_category_name is null)
     )
-  group by si.id, si.name, c.name, si.image_url
+  group by si.id, si.name, c.name, si.image_urls
   order by profit desc, gross_revenue desc, total_quantity_sold desc, si.name asc
   limit p_limit;
 $$;

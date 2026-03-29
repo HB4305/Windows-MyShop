@@ -1,3 +1,4 @@
+using System.Linq;
 using Newtonsoft.Json;
 
 public class DashboardTopSellerProduct
@@ -14,8 +15,10 @@ public class DashboardTopSellerProduct
   [JsonProperty("selling_price")]
   public decimal? SellingPrice { get; set; }
 
-  [JsonProperty("image_url")]
-  public string? ImageUrl { get; set; }
+  [JsonProperty("image_urls")]
+  public string[] ImageUrls { get; set; } = [];
+
+  public string? ImageUrl => ImageUrls.FirstOrDefault();
 
   [JsonProperty("quantity_sold")]
   public int QuantitySold { get; set; }
