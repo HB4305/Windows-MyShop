@@ -44,7 +44,7 @@ public partial class App : Application
 
         if (rootFrame.Content == null)
         {
-            rootFrame.Navigate(typeof(ReportPage), args.Arguments);
+            rootFrame.Navigate(typeof(DashboardPage), args.Arguments);
         }
 
         MainWindow.SetWindowIcon();

@@ -138,7 +138,7 @@ public partial class DashboardViewModel : ObservableObject
       else
       {
         lines.AddRange(LowStockItems.Select(item =>
-            $"- {item.Name} | Stock: {item.StockQuantity} | Image: {item.ImageUrl}"));
+            $"- {item.Name} | Stock: {item.StockQuantity} | Images: {item.ImageUrlsText}"));
       }
 
       lines.Add("");
@@ -152,7 +152,7 @@ public partial class DashboardViewModel : ObservableObject
       else
       {
         lines.AddRange(TopSellerItems.Select(item =>
-            $"- {item.Name} | Sold: {item.QuantitySold} | Revenue: {item.CurrPeriodRevenue:N2} | Prev: {item.PrevPeriodRevenue:N2}"));
+            $"- {item.Name} | Sold: {item.QuantitySold} | Revenue: {item.CurrPeriodRevenue:N2} | Prev: {item.PrevPeriodRevenue:N2} | Images: {item.ImageUrlsText}"));
 
         TopSellerSummary = string.Join(
           Environment.NewLine,

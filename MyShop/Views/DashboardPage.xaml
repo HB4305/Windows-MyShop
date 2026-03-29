@@ -96,8 +96,8 @@
                       <Run Text="{Binding StockQuantity}"/>
                     </TextBlock>
                     <TextBlock>
-                      <Run Text="Image: "/>
-                      <Run Text="{Binding ImageUrl}"/>
+                      <Run Text="Images: "/>
+                      <Run Text="{Binding ImageUrlsText}"/>
                     </TextBlock>
                   </StackPanel>
                 </Border>
@@ -146,8 +146,8 @@
                       <Run Text="{Binding PrevPeriodRevenue}"/>
                     </TextBlock>
                     <TextBlock>
-                      <Run Text="Image: "/>
-                      <Run Text="{Binding ImageUrl}"/>
+                      <Run Text="Images: "/>
+                      <Run Text="{Binding ImageUrlsText}"/>
                     </TextBlock>
                   </StackPanel>
                 </Border>

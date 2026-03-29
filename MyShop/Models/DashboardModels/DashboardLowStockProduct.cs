@@ -9,4 +9,5 @@ public class DashboardLowStockProduct
   public int StockQuantity { get; set; }
   public string[] ImageUrls { get; set; } = [];
   public string? ImageUrl => ImageUrls.FirstOrDefault();
+  public string ImageUrlsText => string.Join(", ", ImageUrls);
 }

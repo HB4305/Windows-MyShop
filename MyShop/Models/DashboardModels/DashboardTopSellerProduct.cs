@@ -19,6 +19,7 @@ public class DashboardTopSellerProduct
   public string[] ImageUrls { get; set; } = [];
 
   public string? ImageUrl => ImageUrls.FirstOrDefault();
+  public string ImageUrlsText => string.Join(", ", ImageUrls);
 
   [JsonProperty("quantity_sold")]
   public int QuantitySold { get; set; }
