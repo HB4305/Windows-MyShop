@@ -78,7 +78,7 @@ public partial class ProductReportViewModel : ObservableObject
       TopPerformingProductLines = TopPerformingProducts.Count == 0
         ? ["- No data"]
         : TopPerformingProducts.Select(product =>
-          $"{product.ProductName} | Category: {product.CategoryName} | Qty: {product.TotalQuantitySold} | Revenue: {product.GrossRevenue:N2} | Profit: {product.Profit:N2} | Image: {product.ImageUrl}").ToList();
+          $"{product.ProductName} | Category: {product.CategoryName} | Qty: {product.TotalQuantitySold} | Revenue: {product.GrossRevenue:N2} | Profit: {product.Profit:N2} | Images: {string.Join(", ", product.ImageUrls)}").ToList();
       SalesLines = Sales.Count == 0
         ? ["- No data"]
         : Sales.Select(sale =>

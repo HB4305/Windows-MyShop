@@ -1,3 +1,4 @@
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace MyShop.Models.ReportModels;
@@ -13,8 +14,10 @@ public class TopPerformingProduct
   [JsonProperty("category_name")]
   public string CategoryName { get; set; } = string.Empty;
 
-  [JsonProperty("image_url")]
-  public string ImageUrl { get; set; } = string.Empty;
+  [JsonProperty("image_urls")]
+  public string[] ImageUrls { get; set; } = [];
+
+  public string ImageUrl => ImageUrls.FirstOrDefault() ?? string.Empty;
 
   [JsonProperty("total_quantity_sold")]
   public int TotalQuantitySold { get; set; }

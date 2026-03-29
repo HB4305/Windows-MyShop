@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Postgrest.Attributes;
 using Postgrest.Models;
 
@@ -38,6 +39,8 @@ public class SportItem : BaseModel
     [Column("low_stock_threshold")]
     public int? LowStockThreshold { get; set; }
 
-    [Column("image_url")]
-    public string? ImageUrl { get; set; }
+    [Column("image_urls")]
+    public string[] ImageUrls { get; set; } = [];
+
+    public string? ImageUrl => ImageUrls.FirstOrDefault();
 }
