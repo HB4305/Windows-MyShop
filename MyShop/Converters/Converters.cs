@@ -57,3 +57,28 @@ public class StringToVisibilityConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
 }
+
+/// <summary>Chuyển hex color string (#RRGGBB) thành SolidColorBrush</summary>
+public class HexToBrushConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        var hex = value as string;
+        if (string.IsNullOrWhiteSpace(hex)) return new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(0, 0, 0, 0));
+
+        hex = hex.TrimStart('#');
+        if (hex.Length == 6)
+        {
+            byte r = System.Convert.ToByte(hex.Substring(0, 2), 16);
+            byte g = System.Convert.ToByte(hex.Substring(2, 2), 16);
+            byte b = System.Convert.ToByte(hex.Substring(4, 2), 16);
+            return new Microsoft.UI.Xaml.Media.SolidColorBrush(
+                Windows.UI.Color.FromArgb(255, r, g, b));
+        }
+        return new Microsoft.UI.Xaml.Media.SolidColorBrush(
+            Windows.UI.Color.FromArgb(0, 0, 0, 0));
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}

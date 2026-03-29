@@ -17,6 +17,7 @@
       <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
       <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
       <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+      <conv:HexToBrushConverter x:Key="HexToBrushConverter"/>
 
     </ResourceDictionary>
   </Application.Resources>

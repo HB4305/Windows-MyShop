@@ -1,5 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.UI;
+using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
 using MyShop.Models.DashboardModels;
 using MyShop.Services;
@@ -8,196 +14,144 @@ namespace MyShop.ViewModels;
 
 public partial class DashboardViewModel : ObservableObject
 {
-  private readonly SportItemService _sportItemService;
-  private readonly OrderService _orderService;
-  private readonly SupplyService _supplyService;
+    private readonly SportItemService _sportItemService;
+    private readonly OrderService _orderService;
+    private readonly SupplyService _supplyService;
 
-  public DashboardViewModel(
-    SportItemService sportItemService,
-    OrderService orderService,
-    SupplyService supplyService
-  ) {
-    _sportItemService = sportItemService;
-    _orderService = orderService;
-    _supplyService = supplyService;
-    _ = LoadDashboardAsync();
-  }
-
-  // For UI indications
-  [ObservableProperty]
-  private bool _isLoading;
-
-  [ObservableProperty]
-  private string _errorMessage = string.Empty;
-
-  [ObservableProperty]
-  private string _output = "Dang tai dashboard...";
-
-  [ObservableProperty]
-  private string _topSellerSummary = "Dang tai top seller...";
-
-  // Attributes
-
-  // Tổng sản phẩm
-  [ObservableProperty]
-  private int _totalProducts = 0;
-  // Số sản phẩm nhập thêm hôm nay
-  [ObservableProperty]
-  private int _todaySuppliedProducts = 0;
-  // Tổng đơn hàng hôm nay
-  [ObservableProperty]
-  private int _totalTodayOrders = 0;
-  // Trung bình số đơn hàng 7 ngày gần nhất
-  [ObservableProperty]
-  private int _avgWeeklyOrders = 0;
-  // Tổng doanh thu trong ngày
-  [ObservableProperty]
-  private decimal _todayRevenue = 0;
-  // Doanh thu hôm qua để so sánh
-  [ObservableProperty]
-  private decimal _PrevDayRevenue = 0;
-  // Top 5 sản phẩm sắp hết hàng (số lượng < 5)
-  [ObservableProperty]
-  private List<DashboardLowStockProduct> _lowStockItems = [];
-  // Top 5 sản phẩm bán chạy 
-  [ObservableProperty]
-  private List<DashboardTopSellerProduct> _topSellerItems = [];
-  // Chi tiết 3 đơn hàng gần nhất
-  [ObservableProperty]
-  private List<DashboardRecentOrder> _recentOrders = [];
-  // Biểu đồ doanh thu theo ngày trong tháng hiện tại
-  [ObservableProperty]
-  private List<RevenueReport> _dailyRevenuePoints = [];
-
-  [RelayCommand]
-  public async Task LoadDashboardAsync()
-  {
-    try
+    public DashboardViewModel(
+        SportItemService sportItemService,
+        OrderService orderService,
+        SupplyService supplyService)
     {
-      IsLoading = true;
-      ErrorMessage = string.Empty;
-      Output = "Dang tai dashboard...";
-      TopSellerSummary = "Dang tai top seller...";
-
-      var now = DateTime.Now;
-
-      var totalProductsTask = _sportItemService.GetTotalCountAsync();
-      var todaySuppliedProductsTask = _supplyService.GetSuppliedProductCountByDateAsync(now);
-
-      var totalTodayOrdersTask = _orderService.GetOrderCountByDateAsync(now);
-      var avgWeeklyOrdersTask = _orderService.GetAvgWeeklyOrdersAsync(now);
-
-      var todayRevenueTask = _orderService.GetRevenueByDateAsync(now);
-      var prevDayRevenueTask = _orderService.GetPrevDateRevenueAsync(now);
-
-      var topSellerItemsTask = _orderService.GetTopSellingProductsAsync(nDays: 30);
-      var lowStockItemsTask = _sportItemService.GetLowStockProductsAsync();
-
-      var recentOrdersTask = _orderService.GetRecentOrdersAsync();
-      var dailyRevenuePointsTask = _orderService.GetMonthlyRevenueAsync(now);
-
-      await Task.WhenAll(
-        totalProductsTask,
-        todaySuppliedProductsTask,
-        lowStockItemsTask,
-        topSellerItemsTask,
-        totalTodayOrdersTask,
-        avgWeeklyOrdersTask,
-        todayRevenueTask,
-        prevDayRevenueTask,
-        recentOrdersTask,
-        dailyRevenuePointsTask);
-
-      TotalProducts = totalProductsTask.Result;
-      TodaySuppliedProducts = todaySuppliedProductsTask.Result;
-      TotalTodayOrders = totalTodayOrdersTask.Result;
-      AvgWeeklyOrders = avgWeeklyOrdersTask.Result;
-      TodayRevenue = todayRevenueTask.Result;
-      PrevDayRevenue = prevDayRevenueTask.Result;
-      LowStockItems = lowStockItemsTask.Result;
-      TopSellerItems = topSellerItemsTask.Result;
-      RecentOrders = recentOrdersTask.Result;
-      DailyRevenuePoints = dailyRevenuePointsTask.Result;
-
-      var lines = new List<string>
-      {
-        $"Total products: {TotalProducts}",
-        $"Today supplied products: {TodaySuppliedProducts}",
-        $"Today orders: {TotalTodayOrders}",
-        $"Average weekly orders: {AvgWeeklyOrders}",
-        $"Today revenue: {TodayRevenue:N2}",
-        $"Previous day revenue: {PrevDayRevenue:N2}",
-        "",
-        "Top 5 low stock:"
-      };
-
-      if (LowStockItems.Count == 0)
-      {
-        lines.Add("- No data");
-      }
-      else
-      {
-        lines.AddRange(LowStockItems.Select(item =>
-            $"- {item.Name} | Stock: {item.StockQuantity} | Image: {item.ImageUrl}"));
-      }
-
-      lines.Add("");
-      lines.Add("Top 5 best sellers:");
-
-      if (TopSellerItems.Count == 0)
-      {
-        lines.Add("- No data");
-        TopSellerSummary = "Top seller: No data";
-      }
-      else
-      {
-        lines.AddRange(TopSellerItems.Select(item =>
-            $"- {item.Name} | Sold: {item.QuantitySold} | Revenue: {item.CurrPeriodRevenue:N2} | Prev: {item.PrevPeriodRevenue:N2}"));
-
-        TopSellerSummary = string.Join(
-          Environment.NewLine,
-          TopSellerItems.Select(item =>
-            $"{item.Name} | Current: {item.CurrPeriodRevenue:N2} | Prev: {item.PrevPeriodRevenue:N2}")
-        );
-      }
-
-      lines.Add("");
-      lines.Add("Recent orders:");
-
-      if (RecentOrders.Count == 0)
-      {
-        lines.Add("- No data");
-      }
-      else
-      {
-        lines.AddRange(RecentOrders.Select(order =>
-            $"- #{order.Id} | {order.CustomerName} | {order.TotalPrice:N2} | {order.Status}"));
-      }
-
-      lines.Add("");
-      lines.Add("Monthly revenue:");
-
-      if (DailyRevenuePoints.Count == 0)
-      {
-        lines.Add("- No data");
-      }
-      else
-      {
-        lines.AddRange(DailyRevenuePoints.Select(point =>
-            $"- {point.Date:yyyy-MM-dd} | Orders: {point.TotalOrders} | Revenue: {point.GrossRevenue:N2}"));
-      }
-
-      Output = string.Join(Environment.NewLine, lines);
+        _sportItemService = sportItemService;
+        _orderService = orderService;
+        _supplyService = supplyService;
+        _ = LoadDashboardAsync();
     }
-    catch (Exception e)
+
+    [ObservableProperty] private bool _isLoading;
+    [ObservableProperty] private string _errorMessage = string.Empty;
+
+    // ── Raw data ────────────────────────────────────────────────────────
+    [ObservableProperty] private int _totalProducts;
+    [ObservableProperty] private int _todaySuppliedProducts;
+    [ObservableProperty] private int _totalTodayOrders;
+    [ObservableProperty] private int _avgWeeklyOrders;
+    [ObservableProperty] private decimal _todayRevenue;
+    [ObservableProperty] private decimal _prevDayRevenue;
+    [ObservableProperty] private List<DashboardLowStockProduct> _lowStockItems = [];
+    [ObservableProperty] private List<DashboardTopSellerProduct> _topSellerItems = [];
+    [ObservableProperty] private List<DashboardRecentOrder> _recentOrders = [];
+    [ObservableProperty] private List<RevenueReport> _dailyRevenuePoints = [];
+
+    // ── Computed display properties (used by DashboardPage.xaml) ───────
+
+    public string TotalProductsDisplay => TotalProducts.ToString("N0");
+
+    public string TotalProductsTrend
     {
-      ErrorMessage = $"Loi: {e.Message}";
-      Output = "Khong tai duoc du lieu dashboard.";
-      TopSellerSummary = "Khong tai duoc top seller.";
+        get
+        {
+            if (TotalProducts == 0) return "No data";
+            var pct = ((double)TodaySuppliedProducts / Math.Max(TotalProducts, 1)) * 100;
+            return $"{pct:F1}% added this month";
+        }
     }
-    finally
+
+    public string TotalTodayOrdersDisplay => TotalTodayOrders.ToString("N0");
+
+    public string TodayOrdersTrend
     {
-      IsLoading = false;
+        get
+        {
+            if (AvgWeeklyOrders == 0) return "No avg data";
+            var diff = TotalTodayOrders - AvgWeeklyOrders;
+            var sign = diff >= 0 ? "+" : "";
+            return $"{sign}{diff} vs avg daily";
+        }
     }
-  }
+
+    public string TodayRevenueDisplay => $"${TodayRevenue:N2}";
+
+    public string TodayRevenueTrend
+    {
+        get
+        {
+            if (PrevDayRevenue == 0) return "No prev data";
+            var diff = TodayRevenue - PrevDayRevenue;
+            var pct = (double)(diff / Math.Max(PrevDayRevenue, 1)) * 100;
+            var sign = pct >= 0 ? "+" : "";
+            return $"{sign}{pct:F1}% vs yesterday";
+        }
+    }
+
+    /// Returns "↑" (up) or "↓" (down) for revenue trend icon
+    public string RevenueTrendIcon => TodayRevenue >= PrevDayRevenue ? "↑" : "↓";
+
+    /// Returns Green or Red brush for revenue trend
+    public SolidColorBrush RevenueTrendBrush =>
+        TodayRevenue >= PrevDayRevenue
+            ? new SolidColorBrush(Windows.UI.Color.FromArgb(255, 5, 150, 105))   // #059669 green
+            : new SolidColorBrush(Windows.UI.Color.FromArgb(255, 220, 38, 38)); // #DC2626 red
+
+    // ── Commands ─────────────────────────────────────────────────────────
+
+    [RelayCommand]
+    public async Task LoadDashboardAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            ErrorMessage = string.Empty;
+
+            var now = DateTime.Now;
+
+            var totalProductsTask = _sportItemService.GetTotalCountAsync();
+            var todaySuppliedProductsTask = _supplyService.GetSuppliedProductCountByDateAsync(now);
+            var totalTodayOrdersTask = _orderService.GetOrderCountByDateAsync(now);
+            var avgWeeklyOrdersTask = _orderService.GetAvgWeeklyOrdersAsync(now);
+            var todayRevenueTask = _orderService.GetRevenueByDateAsync(now);
+            var prevDayRevenueTask = _orderService.GetPrevDateRevenueAsync(now);
+            var topSellerItemsTask = _orderService.GetTopSellingProductsAsync(nDays: 30);
+            var lowStockItemsTask = _sportItemService.GetLowStockProductsAsync();
+            var recentOrdersTask = _orderService.GetRecentOrdersAsync();
+            var dailyRevenuePointsTask = _orderService.GetMonthlyRevenueAsync(now);
+
+            await Task.WhenAll(
+                totalProductsTask, todaySuppliedProductsTask,
+                lowStockItemsTask, topSellerItemsTask,
+                totalTodayOrdersTask, avgWeeklyOrdersTask,
+                todayRevenueTask, prevDayRevenueTask,
+                recentOrdersTask, dailyRevenuePointsTask);
+
+            TotalProducts = totalProductsTask.Result;
+            TodaySuppliedProducts = todaySuppliedProductsTask.Result;
+            TotalTodayOrders = totalTodayOrdersTask.Result;
+            AvgWeeklyOrders = avgWeeklyOrdersTask.Result;
+            TodayRevenue = todayRevenueTask.Result;
+            PrevDayRevenue = prevDayRevenueTask.Result;
+            LowStockItems = lowStockItemsTask.Result;
+            TopSellerItems = topSellerItemsTask.Result;
+            RecentOrders = recentOrdersTask.Result;
+            DailyRevenuePoints = dailyRevenuePointsTask.Result;
+
+            // Re-evaluate computed properties
+            OnPropertyChanged(nameof(TotalProductsDisplay));
+            OnPropertyChanged(nameof(TotalProductsTrend));
+            OnPropertyChanged(nameof(TotalTodayOrdersDisplay));
+            OnPropertyChanged(nameof(TodayOrdersTrend));
+            OnPropertyChanged(nameof(TodayRevenueDisplay));
+            OnPropertyChanged(nameof(TodayRevenueTrend));
+            OnPropertyChanged(nameof(RevenueTrendIcon));
+            OnPropertyChanged(nameof(RevenueTrendBrush));
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = $"Loi: {e.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
 }
