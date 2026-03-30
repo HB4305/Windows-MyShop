@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
@@ -35,8 +33,9 @@ public partial class DashboardViewModel : ObservableObject
     // ── Raw data ────────────────────────────────────────────────────────
     [ObservableProperty] private int _totalProducts;
     [ObservableProperty] private int _todaySuppliedProducts;
+    [ObservableProperty] private int _prevMonthSuppliedProducts;
     [ObservableProperty] private int _totalTodayOrders;
-    [ObservableProperty] private int _avgWeeklyOrders;
+    [ObservableProperty] private int _prevDayOrders;
     [ObservableProperty] private decimal _todayRevenue;
     [ObservableProperty] private decimal _prevDayRevenue;
     [ObservableProperty] private List<DashboardLowStockProduct> _lowStockItems = [];
@@ -48,36 +47,59 @@ public partial class DashboardViewModel : ObservableObject
 
     public string TotalProductsDisplay => TotalProducts.ToString("N0");
 
+    /// <summary>
+    /// Shows: "+X this month" when there is no previous month data (new project),
+    /// or "+X.X% vs last month" when comparison is possible.
+    /// </summary>
     public string TotalProductsTrend
     {
         get
         {
-            if (TotalProducts == 0) return "No data";
-            var pct = ((double)TodaySuppliedProducts / Math.Max(TotalProducts, 1)) * 100;
-            return $"{pct:F1}% added this month";
+            if (TodaySuppliedProducts == 0 && PrevMonthSuppliedProducts == 0)
+                return "No new stock";
+            if (PrevMonthSuppliedProducts == 0)
+                return $"+{TodaySuppliedProducts} this month";
+            var pct = ((double)(TodaySuppliedProducts - PrevMonthSuppliedProducts)
+                       / Math.Max(PrevMonthSuppliedProducts, 1)) * 100;
+            var sign = pct >= 0 ? "+" : "";
+            return $"{sign}{pct:F1}% vs last month";
         }
     }
 
     public string TotalTodayOrdersDisplay => TotalTodayOrders.ToString("N0");
 
+    /// <summary>
+    /// Shows: "+X vs yesterday" or "-X vs yesterday".
+    /// When yesterday had no orders: "X today (no orders yesterday)".
+    /// </summary>
     public string TodayOrdersTrend
     {
         get
         {
-            if (AvgWeeklyOrders == 0) return "No avg data";
-            var diff = TotalTodayOrders - AvgWeeklyOrders;
+            var diff = TotalTodayOrders - PrevDayOrders;
+            if (PrevDayOrders == 0)
+                return TotalTodayOrders > 0
+                    ? $"{TotalTodayOrders} today (+{diff})"
+                    : "No orders today";
             var sign = diff >= 0 ? "+" : "";
-            return $"{sign}{diff} vs avg daily";
+            return $"{sign}{diff} vs yesterday";
         }
     }
 
     public string TodayRevenueDisplay => $"${TodayRevenue:N2}";
 
+    /// <summary>
+    /// Shows: "+X.X% vs yesterday" with direction arrow.
+    /// When yesterday had no revenue: "New today: $X" instead of a percentage.
+    /// </summary>
     public string TodayRevenueTrend
     {
         get
         {
-            if (PrevDayRevenue == 0) return "No prev data";
+            if (PrevDayRevenue == 0)
+                return TodayRevenue > 0
+                    ? $"New today"
+                    : "No revenue today";
             var diff = TodayRevenue - PrevDayRevenue;
             var pct = (double)(diff / Math.Max(PrevDayRevenue, 1)) * 100;
             var sign = pct >= 0 ? "+" : "";
@@ -108,10 +130,11 @@ public partial class DashboardViewModel : ObservableObject
 
             var totalProductsTask = _sportItemService.GetTotalCountAsync();
             var todaySuppliedProductsTask = _supplyService.GetSuppliedProductCountByDateAsync(now);
+            var prevMonthSuppliedProductsTask = _supplyService.GetSuppliedProductCountByMonthAsync(now);
             var totalTodayOrdersTask = _orderService.GetOrderCountByDateAsync(now);
-            var avgWeeklyOrdersTask = _orderService.GetAvgWeeklyOrdersAsync(now);
+            var prevDayOrdersTask = _orderService.GetPrevDayOrdersAsync(now);
             var todayRevenueTask = _orderService.GetRevenueByDateAsync(now);
-            var prevDayRevenueTask = _orderService.GetPrevDateRevenueAsync(now);
+            var prevDayRevenueTask = _orderService.GetPrevDayRevenueAsync(now);
             var topSellerItemsTask = _orderService.GetTopSellingProductsAsync(nDays: 30);
             var lowStockItemsTask = _sportItemService.GetLowStockProductsAsync();
             var recentOrdersTask = _orderService.GetRecentOrdersAsync();
@@ -119,15 +142,17 @@ public partial class DashboardViewModel : ObservableObject
 
             await Task.WhenAll(
                 totalProductsTask, todaySuppliedProductsTask,
-                lowStockItemsTask, topSellerItemsTask,
-                totalTodayOrdersTask, avgWeeklyOrdersTask,
-                todayRevenueTask, prevDayRevenueTask,
-                recentOrdersTask, dailyRevenuePointsTask);
+                prevMonthSuppliedProductsTask, totalTodayOrdersTask,
+                prevDayOrdersTask, todayRevenueTask,
+                prevDayRevenueTask, lowStockItemsTask,
+                topSellerItemsTask, recentOrdersTask,
+                dailyRevenuePointsTask);
 
             TotalProducts = totalProductsTask.Result;
             TodaySuppliedProducts = todaySuppliedProductsTask.Result;
+            PrevMonthSuppliedProducts = prevMonthSuppliedProductsTask.Result;
             TotalTodayOrders = totalTodayOrdersTask.Result;
-            AvgWeeklyOrders = avgWeeklyOrdersTask.Result;
+            PrevDayOrders = prevDayOrdersTask.Result;
             TodayRevenue = todayRevenueTask.Result;
             PrevDayRevenue = prevDayRevenueTask.Result;
             LowStockItems = lowStockItemsTask.Result;
