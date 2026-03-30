@@ -74,7 +74,7 @@ public partial class App : Application
     {
         if (_rootFrame == null) return;
         _rootFrame.BackStack.Clear();
-        _rootFrame.Navigate(typeof(CategoryPage));
+        _rootFrame.Navigate(typeof(ShellPage));
     }
 
     void OnNavigationFailed(object sender, NavigationFailedEventArgs e)

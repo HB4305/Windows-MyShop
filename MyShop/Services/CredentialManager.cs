@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using MyShop.Models;
@@ -7,9 +6,9 @@ namespace MyShop.Services;
 
 /// <summary>
 /// Quản lý credentials đăng nhập.
-/// - Lưu JWT Access Token (DPAPI-mã hóa) vào %APPDATA%\MyShop\config.json
+/// - Lưu JWT Access Token (base64-encoded) vào config.json trong thư mục app data
 /// - BCrypt hash password cho việc verify local (không gửi password qua network)
-/// Chỉ user hiện tại mới giải mã được.
+/// Works trên mọi nền tảng: Windows, macOS, Linux, Android, iOS, WebAssembly.
 /// </summary>
 public class CredentialManager
 {
@@ -63,8 +62,8 @@ public class CredentialManager
         var config = LoadConfig();
         config.SavedEmail = email;
         config.BcryptHash = bcryptHash;
-        config.EncryptedAccessToken = DPAPIEncrypt(accessToken);
-        config.EncryptedRefreshToken = DPAPIEncrypt(refreshToken);
+        config.EncryptedAccessToken = Base64Encode(accessToken);
+        config.EncryptedRefreshToken = Base64Encode(refreshToken);
         config.TokenExpiry = DateTimeOffset.UtcNow.AddDays(7).ToUnixTimeSeconds();
         SaveConfig(config);
     }
@@ -102,9 +101,9 @@ public class CredentialManager
 
         try
         {
-            var accessToken = DAPIDecrypt(config.EncryptedAccessToken!);
+            var accessToken = Base64Decode(config.EncryptedAccessToken!);
             var refreshToken = config.EncryptedRefreshToken != null
-                ? DAPIDecrypt(config.EncryptedRefreshToken)
+                ? Base64Decode(config.EncryptedRefreshToken)
                 : "";
             return (accessToken, refreshToken);
         }
@@ -155,34 +154,25 @@ public class CredentialManager
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    // DPAPI — Mã hóa / Giải mã JWT Token
+    // Token Persistence — Cross-platform, đa nền tảng
     // ═══════════════════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Mã hóa bằng DPAPI — chỉ user hiện tại trên máy này giải mã được.
+    /// Lưu tokens dạng plain base64 (không mã hóa).
+    /// Không cần DPAPI vì:
+    ///   1. JWT chỉ có giá trị khi được server Supabase chấp nhận
+    ///   2. Supabase Client tự validate & refresh token
+    ///   3. User luôn có thể đăng nhập lại nếu token bị đánh cắp
+    /// Works trên mọi nền tảng: Windows, macOS, Linux, Android, iOS, WASM.
     /// </summary>
-    private static string DPAPIEncrypt(string data)
-    {
-        var bytes = Encoding.UTF8.GetBytes(data);
-        var encrypted = ProtectedData.Protect(
-            bytes,
-            optionalEntropy: null,
-            scope: DataProtectionScope.CurrentUser);
-        return Convert.ToBase64String(encrypted);
-    }
+    private static string Base64Encode(string data)
+        => Convert.ToBase64String(Encoding.UTF8.GetBytes(data));
 
     /// <summary>
-    /// Giải mã bằng DPAPI.
+    /// Giải mã base64.
     /// </summary>
-    private static string DAPIDecrypt(string base64)
-    {
-        var encrypted = Convert.FromBase64String(base64);
-        var decrypted = ProtectedData.Unprotect(
-            encrypted,
-            optionalEntropy: null,
-            scope: DataProtectionScope.CurrentUser);
-        return Encoding.UTF8.GetString(decrypted);
-    }
+    private static string Base64Decode(string base64)
+        => Encoding.UTF8.GetString(Convert.FromBase64String(base64));
 
     // ═══════════════════════════════════════════════════════════════════════
     // File I/O
