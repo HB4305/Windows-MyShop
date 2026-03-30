@@ -16,13 +16,14 @@ public class OrderService
     return _repository.GetDateOrderCountAsync(date);
   }
 
-  public Task<int> GetAvgWeeklyOrdersAsync(DateTime? referenceTime = null)
+  /// <summary>
+  /// Order count on the day before the reference date (yesterday).
+  /// </summary>
+  public Task<int> GetPrevDayOrdersAsync(DateTime? referenceTime = null)
   {
     DateTime currentDate = referenceTime ?? DateTime.Now;
-    DateTime end = currentDate.Date.AddDays(1);
-    DateTime start = end.AddDays(-7);
-
-    return _repository.GetAvgOrdersAsync(start, end);
+    DateTime prevDay = currentDate.AddDays(-1);
+    return _repository.GetDateOrderCountAsync(prevDay);
   }
 
   public Task<decimal> GetRevenueByDateAsync(DateTime? referenceTime = null)
@@ -31,11 +32,14 @@ public class OrderService
     return _repository.GetDateRevenueAsync(date);
   }
 
-  public Task<decimal> GetPrevDateRevenueAsync(DateTime? referenceTime = null)
+  /// <summary>
+  /// Revenue on the day before the reference date (yesterday).
+  /// </summary>
+  public Task<decimal> GetPrevDayRevenueAsync(DateTime? referenceTime = null)
   {
     DateTime currentDate = referenceTime ?? DateTime.Now;
-    DateTime prevDate = currentDate.AddDays(-1);
-    return _repository.GetDateRevenueAsync(prevDate);
+    DateTime prevDay = currentDate.AddDays(-1);
+    return _repository.GetDateRevenueAsync(prevDay);
   }
 
   public Task<List<DashboardRecentOrder>> GetRecentOrdersAsync(int limit = 3)
