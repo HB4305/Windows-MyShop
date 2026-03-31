@@ -61,6 +61,7 @@ public class StringToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
+<<<<<<< HEAD
 /// <summary>
 /// Chuyển bool → Foreground color. Dùng cho ConfigPage message.
 /// true  → xanh lá (0, 200, 0)
@@ -151,6 +152,16 @@ public class StringToImageConverter : IValueConverter
         }
         return null;
     }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Chuyển string rỗng -> false, có nội dung -> true</summary>
+public class StringToBoolConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+        => !string.IsNullOrWhiteSpace(value?.ToString());
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();

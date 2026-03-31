@@ -56,6 +56,12 @@ public sealed partial class ShellPage : Page
         UpdateActiveNav("Suppliers");
     }
 
+    private void NavCategory_Click(object sender, RoutedEventArgs e)
+    {
+        _frame.Navigate(typeof(CategoryPage));
+        UpdateActiveNav("Category");
+    }
+
     private void NavSettings_Click(object sender, RoutedEventArgs e)
     {
         _frame.Navigate(typeof(SettingsPage));
@@ -79,6 +85,7 @@ public sealed partial class ShellPage : Page
             nameof(OrdersManagementPage) => "OrdersManagement",
             nameof(SalesStatsPage) => "SalesStats",
             nameof(SuppliersPage) => "Suppliers",
+            nameof(CategoryPage) => "Category",
             nameof(SettingsPage) => "Settings",
             _ => null
         };
@@ -93,6 +100,7 @@ public sealed partial class ShellPage : Page
         ResetNavStyle(NavOrders);
         ResetNavStyle(NavSalesStats);
         ResetNavStyle(NavSuppliers);
+        ResetNavStyle(NavCategory);
         ResetNavStyle(NavSettings);
 
         var activeBtn = activeTag switch
@@ -103,6 +111,7 @@ public sealed partial class ShellPage : Page
             "OrdersManagement" => NavOrders,
             "SalesStats" => NavSalesStats,
             "Suppliers" => NavSuppliers,
+            "Category" => NavCategory,
             "Settings" => NavSettings,
             _ => null
         };
