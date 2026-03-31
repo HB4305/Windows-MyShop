@@ -40,7 +40,7 @@ public sealed partial class ShellPage : Page
 
     private void NavOrders_Click(object sender, RoutedEventArgs e)
     {
-        _frame.Navigate(typeof(OrdersManagementPage));
+        _frame.Navigate(typeof(CustomerOrderPage));
         UpdateActiveNav("OrdersManagement");
     }
 
@@ -82,6 +82,7 @@ public sealed partial class ShellPage : Page
             nameof(ReportPage) => "Reports",
             nameof(SportItemPage) => "ProductCatalog",
             nameof(ProductCatalogPage) => "ProductCatalog",
+            nameof(CustomerOrderPage) => "OrdersManagement",
             nameof(OrdersManagementPage) => "OrdersManagement",
             nameof(SalesStatsPage) => "SalesStats",
             nameof(SuppliersPage) => "Suppliers",

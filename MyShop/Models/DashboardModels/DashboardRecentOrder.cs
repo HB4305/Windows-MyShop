@@ -3,7 +3,7 @@ namespace MyShop.Models.DashboardModels;
 public class DashboardRecentOrder
 {
     public int Id { get; set; }
-    public DateTime? CreatedAt { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
     public string CustomerName { get; set; } = string.Empty;
     public string? Status { get; set; }
     public decimal? TotalPrice { get; set; }

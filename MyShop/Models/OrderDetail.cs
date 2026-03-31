@@ -16,11 +16,17 @@ public class OrderDetail : BaseModel
     [Column("item_id")]
     public int? ItemId { get; set; }
 
+    [Column("item_name")]
+    [MaxLength(255, ErrorMessage = "Item name must not exceed 255 characters")]
+    public string? ItemName { get; set; }
+
     [Column("quantity")]
-    [Required]
+    [Required(ErrorMessage = "Quantity is required")]
+    [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
     public int Quantity { get; set; }
 
     [Column("unit_price")]
-    [Required]
+    [Required(ErrorMessage = "Unit price is required")]
+    [Range(0, 9999999999.99, ErrorMessage = "Unit price exceeds allowed range")]
     public decimal UnitPrice { get; set; }
 }

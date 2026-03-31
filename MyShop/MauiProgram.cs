@@ -62,6 +62,8 @@ public static class MauiProgram
         Services.AddScoped<OrderRepository>();
         Services.AddScoped<SupplyRepository>();
         Services.AddScoped<ReportRepository>();
+        Services.AddScoped<CustomerOrderRepository>();
+        Services.AddScoped<OrderDetailRepository>();
 
         // ── 6. Services ─────────────────────────────────────────
         Services.AddScoped<CategoryService>();
@@ -69,6 +71,8 @@ public static class MauiProgram
         Services.AddScoped<OrderService>();
         Services.AddScoped<SupplyService>();
         Services.AddScoped<ReportService>();
+        Services.AddScoped<CustomerOrderService>();
+        Services.AddScoped<OrderDetailService>();
         Services.AddScoped<IProductSalesStrategy, DayProductSalesStrategy>();
         Services.AddScoped<IProductSalesStrategy, WeekProductSalesStrategy>();
         Services.AddScoped<IProductSalesStrategy, MonthProductSalesStrategy>();
@@ -82,6 +86,8 @@ public static class MauiProgram
         Services.AddTransient<ProductReportViewModel>();
         Services.AddTransient<SportItemViewModel>();
         Services.AddTransient<SportItemDetailViewModel>();
+        Services.AddTransient<CustomerOrderViewModel>();
+        Services.AddTransient<OrderDetailViewModel>();
 
         // ── 8. Build và lưu provider ────────────────────────────
         _provider = Services.BuildServiceProvider();
