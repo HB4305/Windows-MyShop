@@ -10,7 +10,8 @@
     </Grid.ColumnDefinitions>
 
     <!-- ═══════════════════════════════════ SIDEBAR ═══════════════════════════════════ -->
-    <Grid Grid.Column="0" Background="#FFFFFF">
+    <Grid Grid.Column="0"
+          Background="#FFFFFF">
 
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
@@ -19,9 +20,15 @@
       </Grid.RowDefinitions>
 
       <!-- Brand Header -->
-      <StackPanel Grid.Row="0" Margin="20,20,20,24">
+      <StackPanel Grid.Row="0"
+                  Margin="20,20,20,24">
         <!-- Logo circle -->
-        <Border Width="40" Height="40" CornerRadius="20" Background="#7C3AED" HorizontalAlignment="Left" Margin="0,0,0,10">
+        <Border Width="40"
+                Height="40"
+                CornerRadius="20"
+                Background="#7C3AED"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,10">
           <TextBlock Text="ES"
                      Foreground="White"
                      FontWeight="Bold"
@@ -36,11 +43,13 @@
       </StackPanel>
 
       <!-- Navigation Menu -->
-      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="12,0,12,0" Spacing="2">
+      <ScrollViewer Grid.Row="1"
+                    VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="12,0,12,0"
+                    Spacing="2">
 
-          <!-- SECTION: MAIN -->
-          <TextBlock Text="MAIN"
+          <!-- SECTION: MENU -->
+          <TextBlock Text="MENU"
                      FontSize="10"
                      FontWeight="SemiBold"
                      Foreground="#9CA3AF"
@@ -57,16 +66,31 @@
                   HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left">
             <Button.Resources>
-              <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
-                <Setter Property="Padding" Value="10,8"/>
-                <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                <Setter Property="Background" Value="#F3F0FF"/>
+              <Style TargetType="Button"
+                     BasedOn="{StaticResource ButtonRevealStyle}">
+                <Setter Property="Padding"
+                        Value="10,8"/>
+                <Setter Property="HorizontalAlignment"
+                        Value="Stretch"/>
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Left"/>
+                <Setter Property="Background"
+                        Value="#F3F0FF"/>
               </Style>
             </Button.Resources>
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE80F;" FontSize="14" Foreground="#7C3AED" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Dashboard" FontSize="13" FontWeight="SemiBold" Foreground="#7C3AED" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE80F;"
+                         FontSize="14"
+                         Foreground="#7C3AED"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Dashboard"
+                         FontSize="13"
+                         FontWeight="SemiBold"
+                         Foreground="#7C3AED"
+                         VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -77,9 +101,18 @@
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE9F9;" FontSize="14" Foreground="#6B7280" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Reports" FontSize="13" Foreground="#6B7280" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE9F9;"
+                         FontSize="14"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Reports"
+                         FontSize="13"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -90,9 +123,18 @@
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7BF;" FontSize="14" Foreground="#6B7280" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Product Catalog" FontSize="13" Foreground="#6B7280" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE7BF;"
+                         FontSize="14"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Product Catalog"
+                         FontSize="13"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -103,9 +145,18 @@
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7BC;" FontSize="14" Foreground="#6B7280" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Orders Management" FontSize="13" Foreground="#6B7280" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE7BC;"
+                         FontSize="14"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Orders Management"
+                         FontSize="13"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -116,30 +167,18 @@
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE9D2;" FontSize="14" Foreground="#6B7280" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Sales Stats" FontSize="13" Foreground="#6B7280" VerticalAlignment="Center"/>
-            </StackPanel>
-          </Button>
-
-          <!-- SECTION: MANAGEMENT -->
-          <TextBlock Text="MANAGEMENT"
-                     FontSize="10"
-                     FontWeight="SemiBold"
-                     Foreground="#9CA3AF"
-                     Margin="8,16,0,8"
-                     CharacterSpacing="60"/>
-
-          <!-- Suppliers -->
-          <Button x:Name="NavSuppliers"
-                  Click="NavSuppliers_Click"
-                  Tag="Suppliers"
-                  Padding="10,8"
-                  HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B8;" FontSize="14" Foreground="#6B7280" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Suppliers" FontSize="13" Foreground="#6B7280" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE9D2;"
+                         FontSize="14"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Sales Stats"
+                         FontSize="13"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -150,9 +189,18 @@
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8EC;" FontSize="14" Foreground="#6B7280" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Category" FontSize="13" Foreground="#6B7280" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE8EC;"
+                         FontSize="14"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Category"
+                         FontSize="13"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -163,9 +211,18 @@
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
                   HorizontalContentAlignment="Left">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE713;" FontSize="14" Foreground="#6B7280" VerticalAlignment="Center" Width="20"/>
-              <TextBlock Text="Settings" FontSize="13" Foreground="#6B7280" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE713;"
+                         FontSize="14"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Settings"
+                         FontSize="13"
+                         Foreground="#6B7280"
+                         VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -189,7 +246,8 @@
 
           <!-- Avatar -->
           <Border Grid.Column="0"
-                  Width="32" Height="32"
+                  Width="32"
+                  Height="32"
                   CornerRadius="16"
                   Background="#DBEAFE"
                   Margin="0,0,10,0">
@@ -202,7 +260,8 @@
           </Border>
 
           <!-- Name & Role -->
-          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+          <StackPanel Grid.Column="1"
+                      VerticalAlignment="Center">
             <TextBlock Text="Alex Morgan"
                        FontSize="12"
                        FontWeight="SemiBold"
@@ -252,30 +311,44 @@
                      VerticalAlignment="Center"/>
 
           <!-- Right side icons -->
-          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
+          <StackPanel Grid.Column="1"
+                      Orientation="Horizontal"
+                      Spacing="4">
 
             <!-- Notification bell -->
             <Button Tag="Notifications"
                     Click="NavNotifications_Click"
-                    Width="36" Height="36"
+                    Width="36"
+                    Height="36"
                     Background="Transparent"
                     BorderThickness="0"
                     ToolTipService.ToolTip="Notifications">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7E3;" FontSize="16" Foreground="#6B7280"/>
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE7E3;"
+                         FontSize="16"
+                         Foreground="#6B7280"/>
             </Button>
 
             <!-- Settings gear -->
             <Button Tag="Settings"
                     Click="NavSettings_Click"
-                    Width="36" Height="36"
+                    Width="36"
+                    Height="36"
                     Background="Transparent"
                     BorderThickness="0"
                     ToolTipService.ToolTip="Settings">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE713;" FontSize="16" Foreground="#6B7280"/>
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE713;"
+                         FontSize="16"
+                         Foreground="#6B7280"/>
             </Button>
 
             <!-- User avatar -->
-            <Border Width="36" Height="36" CornerRadius="18" Background="#DBEAFE" Margin="8,0,0,0">
+            <Border Width="36"
+                    Height="36"
+                    CornerRadius="18"
+                    Background="#DBEAFE"
+                    Margin="8,0,0,0">
               <TextBlock Text="AM"
                          FontSize="11"
                          FontWeight="Bold"
