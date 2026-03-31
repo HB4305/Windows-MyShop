@@ -8,6 +8,52 @@ public class ReportRepository
 
   public ReportRepository(Supabase.Client client) => _client = client;
 
+  public async Task<ReportOverview> GetReportOverviewAsync(ProductSalesFilter filter)
+  {
+    var result = await _client.Rpc<List<ReportOverview>>(
+      "get_report_overview",
+      new
+      {
+        p_start_date = filter.StartDate,
+        p_end_date = filter.EndDate,
+        p_category_name = string.IsNullOrWhiteSpace(filter.CategoryName) ? null : filter.CategoryName,
+        p_product_name = string.IsNullOrWhiteSpace(filter.ProductName) ? null : filter.ProductName
+      }
+    );
+
+    return result?.FirstOrDefault() ?? new ReportOverview();
+  }
+
+  public async Task<List<RevenueData>> GetCategoryRevenueAsync(ProductSalesFilter filter)
+  {
+    var result = await _client.Rpc<List<RevenueData>>(
+      "get_category_revenue",
+      new
+      {
+        p_start_date = filter.StartDate,
+        p_end_date = filter.EndDate,
+        p_category_name = string.IsNullOrWhiteSpace(filter.CategoryName) ? null : filter.CategoryName,
+        p_product_name = string.IsNullOrWhiteSpace(filter.ProductName) ? null : filter.ProductName
+      }
+    );
+
+    return result ?? [];
+  }
+
+  public async Task<List<ProfitData>> GetCategoryProfitAsync(DateTime startDate, DateTime endDate)
+  {
+    var result = await _client.Rpc<List<ProfitData>>(
+      "get_category_profit",
+      new
+      {
+        p_start_date = startDate,
+        p_end_date = endDate
+      }
+    );
+
+    return result ?? [];
+  }
+
   public async Task<List<TopPerformingProduct>> GetTopPerformingProductsAsync(
     ProductSalesFilter filter,
     int limit = 5

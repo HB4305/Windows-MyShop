@@ -18,6 +18,71 @@ public class ReportService
     _strategies = strategies.ToDictionary(strategy => strategy.Period, StringComparer.OrdinalIgnoreCase);
   }
 
+  public async Task<decimal> GetTotalRevenueAsync(ProductSalesFilter filter)
+    => (await GetReportOverviewAsync(filter)).TotalRevenue;
+
+  public async Task<int> GetTotalQuantitySoldAsync(ProductSalesFilter filter)
+    => (await GetReportOverviewAsync(filter)).TotalQuantitySold;
+
+  public async Task<decimal> GetTotalProfitAsync(ProductSalesFilter filter)
+    => (await GetReportOverviewAsync(filter)).TotalProfit;
+
+  public async Task<int> GetTotalCustomersAsync(ProductSalesFilter filter)
+    => (await GetReportOverviewAsync(filter)).TotalCustomers;
+
+  public Task<ReportOverview> GetReportOverviewAsync(ProductSalesFilter filter)
+  {
+    filter.StartDate = NormalizeStartDate(filter.StartDate);
+    filter.EndDate = NormalizeEndDate(filter.EndDate);
+    filter.CategoryName = NormalizeFilter(filter.CategoryName);
+    filter.ProductName = NormalizeFilter(filter.ProductName);
+
+    return _repository.GetReportOverviewAsync(filter);
+  }
+
+  public Task<List<RevenueData>> GetCategoryRevenueAsync(ProductSalesFilter filter)
+  {
+    filter.StartDate = NormalizeStartDate(filter.StartDate);
+    filter.EndDate = NormalizeEndDate(filter.EndDate);
+    filter.CategoryName = NormalizeFilter(filter.CategoryName);
+    filter.ProductName = NormalizeFilter(filter.ProductName);
+
+    return _repository.GetCategoryRevenueAsync(filter);
+  }
+
+  public Task<List<ProfitData>> GetCurrentCategoryProfitAsync(string period, DateTime? referenceTime = null)
+  {
+    var current = referenceTime ?? DateTime.Now;
+    var normalizedPeriod = NormalizeFilter(period)?.ToLowerInvariant() ?? "day";
+
+    DateTime startDate;
+    DateTime endDate;
+
+    switch (normalizedPeriod)
+    {
+      case "week":
+        var dayOfWeek = (int)current.DayOfWeek;
+        var offset = dayOfWeek == 0 ? 6 : dayOfWeek - 1;
+        startDate = current.Date.AddDays(-offset);
+        endDate = startDate.AddDays(7);
+        break;
+      case "month":
+        startDate = new DateTime(current.Year, current.Month, 1);
+        endDate = startDate.AddMonths(1);
+        break;
+      case "year":
+        startDate = new DateTime(current.Year, 1, 1);
+        endDate = startDate.AddYears(1);
+        break;
+      default:
+        startDate = current.Date;
+        endDate = startDate.AddDays(1);
+        break;
+    }
+
+    return _repository.GetCategoryProfitAsync(startDate, endDate);
+  }
+
   public Task<List<ProductSale>> GetProductSalesInPeriodAsync(ProductSalesFilter filter)
   {
     filter.StartDate = NormalizeStartDate(filter.StartDate);

@@ -11,6 +11,8 @@ public abstract class ProductSale
   public decimal GrossRevenue { get; set; } = 0;
 
   public string PeriodLabel => GetPeriod();
+  public string QuantitySoldDisplay => $"{QuantitySold:N0}";
+  public string GrossRevenueDisplay => $"{GrossRevenue:N0} VND";
   public abstract string GetPeriod();
 }
 
