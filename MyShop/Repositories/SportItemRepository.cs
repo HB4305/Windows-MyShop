@@ -32,7 +32,7 @@ public class SportItemRepository
                 ItemId = item.Id,
                 Name = item.Name,
                 StockQuantity = item.StockQuantity ?? 0,
-                ImageUrls = item.ImageUrls
+                ImageUrls = item.ImageUrls?.ToArray() ?? Array.Empty<string>()
             })
             .ToList();
     }
