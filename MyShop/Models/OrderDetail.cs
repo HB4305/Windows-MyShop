@@ -16,6 +16,10 @@ public class OrderDetail : BaseModel
     [Column("item_id")]
     public int? ItemId { get; set; }
 
+    [Column("item_name")]
+    [MaxLength(255, ErrorMessage = "Item name must not exceed 255 characters")]
+    public string? ItemName { get; set; }
+
     [Column("quantity")]
     [Required(ErrorMessage = "Quantity is required")]
     [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
