@@ -12,7 +12,20 @@ public partial class App : Application
     protected Window? MainWindow { get; private set; }
     private Frame? _rootFrame;
 
-    public App() { this.InitializeComponent(); }
+    public App()
+    {
+        // Set global culture to Vietnamese for correct date and number formatting
+        var culture = new System.Globalization.CultureInfo("vi-VN");
+        System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
+        System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
+        System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+        System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+
+        // Uno-specific primary language override
+        Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "vi-VN";
+
+        this.InitializeComponent();
+    }
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {

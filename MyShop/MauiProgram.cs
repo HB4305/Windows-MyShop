@@ -80,6 +80,8 @@ public static class MauiProgram
         Services.AddTransient<CategoryViewModel>();
         Services.AddTransient<DashboardViewModel>();
         Services.AddTransient<ProductReportViewModel>();
+        Services.AddTransient<SportItemViewModel>();
+        Services.AddTransient<SportItemDetailViewModel>();
 
         // ── 8. Build và lưu provider ────────────────────────────
         _provider = Services.BuildServiceProvider();

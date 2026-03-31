@@ -34,7 +34,7 @@ public sealed partial class ShellPage : Page
 
     private void NavProductCatalog_Click(object sender, RoutedEventArgs e)
     {
-        _frame.Navigate(typeof(ProductCatalogPage));
+        _frame.Navigate(typeof(SportItemPage));
         UpdateActiveNav("ProductCatalog");
     }
 
@@ -74,6 +74,7 @@ public sealed partial class ShellPage : Page
         {
             nameof(DashboardPage) => "Dashboard",
             nameof(ReportPage) => "Reports",
+            nameof(SportItemPage) => "ProductCatalog",
             nameof(ProductCatalogPage) => "ProductCatalog",
             nameof(OrdersManagementPage) => "OrdersManagement",
             nameof(SalesStatsPage) => "SalesStats",

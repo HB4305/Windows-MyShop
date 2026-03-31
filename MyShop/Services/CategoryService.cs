@@ -11,8 +11,6 @@ public class CategoryService
 
     public async Task<List<Category>> GetAllAsync()
     {
-        // Có thể thêm logic nghiệp vụ ở đây
-        // Ví dụ: lọc, sắp xếp, transform dữ liệu...
         return await _repository.GetAllAsync();
     }
 }

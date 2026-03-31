@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
@@ -104,6 +106,50 @@ public class HexToBrushConverter : IValueConverter
         }
         return new Microsoft.UI.Xaml.Media.SolidColorBrush(
             Windows.UI.Color.FromArgb(0, 0, 0, 0));
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Lấy ảnh đầu tiên trong danh sách ảnh (array text) để hiển thị thumbnail</summary>
+public class FirstImageConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is IEnumerable<string> list && list.Any())
+        {
+            var url = list.First();
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                try
+                {
+                    return new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new System.Uri(url));
+                }
+                catch { }
+            }
+        }
+        return null;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Chuyển string URL thành BitmapImage để dùng cho Image.Source trong DataTemplate</summary>
+public class StringToImageConverter : IValueConverter
+{
+    public object? Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is string url && !string.IsNullOrWhiteSpace(url))
+        {
+            try
+            {
+                return new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new System.Uri(url));
+            }
+            catch { }
+        }
+        return null;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)

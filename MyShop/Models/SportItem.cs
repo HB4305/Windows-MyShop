@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using Postgrest.Attributes;
 using Postgrest.Models;
 
@@ -12,7 +12,7 @@ public class SportItem : BaseModel
     public int Id { get; set; }
 
     [Column("category_id")]
-    public int? CategoryId { get; set; }
+    public int CategoryId { get; set; }
 
     [Column("name")]
     [Required]
@@ -40,7 +40,7 @@ public class SportItem : BaseModel
     public int? LowStockThreshold { get; set; }
 
     [Column("image_urls")]
-    public string[] ImageUrls { get; set; } = [];
+    public List<string> ImageUrls { get; set; } = new();
 
     public string? ImageUrl => ImageUrls.FirstOrDefault();
 }
