@@ -61,7 +61,6 @@ public class StringToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-<<<<<<< HEAD
 /// <summary>
 /// Chuyển bool → Foreground color. Dùng cho ConfigPage message.
 /// true  → xanh lá (0, 200, 0)
