@@ -40,4 +40,14 @@ public class CategoryRepository
             .Where(x => x.Id == id)
             .Delete();
     }
+
+    public async Task<bool> HasProductsAsync(int categoryId)
+    {
+        var response = await _client.From<SportItem>()
+            .Where(x => x.CategoryId == categoryId)
+            .Limit(1)
+            .Get();
+
+        return response.Models.Count > 0;
+    }
 }

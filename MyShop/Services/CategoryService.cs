@@ -33,6 +33,12 @@ public class CategoryService
 
     public async Task DeleteAsync(int id)
     {
+        bool hasProducts = await _repository.HasProductsAsync(id);
+        if (hasProducts)
+        {
+            throw new InvalidOperationException("Cannot delete this category because it still contains products.");
+        }
+
         await _repository.DeleteAsync(id);
     }
 
