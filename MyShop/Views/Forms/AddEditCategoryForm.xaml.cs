@@ -12,13 +12,13 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 
 		if (category is null)
 		{
-			Title = "Thêm danh mục";
+			Title = "Add category";
 			CategoryName = string.Empty;
 			CategoryDescription = string.Empty;
 		}
 		else
 		{
-			Title = "Sửa danh mục";
+			Title = "Edit category";
 			CategoryName = category.Name;
 			CategoryDescription = category.Description ?? string.Empty;
 		}
@@ -41,8 +41,8 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 	{
 		get
 		{
-			if (IsNameEmpty) return "Tên danh mục là bắt buộc";
-			if (IsNameTooLong) return "Tên danh mục không được vượt quá 100 ký tự";
+			if (IsNameEmpty) return "Category name is required";
+			if (IsNameTooLong) return "Category name must not exceed 100 characters";
 			return string.Empty;
 		}
 	}

@@ -38,21 +38,21 @@
                   MinHeight="32"
                   Style="{StaticResource EllipsisButton}">
             <ToolTipService.ToolTip>
-              <ToolTip Content="Tùy chọn"/>
+              <ToolTip Content="Options"/>
             </ToolTipService.ToolTip>
             <Button.Content>
               <FontIcon Glyph="&#xE712;"/>
             </Button.Content>
             <Button.Flyout>
               <MenuFlyout>
-                <MenuFlyoutItem Text="Sửa"
+                <MenuFlyoutItem Text="Edit"
                                 DataContext="{Binding}"
                                 Click="EditCategory_Click">
                   <MenuFlyoutItem.Icon>
                     <FontIcon Glyph="&#xE70F;"/>
                   </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem Text="Xóa"
+                <MenuFlyoutItem Text="Delete"
                                 DataContext="{Binding}"
                                 Click="DeleteCategory_Click">
                   <MenuFlyoutItem.Icon>
@@ -79,7 +79,7 @@
     <StackPanel Grid.Row="0"
                 Orientation="Horizontal"
                 Spacing="16">
-      <TextBlock Text="Danh mục"
+      <TextBlock Text="Categories"
                  Style="{StaticResource TitleTextBlockStyle}"
                  VerticalAlignment="Center"/>
       <ProgressBar IsIndeterminate="True"
@@ -92,12 +92,12 @@
                 Spacing="8">
       <InfoBar IsOpen="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
                Severity="Error"
-               Title="Đã xảy ra lỗi"
+               Title="An error occurred"
                Message="{Binding ErrorMessage}"/>
 
       <InfoBar IsOpen="{Binding SuccessMessage, Converter={StaticResource StringToBoolConverter}}"
                Severity="Success"
-               Title="Thành công"
+               Title="Success"
                Message="{Binding SuccessMessage}"/>
     </StackPanel>
 
@@ -111,7 +111,7 @@
                  VerticalAlignment="Center"
                  Style="{StaticResource BodyTextBlockStyle}">
         <Run Text="{Binding Categories.Count, Mode=OneWay}"/>
-        <Run Text="danh mục"/>
+        <Run Text="categories"/>
       </TextBlock>
 
       <Button Grid.Column="1"
@@ -120,7 +120,7 @@
         <StackPanel Orientation="Horizontal"
                     Spacing="8">
           <FontIcon Glyph="&#xE710;"/>
-          <TextBlock Text="Thêm"/>
+          <TextBlock Text="Add"/>
         </StackPanel>
       </Button>
     </Grid>
@@ -162,7 +162,7 @@
                   FontSize="32"
                   Opacity="0.7"
                   HorizontalAlignment="Center"/>
-        <TextBlock Text="Chưa có danh mục"
+        <TextBlock Text="No categories yet"
                    Style="{StaticResource BodyTextBlockStyle}"
                    HorizontalAlignment="Center"/>
       </StackPanel>

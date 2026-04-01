@@ -7,15 +7,15 @@
 	mc:Ignorable="d"
 	x:Name="DialogRoot"
 	DefaultButton="Primary"
-	PrimaryButtonText="Xác nhận"
-	CloseButtonText="Hủy"
+	PrimaryButtonText="Confirm"
+	CloseButtonText="Cancel"
 	MinWidth="400">
 
 	<StackPanel Spacing="16">
 		<StackPanel Spacing="8">
 			<TextBox x:Name="CategoryNameTextBox"
-					 Header="Tên danh mục"
-					 PlaceholderText="Nhập tên danh mục"
+					 Header="Category name"
+					 PlaceholderText="Enter category name"
 					 TextChanged="CategoryNameTextBox_TextChanged"
 					 MaxLength="100"
 					 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -25,8 +25,8 @@
 					   Style="{StaticResource CaptionTextBlockStyle}"/>
 		</StackPanel>
 
-		<TextBox PlaceholderText="Nhập mô tả (không bắt buộc)"
-				 Header="Mô tả"
+		<TextBox PlaceholderText="Enter description (optional)"
+				 Header="Description"
 				 TextWrapping="Wrap"
 				 AcceptsReturn="True"
 				 MinHeight="90"

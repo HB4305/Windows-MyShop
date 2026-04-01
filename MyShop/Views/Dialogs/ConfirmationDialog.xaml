@@ -7,12 +7,12 @@
 	mc:Ignorable="d"
 	x:Name="DialogRoot"
 	Title="{x:Bind DialogTitle, Mode=OneWay}"
-	PrimaryButtonText="Xác nhận"
-	CloseButtonText="Hủy"
+	PrimaryButtonText="Confirm"
+	CloseButtonText="Cancel"
 	DefaultButton="Close">
 
 	<StackPanel Spacing="16">
 		<TextBlock Text="{x:Bind DialogContent, Mode=OneWay}"
-				TextWrapping="Wrap"/>
+				   TextWrapping="Wrap"/>
 	</StackPanel>
 </ContentDialog>
