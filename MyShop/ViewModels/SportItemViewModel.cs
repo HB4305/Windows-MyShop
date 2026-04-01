@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Dispatching;
 using MyShop.Models;
 using MyShop.Services;
 
@@ -8,15 +10,20 @@ namespace MyShop.ViewModels;
 
 public partial class SportItemViewModel : ObservableObject
 {
-    private readonly SportItemService _service;
+    public const double PriceUsdSliderMax = 500;
 
-    public SportItemViewModel(SportItemService service)
+    private readonly SportItemService _service;
+    private readonly CategoryService _categoryService;
+    private int _priceFilterDebounce;
+
+    public SportItemViewModel(SportItemService service, CategoryService categoryService)
     {
         _service = service;
+        _categoryService = categoryService;
     }
 
     [ObservableProperty]
-    private ObservableCollection<SportItem> _items = [];
+    private ObservableCollection<SportItemListRow> _items = [];
 
     [ObservableProperty]
     private bool _isLoading;
@@ -57,12 +64,100 @@ public partial class SportItemViewModel : ObservableObject
     [ObservableProperty]
     private double? _maxPrice;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PriceRangeSummary))]
+    private double _priceUsdMin;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PriceRangeSummary))]
+    private double _priceUsdMax = PriceUsdSliderMax;
+
+    /// <summary>Khoảng giá đang lọc (chỉ hiển thị; đồng bộ với thanh range).</summary>
+    public string PriceRangeSummary
+    {
+        get
+        {
+            var lo = PriceUsdMin.ToString("N2", CultureInfo.InvariantCulture);
+            if (PriceUsdMax >= PriceUsdSliderMax - 0.0001)
+                return $"${lo} – ${PriceUsdSliderMax.ToString("N2", CultureInfo.InvariantCulture)}+";
+            var hi = PriceUsdMax.ToString("N2", CultureInfo.InvariantCulture);
+            return $"${lo} – ${hi}";
+        }
+    }
+
     // Sắp xếp
     [ObservableProperty]
     private string _sortField = "name";
 
     [ObservableProperty]
     private bool _isSortAscending = true;
+
+    /// <summary>Gọi sau khi UI sort (ComboBox) đã có giá trị cột — tải lại danh sách.</summary>
+    public Task ReloadWithCurrentSortAsync()
+    {
+        CurrentPage = 1;
+        return LoadItemsAsync();
+    }
+
+    partial void OnIsSortAscendingChanged(bool value)
+    {
+        if (string.IsNullOrWhiteSpace(SortField))
+            return;
+        CurrentPage = 1;
+        _ = LoadItemsAsync();
+    }
+
+    partial void OnPriceUsdMinChanged(double value)
+    {
+        if (value > PriceUsdMax)
+            PriceUsdMax = value;
+        SyncPriceFiltersFromSliders();
+        SchedulePriceFilterSearch();
+    }
+
+    partial void OnPriceUsdMaxChanged(double value)
+    {
+        if (value < PriceUsdMin)
+            PriceUsdMin = value;
+        SyncPriceFiltersFromSliders();
+        SchedulePriceFilterSearch();
+    }
+
+    private void SyncPriceFiltersFromSliders()
+    {
+        if (PriceUsdMin <= 0)
+            MinPrice = null;
+        else
+            MinPrice = PriceUsdMin;
+
+        if (PriceUsdMax >= PriceUsdSliderMax - 0.0001)
+            MaxPrice = null;
+        else
+            MaxPrice = PriceUsdMax;
+    }
+
+    private void SchedulePriceFilterSearch()
+    {
+        var gen = ++_priceFilterDebounce;
+        _ = DebounceSearchAsync(gen);
+    }
+
+    private async Task DebounceSearchAsync(int gen)
+    {
+        await Task.Delay(280);
+        if (gen != _priceFilterDebounce)
+            return;
+
+        var dq = DispatcherQueue.GetForCurrentThread();
+        if (dq != null)
+        {
+            dq.TryEnqueue(() => SearchCommand.Execute(null));
+        }
+        else
+        {
+            SearchCommand.Execute(null);
+        }
+    }
 
     [RelayCommand]
     public async Task LoadItemsAsync()
@@ -71,17 +166,28 @@ public partial class SportItemViewModel : ObservableObject
         {
             IsLoading = true;
             ErrorMessage = string.Empty;
-            
-            var (items, totalCount) = await _service.GetItemsAsync(
-                CurrentPage, 
-                PageSize, 
-                SearchKeyword, 
-                (decimal?)MinPrice, 
-                (decimal?)MaxPrice, 
-                SortField, 
+
+            var categories = await _categoryService.GetAllAsync();
+            var catNames = categories.ToDictionary(c => c.Id, c => c.Name);
+
+            var (rawItems, totalCount) = await _service.GetItemsAsync(
+                CurrentPage,
+                PageSize,
+                SearchKeyword,
+                (decimal?)MinPrice,
+                (decimal?)MaxPrice,
+                SortField,
                 IsSortAscending);
 
-            Items = new ObservableCollection<SportItem>(items);
+            var rows = rawItems
+                .Select(i => new SportItemListRow
+                {
+                    Item = i,
+                    CategoryName = catNames.TryGetValue(i.CategoryId, out var n) ? n : "—"
+                })
+                .ToList();
+
+            Items = new ObservableCollection<SportItemListRow>(rows);
             TotalItems = totalCount;
         }
         catch (Exception ex)

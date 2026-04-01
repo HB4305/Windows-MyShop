@@ -19,7 +19,6 @@ public partial class CategoryViewModel : ObservableObject
     public CategoryViewModel(CategoryService service)
     {
         _service = service;
-        // Tự động tải danh sách khi khởi tạo
         _ = LoadCategoriesAsync();
     }
 
@@ -86,7 +85,7 @@ public partial class CategoryViewModel : ObservableObject
 
         if (success)
         {
-            SuccessMessage = $"Đã thêm danh mục \"{payload.Name}\"";
+            SuccessMessage = $"Added category \"{payload.Name}\"";
         }
     }
 
@@ -118,7 +117,7 @@ public partial class CategoryViewModel : ObservableObject
 
         if (success)
         {
-            SuccessMessage = $"Đã sửa danh mục \"{payload.Name}\"";
+            SuccessMessage = $"Updated category \"{payload.Name}\"";
         }
     }
 
@@ -131,8 +130,8 @@ public partial class CategoryViewModel : ObservableObject
         }
 
         bool confirmed = await ShowConfirmationDialogAsync(
-            "Xác nhận xóa",
-            $"Bạn có chắc chắn muốn xóa danh mục \"{category.Name}\"?\nQuyết định này không thể hoàn tác."
+            "Confirm delete",
+            $"Are you sure you want to delete \"{category.Name}\"?\nThis action cannot be undone."
         );
 
         if (!confirmed)
@@ -143,7 +142,7 @@ public partial class CategoryViewModel : ObservableObject
         bool success = await ExecuteMutationAsync(async () => await _service.DeleteAsync(category.Id));
         if (success)
         {
-            SuccessMessage = $"Đã xóa danh mục \"{category.Name}\"";
+            SuccessMessage = $"Deleted category \"{category.Name}\"";
         }
     }
 
