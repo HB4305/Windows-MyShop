@@ -19,7 +19,6 @@ public partial class CategoryViewModel : ObservableObject
     public CategoryViewModel(CategoryService service)
     {
         _service = service;
-        // Tự động tải danh sách khi khởi tạo
         _ = LoadCategoriesAsync();
     }
 

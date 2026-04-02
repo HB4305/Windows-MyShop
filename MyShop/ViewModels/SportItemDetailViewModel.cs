@@ -1,9 +1,10 @@
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyShop.Models;
 using MyShop.Services;
-using System.IO;
-using System.Collections.ObjectModel;
 
 namespace MyShop.ViewModels;
 
@@ -12,10 +13,53 @@ public partial class SportItemDetailViewModel : ObservableObject
     private readonly SportItemService _service;
     private readonly CategoryService _catService;
 
+    public Func<string, string, Task<bool>>? ShowConfirmationDialogAsync { get; set; }
+
     public SportItemDetailViewModel(SportItemService service, CategoryService catService)
     {
         _service = service;
         _catService = catService;
+        ImageUrls.CollectionChanged += OnImageUrlsCollectionChanged;
+    }
+
+    private void OnImageUrlsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Remove:
+                if (e.OldStartingIndex >= 0 && e.OldStartingIndex < SelectedImageIndex)
+                    SelectedImageIndex--;
+                else if (e.OldStartingIndex >= 0
+                         && e.OldStartingIndex == SelectedImageIndex
+                         && SelectedImageIndex >= ImageUrls.Count)
+                    SelectedImageIndex = Math.Max(0, ImageUrls.Count - 1);
+                break;
+            case NotifyCollectionChangedAction.Reset:
+                SelectedImageIndex = 0;
+                break;
+            case NotifyCollectionChangedAction.Move:
+                AdjustSelectedIndexAfterMove(e.OldStartingIndex, e.NewStartingIndex);
+                break;
+        }
+
+        if (ImageUrls.Count == 0)
+            SelectedImageIndex = 0;
+        else if (SelectedImageIndex >= ImageUrls.Count)
+            SelectedImageIndex = ImageUrls.Count - 1;
+
+        OnPropertyChanged(nameof(PreviewImageUrl));
+    }
+
+    /// <summary>Keeps selection aligned when items reorder (drag-drop or Move).</summary>
+    private void AdjustSelectedIndexAfterMove(int oldIdx, int newIdx)
+    {
+        if (oldIdx < 0 || newIdx < 0) return;
+        if (SelectedImageIndex == oldIdx)
+            SelectedImageIndex = newIdx;
+        else if (oldIdx < newIdx && oldIdx < SelectedImageIndex && SelectedImageIndex <= newIdx)
+            SelectedImageIndex--;
+        else if (oldIdx > newIdx && newIdx <= SelectedImageIndex && SelectedImageIndex < oldIdx)
+            SelectedImageIndex++;
     }
 
     [ObservableProperty]
@@ -32,6 +76,20 @@ public partial class SportItemDetailViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<string> _imageUrls = [];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PreviewImageUrl))]
+    private int _selectedImageIndex;
+
+    /// <summary>URL of the image shown in the main preview (left).</summary>
+    public string? PreviewImageUrl =>
+        ImageUrls.Count > 0 && SelectedImageIndex >= 0 && SelectedImageIndex < ImageUrls.Count
+            ? ImageUrls[SelectedImageIndex]
+            : null;
+
+    /// <summary>Description field on the form (no DB column yet).</summary>
+    [ObservableProperty]
+    private string _productDescriptionUi = string.Empty;
 
     [ObservableProperty]
     private bool _isLoading;
@@ -67,11 +125,15 @@ public partial class SportItemDetailViewModel : ObservableObject
             {
                 Item = new SportItem();
                 ImageUrls.Clear();
+                ProductDescriptionUi = string.Empty;
             }
+
+            SelectedImageIndex = ImageUrls.Count > 0 ? 0 : 0;
+            OnPropertyChanged(nameof(PreviewImageUrl));
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Lỗi khởi tạo: {ex.Message}";
+            ErrorMessage = $"Initialization error: {ex.Message}";
         }
         finally
         {
@@ -89,7 +151,6 @@ public partial class SportItemDetailViewModel : ObservableObject
             IsLoading = true;
             if (SelectedCategory != null) Item.CategoryId = SelectedCategory.Id;
             
-            // Đồng bộ danh sách ảnh từ UI vào Model trước khi lưu
             Item.ImageUrls = ImageUrls.ToList();
 
             if (Item.Id == 0) 
@@ -102,12 +163,11 @@ public partial class SportItemDetailViewModel : ObservableObject
                 await _service.UpdateAsync(Item);
             }
             
-            // Lưu thành công → thông báo cho View quay lại
             SaveCompleted?.Invoke();
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Lỗi lưu: {ex.Message}";
+            ErrorMessage = $"Save error: {ex.Message}";
         }
         finally
         {
@@ -118,18 +178,29 @@ public partial class SportItemDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteAsync()
     {
+        if (Item.Id == 0 || ShowConfirmationDialogAsync is null)
+        {
+            return;
+        }
+
+        bool confirmed = await ShowConfirmationDialogAsync(
+            "Confirm delete",
+            $"Are you sure you want to delete \"{Item.Name}\"?\nThis action cannot be undone.");
+
+        if (!confirmed)
+        {
+            return;
+        }
+
         try
         {
             IsLoading = true;
-            if (Item.Id != 0)
-            {
-                await _service.DeleteAsync(Item.Id);
-                SaveCompleted?.Invoke();
-            }
+            await _service.DeleteAsync(Item.Id);
+            SaveCompleted?.Invoke();
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Lỗi xóa: {ex.Message}";
+            ErrorMessage = $"Delete error: {ex.Message}";
         }
         finally
         {
@@ -159,16 +230,13 @@ public partial class SportItemDetailViewModel : ObservableObject
                 var buffer = new byte[stream.Length];
                 await stream.ReadAsync(buffer, 0, buffer.Length);
 
-                // Tải lên Storage
                 var publicUrl = await _service.UploadImageAsync(buffer, file.Name);
-                
-                // Cập nhật lại danh sách hiển thị (việc lưu vào DB sẽ được thực hiện khi nhấn nút Save chung)
                 ImageUrls.Add(publicUrl);
             }
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Lỗi tải ảnh: {ex.Message}";
+            ErrorMessage = $"Image upload error: {ex.Message}";
         }
         finally
         {
@@ -181,5 +249,19 @@ public partial class SportItemDetailViewModel : ObservableObject
     {
         if (string.IsNullOrEmpty(url)) return;
         ImageUrls.Remove(url);
+    }
+
+    [RelayCommand]
+    private void MoveSelectedImageEarlier()
+    {
+        if (SelectedImageIndex <= 0 || SelectedImageIndex >= ImageUrls.Count) return;
+        ImageUrls.Move(SelectedImageIndex, SelectedImageIndex - 1);
+    }
+
+    [RelayCommand]
+    private void MoveSelectedImageLater()
+    {
+        if (SelectedImageIndex < 0 || SelectedImageIndex >= ImageUrls.Count - 1) return;
+        ImageUrls.Move(SelectedImageIndex, SelectedImageIndex + 1);
     }
 }

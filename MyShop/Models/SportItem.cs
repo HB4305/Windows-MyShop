@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 using Postgrest.Attributes;
 using Postgrest.Models;
 
@@ -40,7 +41,10 @@ public class SportItem : BaseModel
     public int? LowStockThreshold { get; set; }
 
     [Column("image_urls")]
+    [JsonProperty("image_urls")]
     public List<string> ImageUrls { get; set; } = new();
 
+    /// <summary>Convenience for UI; must not be serialized — PostgREST only has <c>image_urls</c>.</summary>
+    [JsonIgnore]
     public string? ImageUrl => ImageUrls.FirstOrDefault();
 }

@@ -3,6 +3,9 @@ using Microsoft.UI.Xaml.Data;
 
 namespace MyShop.Converters;
 
+/// <summary>
+/// Hiển thị đúng giá trị trong DB, chỉ thêm ký hiệu $ (không quy đổi).
+/// </summary>
 public class CurrencyFormatter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
@@ -21,7 +24,5 @@ public class CurrencyFormatter : IValueConverter
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
-    {
-        throw new NotImplementedException();
-    }
+        => throw new NotImplementedException();
 }
