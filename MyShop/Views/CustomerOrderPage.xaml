@@ -8,66 +8,993 @@
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Page.Resources>
-    <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <!-- ══ Converters ══ -->
+    <conv:OrderStatusToBrushConverter x:Key="OrderStatusToBrushConverter"/>
+    <conv:OrderStatusToForegroundConverter x:Key="OrderStatusToForegroundConverter"/>
+    <conv:PaymentStatusToBrushConverter x:Key="PaymentStatusToBrushConverter"/>
+    <conv:PaymentStatusToForegroundConverter x:Key="PaymentStatusToForegroundConverter"/>
+    <conv:CurrencyConverter x:Key="CurrencyConverter"/>
+    <conv:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter"/>
+    <conv:LineTotalConverter x:Key="LineTotalConverter"/>
+    <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
+    <conv:OrderIdConverter x:Key="OrderIdConverter"/>
 
-    <DataTemplate x:Key="CustomerOrderItemTemplate" x:DataType="m:CustomerOrder">
-      <StackPanel Padding="8">
-        <TextBlock Text="{x:Bind CustomerName}" FontWeight="SemiBold" FontSize="16"/>
-        <TextBlock Text="{x:Bind CustomerPhone}" Foreground="Gray" FontSize="13"/>
-        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
-          <TextBlock Text="{x:Bind Status}" FontSize="13"/>
-          <TextBlock Text="|" Foreground="Gray" FontSize="13"/>
-          <TextBlock Text="{x:Bind PaymentStatus}" FontSize="13"/>
-          <TextBlock Text="|" Foreground="Gray" FontSize="13"/>
-          <TextBlock Text="{x:Bind TotalAmount}" FontSize="13"/>
-        </StackPanel>
-      </StackPanel>
+    <!-- ══ Accent Colors ══ -->
+    <SolidColorBrush x:Key="PurpleBrush"     Color="#7C3AED"/>
+    <SolidColorBrush x:Key="PurpleLightBrush" Color="#F3F0FF"/>
+
+    <!-- ══ Card ══ -->
+    <Style x:Key="CardBorder" TargetType="Border">
+      <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="12"/>
+    </Style>
+
+    <Style x:Key="StatusBadgeBase" TargetType="Border">
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="Padding" Value="10,4"/>
+    </Style>
+
+    <Style x:Key="PrimaryBtn" TargetType="Button">
+      <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Padding" Value="14,8"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="SecondaryBtn" TargetType="Button">
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Padding" Value="14,8"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+    </Style>
+
+    <Style x:Key="IconBtn" TargetType="Button">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Padding" Value="8"/>
+      <Setter Property="CornerRadius" Value="6"/>
+    </Style>
+
+    <!-- ══ Search Box ══ -->
+    <Style x:Key="SearchBoxBorder" TargetType="Border">
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="8"/>
+    </Style>
+
+    <Style x:Key="SearchBoxText" TargetType="TextBox">
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Padding" Value="0,8,10,8"/>
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+    </Style>
+
+    <!-- ══ Text Styles ══ -->
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondary}"/>
+    </Style>
+
+    <Style x:Key="MutedText" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiary}"/>
+    </Style>
+
+    <Style x:Key="DetailValue" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+    </Style>
+
+    <Style x:Key="PageTitle" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="20"/>
+      <Setter Property="FontWeight" Value="Bold"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+    </Style>
+
+    <Style x:Key="TableHeaderText" TargetType="TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiary}"/>
+    </Style>
+
+    <!-- ══ Table Row Style ══ -->
+    <Style x:Key="TableRow" TargetType="Border">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="0,10"/>
+      <Setter Property="Margin" Value="0,0,0,4"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="TableRowHover" TargetType="Border">
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="0,10"/>
+      <Setter Property="Margin" Value="0,0,0,4"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- ══ Tab Button Style ══ -->
+    <Style x:Key="TabBtn" TargetType="Button">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondary}"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Padding" Value="14,8"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="TabBtnActive" TargetType="Button">
+      <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Padding" Value="14,8"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- ══ Tab Count Badge (inactive tab) ══ -->
+    <Style x:Key="TabCountBadge" TargetType="Border">
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
+      <Setter Property="Padding" Value="6,2"/>
+      <Setter Property="MinWidth" Value="20"/>
+    </Style>
+
+    <!-- ══ Tab Count Badge (active tab) ══ -->
+    <Style x:Key="TabCountBadgeActive" TargetType="Border">
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="Background" Value="#FFFFFF33"/>
+      <Setter Property="Padding" Value="6,2"/>
+      <Setter Property="MinWidth" Value="20"/>
+    </Style>
+
+    <!-- ══ Pagination Button ══ -->
+    <Style x:Key="PageBtn" TargetType="Button">
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="MinWidth" Value="32"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+    </Style>
+
+    <Style x:Key="PageBtnActive" TargetType="Button">
+      <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="MinWidth" Value="32"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <!-- ══ DataTemplate: Order Table Row ══ -->
+    <DataTemplate x:Key="OrderTableRowTemplate" x:DataType="m:CustomerOrder">
+      <Border x:Name="RowBorder" Style="{StaticResource TableRow}">
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Left">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="90"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+
+          <!-- Order ID -->
+          <TextBlock Grid.Column="0"
+                     Text="{x:Bind Id, Converter={StaticResource OrderIdConverter}}"
+                     FontSize="12"
+                     FontWeight="SemiBold"
+                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     VerticalAlignment="Center"/>
+
+          <!-- Customer Name -->
+          <TextBlock Grid.Column="1"
+                     Text="{x:Bind CustomerName}"
+                     FontSize="13"
+                     FontWeight="SemiBold"
+                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     TextTrimming="CharacterEllipsis"
+                     VerticalAlignment="Top"
+                     HorizontalAlignment="Left"
+                     Padding="0,0,4,0"/>
+
+          <!-- Customer Phone -->
+          <TextBlock Grid.Column="2"
+                     Text="{x:Bind CustomerPhone}"
+                     FontSize="12"
+                     Foreground="{ThemeResource TextFillColorTertiary}"
+                     VerticalAlignment="Top"
+                     HorizontalAlignment="Left"/>
+
+          <!-- Date -->
+          <TextBlock Grid.Column="3"
+                     Text="{x:Bind CreatedAt, Converter={StaticResource DateTimeOffsetConverter}}"
+                     FontSize="12"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     VerticalAlignment="Top"
+                     HorizontalAlignment="Left"/>
+
+          <!-- Status -->
+          <Border Grid.Column="4"
+                  Style="{StaticResource StatusBadgeBase}"
+                  Background="{x:Bind Status, Converter={StaticResource OrderStatusToBrushConverter}}"
+                  VerticalAlignment="Center">
+            <TextBlock Text="{x:Bind Status}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       Foreground="{x:Bind Status, Converter={StaticResource OrderStatusToForegroundConverter}}"/>
+          </Border>
+
+          <!-- Payment -->
+          <Border Grid.Column="5"
+                  Style="{StaticResource StatusBadgeBase}"
+                  Background="{x:Bind PaymentStatus, Converter={StaticResource PaymentStatusToBrushConverter}}"
+                  VerticalAlignment="Center">
+            <TextBlock Text="{x:Bind PaymentStatus}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       Foreground="{x:Bind PaymentStatus, Converter={StaticResource PaymentStatusToForegroundConverter}}"/>
+          </Border>
+
+          <!-- Total -->
+          <TextBlock Grid.Column="6"
+                     Text="{x:Bind TotalAmount, Converter={StaticResource CurrencyConverter}}"
+                     FontSize="14"
+                     FontWeight="Bold"
+                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     VerticalAlignment="Center"
+                     TextAlignment="Right"/>
+        </Grid>
+      </Border>
+      <DataTemplate.Triggers>
+        <Trigger Property="IsSelected" Value="True">
+          <Setter TargetName="RowBorder" Property="Style" Value="{StaticResource TableRowHover}"/>
+        </Trigger>
+      </DataTemplate.Triggers>
     </DataTemplate>
+
+    <!-- ══ DataTemplate: Order Detail Item ══ -->
+    <DataTemplate x:Key="OrderDetailItemTemplate" x:DataType="m:OrderDetail">
+      <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+              BorderThickness="0,0,0,1"
+              Padding="0,10">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+
+          <Border Grid.Column="0"
+                  Width="36" Height="36"
+                  CornerRadius="8"
+                  Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                  Margin="0,0,12,0">
+            <TextBlock FontFamily="Segoe MDL2 Assets"
+                       Text="&#xE7BF;"
+                       FontSize="14"
+                       Foreground="{ThemeResource TextFillColorTertiary}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+          </Border>
+
+          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock Text="{x:Bind ItemName}"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       Foreground="{ThemeResource TextFillColorPrimary}"
+                       TextTrimming="CharacterEllipsis"/>
+            <TextBlock FontSize="11"
+                       Foreground="{ThemeResource TextFillColorSecondary}"
+                       Margin="0,2,0,0">
+              <Run Text="{x:Bind Quantity, Mode=OneWay}"/>
+              <Run Text=" x "/>
+              <Run Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}, Mode=OneWay}"/>
+            </TextBlock>
+          </StackPanel>
+
+          <TextBlock Grid.Column="2"
+                     Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}}"
+                     FontSize="12"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     VerticalAlignment="Center"
+                     Margin="12,0"/>
+
+          <TextBlock Grid.Column="3"
+                     Text="{x:Bind Converter={StaticResource LineTotalConverter}}"
+                     FontSize="13"
+                     FontWeight="Bold"
+                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     VerticalAlignment="Center"
+                     MinWidth="72"
+                     TextAlignment="Right"/>
+        </Grid>
+      </Border>
+    </DataTemplate>
+
   </Page.Resources>
 
-  <Grid Margin="24">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
+  <Grid Margin="0">
 
-    <!-- Title + Progress -->
-    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
-      <TextBlock Text="Đơn hàng" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
-      <ProgressBar IsIndeterminate="True" Width="120" Margin="16,0,0,0"
-                   VerticalAlignment="Center"
-                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
-    </StackPanel>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="420"/>
+    </Grid.ColumnDefinitions>
 
-    <!-- Reload button + Count -->
-    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,12">
-      <Button Content="Tải lại" Command="{Binding LoadOrdersCommand}"
-              IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"/>
-      <TextBlock Margin="16,0,0,0" VerticalAlignment="Center">
-        <Run Text="{Binding Orders.Count, Mode=OneWay}"/>
-        <Run Text=" đơn hàng"/>
-      </TextBlock>
-    </StackPanel>
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- LEFT PANEL: ORDER LIST                          -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <Grid Grid.Column="0">
 
-    <!-- List -->
-    <ListView Grid.Row="2"
-              ItemsSource="{Binding Orders}"
-              ItemTemplate="{StaticResource CustomerOrderItemTemplate}"
-              BorderThickness="1" BorderBrush="Gray">
-      <ListView.ItemContainerStyle>
-        <Style TargetType="ListViewItem">
-          <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
-      </ListView.ItemContainerStyle>
-    </ListView>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
 
-    <!-- Error -->
-    <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}"
-               Foreground="Red" TextWrapping="Wrap" Margin="0,12,0,0"
-               Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+      <!-- Page Title -->
+      <StackPanel Grid.Row="0" Margin="24,20,24,16">
+        <TextBlock Text="Orders Management" Style="{StaticResource PageTitle}"/>
+        <TextBlock Text="Manage and track all your customer orders."
+                   FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}" Margin="0,2,0,0"/>
+      </StackPanel>
+
+      <!-- Stats Cards Row -->
+      <Border Grid.Row="1" Margin="24,0,24,16">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+
+          <!-- Total -->
+          <Border Grid.Column="0" CornerRadius="10" Padding="16,12"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1">
+            <StackPanel>
+              <TextBlock Text="Total Orders" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
+              <TextBlock FontSize="22" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}">
+                <Run Text="{Binding TotalOrders, Mode=OneWay}"/>
+                <Run Text=" orders" FontSize="12" FontWeight="Normal" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              </TextBlock>
+            </StackPanel>
+          </Border>
+
+          <!-- Pending -->
+          <Border Grid.Column="2" CornerRadius="10" Padding="16,12"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1">
+            <StackPanel>
+              <TextBlock Text="Pending" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
+              <TextBlock Text="{Binding PendingCount}"
+                         FontSize="22" FontWeight="Bold" Foreground="#D97706"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Processing -->
+          <Border Grid.Column="4" CornerRadius="10" Padding="16,12"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1">
+            <StackPanel>
+              <TextBlock Text="Processing" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
+              <TextBlock Text="{Binding ProcessingCount}"
+                         FontSize="22" FontWeight="Bold" Foreground="#2563EB"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Revenue -->
+          <Border Grid.Column="6" CornerRadius="10" Padding="16,12"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1">
+            <StackPanel>
+              <TextBlock Text="Total Revenue" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
+              <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyConverter}}"
+                         FontSize="18" FontWeight="Bold" Foreground="#059669"
+                         TextTrimming="CharacterEllipsis"/>
+            </StackPanel>
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Tabs Bar -->
+      <Border Grid.Row="2" Margin="24,0,24,12">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+
+          <!-- Tab Buttons -->
+          <ScrollViewer Grid.Column="0"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Disabled">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <!-- All Tab -->
+              <Button x:Name="TabAll"
+                      Click="TabAll_Click"
+                      Style="{StaticResource TabBtnActive}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="All"/>
+                  <Border Style="{StaticResource TabCountBadgeActive}">
+                    <TextBlock Text="{Binding TotalOrders}"
+                               FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                  </Border>
+                </StackPanel>
+              </Button>
+
+              <!-- Pending Tab -->
+              <Button x:Name="TabPending"
+                      Click="TabPending_Click"
+                      Style="{StaticResource TabBtn}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="Pending"/>
+                  <Border Style="{StaticResource TabCountBadge}">
+                    <TextBlock Text="{Binding PendingCount}"
+                               FontSize="11" FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  </Border>
+                </StackPanel>
+              </Button>
+
+              <!-- Processing Tab -->
+              <Button x:Name="TabProcessing"
+                      Click="TabProcessing_Click"
+                      Style="{StaticResource TabBtn}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="Processing"/>
+                  <Border Style="{StaticResource TabCountBadge}">
+                    <TextBlock Text="{Binding ProcessingCount}"
+                               FontSize="11" FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  </Border>
+                </StackPanel>
+              </Button>
+
+              <!-- Completed Tab -->
+              <Button x:Name="TabCompleted"
+                      Click="TabCompleted_Click"
+                      Style="{StaticResource TabBtn}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="Completed"/>
+                  <Border Style="{StaticResource TabCountBadge}">
+                    <TextBlock Text="{Binding CompletedCount}"
+                               FontSize="11" FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  </Border>
+                </StackPanel>
+              </Button>
+
+              <!-- Cancelled Tab -->
+              <Button x:Name="TabCancelled"
+                      Click="TabCancelled_Click"
+                      Style="{StaticResource TabBtn}">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                  <TextBlock Text="Cancelled"/>
+                  <Border Style="{StaticResource TabCountBadge}">
+                    <TextBlock Text="{Binding CancelledCount}"
+                               FontSize="11" FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  </Border>
+                </StackPanel>
+              </Button>
+            </StackPanel>
+          </ScrollViewer>
+
+          <!-- Search Box -->
+          <Border Grid.Column="1"
+                  Style="{StaticResource SearchBoxBorder}"
+                  MinWidth="220"
+                  Margin="16,0,0,0">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0"
+                         FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE721;"
+                         FontSize="13"
+                         Foreground="{ThemeResource TextFillColorTertiary}"
+                         VerticalAlignment="Center"
+                         Margin="10,0,8,0"/>
+              <TextBox Grid.Column="1"
+                       Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       PlaceholderText="Search..."
+                       Style="{StaticResource SearchBoxText}"/>
+            </Grid>
+          </Border>
+
+        </Grid>
+      </Border>
+
+      <!-- Table Container -->
+      <Border Grid.Row="3" Margin="24,0,24,0">
+        <Grid>
+          <!-- Loading overlay -->
+          <Border Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}"
+                  CornerRadius="12"
+                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Canvas.ZIndex="10">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+              <ProgressBar IsIndeterminate="True" Width="120"/>
+              <TextBlock Text="Loading orders..."
+                         FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}"
+                         HorizontalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Table with header -->
+          <Border CornerRadius="12"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  Padding="0">
+
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+
+              <!-- Table Header (fixed, outside scroll) -->
+              <Border Grid.Row="0"
+                      BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+                      BorderThickness="0,0,0,1"
+                      Padding="16,10">
+                <Grid HorizontalAlignment="Left">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0" Text="Order ID" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="1" Text="Customer Name" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="2" Text="Phone" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="3" Text="Date" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="4" Text="Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="5" Text="Payment" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="6" Text="Total" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" TextAlignment="Right"/>
+                </Grid>
+              </Border>
+
+              <!-- Table Body: ListView (clickable rows) -->
+              <ListView Grid.Row="1"
+                        ItemsSource="{Binding PaginatedOrders}"
+                        ItemTemplate="{StaticResource OrderTableRowTemplate}"
+                        SelectionMode="Single"
+                        SelectionChanged="OrderList_SelectionChanged"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Padding="16,4"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+              <!-- Empty State (fixed overlay, shows when Count==0) -->
+              <StackPanel Grid.Row="1"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Spacing="10"
+                          Canvas.ZIndex="10"
+                          Visibility="{Binding PaginatedOrders.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                <Border Width="60" Height="60" CornerRadius="30"
+                        Background="{StaticResource PurpleLightBrush}" HorizontalAlignment="Center">
+                  <TextBlock FontFamily="Segoe MDL2 Assets"
+                             Text="&#xE7BC;"
+                             FontSize="28"
+                             Foreground="{StaticResource PurpleBrush}"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="No orders found"
+                           FontSize="15" FontWeight="SemiBold"
+                           Foreground="{ThemeResource TextFillColorSecondary}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="No orders in this category yet."
+                           FontSize="13"
+                           Foreground="{ThemeResource TextFillColorTertiary}"
+                           HorizontalAlignment="Center"/>
+              </StackPanel>
+
+            </Grid>
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Pagination Bar -->
+      <Border Grid.Row="4"
+              Padding="24,10"
+              Margin="0,8,0,0">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+
+          <!-- Showing X-Y of Z -->
+          <TextBlock Grid.Column="0"
+                     FontSize="12"
+                     Foreground="{ThemeResource TextFillColorTertiary}"
+                     VerticalAlignment="Center">
+            <Run Text="Showing"/>
+            <Run FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}">
+              <Run Text=" "/>
+              <Run Text="{Binding CurrentPage, Mode=OneWay}"/>
+            </Run>
+            <Run Text="-"/>
+            <Run FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}">
+              <Run Text="{Binding PaginatedOrders.Count, Mode=OneWay}"/>
+            </Run>
+            <Run Text="of"/>
+            <Run FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}">
+              <Run Text="{Binding TotalOrders, Mode=OneWay}"/>
+            </Run>
+            <Run Text="orders"/>
+          </TextBlock>
+
+          <!-- Pagination Buttons -->
+          <StackPanel Grid.Column="1"
+                      Orientation="Horizontal"
+                      Spacing="4"
+                      x:Name="PaginationPanel"/>
+
+        </Grid>
+      </Border>
+
+    </Grid>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- RIGHT PANEL: ORDER DETAIL                      -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <Border Grid.Column="1"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="1,0,0,0"
+            Visibility="{Binding ShowDetailPanel, Converter={StaticResource BoolToVisibilityConverter}}">
+
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Detail Header -->
+        <Border Grid.Row="0"
+                BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="20,16">
+
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Style="{StaticResource IconBtn}"
+                    Click="CloseDetail_Click"
+                    ToolTipService.ToolTip="Close">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE72B;"
+                         FontSize="16"
+                         Foreground="{ThemeResource TextFillColorSecondary}"/>
+            </Button>
+
+            <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+              <TextBlock FontSize="16" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}">
+                <Run Text="Order #"/>
+                <Run Text="{Binding SelectedOrder.Id, Mode=OneWay}"/>
+              </TextBlock>
+              <TextBlock Text="{Binding SelectedOrder.CreatedAt, Converter={StaticResource DateTimeOffsetConverter}}"
+                         FontSize="12" Foreground="{ThemeResource TextFillColorTertiary}" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <Border Grid.Column="2"
+                    Style="{StaticResource StatusBadgeBase}"
+                    Background="{Binding SelectedOrder.Status, Converter={StaticResource OrderStatusToBrushConverter}}"
+                    VerticalAlignment="Center">
+              <TextBlock Text="{Binding SelectedOrder.Status}"
+                         FontSize="12" FontWeight="SemiBold"
+                         Foreground="{Binding SelectedOrder.Status, Converter={StaticResource OrderStatusToForegroundConverter}}"/>
+            </Border>
+          </Grid>
+        </Border>
+
+        <!-- Detail Content -->
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      Padding="20,16">
+
+          <StackPanel Spacing="16">
+
+            <!-- Customer Info Card -->
+            <Border Style="{StaticResource CardBorder}" Padding="16">
+              <StackPanel Spacing="12">
+                <TextBlock Text="CUSTOMER" Style="{StaticResource SectionTitle}"/>
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Border Grid.Column="0"
+                          Width="44" Height="44"
+                          CornerRadius="22"
+                          Background="{StaticResource PurpleLightBrush}"
+                          Margin="0,0,14,0"
+                          VerticalAlignment="Center">
+                    <TextBlock Text="{Binding SelectedOrder.CustomerName}"
+                               FontSize="14" FontWeight="Bold"
+                               Foreground="{StaticResource PurpleBrush}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               MaxWidth="36"/>
+                  </Border>
+
+                  <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                    <TextBlock Text="{Binding SelectedOrder.CustomerName}"
+                               FontSize="15" FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorPrimary}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                      <TextBlock FontFamily="Segoe MDL2 Assets"
+                                 Text="&#xE717;"
+                                 FontSize="11"
+                                 Foreground="{ThemeResource TextFillColorTertiary}"
+                                 VerticalAlignment="Center"/>
+                      <TextBlock Text="{Binding SelectedOrder.CustomerPhone}"
+                                 FontSize="13"
+                                 Foreground="{ThemeResource TextFillColorSecondary}"/>
+                    </StackPanel>
+                  </StackPanel>
+                </Grid>
+
+                <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+                        BorderThickness="0,1,0,0" Margin="0,4,0,0"/>
+
+                <StackPanel Spacing="2">
+                  <TextBlock Text="Shipping Address" Style="{StaticResource MutedText}"/>
+                  <TextBlock Text="{Binding SelectedOrder.ShippingAddress}"
+                             FontSize="13"
+                             Foreground="{ThemeResource TextFillColorPrimary}"
+                             TextWrapping="Wrap"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Order Items Card -->
+            <Border Style="{StaticResource CardBorder}" Padding="16">
+              <StackPanel Spacing="12">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0" Text="ITEMS" Style="{StaticResource SectionTitle}"/>
+                  <Border Grid.Column="1"
+                          Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                          CornerRadius="10"
+                          Padding="8,4">
+                    <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}">
+                      <Run Text="{Binding CurrentDetails.Count, Mode=OneWay}"/>
+                      <Run Text=" items"/>
+                    </TextBlock>
+                  </Border>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding CurrentDetails}"
+                              ItemTemplate="{StaticResource OrderDetailItemTemplate}"/>
+
+                <TextBlock Text="No items in this order."
+                           FontSize="13" Foreground="{ThemeResource TextFillColorTertiary}"
+                           HorizontalAlignment="Center" Margin="0,4,0,0"
+                           Visibility="{Binding CurrentDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+
+                <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+                        BorderThickness="0,1,0,0" Margin="0,8,0,0"/>
+
+                <Grid Margin="0,8,0,0">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0"
+                             Text="Order Total"
+                             FontSize="14" FontWeight="SemiBold"
+                             Foreground="{ThemeResource TextFillColorPrimary}"
+                             VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="1"
+                             Text="{Binding SelectedOrder.TotalAmount, Converter={StaticResource CurrencyConverter}}"
+                             FontSize="18" FontWeight="Bold"
+                             Foreground="{StaticResource PurpleBrush}"
+                             VerticalAlignment="Center"/>
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Order Info Card -->
+            <Border Style="{StaticResource CardBorder}" Padding="16">
+              <StackPanel Spacing="12">
+                <TextBlock Text="ORDER INFO" Style="{StaticResource SectionTitle}"/>
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <StackPanel Grid.Column="0" Spacing="2">
+                    <TextBlock Text="Order Type" Style="{StaticResource MutedText}"/>
+                    <TextBlock Text="{Binding SelectedOrder.OrderType}"
+                               FontSize="14" FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Margin="0,2,0,0"/>
+                  </StackPanel>
+
+                  <StackPanel Grid.Column="1" Spacing="2">
+                    <TextBlock Text="Payment Status" Style="{StaticResource MutedText}"/>
+                    <Border Style="{StaticResource StatusBadgeBase}"
+                            Background="{Binding SelectedOrder.PaymentStatus, Converter={StaticResource PaymentStatusToBrushConverter}}"
+                            HorizontalAlignment="Left"
+                            Margin="0,2,0,0">
+                      <TextBlock Text="{Binding SelectedOrder.PaymentStatus}"
+                                 FontSize="11" FontWeight="SemiBold"
+                                 Foreground="#065F46"/>
+                    </Border>
+                  </StackPanel>
+                </Grid>
+
+                <StackPanel Spacing="2">
+                  <TextBlock Text="Notes" Style="{StaticResource MutedText}"/>
+                  <TextBlock Text="{Binding SelectedOrder.Notes}"
+                             FontSize="13"
+                             Foreground="{ThemeResource TextFillColorPrimary}"
+                             TextWrapping="Wrap"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Update Status Card -->
+            <Border Style="{StaticResource CardBorder}" Padding="16">
+              <StackPanel Spacing="10">
+                <TextBlock Text="UPDATE STATUS" Style="{StaticResource SectionTitle}"/>
+
+                <ItemsControl>
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <Button Content="Pending"
+                          Click="StatusPending_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
+                  <Button Content="Processing"
+                          Click="StatusProcessing_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
+                  <Button Content="Shipped"
+                          Click="StatusShipped_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
+                  <Button Content="Delivered"
+                          Click="StatusDelivered_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
+                  <Button Content="Cancelled"
+                          Click="StatusCancelled_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <TextBlock Text="Payment:" Style="{StaticResource SectionTitle}"
+                             VerticalAlignment="Center" Margin="0" FontSize="12"/>
+                  <Button Content="Mark as Paid"
+                          Click="PayPaid_Click"
+                          Style="{StaticResource PrimaryBtn}"/>
+                  <Button Content="Mark as Unpaid"
+                          Click="PayUnpaid_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer: Delete -->
+        <Border Grid.Row="2"
+                BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="20,14">
+          <Button Content="Delete Order"
+                  Click="DeleteOrder_Click"
+                  HorizontalAlignment="Right"
+                  Background="#FEE2E2"
+                  Foreground="#EF4444"
+                  BorderBrush="#FECACA"
+                  BorderThickness="1"
+                  CornerRadius="8"
+                  Padding="16,8"
+                  FontWeight="SemiBold"
+                  FontSize="13"/>
+        </Border>
+
+      </Grid>
+    </Border>
+
+    <!-- RIGHT PANEL: Empty State -->
+    <Border Grid.Column="1"
+            Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="1,0,0,0"
+            Visibility="{Binding ShowDetailPanel, Converter={StaticResource InverseBoolConverter}}">
+      <StackPanel HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Spacing="12">
+        <Border Width="72" Height="72" CornerRadius="36"
+                Background="{StaticResource PurpleLightBrush}" HorizontalAlignment="Center">
+          <TextBlock FontFamily="Segoe MDL2 Assets"
+                     Text="&#xE7BC;"
+                     FontSize="32"
+                     Foreground="{StaticResource PurpleBrush}"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"/>
+        </Border>
+        <TextBlock Text="Select an order"
+                   FontSize="18" FontWeight="SemiBold"
+                   Foreground="{ThemeResource TextFillColorPrimary}"
+                   HorizontalAlignment="Center"/>
+        <TextBlock Text="Click an order from the list to view its details."
+                   FontSize="13"
+                   Foreground="{ThemeResource TextFillColorSecondary}"
+                   HorizontalAlignment="Center"
+                   TextWrapping="Wrap"
+                   MaxWidth="220"
+                   TextAlignment="Center"/>
+      </StackPanel>
+    </Border>
+
   </Grid>
+
 </Page>

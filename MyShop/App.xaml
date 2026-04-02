@@ -23,6 +23,15 @@
       <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
       <conv:PercentageFormatter x:Key="PercentageFormatter"/>
       <conv:DateFormatter x:Key="DateFormatter"/>
+      <conv:OrderStatusToBrushConverter x:Key="OrderStatusToBrushConverter"/>
+      <conv:OrderStatusToForegroundConverter x:Key="OrderStatusToForegroundConverter"/>
+      <conv:PaymentStatusToBrushConverter x:Key="PaymentStatusToBrushConverter"/>
+      <conv:CurrencyConverter x:Key="CurrencyConverter"/>
+      <conv:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter"/>
+      <conv:LineTotalConverter x:Key="LineTotalConverter"/>
+      <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+      <conv:CountToVisibilityInverseConverter x:Key="CountToVisibilityInverseConverter"/>
+      <conv:OrderIdConverter x:Key="OrderIdConverter"/>
 
     </ResourceDictionary>
   </Application.Resources>
