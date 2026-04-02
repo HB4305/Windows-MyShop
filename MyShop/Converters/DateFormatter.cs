@@ -3,18 +3,20 @@ using Microsoft.UI.Xaml.Data;
 
 namespace MyShop.Converters;
 
-public class CurrencyFormatter : IValueConverter
+public class DateFormatter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
-        if (value is decimal d)
+        var format = parameter as string ?? "dd/MM/yyyy";
+
+        if (value is DateTime dateTime)
         {
-            return $"${d:N2}";
+            return dateTime.ToString(format);
         }
 
-        if (value is double db)
+        if (value is DateTimeOffset dateTimeOffset)
         {
-            return $"${db:N2}";
+            return dateTimeOffset.ToString(format);
         }
 
         return value?.ToString() ?? string.Empty;

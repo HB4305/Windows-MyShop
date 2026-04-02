@@ -1,57 +1,87 @@
 using MyShop.Models.ReportModels;
 using MyShop.Repositories;
-using MyShop.Services.ReportStrategies;
 
 namespace MyShop.Services;
 
 public class ReportService
 {
   private readonly ReportRepository _repository;
-  private readonly IReadOnlyDictionary<string, IProductSalesStrategy> _strategies;
+  public ReportService(ReportRepository repository) => _repository = repository;
 
-  public ReportService(
-    ReportRepository repository,
-    IEnumerable<IProductSalesStrategy> strategies
-  )
+  public static PeriodSelection CreatePeriodSelection(ReportPeriod period, DateTime? referenceDate = null)
   {
-    _repository = repository;
-    _strategies = strategies.ToDictionary(strategy => strategy.Period, StringComparer.OrdinalIgnoreCase);
-  }
-
-  public Task<List<ProductSale>> GetProductSalesInPeriodAsync(ProductSalesFilter filter)
-  {
-    filter.StartDate = NormalizeStartDate(filter.StartDate);
-    filter.EndDate = NormalizeEndDate(filter.EndDate);
-    filter.CategoryName = NormalizeFilter(filter.CategoryName);
-    filter.ProductName = NormalizeFilter(filter.ProductName);
-
-    if (_strategies.TryGetValue(filter.Period, out var strategy))
+    return period switch
     {
-      return strategy.GetSalesAsync(filter);
-    }
-
-    return _strategies["day"].GetSalesAsync(filter);
+      ReportPeriod.Week => new WeekPeriodSelection(referenceDate),
+      ReportPeriod.Month => new MonthPeriodSelection(referenceDate),
+      ReportPeriod.Year => new YearPeriodSelection(referenceDate),
+      _ => new WeekPeriodSelection(referenceDate)
+    };
   }
 
-  public Task<List<TopPerformingProduct>> GetTopPerformingProductsAsync(
-    ProductSalesFilter filter,
-    int limit = 5
-  )
+  public async Task<ReportOverview> GetReportOverviewAsync(PeriodSelection periodSelection)
   {
-    filter.StartDate = NormalizeStartDate(filter.StartDate);
-    filter.EndDate = NormalizeEndDate(filter.EndDate);
-    filter.CategoryName = NormalizeFilter(filter.CategoryName);
-    filter.ProductName = NormalizeFilter(filter.ProductName);
+    var currentRange = periodSelection.Range;
+    var previousRange = GetPreviousRange(periodSelection);
 
-    return _repository.GetTopPerformingProductsAsync(filter, limit);
+    var current = await _repository.GetOverviewSnapshotAsync(currentRange.Start, currentRange.End);
+    var previous = await _repository.GetOverviewSnapshotAsync(previousRange.Start, previousRange.End);
+
+    return new ReportOverview
+    {
+      Revenue = current.Revenue,
+      PreviousRevenue = previous.Revenue,
+      QuantitySold = current.QuantitySold,
+      PreviousQuantitySold = previous.QuantitySold,
+      Profit = current.Profit,
+      PreviousProfit = previous.Profit,
+      CustomersCount = current.CustomersCount,
+      PreviousCustomersCount = previous.CustomersCount
+    };
   }
 
-  private static DateTime NormalizeStartDate(DateTime value)
-    => value.Date;
+  public Task<List<SoldQuantityData>> GetProductSalesAsync(ProductSalesFilter filter, PeriodSelection periodSelection)
+  {
+    var range = periodSelection.Range;
+    return _repository.GetSoldQuantityDataAsync(
+      range.Start,
+      range.End,
+      filter.CategoryName,
+      filter.ProductName
+    );
+  }
 
-  private static DateTime NormalizeEndDate(DateTime value)
-    => value.Date.AddDays(1);
+  public async Task<List<RevenueData>> GetRevenueDataAsync(PeriodSelection periodSelection)
+  {
+    var range = periodSelection.Range;
+    return await _repository.GetRevenueDataAsync(
+      range.Start,
+      range.End
+    );
+  }
 
-  private static string? NormalizeFilter(string? value)
-    => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+  public Task<List<ProfitByCategory>> GetProfitDataAsync(PeriodSelection periodSelection)
+  {
+    var range = periodSelection.Range;
+    return _repository.GetProfitByCategoryAsync(range.Start, range.End);
+  }
+
+  public Task<List<TopPerformingProduct>> GetTopPerformingProductsAsync(PeriodSelection periodSelection, int limit = 5)
+  {
+    var range = periodSelection.Range;
+    return _repository.GetTopPerformingProductsAsync(range.Start, range.End, limit);
+  }
+
+  private static (DateTime Start, DateTime End) GetPreviousRange(PeriodSelection currentSelection)
+  {
+    var currentRange = currentSelection.Range;
+
+    return currentSelection.Period switch
+    {
+      ReportPeriod.Week => (currentRange.Start.AddDays(-7), currentRange.Start),
+      ReportPeriod.Month => (currentRange.Start.AddMonths(-1), currentRange.Start),
+      ReportPeriod.Year => (currentRange.Start.AddYears(-1), currentRange.Start),
+      _ => (currentRange.Start, currentRange.End)
+    };
+  }
 }

@@ -3,18 +3,23 @@ using Microsoft.UI.Xaml.Data;
 
 namespace MyShop.Converters;
 
-public class CurrencyFormatter : IValueConverter
+public class PercentageFormatter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is decimal d)
         {
-            return $"${d:N2}";
+            return $"{d:F2}%";
         }
 
         if (value is double db)
         {
-            return $"${db:N2}";
+            return $"{db:F2}%";
+        }
+
+        if (value is float f)
+        {
+            return $"{f:F2}%";
         }
 
         return value?.ToString() ?? string.Empty;
