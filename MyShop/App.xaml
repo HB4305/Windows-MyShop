@@ -32,6 +32,9 @@
       <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
       <conv:CountToVisibilityInverseConverter x:Key="CountToVisibilityInverseConverter"/>
       <conv:OrderIdConverter x:Key="OrderIdConverter"/>
+      <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
+      <conv:PercentageFormatter x:Key="PercentageFormatter"/>
+      <conv:DateFormatter x:Key="DateFormatter"/>
 
     </ResourceDictionary>
   </Application.Resources>
