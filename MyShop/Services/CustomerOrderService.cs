@@ -24,6 +24,11 @@ public class CustomerOrderService
     {
         return await _orderRepo.GetByIdAsync(id);
     }
+
+    public async Task<List<OrderDetail>> GetOrderDetailsAsync(int orderId)
+    {
+        return await _detailRepo.GetByOrderIdAsync(orderId);
+    }
     
     public async Task<CustomerOrder> CreateOrderAsync(CustomerOrder order, List<OrderDetail> details)
     {
