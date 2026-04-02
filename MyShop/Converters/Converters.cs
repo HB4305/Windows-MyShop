@@ -187,3 +187,228 @@ public class StringToBoolConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
 }
+
+/// <summary>
+/// Chuyển Order.Status → SolidColorBrush cho badge background.
+/// </summary>
+public class OrderStatusToBrushConverter : IValueConverter
+{
+    private static readonly Dictionary<string, (string bg, string fg)> StatusStyles = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Pending"]    = ("#FEF3C7", "#92400E"),  // amber
+        ["Processing"] = ("#DBEAFE", "#1E40AF"),  // blue
+        ["Shipped"]    = ("#E0E7FF", "#3730A3"),  // indigo
+        ["Delivered"]  = ("#D1FAE5", "#065F46"),  // green
+        ["Cancelled"]  = ("#FEE2E2", "#991B1B"),  // red
+    };
+
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        var status = value as string ?? "";
+        if (!StatusStyles.TryGetValue(status, out var style))
+            style = ("#F3F4F6", "#6B7280"); // gray default
+
+        var bg = ParseHex(style.bg);
+        return new SolidColorBrush(bg);
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+
+    private static Windows.UI.Color ParseHex(string hex)
+    {
+        hex = hex.TrimStart('#');
+        return Windows.UI.Color.FromArgb(255,
+            System.Convert.ToByte(hex.Substring(0, 2), 16),
+            System.Convert.ToByte(hex.Substring(2, 2), 16),
+            System.Convert.ToByte(hex.Substring(4, 2), 16));
+    }
+}
+
+/// <summary>
+/// Chuyển Order.PaymentStatus → SolidColorBrush cho text foreground.
+/// </summary>
+public class PaymentStatusToForegroundConverter : IValueConverter
+{
+    private static readonly Dictionary<string, string> PayFg = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Paid"]   = "#065F46",
+        ["Unpaid"] = "#991B1B",
+    };
+
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        var status = value as string ?? "";
+        var hex = PayFg.TryGetValue(status, out var h) ? h : "#6B7280";
+        hex = hex.TrimStart('#');
+        return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255,
+            System.Convert.ToByte(hex.Substring(0, 2), 16),
+            System.Convert.ToByte(hex.Substring(2, 2), 16),
+            System.Convert.ToByte(hex.Substring(4, 2), 16)));
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Chuyển Order.PaymentStatus → SolidColorBrush.
+/// </summary>
+public class PaymentStatusToBrushConverter : IValueConverter
+{
+    private static readonly Dictionary<string, (string bg, string fg)> PayStyles = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Paid"]   = ("#D1FAE5", "#065F46"),   // green
+        ["Unpaid"] = ("#FEE2E2", "#991B1B"),   // red
+    };
+
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        var status = value as string ?? "";
+        if (!PayStyles.TryGetValue(status, out var style))
+            style = ("#F3F4F6", "#6B7280");
+
+        var bg = ParseHex(style.bg);
+        return new SolidColorBrush(bg);
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+
+    private static Windows.UI.Color ParseHex(string hex)
+    {
+        hex = hex.TrimStart('#');
+        return Windows.UI.Color.FromArgb(255,
+            System.Convert.ToByte(hex.Substring(0, 2), 16),
+            System.Convert.ToByte(hex.Substring(2, 2), 16),
+            System.Convert.ToByte(hex.Substring(4, 2), 16));
+    }
+}
+
+/// <summary>
+/// Chuyển Order.Status → SolidColorBrush cho text foreground.
+/// </summary>
+public class OrderStatusToForegroundConverter : IValueConverter
+{
+    private static readonly Dictionary<string, string> StatusFg = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Pending"]    = "#92400E",
+        ["Processing"] = "#1E40AF",
+        ["Shipped"]    = "#3730A3",
+        ["Delivered"]  = "#065F46",
+        ["Cancelled"]  = "#991B1B",
+    };
+
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        var status = value as string ?? "";
+        var hex = StatusFg.TryGetValue(status, out var h) ? h : "#6B7280";
+        hex = hex.TrimStart('#');
+        return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255,
+            System.Convert.ToByte(hex.Substring(0, 2), 16),
+            System.Convert.ToByte(hex.Substring(2, 2), 16),
+            System.Convert.ToByte(hex.Substring(4, 2), 16)));
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Format decimal → currency string "$ {N2}"
+/// </summary>
+public class CurrencyConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is decimal d)
+            return $"${d:N2}";
+        return "$0.00";
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Format DateTimeOffset? → "dd/MM/yyyy HH:mm"
+/// </summary>
+public class DateTimeOffsetConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is DateTimeOffset dto)
+            return dto.ToString("dd/MM/yyyy HH:mm");
+        return "-";
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Tính line total: Quantity × UnitPrice
+/// </summary>
+public class LineTotalConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is Models.OrderDetail od)
+        {
+            var total = od.Quantity * od.UnitPrice;
+            return $"${total:N2}";
+        }
+        return "$0.00";
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Format OrderId → "#123" string (dùng trong x:Bind Run without mixed Run)
+/// </summary>
+public class OrderIdConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is int id)
+            return $"#{id}";
+        return "#-";
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Chuyển int Count → Visibility. 0 → Visible (empty state), >0 → Collapsed.
+/// </summary>
+public class CountToVisibilityConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is int count)
+            return count == 0 ? Visibility.Visible : Visibility.Collapsed;
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Chuyển int Count → Visibility. >0 → Visible, 0 → Collapsed.
+/// </summary>
+public class CountToVisibilityInverseConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is int count)
+            return count > 0 ? Visibility.Visible : Visibility.Collapsed;
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}

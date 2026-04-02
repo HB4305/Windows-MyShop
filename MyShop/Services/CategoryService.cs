@@ -33,6 +33,12 @@ public class CategoryService
 
     public async Task DeleteAsync(int id)
     {
+        bool hasProducts = await _repository.HasProductsAsync(id);
+        if (hasProducts)
+        {
+            throw new InvalidOperationException("Cannot delete this category because it still contains products.");
+        }
+
         await _repository.DeleteAsync(id);
     }
 
@@ -40,14 +46,14 @@ public class CategoryService
     {
         if (string.IsNullOrWhiteSpace(category.Name))
         {
-            throw new ArgumentException("Tên danh mục không được để trống.");
+            throw new ArgumentException("Category name is required.");
         }
 
         category.Name = category.Name.Trim();
 
         if (category.Name.Length > 100)
         {
-            throw new ArgumentException("Tên danh mục không được vượt quá 100 ký tự.");
+            throw new ArgumentException("Category name must not exceed 100 characters.");
         }
     }
 }

@@ -50,7 +50,7 @@ public partial class CategoryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Lỗi: {ex.Message}";
+            ErrorMessage = ex.Message;
         }
         finally
         {
@@ -85,7 +85,7 @@ public partial class CategoryViewModel : ObservableObject
 
         if (success)
         {
-            SuccessMessage = $"Added category \"{payload.Name}\"";
+            SuccessMessage = $"Category \"{payload.Name}\" has been added";
         }
     }
 
@@ -117,7 +117,7 @@ public partial class CategoryViewModel : ObservableObject
 
         if (success)
         {
-            SuccessMessage = $"Updated category \"{payload.Name}\"";
+            SuccessMessage = $"Category \"{payload.Name}\" has been updated";
         }
     }
 
@@ -130,8 +130,8 @@ public partial class CategoryViewModel : ObservableObject
         }
 
         bool confirmed = await ShowConfirmationDialogAsync(
-            "Confirm delete",
-            $"Are you sure you want to delete \"{category.Name}\"?\nThis action cannot be undone."
+            "Confirm deletion",
+            $"Are you sure you want to delete category \"{category.Name}\"?\nThis action cannot be undone."
         );
 
         if (!confirmed)
@@ -142,7 +142,7 @@ public partial class CategoryViewModel : ObservableObject
         bool success = await ExecuteMutationAsync(async () => await _service.DeleteAsync(category.Id));
         if (success)
         {
-            SuccessMessage = $"Deleted category \"{category.Name}\"";
+            SuccessMessage = $"Category \"{category.Name}\" has been deleted";
         }
     }
 

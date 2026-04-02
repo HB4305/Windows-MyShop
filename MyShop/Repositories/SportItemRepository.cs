@@ -77,6 +77,27 @@ public class SportItemRepository
         return (response.Models ?? new List<SportItem>(), totalCount);
     }
 
+    public async Task<List<string>> GetProductNamesAsync(int? categoryId = null)
+    {
+        var query = (Postgrest.Table<SportItem>)_client.From<SportItem>();
+
+        if (categoryId.HasValue)
+        {
+            query = query.Where(item => item.CategoryId == categoryId.Value);
+        }
+
+        var response = await query
+            .Order("name", Constants.Ordering.Ascending)
+            .Get();
+
+        return (response.Models ?? new List<SportItem>())
+            .Select(item => item.Name)
+            .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(name => name)
+            .ToList();
+    }
+
     public async Task<int> AddAsync(SportItem item)
     {
         var result = await _client.From<SportItem>().Insert(item);

@@ -6,13 +6,101 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	x:Name="DialogRoot"
-	Title="{x:Bind DialogTitle, Mode=OneWay}"
-	PrimaryButtonText="Confirm"
-	CloseButtonText="Cancel"
-	DefaultButton="Close">
+	DefaultButton="Close"
+	MinWidth="420">
 
-	<StackPanel Spacing="16">
+	<ContentDialog.Resources>
+		<!-- Override ContentDialog background & shape -->
+		<SolidColorBrush x:Key="ContentDialogBackground" Color="White"/>
+		<CornerRadius x:Key="OverlayCornerRadius">12</CornerRadius>
+	</ContentDialog.Resources>
+
+	<StackPanel Spacing="20" Margin="4,0,4,0">
+
+		<!-- Custom header with warning icon -->
+		<StackPanel Spacing="16">
+			<!-- Warning icon circle -->
+			<Border Background="#FEF2F2"
+					CornerRadius="20"
+					Width="48" Height="48"
+					HorizontalAlignment="Left">
+				<TextBlock FontFamily="Segoe MDL2 Assets"
+						   Text="&#xE7BA;"
+						   FontSize="20"
+						   Foreground="#DC2626"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"/>
+			</Border>
+
+			<!-- Title -->
+			<TextBlock Text="{x:Bind DialogTitle, Mode=OneWay}"
+					   FontSize="18"
+					   FontWeight="Bold"
+					   Foreground="#1F2937"/>
+		</StackPanel>
+
+		<!-- Content message -->
 		<TextBlock Text="{x:Bind DialogContent, Mode=OneWay}"
-				TextWrapping="Wrap"/>
+				   FontSize="13"
+				   Foreground="#6B7280"
+				   TextWrapping="Wrap"
+				   LineHeight="20"/>
+
+		<!-- Divider -->
+		<Border Background="#F3F4F6" Height="1" Margin="-4,0,-4,0"/>
+
+		<!-- Action buttons -->
+		<Grid ColumnSpacing="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Cancel button -->
+			<Button Grid.Column="0"
+					x:Name="CancelBtn"
+					Click="CancelBtn_Click"
+					HorizontalAlignment="Stretch"
+					Background="White"
+					BorderBrush="#E5E7EB"
+					BorderThickness="1"
+					CornerRadius="8"
+					Padding="14,10">
+				<Button.Resources>
+					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F9FAFB"/>
+					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#D1D5DB"/>
+					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#374151"/>
+				</Button.Resources>
+				<TextBlock Text="Cancel"
+						   FontSize="13"
+						   FontWeight="SemiBold"
+						   Foreground="#374151"
+						   HorizontalAlignment="Center"/>
+			</Button>
+
+			<!-- Confirm (destructive) button -->
+			<Button Grid.Column="1"
+					x:Name="ConfirmBtn"
+					Click="ConfirmBtn_Click"
+					HorizontalAlignment="Stretch"
+					Background="#DC2626"
+					BorderBrush="#DC2626"
+					BorderThickness="0"
+					CornerRadius="8"
+					Padding="14,10">
+				<Button.Resources>
+					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#E6DC2626"/>
+					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#E6DC2626"/>
+					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
+				</Button.Resources>
+				<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+					<TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" FontSize="12" Foreground="White" VerticalAlignment="Center"/>
+					<TextBlock Text="Confirm"
+							   FontSize="13"
+							   FontWeight="SemiBold"
+							   Foreground="White"/>
+				</StackPanel>
+			</Button>
+		</Grid>
 	</StackPanel>
 </ContentDialog>

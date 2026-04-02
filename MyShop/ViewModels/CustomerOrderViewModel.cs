@@ -15,21 +15,79 @@ public partial class CustomerOrderViewModel : ObservableObject
         _service = orderService;
     }
 
+    // ── Collections ──────────────────────────────────────────────
     [ObservableProperty]
     private ObservableCollection<CustomerOrder> _orders = new();
 
-    [ObservableProperty]
-    private CustomerOrder _selectedOrder = new();
-
-    [ObservableProperty]
-    private ObservableCollection<OrderDetail> _currentDetails = new();
-
+    // ── UI State ──────────────────────────────────────────────────
     [ObservableProperty]
     private bool _isLoading = false;
 
     [ObservableProperty]
     private string? _errorMessage;
 
+    [ObservableProperty]
+    private bool _showDetailPanel = false;
+
+    // ── Active Tab ──────────────────────────────────────────────────
+    [ObservableProperty]
+    private string _activeTab = "All";
+
+    // ── Pagination ──────────────────────────────────────────────────
+    [ObservableProperty]
+    private int _currentPage = 1;
+
+    [ObservableProperty]
+    private int _totalPages = 1;
+
+    [ObservableProperty]
+    private int _ordersPerPage = 10;
+
+    [ObservableProperty]
+    private ObservableCollection<CustomerOrder> _paginatedOrders = new();
+
+    [ObservableProperty]
+    private string? _searchQuery;
+
+    // ── Filter Options ──────────────────────────────────────────────
+    public ObservableCollection<string> TabOptions { get; } = new()
+    {
+        "All",
+        "Pending",
+        "Processing",
+        "Completed",
+        "Cancelled"
+    };
+
+    // ── Computed Stats ─────────────────────────────────────────────
+    [ObservableProperty]
+    private int _totalOrders = 0;
+
+    [ObservableProperty]
+    private int _pendingCount = 0;
+
+    [ObservableProperty]
+    private int _processingCount = 0;
+
+    [ObservableProperty]
+    private int _completedCount = 0;
+
+    [ObservableProperty]
+    private int _cancelledCount = 0;
+
+    [ObservableProperty]
+    private decimal _totalRevenue = 0m;
+
+    // ── Helpers ────────────────────────────────────────────────────
+    private int GetTabCount(string tab)
+        => tab == "All" ? TotalOrders
+         : tab == "Pending" ? PendingCount
+         : tab == "Processing" ? ProcessingCount
+         : tab == "Completed" ? CompletedCount
+         : tab == "Cancelled" ? CancelledCount
+         : 0;
+
+    // ── Load Orders ───────────────────────────────────────────────
     [RelayCommand]
     public async Task LoadOrdersAsync()
     {
@@ -39,6 +97,8 @@ public partial class CustomerOrderViewModel : ObservableObject
         {
             var orders = await _service.GetAllOrdersAsync();
             Orders = new ObservableCollection<CustomerOrder>(orders);
+            RefreshStats();
+            ApplyPagination();
         }
         catch (Exception ex)
         {
@@ -50,14 +110,112 @@ public partial class CustomerOrderViewModel : ObservableObject
         }
     }
 
-    [RelayCommand]
-    public async Task LoadOrderByIdAsync(int id)
+    private void RefreshStats()
     {
+        TotalOrders = Orders.Count;
+        PendingCount = Orders.Count(o => o.Status == "Pending");
+        ProcessingCount = Orders.Count(o => o.Status == "Processing");
+        CompletedCount = Orders.Count(o => o.Status == "Delivered");
+        CancelledCount = Orders.Count(o => o.Status == "Cancelled");
+        TotalRevenue = Orders
+            .Where(o => o.PaymentStatus == "Paid")
+            .Sum(o => o.TotalAmount ?? 0);
+    }
+
+    // ── Tab Selection ─────────────────────────────────────────────
+    partial void OnActiveTabChanged(string value)
+    {
+        CurrentPage = 1;
+        ApplyPagination();
+    }
+
+    partial void OnSearchQueryChanged(string? value)
+    {
+        CurrentPage = 1;
+        ApplyPagination();
+    }
+
+    // ── Pagination ─────────────────────────────────────────────────
+    [RelayCommand]
+    public void GoToPage(int page)
+    {
+        if (page < 1 || page > TotalPages) return;
+        CurrentPage = page;
+        ApplyPagination();
+    }
+
+    [RelayCommand]
+    public void NextPage()
+    {
+        if (CurrentPage < TotalPages)
+        {
+            CurrentPage++;
+            ApplyPagination();
+        }
+    }
+
+    [RelayCommand]
+    public void PrevPage()
+    {
+        if (CurrentPage > 1)
+        {
+            CurrentPage--;
+            ApplyPagination();
+        }
+    }
+
+    private void ApplyPagination()
+    {
+        var filtered = GetFilteredOrders().OrderByDescending(o => o.CreatedAt).ToList();
+        TotalPages = Math.Max(1, (int)Math.Ceiling((double)filtered.Count / OrdersPerPage));
+        CurrentPage = Math.Min(CurrentPage, TotalPages);
+
+        PaginatedOrders = new ObservableCollection<CustomerOrder>(
+            filtered.Skip((CurrentPage - 1) * OrdersPerPage).Take(OrdersPerPage));
+    }
+
+    private IEnumerable<CustomerOrder> GetFilteredOrders()
+    {
+        var query = SearchQuery?.Trim().ToLower() ?? "";
+        var source = Orders.AsEnumerable();
+
+        if (!string.IsNullOrEmpty(query))
+        {
+            source = source.Where(o =>
+                (o.CustomerName?.ToLower().Contains(query) ?? false) ||
+                (o.CustomerPhone?.ToLower().Contains(query) ?? false) ||
+                (o.Id.ToString().Contains(query)));
+        }
+
+        if (ActiveTab != "All")
+        {
+            var tabStatus = ActiveTab switch
+            {
+                "Completed" => "Delivered",
+                _ => ActiveTab
+            };
+            source = source.Where(o => o.Status == tabStatus);
+        }
+
+        return source;
+    }
+
+    // ── Select Order → Detail Panel ────────────────────────────────
+    public async Task SelectOrderAsync(CustomerOrder order)
+    {
+        if (order == null) return;
+
         IsLoading = true;
-        ErrorMessage = null;
         try
         {
-            SelectedOrder = await _service.GetOrderByIdAsync(id) ?? new();
+            var fresh = await _service.GetOrderByIdAsync(order.Id);
+            if (fresh != null)
+            {
+                SelectedOrder = fresh;
+                var details = await _service.GetOrderDetailsAsync(fresh.Id);
+                CurrentDetails = new ObservableCollection<OrderDetail>(details);
+                ShowDetailPanel = true;
+            }
         }
         catch (Exception ex)
         {
@@ -69,35 +227,25 @@ public partial class CustomerOrderViewModel : ObservableObject
         }
     }
 
+    // ── Close Detail Panel ───────────────────────────────────────
     [RelayCommand]
-    public async Task CreateOrderAsync()
+    public void CloseDetailPanel()
     {
-        IsLoading = true;
-        ErrorMessage = null;
-        try
-        {
-            await _service.CreateOrderAsync(SelectedOrder, CurrentDetails.ToList());
-            await LoadOrdersAsync();
-            SelectedOrder = new();
-            CurrentDetails.Clear();
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
-        finally
-        {
-            IsLoading = false;
-        }
+        ShowDetailPanel = false;
+        SelectedOrder = new();
+        CurrentDetails.Clear();
     }
 
+    // ── Update Order Status ──────────────────────────────────────
     [RelayCommand]
-    public async Task UpdateOrderAsync()
+    public async Task UpdateOrderStatusAsync(string status)
     {
+        if (SelectedOrder?.Id == null) return;
         IsLoading = true;
         ErrorMessage = null;
         try
         {
+            SelectedOrder.Status = status;
             await _service.UpdateOrderAsync(SelectedOrder, CurrentDetails.ToList());
             await LoadOrdersAsync();
         }
@@ -111,14 +259,17 @@ public partial class CustomerOrderViewModel : ObservableObject
         }
     }
 
+    // ── Update Payment Status ────────────────────────────────────
     [RelayCommand]
-    public async Task DeleteOrderAsync(int id)
+    public async Task UpdatePaymentStatusAsync(string paymentStatus)
     {
+        if (SelectedOrder?.Id == null) return;
         IsLoading = true;
         ErrorMessage = null;
         try
         {
-            await _service.DeleteOrderAsync(id);
+            SelectedOrder.PaymentStatus = paymentStatus;
+            await _service.UpdateOrderAsync(SelectedOrder, CurrentDetails.ToList());
             await LoadOrdersAsync();
         }
         catch (Exception ex)
@@ -131,9 +282,33 @@ public partial class CustomerOrderViewModel : ObservableObject
         }
     }
 
-    public void SelectOrder(CustomerOrder order, List<OrderDetail> details)
+    // ── Delete Order ─────────────────────────────────────────────
+    [RelayCommand]
+    public async Task DeleteOrderAsync()
     {
-        SelectedOrder = order;
-        CurrentDetails = new ObservableCollection<OrderDetail>(details);
+        if (SelectedOrder?.Id == null) return;
+        IsLoading = true;
+        ErrorMessage = null;
+        try
+        {
+            await _service.DeleteOrderAsync(SelectedOrder.Id);
+            CloseDetailPanel();
+            await LoadOrdersAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
+
+    // ── Properties for Detail Panel ─────────────────────────────
+    [ObservableProperty]
+    private CustomerOrder _selectedOrder = new();
+
+    [ObservableProperty]
+    private ObservableCollection<OrderDetail> _currentDetails = new();
 }
