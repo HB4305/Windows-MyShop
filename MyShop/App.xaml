@@ -20,6 +20,9 @@
       <conv:BoolToForegroundConverter x:Key="BoolToForegroundConverter"/>
       <conv:HexToBrushConverter x:Key="HexToBrushConverter"/>
       <conv:StringToBoolConverter x:Key="StringToBoolConverter"/>
+      <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
+      <conv:PercentageFormatter x:Key="PercentageFormatter"/>
+      <conv:DateFormatter x:Key="DateFormatter"/>
 
     </ResourceDictionary>
   </Application.Resources>

@@ -31,6 +31,9 @@ public class SportItemService
         return await _repository.GetItemsAsync(page, pageSize, keyword, minPrice, maxPrice, sortField, sortAscending);
     }
 
+    public Task<List<string>> GetProductNamesAsync(int? categoryId = null)
+        => _repository.GetProductNamesAsync(categoryId);
+
     public async Task<int> AddAsync(SportItem item) => await _repository.AddAsync(item);
 
     public async Task UpdateAsync(SportItem item) => await _repository.UpdateAsync(item);

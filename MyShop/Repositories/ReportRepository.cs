@@ -1,4 +1,5 @@
 using MyShop.Models.ReportModels;
+using Newtonsoft.Json;
 
 namespace MyShop.Repositories;
 
@@ -8,41 +9,53 @@ public class ReportRepository
 
   public ReportRepository(Supabase.Client client) => _client = client;
 
-  public async Task<ReportOverview> GetReportOverviewAsync(ProductSalesFilter filter)
+  public async Task<ReportOverviewSnapshot> GetOverviewSnapshotAsync(
+    DateTime startDate,
+    DateTime endDate,
+    string? categoryName = null,
+    string? productName = null)
   {
-    var result = await _client.Rpc<List<ReportOverview>>(
+    categoryName = NormalizeFilter(categoryName);
+    productName = NormalizeFilter(productName);
+
+    var response = await _client.Rpc<List<ReportOverviewRow>>(
       "get_report_overview",
       new
       {
-        p_start_date = filter.StartDate,
-        p_end_date = filter.EndDate,
-        p_category_name = string.IsNullOrWhiteSpace(filter.CategoryName) ? null : filter.CategoryName,
-        p_product_name = string.IsNullOrWhiteSpace(filter.ProductName) ? null : filter.ProductName
+        p_start_date = startDate,
+        p_end_date = endDate,
+        p_category_name = categoryName,
+        p_product_name = productName
       }
     );
 
-    return result?.FirstOrDefault() ?? new ReportOverview();
-  }
-
-  public async Task<List<RevenueData>> GetCategoryRevenueAsync(ProductSalesFilter filter)
-  {
-    var result = await _client.Rpc<List<RevenueData>>(
-      "get_category_revenue",
-      new
-      {
-        p_start_date = filter.StartDate,
-        p_end_date = filter.EndDate,
-        p_category_name = string.IsNullOrWhiteSpace(filter.CategoryName) ? null : filter.CategoryName,
-        p_product_name = string.IsNullOrWhiteSpace(filter.ProductName) ? null : filter.ProductName
-      }
+    var row = response?.FirstOrDefault() ?? new ReportOverviewRow();
+    return new ReportOverviewSnapshot(
+      row.TotalRevenue,
+      row.TotalQuantitySold,
+      row.TotalProfit,
+      row.TotalCustomers
     );
-
-    return result ?? [];
   }
 
-  public async Task<List<ProfitData>> GetCategoryProfitAsync(DateTime startDate, DateTime endDate)
+  public async Task<List<SoldQuantityData>> GetSoldQuantityDataAsync(
+    DateTime startDate,
+    DateTime endDate,
+    string? categoryName,
+    string? productName)
   {
-    var result = await _client.Rpc<List<ProfitData>>(
+    categoryName = NormalizeFilter(categoryName);
+    productName = NormalizeFilter(productName);
+
+    return await GetSoldQuantityDataByDayAsync(startDate, endDate, categoryName, productName);
+  }
+
+  public Task<List<RevenueData>> GetRevenueDataAsync(DateTime startDate, DateTime endDate)
+    => GetRevenueByDayAsync(startDate, endDate);
+
+  public async Task<List<ProfitByCategory>> GetProfitByCategoryAsync(DateTime startDate, DateTime endDate)
+  {
+    var response = await _client.Rpc<List<ProfitByCategory>>(
       "get_category_profit",
       new
       {
@@ -51,37 +64,36 @@ public class ReportRepository
       }
     );
 
-    return result ?? [];
+    return response ?? [];
   }
 
   public async Task<List<TopPerformingProduct>> GetTopPerformingProductsAsync(
-    ProductSalesFilter filter,
-    int limit = 5
-  )
+    DateTime startDate,
+    DateTime endDate,
+    int limit = 5)
   {
-    var result = await _client.Rpc<List<TopPerformingProduct>>(
+    var response = await _client.Rpc<List<TopPerformingProduct>>(
       "get_top_performing_products",
       new
       {
-        p_start_date = filter.StartDate,
-        p_end_date = filter.EndDate,
-        p_category_name = string.IsNullOrWhiteSpace(filter.CategoryName) ? null : filter.CategoryName,
-        p_product_name = string.IsNullOrWhiteSpace(filter.ProductName) ? null : filter.ProductName,
+        p_start_date = startDate,
+        p_end_date = endDate,
+        p_category_name = (string?)null,
+        p_product_name = (string?)null,
         p_limit = limit
       }
     );
 
-    return result ?? [];
+    return response ?? [];
   }
 
-  public async Task<List<ProductSaleByDay>> GetProductSalesByDayAsync(
+  private async Task<List<SoldQuantityData>> GetSoldQuantityDataByDayAsync(
     DateTime startDate,
     DateTime endDate,
-    string? categoryName = null,
-    string? productName = null
-  )
+    string? categoryName,
+    string? productName)
   {
-    var result = await _client.Rpc<List<ProductSaleByDay>>(
+    var response = await _client.Rpc<List<ProductSalesByDayRow>>(
       "get_product_sales_by_day",
       new
       {
@@ -92,69 +104,71 @@ public class ReportRepository
       }
     );
 
-    return result ?? [];
+    return response?.Select(row => new SoldQuantityData
+    {
+      Date = row.Day,
+      QuantitySold = row.QuantitySold
+    }).ToList() ?? [];
   }
 
-  public async Task<List<ProductSaleByWeek>> GetProductSalesByWeekAsync(
-    DateTime startDate,
-    DateTime endDate,
-    string? categoryName = null,
-    string? productName = null
-  )
+  private async Task<List<RevenueData>> GetRevenueByDayAsync(DateTime startDate, DateTime endDate)
   {
-    var result = await _client.Rpc<List<ProductSaleByWeek>>(
-      "get_product_sales_by_week",
+    var response = await _client.Rpc<List<ProductSalesByDayRow>>(
+      "get_product_sales_by_day",
       new
       {
         p_start_date = startDate,
         p_end_date = endDate,
-        p_category_name = categoryName,
-        p_product_name = productName
+        p_category_name = (string?)null,
+        p_product_name = (string?)null
       }
     );
 
-    return result ?? [];
+    return response?.Select(row => new RevenueData
+    {
+      Date = row.Day,
+      GrossRevenue = row.GrossRevenue
+    }).ToList() ?? [];
   }
 
-  public async Task<List<ProductSaleByMonth>> GetProductSalesByMonthAsync(
-    DateTime startDate,
-    DateTime endDate,
-    string? categoryName = null,
-    string? productName = null
-  )
+  private static string? NormalizeFilter(string? value)
   {
-    var result = await _client.Rpc<List<ProductSaleByMonth>>(
-      "get_product_sales_by_month",
-      new
-      {
-        p_start_date = startDate,
-        p_end_date = endDate,
-        p_category_name = categoryName,
-        p_product_name = productName
-      }
-    );
-
-    return result ?? [];
+    var trimmed = value?.Trim();
+    return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
   }
 
-  public async Task<List<ProductSaleByYear>> GetProductSalesByYearAsync(
-    DateTime startDate,
-    DateTime endDate,
-    string? categoryName = null,
-    string? productName = null
-  )
+  public readonly record struct ReportOverviewSnapshot(
+    decimal Revenue,
+    long QuantitySold,
+    decimal Profit,
+    int CustomersCount
+  );
+
+  private sealed class ReportOverviewRow
   {
-    var result = await _client.Rpc<List<ProductSaleByYear>>(
-      "get_product_sales_by_year",
-      new
-      {
-        p_start_date = startDate,
-        p_end_date = endDate,
-        p_category_name = categoryName,
-        p_product_name = productName
-      }
-    );
+    [JsonProperty("total_revenue")]
+    public decimal TotalRevenue { get; set; }
 
-    return result ?? [];
+    [JsonProperty("total_quantity_sold")]
+    public long TotalQuantitySold { get; set; }
+
+    [JsonProperty("total_profit")]
+    public decimal TotalProfit { get; set; }
+
+    [JsonProperty("total_customers")]
+    public int TotalCustomers { get; set; }
   }
+
+  private sealed class ProductSalesByDayRow
+  {
+    [JsonProperty("day")]
+    public DateTime Day { get; set; }
+
+    [JsonProperty("quantity_sold")]
+    public long QuantitySold { get; set; }
+
+    [JsonProperty("gross_revenue")]
+    public decimal GrossRevenue { get; set; }
+  }
+
 }

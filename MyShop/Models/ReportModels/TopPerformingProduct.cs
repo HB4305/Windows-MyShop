@@ -27,8 +27,4 @@ public class TopPerformingProduct
 
   [JsonProperty("profit")]
   public decimal Profit { get; set; }
-
-  public string TotalQuantitySoldDisplay => $"{TotalQuantitySold:N0} Units";
-  public string GrossRevenueDisplay => $"{GrossRevenue:N0} VND";
-  public string ProfitDisplay => $"{Profit:N0} VND";
 }

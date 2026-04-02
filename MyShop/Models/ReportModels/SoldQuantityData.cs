@@ -2,11 +2,11 @@ using Newtonsoft.Json;
 
 namespace MyShop.Models.ReportModels;
 
-public class RevenueData
+public class SoldQuantityData
 {
   [JsonProperty("date")]
   public DateTime Date { get; set; }
 
-  [JsonProperty("gross_revenue")]
-  public decimal GrossRevenue { get; set; }
+  [JsonProperty("quantity_sold")]
+  public long QuantitySold { get; set; }
 }
