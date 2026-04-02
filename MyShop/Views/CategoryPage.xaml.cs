@@ -48,7 +48,7 @@ public sealed partial class CategoryPage : Page
 
     private void EditCategory_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is MenuFlyoutItem item && item.DataContext is Category category)
+        if (sender is Button btn && btn.DataContext is Category category)
         {
             _viewModel.EditCategoryCommand.Execute(category);
         }
@@ -56,7 +56,7 @@ public sealed partial class CategoryPage : Page
 
     private void DeleteCategory_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is MenuFlyoutItem item && item.DataContext is Category category)
+        if (sender is Button btn && btn.DataContext is Category category)
         {
             _viewModel.DeleteCategoryCommand.Execute(category);
         }

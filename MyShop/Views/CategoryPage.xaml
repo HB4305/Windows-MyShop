@@ -4,168 +4,363 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:m="using:MyShop.Models"
       xmlns:conv="using:MyShop.Converters"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      Background="#F3F4F6">
 
   <Page.Resources>
-    <DataTemplate x:Key="CategoryItemTemplate"
-                  x:DataType="m:Category">
-      <Border Margin="0"
-              Padding="12,10"
-              CornerRadius="8"
-              Background="{ThemeResource ControlFillColorSecondaryBrush}">
-        <Grid ColumnSpacing="12">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
+    <!-- Purple accent color -->
+    <SolidColorBrush x:Key="PurpleBrush"
+        Color="#7C3AED"/>
+    <SolidColorBrush x:Key="PurpleLightBrush"
+        Color="#F3F0FF"/>
+    <SolidColorBrush x:Key="PurpleFaintBrush"
+        Color="#EDE9FE"/>
 
-          <StackPanel Grid.Column="0"
-                      Spacing="2">
-            <TextBlock Text="{x:Bind Name}"
-                       Style="{StaticResource BodyStrongTextBlockStyle}"/>
-            <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                       Text="{x:Bind Description}"
-                       Style="{StaticResource CaptionTextBlockStyle}"
-                       MaxLines="1"
-                       TextTrimming="CharacterEllipsis"
-                       Visibility="{Binding Description, Converter={StaticResource StringToVisibilityConverter}}"/>
-          </StackPanel>
+    <!-- Text colors -->
+    <SolidColorBrush x:Key="DarkTextBrush"
+        Color="#1F2937"/>
+    <SolidColorBrush x:Key="GrayTextBrush"
+        Color="#6B7280"/>
+    <SolidColorBrush x:Key="MutedTextBrush"
+        Color="#9CA3AF"/>
 
-          <Button Grid.Column="1"
-                  VerticalAlignment="Center"
-                  HorizontalAlignment="Right"
-                  MinWidth="32"
-                  MinHeight="32"
-                  Style="{StaticResource EllipsisButton}">
-            <ToolTipService.ToolTip>
-              <ToolTip Content="Options"/>
-            </ToolTipService.ToolTip>
-            <Button.Content>
-              <FontIcon Glyph="&#xE712;"/>
-            </Button.Content>
-            <Button.Flyout>
-              <MenuFlyout>
-                <MenuFlyoutItem Text="Edit"
-                                DataContext="{Binding}"
-                                Click="EditCategory_Click">
-                  <MenuFlyoutItem.Icon>
-                    <FontIcon Glyph="&#xE70F;"/>
-                  </MenuFlyoutItem.Icon>
-                </MenuFlyoutItem>
-                <MenuFlyoutItem Text="Delete"
-                                DataContext="{Binding}"
-                                Click="DeleteCategory_Click">
-                  <MenuFlyoutItem.Icon>
-                    <FontIcon Glyph="&#xE74D;"/>
-                  </MenuFlyoutItem.Icon>
-                </MenuFlyoutItem>
-              </MenuFlyout>
-            </Button.Flyout>
-          </Button>
-        </Grid>
-      </Border>
-    </DataTemplate>
+    <!-- Card style -->
+    <Style x:Key="CardBorder"
+        TargetType="Border">
+      <Setter Property="Background"
+          Value="White"/>
+      <Setter Property="BorderBrush"
+          Value="#E5E7EB"/>
+      <Setter Property="BorderThickness"
+          Value="1"/>
+      <Setter Property="CornerRadius"
+          Value="12"/>
+      <Setter Property="Padding"
+          Value="20"/>
+    </Style>
+
+    <!-- Transparent button style for icon buttons -->
+    <Style x:Key="IconActionButton"
+        TargetType="Button">
+      <Setter Property="Background"
+          Value="Transparent"/>
+      <Setter Property="BorderThickness"
+          Value="0"/>
+      <Setter Property="Padding"
+          Value="0"/>
+      <Setter Property="MinWidth"
+          Value="0"/>
+      <Setter Property="MinHeight"
+          Value="0"/>
+    </Style>
   </Page.Resources>
 
-  <Grid Margin="24"
-        RowSpacing="16">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="24"
+        Spacing="20">
 
-    <StackPanel Grid.Row="0"
-                Orientation="Horizontal"
-                Spacing="16">
-      <TextBlock Text="Categories"
-                 Style="{StaticResource TitleTextBlockStyle}"
-                 VerticalAlignment="Center"/>
-      <ProgressBar IsIndeterminate="True"
-                   Width="120"
-                   VerticalAlignment="Center"
-                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
-    </StackPanel>
+      <!-- ═══════════════════════════ PAGE TITLE ═══════════════════════════ -->
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
-    <StackPanel Grid.Row="1"
-                Spacing="8">
-      <InfoBar IsOpen="{Binding ErrorMessage, Converter={StaticResource StringToBoolConverter}}"
-               Severity="Error"
-               Title="An error occurred"
-               Message="{Binding ErrorMessage}"/>
-
-      <InfoBar IsOpen="{Binding SuccessMessage, Converter={StaticResource StringToBoolConverter}}"
-               Severity="Success"
-               Title="Success"
-               Message="{Binding SuccessMessage}"/>
-    </StackPanel>
-
-    <Grid Grid.Row="2">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-      </Grid.ColumnDefinitions>
-
-      <TextBlock Grid.Column="0"
-                 VerticalAlignment="Center"
-                 Style="{StaticResource BodyTextBlockStyle}">
-        <Run Text="{Binding Categories.Count, Mode=OneWay}"/>
-        <Run Text="categories"/>
-      </TextBlock>
-
-      <Button Grid.Column="1"
-              Command="{Binding AddCategoryCommand}"
-              Style="{StaticResource AccentButtonStyle}">
-        <StackPanel Orientation="Horizontal"
-                    Spacing="8">
-          <FontIcon Glyph="&#xE710;"/>
-          <TextBlock Text="Add"/>
+        <StackPanel Grid.Column="0">
+          <TextBlock Text="Categories"
+                     FontSize="22"
+                     FontWeight="Bold"
+                     Foreground="#1F2937"/>
+          <TextBlock Text="Organize your product catalog with categories."
+                     FontSize="13"
+                     Foreground="#6B7280"
+                     Margin="0,2,0,0"/>
         </StackPanel>
-      </Button>
-    </Grid>
 
-    <Grid Grid.Row="3">
-      <ListView ItemsSource="{Binding Categories}"
-                ItemTemplate="{StaticResource CategoryItemTemplate}"
-                SelectionMode="None"
-                IsItemClickEnabled="False">
-        <ListView.ItemContainerStyle>
-          <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Stretch"/>
-            <Setter Property="Padding"
-                    Value="8"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,12"/>
-            <Setter Property="UseSystemFocusVisuals"
-                    Value="False"/>
-            <Setter Property="Template">
-              <Setter.Value>
-                <ControlTemplate TargetType="ListViewItem">
-                  <Grid Background="Transparent">
-                    <ContentPresenter/>
-                  </Grid>
-                </ControlTemplate>
-              </Setter.Value>
-            </Setter>
-          </Style>
-        </ListView.ItemContainerStyle>
-      </ListView>
+        <!-- Controls -->
+        <StackPanel Grid.Column="1"
+            Orientation="Horizontal"
+            Spacing="10"
+            VerticalAlignment="Center">
 
-      <!-- Empty State -->
-      <StackPanel HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  Spacing="8"
-                  Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVisibilityConverter}}">
-        <FontIcon Glyph="&#xE14C;"
-                  FontSize="32"
-                  Opacity="0.7"
-                  HorizontalAlignment="Center"/>
-        <TextBlock Text="No categories yet"
-                   Style="{StaticResource BodyTextBlockStyle}"
-                   HorizontalAlignment="Center"/>
+          <!-- Loading indicator -->
+          <ProgressRing IsActive="{Binding IsLoading}"
+                        Width="20"
+              Height="20"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+          <!-- Add Category button -->
+          <Button Command="{Binding AddCategoryCommand}"
+                  Background="#7C3AED"
+                  BorderBrush="#7C3AED"
+                  BorderThickness="0"
+                  CornerRadius="8"
+                  Padding="14,8">
+            <Button.Resources>
+              <SolidColorBrush x:Key="ButtonBackgroundPointerOver"
+                  Color="#E67C3AED"/>
+              <SolidColorBrush x:Key="ButtonBorderBrushPointerOver"
+                  Color="#E67C3AED"/>
+              <SolidColorBrush x:Key="ButtonForegroundPointerOver"
+                  Color="White"/>
+            </Button.Resources>
+            <StackPanel Orientation="Horizontal"
+                Spacing="6">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                  Text="&#xE710;"
+                  FontSize="13"
+                  Foreground="White"
+                  VerticalAlignment="Center"/>
+              <TextBlock Text="Add Category"
+                  FontSize="13"
+                  FontWeight="SemiBold"
+                  Foreground="White"
+                  VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </Grid>
+
+      <!-- ═══════════════════════════ NOTIFICATION BARS ═══════════════════════════ -->
+      <StackPanel Spacing="8"
+                  Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}">
+        <Border Background="#FEF2F2"
+                BorderBrush="#FECACA"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="16,12">
+          <StackPanel Orientation="Horizontal"
+              Spacing="8">
+            <TextBlock FontFamily="Segoe MDL2 Assets"
+                Text="&#xEA39;"
+                FontSize="14"
+                Foreground="#DC2626"
+                VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding ErrorMessage}"
+                FontSize="13"
+                Foreground="#DC2626"
+                TextWrapping="Wrap"
+                VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
       </StackPanel>
-    </Grid>
-  </Grid>
+
+      <StackPanel Spacing="8"
+                  Visibility="{Binding SuccessMessage, Converter={StaticResource StringToVisibilityConverter}}">
+        <Border Background="#ECFDF5"
+                BorderBrush="#A7F3D0"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="16,12">
+          <StackPanel Orientation="Horizontal"
+              Spacing="8">
+            <TextBlock FontFamily="Segoe MDL2 Assets"
+                Text="&#xE73E;"
+                FontSize="14"
+                Foreground="#059669"
+                VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding SuccessMessage}"
+                FontSize="13"
+                Foreground="#059669"
+                TextWrapping="Wrap"
+                VerticalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- ═══════════════════════════ CATEGORY LIST CARD ═══════════════════════════ -->
+      <Border Style="{StaticResource CardBorder}">
+        <StackPanel>
+          <!-- Card Header -->
+          <Grid Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0"
+                Orientation="Horizontal"
+                Spacing="8">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                  Text="&#xE8EC;"
+                  FontSize="14"
+                  Foreground="#7C3AED"
+                  VerticalAlignment="Center"/>
+              <TextBlock Text="All Categories"
+                         FontSize="15"
+                         FontWeight="SemiBold"
+                         Foreground="#1F2937"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                Orientation="Horizontal"
+                Spacing="4">
+              <TextBlock Text="{Binding Categories.Count, Mode=OneWay}"
+                         FontSize="12"
+                         FontWeight="SemiBold"
+                         Foreground="#7C3AED"
+                         VerticalAlignment="Center"/>
+              <TextBlock Text="items"
+                         FontSize="12"
+                         Foreground="#9CA3AF"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+          </Grid>
+
+          <!-- Table Header -->
+          <Border Background="#FAFAFA"
+                  CornerRadius="8"
+                  Padding="12,10"
+                  Margin="0,0,0,4">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="80"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0"
+                  Text="NAME"
+                  FontSize="10"
+                  Foreground="#9CA3AF"
+                  FontWeight="SemiBold"
+                  CharacterSpacing="40"/>
+              <TextBlock Grid.Column="1"
+                  Text="DESCRIPTION"
+                  FontSize="10"
+                  Foreground="#9CA3AF"
+                  FontWeight="SemiBold"
+                  CharacterSpacing="40"/>
+              <TextBlock Grid.Column="2"
+                  Text="ACTIONS"
+                  FontSize="10"
+                  Foreground="#9CA3AF"
+                  FontWeight="SemiBold"
+                  HorizontalAlignment="Right"
+                  CharacterSpacing="40"/>
+            </Grid>
+          </Border>
+
+          <!-- Category List -->
+          <ItemsControl ItemsSource="{Binding Categories}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="m:Category">
+                <Border BorderBrush="#F3F4F6"
+                        BorderThickness="0,0,0,1"
+                        Padding="12,12"
+                        Margin="0,0,0,0">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="2*"/>
+                      <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Name + icon -->
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                Spacing="10"
+                                VerticalAlignment="Center">
+                      <Border Background="#F3F0FF"
+                              CornerRadius="6"
+                              Width="28"
+                              Height="28"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   Text="&#xE8EC;"
+                                   FontSize="12"
+                                   Foreground="#7C3AED"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                      </Border>
+                      <TextBlock Text="{x:Bind Name}"
+                                 FontSize="13"
+                                 FontWeight="SemiBold"
+                                 Foreground="#1F2937"
+                                 VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Description -->
+                    <TextBlock Grid.Column="1"
+                               Text="{x:Bind Description}"
+                               FontSize="12"
+                               Foreground="#6B7280"
+                               VerticalAlignment="Center"
+                               Margin="0,0,12,0"
+                               MaxLines="2"
+                               TextTrimming="WordEllipsis"
+                               TextWrapping="Wrap"
+                               Visibility="{Binding Description, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+                    <!-- Action buttons -->
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                Spacing="4"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                      <!-- Edit button -->
+                      <Button Style="{StaticResource IconActionButton}"
+                              DataContext="{Binding}"
+                              Click="EditCategory_Click">
+                        <Border Background="#F3F0FF"
+                                CornerRadius="6"
+                                Padding="8,5">
+                          <TextBlock FontFamily="Segoe MDL2 Assets"
+                                     Text="&#xE70F;"
+                                     FontSize="12"
+                                     Foreground="#7C3AED"/>
+                        </Border>
+                      </Button>
+
+                      <!-- Delete button -->
+                      <Button Style="{StaticResource IconActionButton}"
+                              DataContext="{Binding}"
+                              Click="DeleteCategory_Click">
+                        <Border Background="#FEF2F2"
+                                CornerRadius="6"
+                                Padding="8,5">
+                          <TextBlock FontFamily="Segoe MDL2 Assets"
+                                     Text="&#xE74D;"
+                                     FontSize="12"
+                                     Foreground="#DC2626"/>
+                        </Border>
+                      </Button>
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <!-- Empty State - inside card -->
+          <StackPanel HorizontalAlignment="Center"
+                      Spacing="12"
+                      Margin="0,32,0,32"
+                      Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Border Background="#F3F0FF"
+                    CornerRadius="20"
+                    Width="56"
+                Height="56"
+                    HorizontalAlignment="Center">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE14C;"
+                         FontSize="24"
+                         Foreground="#7C3AED"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </Border>
+            <TextBlock Text="No categories yet"
+                       FontSize="15"
+                       FontWeight="SemiBold"
+                       Foreground="#1F2937"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="Create your first category to start organizing products."
+                       FontSize="12"
+                       Foreground="#9CA3AF"
+                       HorizontalAlignment="Center"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
 </Page>

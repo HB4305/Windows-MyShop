@@ -4,26 +4,31 @@ namespace MyShop.Views.Forms;
 
 public sealed partial class AddEditCategoryForm : ContentDialog
 {
+	private ContentDialogResult _result = ContentDialogResult.None;
+
 	public AddEditCategoryForm(Category? category = null)
 	{
 		Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
 		InitializeComponent();
 
-
 		if (category is null)
 		{
-			Title = "Add category";
+			FormTitle.Text = "Add Category";
+			FormSubtitle.Text = "Create a new category for your product catalog.";
+			SaveBtnText.Text = "Create Category";
 			CategoryName = string.Empty;
 			CategoryDescription = string.Empty;
 		}
 		else
 		{
-			Title = "Edit category";
+			FormTitle.Text = "Edit Category";
+			FormSubtitle.Text = "Update the details of this category.";
+			SaveBtnText.Text = "Save Changes";
 			CategoryName = category.Name;
 			CategoryDescription = category.Description ?? string.Empty;
 		}
 
-		UpdatePrimaryButtonState();
+		UpdateSaveButtonState();
 		Loaded += (_, _) => CategoryNameTextBox.Focus(FocusState.Programmatic);
 	}
 
@@ -58,14 +63,31 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 		}
 	}
 
-	private void UpdatePrimaryButtonState()
+	private void UpdateSaveButtonState()
 	{
-		IsPrimaryButtonEnabled = !IsNameInvalid;
+		SaveBtn.IsEnabled = !IsNameInvalid;
 	}
 
 	private void CategoryNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
 	{
 		Bindings.Update();
-		UpdatePrimaryButtonState();
+		UpdateSaveButtonState();
+	}
+
+	private void CancelBtn_Click(object sender, RoutedEventArgs e)
+	{
+		Hide();
+	}
+
+	private void SaveBtn_Click(object sender, RoutedEventArgs e)
+	{
+		_result = ContentDialogResult.Primary;
+		Hide();
+	}
+
+	public new async Task<ContentDialogResult> ShowAsync()
+	{
+		await base.ShowAsync();
+		return _result;
 	}
 }
