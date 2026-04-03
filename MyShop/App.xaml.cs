@@ -52,8 +52,14 @@ public partial class App : Application
         LoginPageEvents.OnNavigateToSignUp += OnNavigateToSignUp;
         LoginPageEvents.OnNavigateToLogin  += OnNavigateToLogin;
 
-        // Luôn khởi đầu tại LoginPage — auth là bắt buộc
-        rootFrame.Navigate(typeof(LoginPage), args.Arguments);
+        // Luồng: ConfigScreen → Login → Dashboard
+        // Lần đầu chưa có config → vào ConfigPage; có config → vào LoginPage
+        var credMgr = Services.GetRequiredService<CredentialManager>();
+        if (credMgr.HasDatabaseConfig())
+            rootFrame.Navigate(typeof(LoginPage), args.Arguments);
+        else
+            rootFrame.Navigate(typeof(ConfigPage), args.Arguments);
+
         MainWindow.SetWindowIcon();
         MainWindow.Activate();
     }
@@ -63,7 +69,6 @@ public partial class App : Application
     private void OnNavigateToConfig()
         => _rootFrame?.Navigate(typeof(ConfigPage));
 
-
     private void OnNavigateToSignUp()
         => _rootFrame?.Navigate(typeof(SignUpPage));
 
@@ -72,11 +77,9 @@ public partial class App : Application
 
     private void OnConfigSaved()
     {
-        var credMgr = Services.GetRequiredService<CredentialManager>();
-        var url = credMgr.GetSupabaseUrl();
-        var key = credMgr.GetSupabaseAnonKey();
-        if (!string.IsNullOrEmpty(url) && !string.IsNullOrEmpty(key))
-            MauiProgram.RebuildSupabaseClient(url, key);
+        // Invalidate connection cache để dùng config mới
+        var connFactory = Services.GetRequiredService<DbConnectionFactory>();
+        connFactory.InvalidateCache();
         _rootFrame?.Navigate(typeof(LoginPage));
     }
 

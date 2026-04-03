@@ -17,32 +17,14 @@
     <!-- Package Description -->
     <Description>MyShop powered by Uno Platform.</Description>
 
-    <!--
-      UnoFeatures are used to quickly add and manage features enabled for your app.
-      https://aka.platform.uno/singleproject-features
-    -->
     <UnoFeatures>
       Mvvm;
       SkiaRenderer;
     </UnoFeatures>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net-Next" />
-    <PackageReference Include="DotNetEnv" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <PackageReference Include="postgrest-csharp" />
-    <PackageReference Include="supabase-csharp" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Update=".env">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="Npgsql" />
   </ItemGroup>
 </Project>

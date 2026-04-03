@@ -1,8 +1,8 @@
 using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MyShop.Repositories;
 using MyShop.Services;
-using Supabase;
 
 namespace MyShop.ViewModels;
 
@@ -24,12 +24,12 @@ public static class LoginPageEvents
 public partial class LoginViewModel : ObservableObject
 {
     private readonly CredentialManager _credentialManager;
-    private readonly Func<Client> _clientFactory;
+    private readonly UserRepository _userRepository;
 
-    public LoginViewModel(CredentialManager credentialManager, Func<Client> clientFactory)
+    public LoginViewModel(CredentialManager credentialManager, UserRepository userRepository)
     {
         _credentialManager = credentialManager;
-        _clientFactory = clientFactory;
+        _userRepository = userRepository;
         Email = _credentialManager.GetSavedEmail() ?? string.Empty;
     }
 
@@ -46,19 +46,12 @@ public partial class LoginViewModel : ObservableObject
     private bool _isLoading;
 
     [ObservableProperty]
-    private bool _rememberMe = true;
-
-    [ObservableProperty]
-    private bool _keepSessionActive = true;
-
-    [ObservableProperty]
     private string _errorMessage = string.Empty;
 
     /// <summary>
     /// Phiên bản ứng dụng hiển thị ở màn hình login.
-    /// Format: "Version 1.0.0 · © 2026 ProSport"
     /// </summary>
-    public string AppVersion
+    public static string AppVersion
     {
         get
         {
@@ -69,13 +62,12 @@ public partial class LoginViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Đăng nhập bằng JWT Token đã lưu (auto-login).
-    /// Thử khôi phục session từ token, không cần nhập password.
+    /// Đăng nhập bằng credentials đã lưu (auto-login).
+    /// Thử khôi phục session từ credentials đã lưu.
     /// </summary>
     public async Task<bool> TryAutoLoginAsync()
     {
-        var tokens = _credentialManager.LoadTokens();
-        if (!tokens.HasValue)
+        if (!_credentialManager.HasSavedCredentials())
             return false;
 
         try
@@ -83,16 +75,14 @@ public partial class LoginViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            var client = _clientFactory();
-            await client.InitializeAsync();
+            var savedEmail = _credentialManager.GetSavedEmail() ?? "";
+            var savedPassword = _credentialManager.GetSavedPassword() ?? "";
 
-            // Khôi phục session từ JWT tokens đã lưu
-            var (accessToken, refreshToken) = tokens.Value;
-            await client.Auth.SetSession(accessToken, refreshToken);
-
-            // Kiểm tra session còn hợp lệ không
-            if (client.Auth.CurrentSession?.User is not null)
+            // Tìm user trong DB và so sánh plain text password
+            var user = await _userRepository.GetByEmailAsync(savedEmail);
+            if (user != null && user.Password == savedPassword)
             {
+                Email = savedEmail;
                 LoginPageEvents.RaiseLoginSuccess();
                 return true;
             }
@@ -123,34 +113,26 @@ public partial class LoginViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            // 1. Khởi tạo Supabase client
-            var client = _clientFactory();
-            await client.InitializeAsync();
-
-            // 2. Gọi Supabase Auth đăng nhập
-            //    Supabase server verify password bằng PBKDF2 internally
-            //    Trả về JWT session token
-            var session = await client.Auth.SignInWithPassword(Email, Password);
-
-            if (session?.User is not null)
+            // 1. Tìm user trong bảng users
+            var user = await _userRepository.GetByEmailAsync(Email.Trim().ToLowerInvariant());
+            if (user == null)
             {
-                // 3. Lấy JWT Tokens từ session
-                var accessToken = session.AccessToken;
-                var refreshToken = session.RefreshToken ?? "";
-
-                // 4. Tạo BCrypt hash của password
-                //    Dùng để verify local (không cần gọi server lần sau)
-                var bcryptHash = CredentialManager.HashPassword(Password);
-
-                // 5. Lưu credentials nếu Remember Me = true
-                if (RememberMe)
-                    _credentialManager.SaveCredentials(Email, bcryptHash, accessToken, refreshToken);
-                else
-                    _credentialManager.ClearCredentials();
-
-                // 6. Chuyển sang màn hình chính
-                LoginPageEvents.RaiseLoginSuccess();
+                ErrorMessage = "Email hoặc mật khẩu không đúng.";
+                return;
             }
+
+            // 2. So sánh plain text password
+            if (user.Password != Password)
+            {
+                ErrorMessage = "Email hoặc mật khẩu không đúng.";
+                return;
+            }
+
+            // 3. Lưu credentials nếu thành công
+            _credentialManager.SaveCredentials(user.Email, user.Password);
+
+            // 4. Chuyển sang màn hình chính
+            LoginPageEvents.RaiseLoginSuccess();
         }
         catch (Exception ex)
         {
@@ -175,7 +157,7 @@ public partial class LoginViewModel : ObservableObject
         => LoginPageEvents.RaiseNavigateToLogin();
 
     /// <summary>
-    /// Đăng ký tài khoản owner mới (lần đầu).
+    /// Đăng ký tài khoản mới (ghi vào bảng users).
     /// </summary>
     [RelayCommand]
     public async Task SignUpAsync()
@@ -197,25 +179,19 @@ public partial class LoginViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            var client = _clientFactory();
-            await client.InitializeAsync();
-
-            // 1. Đăng ký tài khoản với Supabase Auth
-            var session = await client.Auth.SignUp(Email, Password);
-
-            if (session?.User is not null)
+            // 1. Ghi vào bảng users (plain text password)
+            var success = await _userRepository.CreateAsync(Email.Trim().ToLowerInvariant(), Password);
+            if (!success)
             {
-                // 2. Tạo BCrypt hash
-                var bcryptHash = CredentialManager.HashPassword(Password);
-
-                // 3. Lưu credentials
-                var accessToken = session.AccessToken;
-                var refreshToken = session.RefreshToken ?? "";
-                _credentialManager.SaveCredentials(Email, bcryptHash, accessToken, refreshToken);
-
-                // 4. Chuyển sang màn hình chính
-                LoginPageEvents.RaiseLoginSuccess();
+                ErrorMessage = "Email đã được sử dụng. Vui lòng dùng email khác.";
+                return;
             }
+
+            // 2. Lưu credentials
+            _credentialManager.SaveCredentials(Email.Trim().ToLowerInvariant(), Password);
+
+            // 4. Chuyển sang màn hình chính
+            LoginPageEvents.RaiseLoginSuccess();
         }
         catch (Exception ex)
         {

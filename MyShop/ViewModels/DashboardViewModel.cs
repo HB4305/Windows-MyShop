@@ -24,7 +24,16 @@ public partial class DashboardViewModel : ObservableObject
         _sportItemService = sportItemService;
         _orderService = orderService;
         _supplyService = supplyService;
+        TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+        Console.Error.WriteLine("[DashboardVM] Created, starting LoadDashboardAsync...");
         _ = LoadDashboardAsync();
+    }
+
+    // Catch all unobserved task exceptions for debugging
+    private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+    {
+        Console.Error.WriteLine($"[DashboardVM] Unobserved exception: {e.Exception}");
+        e.SetObserved();
     }
 
     [ObservableProperty] private bool _isLoading;
@@ -172,6 +181,7 @@ public partial class DashboardViewModel : ObservableObject
         }
         catch (Exception e)
         {
+            Console.Error.WriteLine($"[DashboardVM] LoadDashboardAsync ERROR: {e}");
             ErrorMessage = $"Loi: {e.Message}";
         }
         finally

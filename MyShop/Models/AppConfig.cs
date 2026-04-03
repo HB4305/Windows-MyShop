@@ -6,16 +6,14 @@ namespace MyShop.Models;
 /// </summary>
 public class AppConfig
 {
-    // Server Config (ConfigScreen)
-    public string? SupabaseUrl { get; set; }
-    public string? SupabaseAnonKey { get; set; }
+    // Database Config (ConfigScreen — 5 trường)
+    public string? DbHost { get; set; }
+    public int    DbPort { get; set; }
+    public string? DbName { get; set; }
+    public string? DbUsername { get; set; }
+    public string? DbPassword { get; set; }
 
-    // Credentials (Login)
+    // Credentials (Login — lưu sau khi đăng nhập thành công)
     public string? SavedEmail { get; set; }
-    public string? BcryptHash { get; set; }
-
-    // JWT Tokens (DPAPI-mã hóa)
-    public string? EncryptedAccessToken { get; set; }
-    public string? EncryptedRefreshToken { get; set; }
-    public long? TokenExpiry { get; set; }
+    public string? SavedPassword { get; set; }
 }
