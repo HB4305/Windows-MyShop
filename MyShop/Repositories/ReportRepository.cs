@@ -1,174 +1,190 @@
 using MyShop.Models.ReportModels;
+using MyShop.Services;
 using Newtonsoft.Json;
+using Npgsql;
 
 namespace MyShop.Repositories;
 
 public class ReportRepository
 {
-  private readonly Supabase.Client _client;
+    private readonly DbConnectionFactory _connFactory;
 
-  public ReportRepository(Supabase.Client client) => _client = client;
+    public ReportRepository(DbConnectionFactory connFactory) => _connFactory = connFactory;
 
-  public async Task<ReportOverviewSnapshot> GetOverviewSnapshotAsync(
-    DateTime startDate,
-    DateTime endDate,
-    string? categoryName = null,
-    string? productName = null)
-  {
-    categoryName = NormalizeFilter(categoryName);
-    productName = NormalizeFilter(productName);
-
-    var response = await _client.Rpc<List<ReportOverviewRow>>(
-      "get_report_overview",
-      new
-      {
-        p_start_date = startDate,
-        p_end_date = endDate,
-        p_category_name = categoryName,
-        p_product_name = productName
-      }
-    );
-
-    var row = response?.FirstOrDefault() ?? new ReportOverviewRow();
-    return new ReportOverviewSnapshot(
-      row.TotalRevenue,
-      row.TotalQuantitySold,
-      row.TotalProfit,
-      row.TotalCustomers
-    );
-  }
-
-  public async Task<List<SoldQuantityData>> GetSoldQuantityDataAsync(
-    DateTime startDate,
-    DateTime endDate,
-    string? categoryName,
-    string? productName)
-  {
-    categoryName = NormalizeFilter(categoryName);
-    productName = NormalizeFilter(productName);
-
-    return await GetSoldQuantityDataByDayAsync(startDate, endDate, categoryName, productName);
-  }
-
-  public Task<List<RevenueData>> GetRevenueDataAsync(DateTime startDate, DateTime endDate)
-    => GetRevenueByDayAsync(startDate, endDate);
-
-  public async Task<List<ProfitByCategory>> GetProfitByCategoryAsync(DateTime startDate, DateTime endDate)
-  {
-    var response = await _client.Rpc<List<ProfitByCategory>>(
-      "get_category_profit",
-      new
-      {
-        p_start_date = startDate,
-        p_end_date = endDate
-      }
-    );
-
-    return response ?? [];
-  }
-
-  public async Task<List<TopPerformingProduct>> GetTopPerformingProductsAsync(
-    DateTime startDate,
-    DateTime endDate,
-    int limit = 5)
-  {
-    var response = await _client.Rpc<List<TopPerformingProduct>>(
-      "get_top_performing_products",
-      new
-      {
-        p_start_date = startDate,
-        p_end_date = endDate,
-        p_category_name = (string?)null,
-        p_product_name = (string?)null,
-        p_limit = limit
-      }
-    );
-
-    return response ?? [];
-  }
-
-  private async Task<List<SoldQuantityData>> GetSoldQuantityDataByDayAsync(
-    DateTime startDate,
-    DateTime endDate,
-    string? categoryName,
-    string? productName)
-  {
-    var response = await _client.Rpc<List<ProductSalesByDayRow>>(
-      "get_product_sales_by_day",
-      new
-      {
-        p_start_date = startDate,
-        p_end_date = endDate,
-        p_category_name = categoryName,
-        p_product_name = productName
-      }
-    );
-
-    return response?.Select(row => new SoldQuantityData
+    public async Task<ReportOverviewSnapshot> GetOverviewSnapshotAsync(
+        DateTime startDate,
+        DateTime endDate,
+        string? categoryName = null,
+        string? productName = null)
     {
-      Date = row.Day,
-      QuantitySold = row.QuantitySold
-    }).ToList() ?? [];
-  }
+        categoryName = NormalizeFilter(categoryName);
+        productName = NormalizeFilter(productName);
 
-  private async Task<List<RevenueData>> GetRevenueByDayAsync(DateTime startDate, DateTime endDate)
-  {
-    var response = await _client.Rpc<List<ProductSalesByDayRow>>(
-      "get_product_sales_by_day",
-      new
-      {
-        p_start_date = startDate,
-        p_end_date = endDate,
-        p_category_name = (string?)null,
-        p_product_name = (string?)null
-      }
-    );
+        const string sql = @"
+            SELECT * FROM get_report_overview(
+                @p_start_date, @p_end_date, @p_category_name, @p_product_name)";
 
-    return response?.Select(row => new RevenueData
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("p_start_date", startDate);
+        cmd.Parameters.AddWithValue("p_end_date", endDate);
+        cmd.Parameters.AddWithValue("p_category_name", (object?)categoryName ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("p_product_name", (object?)productName ?? DBNull.Value);
+
+        await using var reader = await cmd.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+        {
+            return new ReportOverviewSnapshot(
+                reader.IsDBNull(0) ? 0m : reader.GetDecimal(0),
+                reader.IsDBNull(1) ? 0 : reader.GetInt64(1),
+                reader.IsDBNull(2) ? 0m : reader.GetDecimal(2),
+                reader.IsDBNull(3) ? 0 : reader.GetInt32(3)
+            );
+        }
+        return new ReportOverviewSnapshot(0, 0, 0, 0);
+    }
+
+    public async Task<List<SoldQuantityData>> GetSoldQuantityDataAsync(
+        DateTime startDate,
+        DateTime endDate,
+        string? categoryName,
+        string? productName)
     {
-      Date = row.Day,
-      GrossRevenue = row.GrossRevenue
-    }).ToList() ?? [];
-  }
+        categoryName = NormalizeFilter(categoryName);
+        productName = NormalizeFilter(productName);
+        return await GetSoldQuantityDataByDayAsync(startDate, endDate, categoryName, productName);
+    }
 
-  private static string? NormalizeFilter(string? value)
-  {
-    var trimmed = value?.Trim();
-    return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
-  }
+    public async Task<List<RevenueData>> GetRevenueDataAsync(DateTime startDate, DateTime endDate)
+        => await GetRevenueByDayAsync(startDate, endDate);
 
-  public readonly record struct ReportOverviewSnapshot(
-    decimal Revenue,
-    long QuantitySold,
-    decimal Profit,
-    int CustomersCount
-  );
+    public async Task<List<ProfitByCategory>> GetProfitByCategoryAsync(DateTime startDate, DateTime endDate)
+    {
+        const string sql = @"
+            SELECT * FROM get_category_profit(@p_start_date, @p_end_date)";
 
-  private sealed class ReportOverviewRow
-  {
-    [JsonProperty("total_revenue")]
-    public decimal TotalRevenue { get; set; }
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("p_start_date", startDate);
+        cmd.Parameters.AddWithValue("p_end_date", endDate);
 
-    [JsonProperty("total_quantity_sold")]
-    public long TotalQuantitySold { get; set; }
+        var results = new List<ProfitByCategory>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            results.Add(new ProfitByCategory
+            {
+                CategoryName = reader.IsDBNull(0) ? "" : reader.GetString(0),
+                Profit = reader.IsDBNull(1) ? 0m : reader.GetDecimal(1)
+            });
+        }
+        return results;
+    }
 
-    [JsonProperty("total_profit")]
-    public decimal TotalProfit { get; set; }
+    public async Task<List<TopPerformingProduct>> GetTopPerformingProductsAsync(
+        DateTime startDate,
+        DateTime endDate,
+        int limit = 5)
+    {
+        const string sql = @"
+            SELECT * FROM get_top_performing_products(
+                @p_start_date, @p_end_date, @p_category_name, @p_product_name, @p_limit)";
 
-    [JsonProperty("total_customers")]
-    public int TotalCustomers { get; set; }
-  }
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("p_start_date", startDate);
+        cmd.Parameters.AddWithValue("p_end_date", endDate);
+        cmd.Parameters.AddWithValue("p_category_name", DBNull.Value);
+        cmd.Parameters.AddWithValue("p_product_name", DBNull.Value);
+        cmd.Parameters.AddWithValue("p_limit", limit);
 
-  private sealed class ProductSalesByDayRow
-  {
-    [JsonProperty("day")]
-    public DateTime Day { get; set; }
+        var results = new List<TopPerformingProduct>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            results.Add(new TopPerformingProduct
+            {
+                // col 0=id, 1=product_name, 2=category_name, 3=image_urls, 4=total_quantity_sold, 5=gross_revenue, 6=profit
+                ProductName = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                GrossRevenue = reader.IsDBNull(5) ? 0m : reader.GetDecimal(5),
+                Profit = reader.IsDBNull(6) ? 0m : reader.GetDecimal(6),
+                TotalQuantitySold = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
+            });
+        }
+        return results;
+    }
 
-    [JsonProperty("quantity_sold")]
-    public long QuantitySold { get; set; }
+    private async Task<List<SoldQuantityData>> GetSoldQuantityDataByDayAsync(
+        DateTime startDate,
+        DateTime endDate,
+        string? categoryName,
+        string? productName)
+    {
+        const string sql = @"
+            SELECT * FROM get_product_sales_by_day(
+                @p_start_date, @p_end_date, @p_category_name, @p_product_name)";
 
-    [JsonProperty("gross_revenue")]
-    public decimal GrossRevenue { get; set; }
-  }
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("p_start_date", startDate);
+        cmd.Parameters.AddWithValue("p_end_date", endDate);
+        cmd.Parameters.AddWithValue("p_category_name", (object?)categoryName ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("p_product_name", (object?)productName ?? DBNull.Value);
 
+        var results = new List<SoldQuantityData>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            results.Add(new SoldQuantityData
+            {
+                Date = reader.GetDateTime(0),
+                QuantitySold = reader.IsDBNull(1) ? 0 : reader.GetInt64(1)
+            });
+        }
+        return results;
+    }
+
+    private async Task<List<RevenueData>> GetRevenueByDayAsync(DateTime startDate, DateTime endDate)
+    {
+        const string sql = @"
+            SELECT * FROM get_product_sales_by_day(
+                @p_start_date, @p_end_date, @p_category_name, @p_product_name)";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("p_start_date", startDate);
+        cmd.Parameters.AddWithValue("p_end_date", endDate);
+        cmd.Parameters.AddWithValue("p_category_name", DBNull.Value);
+        cmd.Parameters.AddWithValue("p_product_name", DBNull.Value);
+
+        var results = new List<RevenueData>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            results.Add(new RevenueData
+            {
+                Date = reader.GetDateTime(0),
+                GrossRevenue = reader.IsDBNull(2) ? 0m : reader.GetDecimal(2)
+            });
+        }
+        return results;
+    }
+
+    private static string? NormalizeFilter(string? value)
+    {
+        var trimmed = value?.Trim();
+        return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
+    }
+
+    public readonly record struct ReportOverviewSnapshot(
+        decimal Revenue,
+        long QuantitySold,
+        decimal Profit,
+        int CustomersCount
+    );
 }

@@ -156,33 +156,6 @@
           </Button>
         </Grid>
 
-        <!-- Remember me + Recovery -->
-        <Grid Margin="0,16,0,0">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-          </Grid.ColumnDefinitions>
-
-          <!-- Keep session active -->
-          <CheckBox IsChecked="{Binding KeepSessionActive, Mode=TwoWay}"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
-                    Grid.Column="0"
-                    Content="Keep session active"
-                    FontFamily="{StaticResource InterFont}"
-                    FontSize="14" FontWeight="500"
-                    Foreground="{StaticResource MutedTextBrush}"/>
-
-          <!-- Recovery options -->
-          <Button Grid.Column="1"
-                  Content="Recovery options"
-                  HorizontalAlignment="Right"
-                  Background="Transparent"
-                  Foreground="{StaticResource PrimaryBrush}"
-                  FontFamily="{StaticResource InterFont}"
-                  FontSize="14" FontWeight="500"
-                  BorderThickness="0"/>
-        </Grid>
-
         <!-- Error message -->
         <TextBlock Text="{Binding ErrorMessage}"
                    FontFamily="{StaticResource InterFont}"

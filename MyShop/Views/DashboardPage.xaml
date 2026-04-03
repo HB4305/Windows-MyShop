@@ -5,6 +5,7 @@
       Background="#F3F4F6">
 
   <Page.Resources>
+    <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <!-- Purple accent color -->
     <SolidColorBrush x:Key="PurpleBrush" Color="#7C3AED"/>
     <SolidColorBrush x:Key="PurpleLightBrush" Color="#F3F0FF"/>
