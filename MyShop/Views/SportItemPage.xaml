@@ -123,7 +123,7 @@
           <FontIcon Grid.Column="0" Glyph="&#xE721;" FontSize="16" Foreground="#9CA3AF" VerticalAlignment="Center"/>
           <TextBox x:Name="SearchBox"
                    Grid.Column="1"
-                   PlaceholderText="Search sports gear, SKU or brand..."
+                   PlaceholderText="Search sports gear or brand..."
                    Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    KeyDown="OnSearchKeyDown"
                    BorderThickness="0"
@@ -242,7 +242,6 @@
                 Padding="16,14">
           <Grid ColumnSpacing="12">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="132"/>
               <ColumnDefinition Width="*" MinWidth="200"/>
               <ColumnDefinition Width="130"/>
               <ColumnDefinition Width="96"/>
@@ -250,19 +249,17 @@
               <ColumnDefinition Width="118"/>
               <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="SKU CODE" FontSize="11" FontWeight="SemiBold"
+            <TextBlock Grid.Column="0" Text="PRODUCT" FontSize="11" FontWeight="SemiBold"
                        Foreground="{StaticResource SportHeaderTextBrush}" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="1" Text="PRODUCT" FontSize="11" FontWeight="SemiBold"
+            <TextBlock Grid.Column="1" Text="CATEGORY" FontSize="11" FontWeight="SemiBold"
                        Foreground="{StaticResource SportHeaderTextBrush}" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="2" Text="CATEGORY" FontSize="11" FontWeight="SemiBold"
+            <TextBlock Grid.Column="2" Text="PRICE" FontSize="11" FontWeight="SemiBold"
                        Foreground="{StaticResource SportHeaderTextBrush}" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="3" Text="PRICE" FontSize="11" FontWeight="SemiBold"
+            <TextBlock Grid.Column="3" Text="STOCK LEVEL" FontSize="11" FontWeight="SemiBold"
                        Foreground="{StaticResource SportHeaderTextBrush}" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="4" Text="STOCK LEVEL" FontSize="11" FontWeight="SemiBold"
+            <TextBlock Grid.Column="4" Text="STATUS" FontSize="11" FontWeight="SemiBold"
                        Foreground="{StaticResource SportHeaderTextBrush}" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="5" Text="STATUS" FontSize="11" FontWeight="SemiBold"
-                       Foreground="{StaticResource SportHeaderTextBrush}" VerticalAlignment="Center"/>
-            <TextBlock Grid.Column="6" Text="" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="5" Text="" HorizontalAlignment="Center"/>
           </Grid>
         </Border>
 
@@ -285,7 +282,6 @@
               <Border BorderBrush="#F3F4F6" BorderThickness="0,0,0,1" Padding="0,10">
                 <Grid ColumnSpacing="12">
                   <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="132"/>
                     <ColumnDefinition Width="*" MinWidth="200"/>
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="96"/>
@@ -294,12 +290,7 @@
                     <ColumnDefinition Width="40"/>
                   </Grid.ColumnDefinitions>
 
-                  <TextBlock Grid.Column="0"
-                             VerticalAlignment="Center"
-                             Foreground="#374151" FontSize="13"
-                             Text="{x:Bind Item.Sku, Mode=OneWay, TargetNullValue=-}"/>
-
-                  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                  <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                     <Border Width="44" Height="44" CornerRadius="8" Background="#F3F4F6">
                       <Image Source="{x:Bind Item.ImageUrls, Converter={StaticResource FirstImageConverter}}"
                              Width="44" Height="44" Stretch="UniformToFill"/>
@@ -308,26 +299,26 @@
                                VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>
                   </StackPanel>
 
-                  <TextBlock Grid.Column="2" Text="{x:Bind CategoryName}" VerticalAlignment="Center"
+                  <TextBlock Grid.Column="1" Text="{x:Bind CategoryName}" VerticalAlignment="Center"
                              Foreground="#6B7280" FontSize="13" TextTrimming="CharacterEllipsis"/>
 
-                  <TextBlock Grid.Column="3"
+                  <TextBlock Grid.Column="2"
                              Text="{x:Bind Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}"
                              VerticalAlignment="Center" Foreground="#111827" FontSize="13"/>
 
-                  <StackPanel Grid.Column="4" VerticalAlignment="Center" Spacing="4">
+                  <StackPanel Grid.Column="3" VerticalAlignment="Center" Spacing="4">
                     <ProgressBar Minimum="0" Maximum="100"
                                  Value="{Binding Item, Converter={StaticResource SportItemStockPercentConverter}}"
                                  Foreground="{Binding Item, Converter={StaticResource SportItemStockBarForegroundConverter}}"
                                  Background="#E5E7EB"
                                  Height="6"/>
                     <TextBlock FontSize="12" Foreground="#6B7280">
-                      <Run Text="{x:Bind Item.StockQuantity}"/>
+                      <Run Text="{x:Bind Item.EffectiveStockQuantity}"/>
                       <Run Text=" in stock"/>
                     </TextBlock>
                   </StackPanel>
 
-                  <Border Grid.Column="5"
+                    <Border Grid.Column="4"
                           CornerRadius="20"
                           Padding="10,5"
                           HorizontalAlignment="Left"
@@ -338,7 +329,7 @@
                                Text="{Binding Item, Converter={StaticResource SportItemStatusTextConverter}}"/>
                   </Border>
 
-                  <FontIcon Grid.Column="6"
+                  <FontIcon Grid.Column="5"
                             Glyph="&#xE10C;"
                             FontSize="16"
                             Foreground="#9CA3AF"

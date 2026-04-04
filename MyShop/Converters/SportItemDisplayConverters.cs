@@ -8,11 +8,13 @@ namespace MyShop.Converters;
 
 public sealed class SportItemStockPercentConverter : IValueConverter
 {
+    private static int ResolveStock(SportItem item) => item.EffectiveStockQuantity;
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
             return 0.0;
-        var stock = item.StockQuantity ?? 0;
+        var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         var denom = Math.Max(threshold * 8, 100);
         return Math.Min(100.0, stock * 100.0 / denom);
@@ -24,11 +26,13 @@ public sealed class SportItemStockPercentConverter : IValueConverter
 
 public sealed class SportItemStockBarForegroundConverter : IValueConverter
 {
+    private static int ResolveStock(SportItem item) => item.EffectiveStockQuantity;
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
             return new SolidColorBrush(Color.FromArgb(255, 209, 213, 219));
-        var stock = item.StockQuantity ?? 0;
+        var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         if (stock <= 0)
             return new SolidColorBrush(Color.FromArgb(255, 209, 213, 219));
@@ -43,11 +47,13 @@ public sealed class SportItemStockBarForegroundConverter : IValueConverter
 
 public sealed class SportItemStatusTextConverter : IValueConverter
 {
+    private static int ResolveStock(SportItem item) => item.EffectiveStockQuantity;
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
             return string.Empty;
-        var stock = item.StockQuantity ?? 0;
+        var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         if (stock <= 0)
             return "Out of Stock";
@@ -62,11 +68,13 @@ public sealed class SportItemStatusTextConverter : IValueConverter
 
 public sealed class SportItemStatusBadgeBackgroundConverter : IValueConverter
 {
+    private static int ResolveStock(SportItem item) => item.EffectiveStockQuantity;
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
             return new SolidColorBrush(Color.FromArgb(255, 243, 244, 246));
-        var stock = item.StockQuantity ?? 0;
+        var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         if (stock <= 0)
             return new SolidColorBrush(Color.FromArgb(255, 254, 226, 226));
@@ -81,11 +89,13 @@ public sealed class SportItemStatusBadgeBackgroundConverter : IValueConverter
 
 public sealed class SportItemStatusBadgeForegroundConverter : IValueConverter
 {
+    private static int ResolveStock(SportItem item) => item.EffectiveStockQuantity;
+
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
             return new SolidColorBrush(Color.FromArgb(255, 75, 85, 99));
-        var stock = item.StockQuantity ?? 0;
+        var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         if (stock <= 0)
             return new SolidColorBrush(Color.FromArgb(255, 185, 28, 28));

@@ -2,6 +2,7 @@
       x:Name="Root"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:MyShop.Models"
       xmlns:conv="using:MyShop.Converters"
       Background="#F3F4F6">
 
@@ -322,11 +323,12 @@
                                 </Grid>
                             </StackPanel>
                             <StackPanel Grid.Column="1" Spacing="6">
-                                <TextBlock Text="SKU" Style="{StaticResource DetailFieldLabelStyle}"/>
-                                <TextBox Text="{x:Bind ViewModel.Item.Sku, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         PlaceholderText="SKU code"
-                                         BorderBrush="#E5E7EB"
-                                         Padding="12,10"/>
+                                <TextBlock Text="COST PRICE (USD)" Style="{StaticResource DetailFieldLabelStyle}"/>
+                                <NumberBox Value="{x:Bind ViewModel.Item.CostPrice, Mode=TwoWay}"
+                                           Minimum="0"
+                                           SpinButtonPlacementMode="Hidden"
+                                           BorderBrush="#E5E7EB"
+                                           Padding="10,8"/>
                             </StackPanel>
                         </Grid>
 
@@ -340,7 +342,7 @@
                                       Padding="10,8"/>
                         </StackPanel>
 
-                        <!-- Single-row variant matrix (bound to existing model fields) -->
+                        <!-- Fixed-attribute variant matrix (multi-row) -->
                         <StackPanel Spacing="10">
                             <Grid>
                                 <TextBlock Text="Variants matrix"
@@ -349,48 +351,68 @@
                                            Foreground="#111827"
                                            VerticalAlignment="Center"/>
                                 <Button HorizontalAlignment="Right"
-                                        Content="+ Add attribute"
+                                        Content="+ Add variant"
                                         Style="{StaticResource DetailOutlineButtonStyle}"
                                         Foreground="#7C3AED"
                                         BorderBrush="#C4B5FD"
-                                        IsEnabled="False"
-                                        Opacity="0.65"/>
+                                        Command="{x:Bind ViewModel.AddVariantCommand}"/>
                             </Grid>
                             <Border BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="10" Background="#FAFAFA">
-                                <Grid Padding="12,10" ColumnSpacing="12">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="SIZE" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="COLOR" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="IN STOCK" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="3" Text="COST" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
-                                    <TextBox Grid.Row="1" Grid.Column="0"
-                                             Text="{x:Bind ViewModel.Item.Size, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="—"
-                                             BorderBrush="#E5E7EB"/>
-                                    <TextBox Grid.Row="1" Grid.Column="1"
-                                             Text="{x:Bind ViewModel.Item.Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             PlaceholderText="—"
-                                             BorderBrush="#E5E7EB"/>
-                                    <NumberBox Grid.Row="1" Grid.Column="2"
-                                               Value="{x:Bind ViewModel.Item.StockQuantity, Mode=TwoWay}"
-                                               Minimum="0"
-                                               SpinButtonPlacementMode="Hidden"
-                                               BorderBrush="#E5E7EB"/>
-                                    <NumberBox Grid.Row="1" Grid.Column="3"
-                                               Value="{x:Bind ViewModel.Item.CostPrice, Mode=TwoWay}"
-                                               Minimum="0"
-                                               SpinButtonPlacementMode="Hidden"
-                                               BorderBrush="#E5E7EB"/>
-                                </Grid>
+                                <StackPanel Padding="12,10" Spacing="10">
+                                    <Grid ColumnSpacing="12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="SIZE" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
+                                        <TextBlock Grid.Column="1" Text="COLOR" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
+                                        <TextBlock Grid.Column="2" Text="IN STOCK" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
+                                        <TextBlock Grid.Column="3" Text="VARIANT SKU" Style="{StaticResource DetailFieldLabelStyle}" Margin="0,0,0,4"/>
+                                    </Grid>
+
+                                    <ItemsControl ItemsSource="{x:Bind ViewModel.Variants, Mode=OneWay}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="models:SportItemVariant">
+                                                <Grid ColumnSpacing="12" Margin="0,0,0,8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBox Grid.Column="0"
+                                                             Text="{x:Bind Size, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PlaceholderText="—"
+                                                             BorderBrush="#E5E7EB"/>
+                                                    <TextBox Grid.Column="1"
+                                                             Text="{x:Bind Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PlaceholderText="—"
+                                                             BorderBrush="#E5E7EB"/>
+                                                    <NumberBox Grid.Column="2"
+                                                               Value="{x:Bind StockQuantity, Mode=TwoWay}"
+                                                               Minimum="0"
+                                                               SpinButtonPlacementMode="Hidden"
+                                                               BorderBrush="#E5E7EB"/>
+                                                        <TextBox Grid.Column="3"
+                                                             Text="{x:Bind Sku, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PlaceholderText="Optional"
+                                                             BorderBrush="#E5E7EB"/>
+                                                        <Button Grid.Column="4"
+                                                            Content="Remove"
+                                                            Style="{StaticResource DetailDeleteOutlineButtonStyle}"
+                                                            Command="{Binding ElementName=Root, Path=ViewModel.RemoveVariantCommand}"
+                                                            CommandParameter="{Binding}"
+                                                            MinWidth="86"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
                             </Border>
                         </StackPanel>
 
