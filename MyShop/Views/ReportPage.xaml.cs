@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using MyShop.Models.ReportModels;
 using MyShop.ViewModels;
 
@@ -74,11 +75,28 @@ public sealed partial class ReportPage : Page
       {
         await ViewModel.UpdateCategoryAsync(comboBox.SelectedItem?.ToString());
       }
+
+      CloseOpenDropDowns();
+      Focus(FocusState.Programmatic);
     }
   }
 
   private void SearchButton_Click(object sender, RoutedEventArgs e)
     => ViewModel?.ApplyFilters();
+
+  private void PageScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+  {
+    CloseOpenDropDowns();
+  }
+
+  private void Page_Tapped(object sender, TappedRoutedEventArgs e)
+  {
+    if (e.OriginalSource is DependencyObject source
+        && !IsInsideFilterControl(source))
+    {
+      CloseOpenDropDowns();
+    }
+  }
 
   private void UpdateRevenueProfitLayout()
   {
@@ -199,5 +217,28 @@ public sealed partial class ReportPage : Page
   {
     Grid.SetRow(element, row);
     Grid.SetColumn(element, column);
+  }
+
+  private void CloseOpenDropDowns()
+  {
+    CategoryComboBox.IsDropDownOpen = false;
+    ProductSearchAutoSuggestBox.IsSuggestionListOpen = false;
+  }
+
+  private bool IsInsideFilterControl(DependencyObject source)
+  {
+    DependencyObject? current = source;
+    while (current is not null)
+    {
+      if (ReferenceEquals(current, CategoryComboBox)
+          || ReferenceEquals(current, ProductSearchAutoSuggestBox))
+      {
+        return true;
+      }
+
+      current = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetParent(current);
+    }
+
+    return false;
   }
 }
