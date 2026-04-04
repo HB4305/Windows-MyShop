@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -67,6 +68,53 @@ public partial class SportItemDetailViewModel : ObservableObject
     private SportItem _item = new();
 
     public bool IsEditMode => Item.Id != 0;
+
+    partial void OnItemChanged(SportItem value)
+    {
+        OnPropertyChanged(nameof(SellingPriceText));
+        OnPropertyChanged(nameof(CostPriceText));
+        OnPropertyChanged(nameof(LowStockThresholdText));
+    }
+
+    // Wrapper properties for TextBox binding (string ↔ model decimal?/int?)
+    public string SellingPriceText
+    {
+        get => Item.SellingPrice.HasValue ? Item.SellingPrice.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+        set
+        {
+            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var d))
+                Item.SellingPrice = d;
+            else if (string.IsNullOrWhiteSpace(value))
+                Item.SellingPrice = null;
+            OnPropertyChanged();
+        }
+    }
+
+    public string CostPriceText
+    {
+        get => Item.CostPrice.HasValue ? Item.CostPrice.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+        set
+        {
+            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var d))
+                Item.CostPrice = d;
+            else if (string.IsNullOrWhiteSpace(value))
+                Item.CostPrice = null;
+            OnPropertyChanged();
+        }
+    }
+
+    public string LowStockThresholdText
+    {
+        get => Item.LowStockThreshold.HasValue ? Item.LowStockThreshold.Value.ToString() : string.Empty;
+        set
+        {
+            if (int.TryParse(value, out var i))
+                Item.LowStockThreshold = i;
+            else if (string.IsNullOrWhiteSpace(value))
+                Item.LowStockThreshold = null;
+            OnPropertyChanged();
+        }
+    }
 
     [ObservableProperty]
     private ObservableCollection<Category> _categories = [];
@@ -332,7 +380,9 @@ public partial class SportItemDetailViewModel : ObservableObject
             variant.Size = string.IsNullOrWhiteSpace(variant.Size) ? null : variant.Size.Trim();
             variant.Color = string.IsNullOrWhiteSpace(variant.Color) ? null : variant.Color.Trim();
             variant.Sku = string.IsNullOrWhiteSpace(variant.Sku) ? null : variant.Sku.Trim();
-            variant.StockQuantity = Math.Max(0, variant.StockQuantity);
+            // Ensure StockQuantity is non-negative
+            if (variant.StockQuantity < 0)
+                variant.StockQuantity = 0;
         }
 
         var cleaned = Variants
