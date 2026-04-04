@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -8,6 +9,11 @@ namespace MyShop.Views;
 public sealed partial class LoginPage : Page
 {
     private bool _passwordVisible;
+
+    /// <summary>
+    /// Exposes AppVersion as an instance property for XAML binding.
+    /// </summary>
+    public string AppVersion => LoginViewModel.AppVersion;
 
     public LoginPage()
     {
