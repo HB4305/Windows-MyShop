@@ -4,6 +4,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:models="using:MyShop.Models"
       xmlns:conv="using:MyShop.Converters"
+      xmlns:behaviors="clr-namespace:MyShop.Behaviors;assembly=MyShop"
+      xmlns:controls="using:MyShop.Controls"
       Background="#F3F4F6">
 
     <Page.Resources>
@@ -313,10 +315,9 @@
                                             Background="#F9FAFB">
                                         <TextBlock Text="$" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#374151"/>
                                     </Border>
-                                    <NumberBox Grid.Column="1"
-                                               Value="{x:Bind ViewModel.Item.SellingPrice, Mode=TwoWay}"
-                                               Minimum="0"
-                                               SpinButtonPlacementMode="Hidden"
+                                    <controls:DecimalTextBox Grid.Column="1"
+                                               Text="{x:Bind ViewModel.SellingPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               PlaceholderText="0.00"
                                                BorderThickness="1"
                                                BorderBrush="#E5E7EB"
                                                Padding="10,8"/>
@@ -324,11 +325,10 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1" Spacing="6">
                                 <TextBlock Text="COST PRICE (USD)" Style="{StaticResource DetailFieldLabelStyle}"/>
-                                <NumberBox Value="{x:Bind ViewModel.Item.CostPrice, Mode=TwoWay}"
-                                           Minimum="0"
-                                           SpinButtonPlacementMode="Hidden"
-                                           BorderBrush="#E5E7EB"
-                                           Padding="10,8"/>
+                                <controls:DecimalTextBox Text="{x:Bind ViewModel.CostPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="0.00"
+                                         BorderBrush="#E5E7EB"
+                                         Padding="10,8"/>
                             </StackPanel>
                         </Grid>
 
@@ -385,22 +385,21 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <TextBox Grid.Column="0"
-                                                             Text="{x:Bind Size, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                             PlaceholderText="—"
+                                                    <controls:NumericTextBox Grid.Column="0"
+                                                             Text="{x:Bind SizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PlaceholderText="Size"
                                                              BorderBrush="#E5E7EB"/>
                                                     <TextBox Grid.Column="1"
                                                              Text="{x:Bind Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                             PlaceholderText="—"
+                                                             PlaceholderText="Color"
                                                              BorderBrush="#E5E7EB"/>
-                                                    <NumberBox Grid.Column="2"
-                                                               Value="{x:Bind StockQuantity, Mode=TwoWay}"
-                                                               Minimum="0"
-                                                               SpinButtonPlacementMode="Hidden"
-                                                               BorderBrush="#E5E7EB"/>
+                                                    <controls:NumericTextBox Grid.Column="2"
+                                                             Text="{x:Bind StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PlaceholderText="Stock"
+                                                             BorderBrush="#E5E7EB"/>
                                                         <TextBox Grid.Column="3"
                                                              Text="{x:Bind Sku, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                             PlaceholderText="Optional"
+                                                             PlaceholderText="SKU"
                                                              BorderBrush="#E5E7EB"/>
                                                         <Button Grid.Column="4"
                                                             Content="Remove"
@@ -418,11 +417,10 @@
 
                         <StackPanel Spacing="6">
                             <TextBlock Text="LOW STOCK THRESHOLD" Style="{StaticResource DetailFieldLabelStyle}"/>
-                            <NumberBox Value="{x:Bind ViewModel.Item.LowStockThreshold, Mode=TwoWay}"
-                                       Minimum="0"
-                                       SpinButtonPlacementMode="Hidden"
-                                       BorderBrush="#E5E7EB"
-                                       Padding="10,8"/>
+                            <controls:NumericTextBox Text="{x:Bind ViewModel.LowStockThresholdText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                     PlaceholderText="0"
+                                                     BorderBrush="#E5E7EB"
+                                                     Padding="10,8"/>
                         </StackPanel>
 
                         <!-- <StackPanel Spacing="10">
