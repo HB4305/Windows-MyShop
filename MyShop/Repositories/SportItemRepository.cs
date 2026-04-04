@@ -77,8 +77,8 @@ public class SportItemRepository
 
         const string countSql = "SELECT COUNT(*) FROM sportitems";
         var dataSql = $@"
-            SELECT id, category_id, name, sku, size, color,
-                   cost_price, selling_price, stock_quantity,
+             SELECT id, category_id, name,
+                 cost_price, selling_price, stock_quantity,
                    low_stock_threshold, image_urls
             FROM sportitems
             {where}
@@ -113,6 +113,11 @@ public class SportItemRepository
             }
         }
 
+        if (items.Count > 0)
+        {
+            await LoadVariantsForItemsAsync(conn, items);
+        }
+
         return (items, totalCount);
     }
 
@@ -138,10 +143,10 @@ public class SportItemRepository
     public async Task<int> AddAsync(SportItem item)
     {
         const string sql = @"
-            INSERT INTO sportitems (category_id, name, sku, size, color,
+            INSERT INTO sportitems (category_id, name,
                                    cost_price, selling_price, stock_quantity,
                                    low_stock_threshold, image_urls)
-            VALUES (@categoryId, @name, @sku, @size, @color,
+            VALUES (@categoryId, @name,
                     @costPrice, @sellingPrice, @stockQuantity,
                     @lowStockThreshold, @imageUrls)
             RETURNING id";
@@ -152,15 +157,16 @@ public class SportItemRepository
         AddSportItemParams(cmd, item);
 
         var result = await cmd.ExecuteScalarAsync();
-        return Convert.ToInt32(result);
+        var newId = Convert.ToInt32(result);
+        await ReplaceVariantsAsync(conn, newId, item.Variants);
+        return newId;
     }
 
     public async Task UpdateAsync(SportItem item)
     {
         const string sql = @"
             UPDATE sportitems SET
-                category_id = @categoryId, name = @name, sku = @sku,
-                size = @size, color = @color, cost_price = @costPrice,
+                category_id = @categoryId, name = @name, cost_price = @costPrice,
                 selling_price = @sellingPrice, stock_quantity = @stockQuantity,
                 low_stock_threshold = @lowStockThreshold, image_urls = @imageUrls
             WHERE id = @id";
@@ -171,6 +177,7 @@ public class SportItemRepository
         cmd.Parameters.AddWithValue("id", item.Id);
         AddSportItemParams(cmd, item);
         await cmd.ExecuteNonQueryAsync();
+        await ReplaceVariantsAsync(conn, item.Id, item.Variants);
     }
 
     public async Task DeleteAsync(int id)
@@ -211,7 +218,7 @@ public class SportItemRepository
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
         await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("itemId", image.ItemId);
+        cmd.Parameters.AddWithValue("itemId", (object?)image.ItemId ?? DBNull.Value);
         cmd.Parameters.AddWithValue("imageUrl", image.ImageUrl);
         await cmd.ExecuteNonQueryAsync();
     }
@@ -230,14 +237,71 @@ public class SportItemRepository
     {
         cmd.Parameters.AddWithValue("categoryId", item.CategoryId);
         cmd.Parameters.AddWithValue("name", item.Name);
-        cmd.Parameters.AddWithValue("sku", (object?)item.Sku ?? DBNull.Value);
-        cmd.Parameters.AddWithValue("size", (object?)item.Size ?? DBNull.Value);
-        cmd.Parameters.AddWithValue("color", (object?)item.Color ?? DBNull.Value);
         cmd.Parameters.AddWithValue("costPrice", (object?)item.CostPrice ?? DBNull.Value);
         cmd.Parameters.AddWithValue("sellingPrice", (object?)item.SellingPrice ?? DBNull.Value);
         cmd.Parameters.AddWithValue("stockQuantity", item.StockQuantity ?? 0);
         cmd.Parameters.AddWithValue("lowStockThreshold", (object?)item.LowStockThreshold ?? DBNull.Value);
         cmd.Parameters.AddWithValue("imageUrls", item.ImageUrls.ToArray());
+    }
+
+    private static async Task ReplaceVariantsAsync(NpgsqlConnection conn, int itemId, List<SportItemVariant> variants)
+    {
+        await using (var del = new NpgsqlCommand("DELETE FROM sportitem_variants WHERE sportitem_id = @itemId", conn))
+        {
+            del.Parameters.AddWithValue("itemId", itemId);
+            await del.ExecuteNonQueryAsync();
+        }
+
+        if (variants.Count == 0)
+            return;
+
+        const string insertSql = @"
+            INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku)
+            VALUES (@itemId, @size, @color, @stockQuantity, @sku)";
+
+        foreach (var v in variants)
+        {
+            await using var cmd = new NpgsqlCommand(insertSql, conn);
+            cmd.Parameters.AddWithValue("itemId", itemId);
+            cmd.Parameters.AddWithValue("size", (object?)v.Size ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("color", (object?)v.Color ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("stockQuantity", Math.Max(0, v.StockQuantity));
+            cmd.Parameters.AddWithValue("sku", (object?)v.Sku ?? DBNull.Value);
+            await cmd.ExecuteNonQueryAsync();
+        }
+    }
+
+    private static async Task LoadVariantsForItemsAsync(NpgsqlConnection conn, List<SportItem> items)
+    {
+        var itemById = items.ToDictionary(i => i.Id);
+        var itemIds = itemById.Keys.ToArray();
+
+        const string sql = @"
+            SELECT id, sportitem_id, size, color, stock_quantity, sku
+            FROM sportitem_variants
+            WHERE sportitem_id = ANY(@itemIds)
+            ORDER BY id";
+
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("itemIds", itemIds);
+
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            var itemId = reader.GetInt32(1);
+            if (!itemById.TryGetValue(itemId, out var item))
+                continue;
+
+            item.Variants.Add(new SportItemVariant
+            {
+                Id = reader.GetInt32(0),
+                SportItemId = itemId,
+                Size = reader.IsDBNull(2) ? null : reader.GetString(2),
+                Color = reader.IsDBNull(3) ? null : reader.GetString(3),
+                StockQuantity = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
+                Sku = reader.IsDBNull(5) ? null : reader.GetString(5)
+            });
+        }
     }
 
     private static SportItem ReadSportItem(NpgsqlDataReader reader)
@@ -247,14 +311,11 @@ public class SportItemRepository
             Id = reader.GetInt32(0),
             CategoryId = reader.IsDBNull(1) ? 0 : reader.GetInt32(1),
             Name = reader.IsDBNull(2) ? "" : reader.GetString(2),
-            Sku = reader.IsDBNull(3) ? null : reader.GetString(3),
-            Size = reader.IsDBNull(4) ? null : reader.GetString(4),
-            Color = reader.IsDBNull(5) ? null : reader.GetString(5),
-            CostPrice = reader.IsDBNull(6) ? null : reader.GetDecimal(6),
-            SellingPrice = reader.IsDBNull(7) ? null : reader.GetDecimal(7),
-            StockQuantity = reader.IsDBNull(8) ? 0 : reader.GetInt32(8),
-            LowStockThreshold = reader.IsDBNull(9) ? null : reader.GetInt32(9),
-            ImageUrls = reader.IsDBNull(10) ? new List<string>() : reader.GetFieldValue<string[]>(10).ToList()
+            CostPrice = reader.IsDBNull(3) ? null : reader.GetDecimal(3),
+            SellingPrice = reader.IsDBNull(4) ? null : reader.GetDecimal(4),
+            StockQuantity = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+            LowStockThreshold = reader.IsDBNull(6) ? null : reader.GetInt32(6),
+            ImageUrls = reader.IsDBNull(7) ? new List<string>() : reader.GetFieldValue<string[]>(7).ToList()
         };
     }
 }

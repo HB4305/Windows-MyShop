@@ -78,6 +78,9 @@ public partial class SportItemDetailViewModel : ObservableObject
     private ObservableCollection<string> _imageUrls = [];
 
     [ObservableProperty]
+    private ObservableCollection<SportItemVariant> _variants = [];
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PreviewImageUrl))]
     private int _selectedImageIndex;
 
@@ -120,12 +123,33 @@ public partial class SportItemDetailViewModel : ObservableObject
                         ImageUrls.Add(url);
                     }
                 }
+
+                Variants.Clear();
+                foreach (var variant in Item.Variants)
+                {
+                    Variants.Add(new SportItemVariant
+                    {
+                        Id = variant.Id,
+                        SportItemId = variant.SportItemId,
+                        Size = variant.Size,
+                        Color = variant.Color,
+                        StockQuantity = variant.StockQuantity,
+                        Sku = variant.Sku
+                    });
+                }
+
+                if (Variants.Count == 0)
+                    Variants.Add(new SportItemVariant { SportItemId = Item.Id });
             }
             else
             {
                 Item = new SportItem();
                 ImageUrls.Clear();
                 ProductDescriptionUi = string.Empty;
+                Variants =
+                [
+                    new SportItemVariant()
+                ];
             }
 
             SelectedImageIndex = ImageUrls.Count > 0 ? 0 : 0;
@@ -150,7 +174,16 @@ public partial class SportItemDetailViewModel : ObservableObject
         {
             IsLoading = true;
             if (SelectedCategory != null) Item.CategoryId = SelectedCategory.Id;
-            
+
+            NormalizeVariants();
+            if (Variants.Count == 0)
+            {
+                ErrorMessage = "Please add at least one variant row with size or color before saving.";
+                return;
+            }
+
+            Item.Variants = Variants.ToList();
+            SyncLegacyFieldsFromVariants();
             Item.ImageUrls = ImageUrls.ToList();
 
             if (Item.Id == 0) 
@@ -263,5 +296,57 @@ public partial class SportItemDetailViewModel : ObservableObject
     {
         if (SelectedImageIndex < 0 || SelectedImageIndex >= ImageUrls.Count - 1) return;
         ImageUrls.Move(SelectedImageIndex, SelectedImageIndex + 1);
+    }
+
+    [RelayCommand]
+    private void AddVariant()
+    {
+        Variants.Add(new SportItemVariant
+        {
+            SportItemId = Item.Id
+        });
+    }
+
+    [RelayCommand]
+    private void RemoveVariant(SportItemVariant? variant)
+    {
+        if (variant is null)
+            return;
+
+        if (Variants.Count <= 1)
+        {
+            variant.Size = null;
+            variant.Color = null;
+            variant.StockQuantity = 0;
+            variant.Sku = null;
+            return;
+        }
+
+        Variants.Remove(variant);
+    }
+
+    private void NormalizeVariants()
+    {
+        foreach (var variant in Variants)
+        {
+            variant.Size = string.IsNullOrWhiteSpace(variant.Size) ? null : variant.Size.Trim();
+            variant.Color = string.IsNullOrWhiteSpace(variant.Color) ? null : variant.Color.Trim();
+            variant.Sku = string.IsNullOrWhiteSpace(variant.Sku) ? null : variant.Sku.Trim();
+            variant.StockQuantity = Math.Max(0, variant.StockQuantity);
+        }
+
+        var cleaned = Variants
+            .Where(v => !string.IsNullOrWhiteSpace(v.Size)
+                        || !string.IsNullOrWhiteSpace(v.Color)
+                        || !string.IsNullOrWhiteSpace(v.Sku)
+                        || v.StockQuantity > 0)
+            .ToList();
+
+        Variants = new ObservableCollection<SportItemVariant>(cleaned);
+    }
+
+    private void SyncLegacyFieldsFromVariants()
+    {
+        Item.StockQuantity = Variants.Sum(v => Math.Max(0, v.StockQuantity));
     }
 }

@@ -13,12 +13,6 @@ public class SportItem
     [Required]
     public string Name { get; set; } = string.Empty;
 
-    public string? Sku { get; set; }
-
-    public string? Size { get; set; }
-
-    public string? Color { get; set; }
-
     public decimal? CostPrice { get; set; }
 
     public decimal? SellingPrice { get; set; }
@@ -29,6 +23,18 @@ public class SportItem
 
     [JsonProperty("image_urls")]
     public List<string> ImageUrls { get; set; } = new();
+
+    [JsonIgnore]
+    public List<SportItemVariant> Variants { get; set; } = new();
+
+    [JsonIgnore]
+    public int EffectiveStockQuantity =>
+        Variants.Count > 0
+            ? Variants.Sum(v => Math.Max(0, v.StockQuantity))
+            : (StockQuantity ?? 0);
+
+    [JsonIgnore]
+    public string? PrimaryVariantSku => Variants.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.Sku))?.Sku;
 
     /// <summary>Convenience for UI; must not be serialized — DB only has <c>image_urls</c>.</summary>
     [JsonIgnore]
