@@ -8,8 +8,6 @@ namespace MyShop.Views;
 
 public sealed partial class ConfigPage : Page
 {
-    private bool _passwordVisible;
-
     /// <summary>
     /// Exposes AppVersion as an instance property for XAML binding.
     /// </summary>
@@ -22,12 +20,16 @@ public sealed partial class ConfigPage : Page
 
         Loaded += OnLoaded;
         DbPasswordBox.PasswordChanged += OnPasswordChanged;
+        ConfigPasswordTextBox.TextChanged += OnConfigPasswordTextChanged;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         if (DataContext is ConfigViewModel vm)
+        {
             DbPasswordBox.Password = vm.DbPassword;
+            ConfigPasswordTextBox.Text = vm.DbPassword;
+        }
     }
 
     private void OnPasswordChanged(object sender, RoutedEventArgs e)
@@ -36,11 +38,33 @@ public sealed partial class ConfigPage : Page
             vm.DbPassword = DbPasswordBox.Password;
     }
 
-    private void TogglePassword_Click(object sender, RoutedEventArgs e)
+    private void OnConfigPasswordTextChanged(object sender, TextChangedEventArgs e)
     {
-        _passwordVisible = !_passwordVisible;
-        DbPasswordBox.PasswordRevealMode = _passwordVisible
-            ? PasswordRevealMode.Visible
-            : PasswordRevealMode.Hidden;
+        if (DataContext is ConfigViewModel vm)
+            vm.DbPassword = ConfigPasswordTextBox.Text;
+    }
+
+    private bool _isConfigPasswordVisible = false;
+
+    private void OnToggleConfigPasswordClick(object sender, RoutedEventArgs e)
+    {
+        if (_isConfigPasswordVisible)
+        {
+            DbPasswordBox.Password = ConfigPasswordTextBox.Text;
+            DbPasswordBox.Visibility = Visibility.Visible;
+            ConfigPasswordTextBox.Visibility = Visibility.Collapsed;
+            ToggleConfigPasswordIcon.Text = "\uE7B3";
+            ToolTipService.SetToolTip(ToggleConfigPasswordButton, "Show password");
+            _isConfigPasswordVisible = false;
+        }
+        else
+        {
+            ConfigPasswordTextBox.Text = DbPasswordBox.Password;
+            DbPasswordBox.Visibility = Visibility.Collapsed;
+            ConfigPasswordTextBox.Visibility = Visibility.Visible;
+            ToggleConfigPasswordIcon.Text = "\uE7B4";
+            ToolTipService.SetToolTip(ToggleConfigPasswordButton, "Hide password");
+            _isConfigPasswordVisible = true;
+        }
     }
 }
