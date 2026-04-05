@@ -525,12 +525,12 @@
                 </StackPanel>
               </Button>
 
-              <!-- Completed Tab -->
-              <Button x:Name="TabCompleted"
-                      Click="TabCompleted_Click"
+              <!-- Delivered Tab -->
+              <Button x:Name="TabDelivered"
+                      Click="TabDelivered_Click"
                       Style="{StaticResource TabBtn}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="Completed"/>
+                  <TextBlock Text="Delivered"/>
                   <Border Style="{StaticResource TabCountBadge}">
                     <TextBlock Text="{Binding CompletedCount}"
                                FontSize="11" FontWeight="SemiBold"

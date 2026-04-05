@@ -24,7 +24,7 @@ as $$
       sum(od.quantity * od.unit_price)::numeric as curr_period_revenue
     from orderdetails od
     join customerorders co on co.id = od.order_id
-    where co.status = 'Completed'
+    where co.status = 'Delivered'
       and co.created_at >= p_start
       and co.created_at < p_end
     group by od.item_id
@@ -35,7 +35,7 @@ as $$
       sum(od.quantity * od.unit_price)::numeric as prev_period_revenue
     from orderdetails od
     join customerorders co on co.id = od.order_id
-    where co.status = 'Completed'
+    where co.status = 'Delivered'
       and co.created_at >= p_prev_start
       and co.created_at < p_prev_end
     group by od.item_id

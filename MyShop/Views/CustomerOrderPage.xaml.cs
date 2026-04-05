@@ -75,9 +75,9 @@ public sealed partial class CustomerOrderPage : Page
         ViewModel.ActiveTab = "Processing";
     }
 
-    private void TabCompleted_Click(object sender, RoutedEventArgs e)
+    private void TabDelivered_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.ActiveTab = "Completed";
+        ViewModel.ActiveTab = "Delivered";
     }
 
     private void TabCancelled_Click(object sender, RoutedEventArgs e)
@@ -90,7 +90,7 @@ public sealed partial class CustomerOrderPage : Page
         ResetTabStyle(TabAll);
         ResetTabStyle(TabPending);
         ResetTabStyle(TabProcessing);
-        ResetTabStyle(TabCompleted);
+        ResetTabStyle(TabDelivered);
         ResetTabStyle(TabCancelled);
 
         var activeTab = ViewModel.ActiveTab switch
@@ -98,7 +98,7 @@ public sealed partial class CustomerOrderPage : Page
             "All" => TabAll,
             "Pending" => TabPending,
             "Processing" => TabProcessing,
-            "Completed" => TabCompleted,
+            "Delivered" => TabDelivered,
             "Cancelled" => TabCancelled,
             _ => TabAll
         };

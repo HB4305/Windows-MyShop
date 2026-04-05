@@ -50,7 +50,7 @@ public class OrderRepository
         var (start, end) = DateTimeUtils.GetDayRange(date);
         const string sql = @"
             SELECT COALESCE(SUM(total_amount), 0) FROM customerorders
-            WHERE status = 'Completed'
+            WHERE status = 'Delivered'
               AND created_at >= @start AND created_at < @end";
 
         await using var conn = _connFactory.CreateConnection();
