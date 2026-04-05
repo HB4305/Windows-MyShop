@@ -230,15 +230,18 @@ public partial class CustomerOrderViewModel : ObservableObject
     [RelayCommand]
     public async Task UpdateOrderStatusAsync(string status)
     {
-        if (SelectedOrder?.Id == null) return;
+        if (SelectedOrder?.Id == 0) return;
         ErrorMessage = null;
         try
         {
+            await _service.UpdateStatusAsync(SelectedOrder!.Id, status);
             SelectedOrder.Status = status;
-            await _service.UpdateOrderAsync(SelectedOrder, CurrentDetails.ToList());
             // Cập nhật dòng tương ứng trong danh sách thay vì load lại toàn bộ
             var existing = Orders.FirstOrDefault(o => o.Id == SelectedOrder.Id);
             if (existing != null) existing.Status = status;
+            
+            RefreshStats();
+            ApplyPagination();
             OnPropertyChanged(nameof(SelectedOrder));
         }
         catch (Exception ex)
@@ -251,14 +254,17 @@ public partial class CustomerOrderViewModel : ObservableObject
     [RelayCommand]
     public async Task UpdatePaymentStatusAsync(string paymentStatus)
     {
-        if (SelectedOrder?.Id == null) return;
+        if (SelectedOrder?.Id == 0) return;
         ErrorMessage = null;
         try
         {
+            await _service.UpdatePaymentStatusAsync(SelectedOrder!.Id, paymentStatus);
             SelectedOrder.PaymentStatus = paymentStatus;
-            await _service.UpdateOrderAsync(SelectedOrder, CurrentDetails.ToList());
             var existing = Orders.FirstOrDefault(o => o.Id == SelectedOrder.Id);
             if (existing != null) existing.PaymentStatus = paymentStatus;
+            
+            RefreshStats();
+            ApplyPagination();
             OnPropertyChanged(nameof(SelectedOrder));
         }
         catch (Exception ex)

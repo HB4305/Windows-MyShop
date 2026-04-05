@@ -9,7 +9,7 @@ namespace MyShop;
 public partial class App : Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
-    protected Window? MainWindow { get; private set; }
+    public Window? MainWindow { get; private set; }
     private Frame? _rootFrame;
 
     public App()

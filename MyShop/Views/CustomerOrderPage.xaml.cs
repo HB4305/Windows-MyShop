@@ -49,13 +49,13 @@ public sealed partial class CustomerOrderPage : Page
     }
 
     // ══ Order Selection ═══════════════════════════════════════════
-    private void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is not ListView listView) return;
         if (listView.SelectedItem is not CustomerOrder order) return;
 
-        ViewModel.SelectedOrder = order;
-        ViewModel.ShowDetailPanel = true;
+        // SelectOrderAsync loads the order details (items) from the database
+        await ViewModel.SelectOrderAsync(order);
         UpdateStatusButtons();
     }
 

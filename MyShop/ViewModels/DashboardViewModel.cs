@@ -7,6 +7,8 @@ using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
 using MyShop.Models.DashboardModels;
 using MyShop.Services;
+using MyShop.Views.Dialogs;
+using Microsoft.UI.Xaml.Controls;
 
 namespace MyShop.ViewModels;
 
@@ -14,13 +16,16 @@ public partial class DashboardViewModel : ObservableObject
 {
     private readonly SportItemService _sportItemService;
     private readonly OrderService _orderService;
+    private readonly CustomerOrderService _customerOrderService;
 
     public DashboardViewModel(
         SportItemService sportItemService,
-        OrderService orderService)
+        OrderService orderService,
+        CustomerOrderService customerOrderService)
     {
         _sportItemService = sportItemService;
         _orderService = orderService;
+        _customerOrderService = customerOrderService;
         TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
         Console.Error.WriteLine("[DashboardVM] Created, starting LoadDashboardAsync...");
         _ = LoadDashboardAsync();
@@ -52,6 +57,46 @@ public partial class DashboardViewModel : ObservableObject
     public string TodayRevenueDisplay => $"${TodayRevenue:N2}";
 
     // ── Commands ─────────────────────────────────────────────────────────
+
+    [RelayCommand]
+    public async Task CreateOrderAsync()
+    {
+        Console.WriteLine("[DashboardVM] CreateOrder command triggered.");
+        try
+        {
+            var dialog = new CreateOrderDialog();
+            
+            // In WinUI 3 Desktop, we MUST set XamlRoot for ContentDialog
+            var mainWindow = ((App)App.Current).MainWindow;
+            if (mainWindow?.Content?.XamlRoot != null)
+            {
+                dialog.XamlRoot = mainWindow.Content.XamlRoot;
+            }
+            else
+            {
+                Console.Error.WriteLine("[DashboardVM] Error: XamlRoot is null, cannot show dialog.");
+                ErrorMessage = "Cannot open dialog: UI root not ready.";
+                return;
+            }
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                var order = dialog.ViewModel.Order;
+                var details = dialog.ViewModel.OrderDetails.ToList();
+                await _customerOrderService.CreateOrderAsync(order, details);
+                
+                // Refresh dashboard stats
+                await LoadDashboardAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[DashboardVM] CreateOrder ERROR: {ex}");
+            ErrorMessage = $"Failed to create order: {ex.Message}";
+        }
+    }
 
     [RelayCommand]
     public async Task LoadDashboardAsync()
