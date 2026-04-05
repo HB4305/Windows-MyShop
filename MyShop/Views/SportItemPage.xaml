@@ -19,8 +19,10 @@
     <conv:SportItemStatusBadgeForegroundConverter x:Key="SportItemStatusBadgeForegroundConverter"/>
 
     <SolidColorBrush x:Key="SportPurpleBrush" Color="#8B52FF"/>
-    <SolidColorBrush x:Key="SportHeaderBgBrush" Color="{ThemeResource ControlFillColorSecondaryBrush}"/>
-    <SolidColorBrush x:Key="SportHeaderTextBrush" Color="{ThemeResource TextFillColorPrimary}"/>
+    <SolidColorBrush x:Key="SportPurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
+    <StaticResource x:Key="SportHeaderBgBrush" ResourceKey="ControlFillColorSecondaryBrush"/>
+    <StaticResource x:Key="SportHeaderTextBrush" ResourceKey="TextFillColorPrimaryBrush"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#DC2626"/>
 
     <Style x:Key="BulkImportButtonStyle" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
@@ -162,7 +164,7 @@
     </Grid>
 
     <Rectangle Grid.Row="1" Height="1" Margin="0,0,0,20" HorizontalAlignment="Stretch"
-               Stroke="#60A5FA" StrokeThickness="1" StrokeDashArray="5 4" Fill="Transparent"/>
+               Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
 
 
     <!-- Price range & Sort: hai box trắng tách riêng -->
@@ -386,7 +388,7 @@
     <TextBlock Grid.Row="5"
                Margin="0,12,0,0"
                Text="{Binding ErrorMessage}"
-               Foreground="#DC2626"
+               Foreground="{StaticResource ErrorBrush}"
                TextWrapping="Wrap"
                HorizontalAlignment="Center"
                Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>

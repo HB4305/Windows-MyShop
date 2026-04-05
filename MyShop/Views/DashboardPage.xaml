@@ -7,42 +7,67 @@
   <Page.Resources>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <!-- Accent colors (matching Login) -->
-    <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
-    <SolidColorBrush x:Key="PurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
-    <SolidColorBrush x:Key="PurpleFaintBrush" Color="#8B52FF" Opacity="0.08"/>
+    <SolidColorBrush x:Key="PurpleBrush"
+        Color="#8B52FF"/>
+    <SolidColorBrush x:Key="PurpleLightBrush"
+        Color="#8B52FF"
+        Opacity="0.12"/>
+    <SolidColorBrush x:Key="PurpleFaintBrush"
+        Color="#8B52FF"
+        Opacity="0.08"/>
 
     <!-- Text brushes (Theme-aware) -->
-    <StaticResource x:Key="DarkTextBrush" ResourceKey="TextFillColorPrimaryBrush"/>
-    <StaticResource x:Key="GrayTextBrush" ResourceKey="TextFillColorSecondaryBrush"/>
-    <StaticResource x:Key="MutedTextBrush" ResourceKey="TextFillColorTertiaryBrush"/>
-    <SolidColorBrush x:Key="GreenBrush" Color="#10B981"/> <!-- Better green -->
+    <StaticResource x:Key="DarkTextBrush"
+        ResourceKey="TextFillColorPrimaryBrush"/>
+    <StaticResource x:Key="GrayTextBrush"
+        ResourceKey="TextFillColorSecondaryBrush"/>
+    <StaticResource x:Key="MutedTextBrush"
+        ResourceKey="TextFillColorTertiaryBrush"/>
+    <SolidColorBrush x:Key="GreenBrush"
+        Color="#10B981"/>
+    <!-- Better green -->
 
     <!-- Card style -->
-    <Style x:Key="CardBorder" TargetType="Border">
-      <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
-      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
-      <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
-      <Setter Property="Padding" Value="20"/>
+    <Style x:Key="CardBorder"
+        TargetType="Border">
+      <Setter Property="Background"
+          Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+      <Setter Property="BorderBrush"
+          Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness"
+          Value="1"/>
+      <Setter Property="CornerRadius"
+          Value="{ThemeResource ControlCornerRadius}"/>
+      <Setter Property="Padding"
+          Value="20"/>
     </Style>
 
     <!-- KPI Value style -->
-    <Style x:Key="KpiValueStyle" TargetType="TextBlock">
-      <Setter Property="FontSize" Value="32"/>
-      <Setter Property="FontWeight" Value="Bold"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+    <Style x:Key="KpiValueStyle"
+        TargetType="TextBlock">
+      <Setter Property="FontSize"
+          Value="32"/>
+      <Setter Property="FontWeight"
+          Value="Bold"/>
+      <Setter Property="Foreground"
+          Value="{ThemeResource TextFillColorPrimary}"/>
     </Style>
 
     <!-- KPI Label style -->
-    <Style x:Key="KpiLabelStyle" TargetType="TextBlock">
-      <Setter Property="FontSize" Value="12"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondary}"/>
-      <Setter Property="Margin" Value="0,0,0,4"/>
+    <Style x:Key="KpiLabelStyle"
+        TargetType="TextBlock">
+      <Setter Property="FontSize"
+          Value="12"/>
+      <Setter Property="Foreground"
+          Value="{ThemeResource TextFillColorSecondary}"/>
+      <Setter Property="Margin"
+          Value="0,0,0,4"/>
     </Style>
   </Page.Resources>
 
   <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="24" Spacing="20">
+    <StackPanel Margin="24"
+        Spacing="20">
 
       <!-- ═══════════════════════════ PAGE TITLE ═══════════════════════════ -->
       <Grid>
@@ -63,7 +88,9 @@
         </StackPanel>
 
         <!-- Controls -->
-        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+        <StackPanel Grid.Column="1"
+            Orientation="Horizontal"
+            Spacing="10">
 
           <!-- Date picker button -->
           <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -71,21 +98,39 @@
                   BorderThickness="1"
                   CornerRadius="{ThemeResource ControlCornerRadius}"
                   Padding="12,8">
-            <StackPanel Orientation="Horizontal" Spacing="6">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE787;" FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
-              <TextBlock Text="July 2026" FontSize="13" Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                Spacing="6">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                  Text="&#xE787;"
+                  FontSize="13"
+                  Foreground="{ThemeResource TextFillColorSecondary}"
+                  VerticalAlignment="Center"/>
+              <TextBlock Text="July 2026"
+                  FontSize="13"
+                  Foreground="{ThemeResource TextFillColorPrimary}"
+                  VerticalAlignment="Center"/>
             </StackPanel>
           </Border>
 
           <!-- Create Order button -->
           <Button Background="{StaticResource PurpleBrush}"
                   CornerRadius="{ThemeResource ControlCornerRadius}"
-                  Padding="14,8"
+                  Padding="18,10"
                   BorderThickness="0"
+                  MinHeight="44"
                   Command="{Binding CreateOrderCommand}">
-            <StackPanel Orientation="Horizontal" Spacing="6">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" FontSize="13" Foreground="White" VerticalAlignment="Center"/>
-              <TextBlock Text="Create Order" FontSize="13" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                Spacing="6">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                  Text="&#xE710;"
+                  FontSize="14"
+                  Foreground="White"
+                  VerticalAlignment="Center"/>
+              <TextBlock Text="Create Order"
+                  FontSize="14"
+                  FontWeight="SemiBold"
+                  Foreground="White"
+                  VerticalAlignment="Center"/>
             </StackPanel>
           </Button>
 
@@ -103,9 +148,13 @@
         </Grid.ColumnDefinitions>
 
         <!-- Card 1: Total Products -->
-        <Border Grid.Column="0" Style="{StaticResource CardBorder}">
+        <Border Grid.Column="0"
+            Style="{StaticResource CardBorder}">
           <StackPanel>
-            <TextBlock Text="TOTAL PRODUCTS" Style="{StaticResource KpiLabelStyle}" FontWeight="SemiBold" CharacterSpacing="40"/>
+            <TextBlock Text="TOTAL PRODUCTS"
+                Style="{StaticResource KpiLabelStyle}"
+                FontWeight="SemiBold"
+                CharacterSpacing="40"/>
             <TextBlock Text="{Binding TotalProductsDisplay}"
                        Style="{StaticResource KpiValueStyle}"
                        Margin="0,4,0,0"/>
@@ -113,9 +162,13 @@
         </Border>
 
         <!-- Card 2: Today's Orders -->
-        <Border Grid.Column="2" Style="{StaticResource CardBorder}">
+        <Border Grid.Column="2"
+            Style="{StaticResource CardBorder}">
           <StackPanel>
-            <TextBlock Text="TODAY'S ORDERS" Style="{StaticResource KpiLabelStyle}" FontWeight="SemiBold" CharacterSpacing="40"/>
+            <TextBlock Text="TODAY'S ORDERS"
+                Style="{StaticResource KpiLabelStyle}"
+                FontWeight="SemiBold"
+                CharacterSpacing="40"/>
             <TextBlock Text="{Binding TotalTodayOrdersDisplay}"
                        Style="{StaticResource KpiValueStyle}"
                        Margin="0,4,0,0"/>
@@ -123,9 +176,13 @@
         </Border>
 
         <!-- Card 3: Today's Revenue -->
-        <Border Grid.Column="4" Style="{StaticResource CardBorder}">
+        <Border Grid.Column="4"
+            Style="{StaticResource CardBorder}">
           <StackPanel>
-            <TextBlock Text="TODAY'S REVENUE" Style="{StaticResource KpiLabelStyle}" FontWeight="SemiBold" CharacterSpacing="40"/>
+            <TextBlock Text="TODAY'S REVENUE"
+                Style="{StaticResource KpiLabelStyle}"
+                FontWeight="SemiBold"
+                CharacterSpacing="40"/>
             <TextBlock Text="{Binding TodayRevenueDisplay}"
                        Style="{StaticResource KpiValueStyle}"
                        Margin="0,4,0,0"/>
@@ -152,9 +209,18 @@
                          Margin="0,2,0,0"/>
             </StackPanel>
             <!-- Legend -->
-            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-              <Border Width="8" Height="8" CornerRadius="4" Background="{StaticResource PurpleBrush}"/>
-              <TextBlock Text="Revenue ($)" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1"
+                Orientation="Horizontal"
+                Spacing="6"
+                VerticalAlignment="Center">
+              <Border Width="8"
+                  Height="8"
+                  CornerRadius="4"
+                  Background="{StaticResource PurpleBrush}"/>
+              <TextBlock Text="Revenue ($)"
+                  FontSize="12"
+                  Foreground="{ThemeResource TextFillColorSecondary}"
+                  VerticalAlignment="Center"/>
             </StackPanel>
           </Grid>
 
@@ -178,11 +244,31 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="DAY 1" FontSize="11" Foreground="{ThemeResource TextFillColorTertiary}" HorizontalAlignment="Left"/>
-            <TextBlock Grid.Column="1" Text="DAY 7" FontSize="11" Foreground="{ThemeResource TextFillColorTertiary}" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="2" Text="DAY 14" FontSize="11" Foreground="{ThemeResource TextFillColorTertiary}" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="3" Text="DAY 21" FontSize="11" Foreground="{ThemeResource TextFillColorTertiary}" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="4" Text="DAY 30" FontSize="11" Foreground="{ThemeResource TextFillColorTertiary}" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Column="0"
+                Text="DAY 1"
+                FontSize="11"
+                Foreground="{ThemeResource TextFillColorTertiary}"
+                HorizontalAlignment="Left"/>
+            <TextBlock Grid.Column="1"
+                Text="DAY 7"
+                FontSize="11"
+                Foreground="{ThemeResource TextFillColorTertiary}"
+                HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="2"
+                Text="DAY 14"
+                FontSize="11"
+                Foreground="{ThemeResource TextFillColorTertiary}"
+                HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="3"
+                Text="DAY 21"
+                FontSize="11"
+                Foreground="{ThemeResource TextFillColorTertiary}"
+                HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="4"
+                Text="DAY 30"
+                FontSize="11"
+                Foreground="{ThemeResource TextFillColorTertiary}"
+                HorizontalAlignment="Right"/>
           </Grid>
         </StackPanel>
       </Border>
@@ -196,13 +282,20 @@
         </Grid.ColumnDefinitions>
 
         <!-- ── LEFT COLUMN ── -->
-        <StackPanel Grid.Column="0" Spacing="16">
+        <StackPanel Grid.Column="0"
+            Spacing="16">
 
           <!-- Top 5 Best Sellers -->
           <Border Style="{StaticResource CardBorder}">
             <StackPanel>
-              <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,16">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xECC7;" FontSize="14" Foreground="{StaticResource PurpleBrush}" VerticalAlignment="Center"/>
+              <StackPanel Orientation="Horizontal"
+                  Spacing="8"
+                  Margin="0,0,0,16">
+                <TextBlock FontFamily="Segoe MDL2 Assets"
+                    Text="&#xECC7;"
+                    FontSize="14"
+                    Foreground="{StaticResource PurpleBrush}"
+                    VerticalAlignment="Center"/>
                 <TextBlock Text="Top 5 Best Sellers"
                            FontSize="15"
                            FontWeight="SemiBold"
@@ -217,7 +310,8 @@
                          Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
               <!-- Best sellers list -->
-              <ItemsControl ItemsSource="{Binding TopSellerItems}" Margin="0,0,0,0">
+              <ItemsControl ItemsSource="{Binding TopSellerItems}"
+                  Margin="0,0,0,0">
                 <ItemsControl.ItemTemplate>
                   <DataTemplate>
                     <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
@@ -235,7 +329,9 @@
                                      FontSize="13"
                                      FontWeight="SemiBold"
                                      Foreground="{ThemeResource TextFillColorPrimary}"/>
-                          <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorTertiary}" Margin="0,2,0,0"
+                          <TextBlock FontSize="11"
+                              Foreground="{ThemeResource TextFillColorTertiary}"
+                              Margin="0,2,0,0"
                                      Text="{Binding SubInfo}"/>
                           <!-- Revenue badge -->
                           <Border Background="{ThemeResource ControlFillColorSecondaryBrush}"
@@ -243,7 +339,8 @@
                                   Padding="6,2"
                                   Margin="0,4,0,0"
                                   HorizontalAlignment="Left">
-                            <TextBlock FontSize="11" Foreground="{StaticResource GreenBrush}"
+                            <TextBlock FontSize="11"
+                                Foreground="{StaticResource GreenBrush}"
                                        Text="{Binding RevenueBadgeText}"/>
                           </Border>
                         </StackPanel>
@@ -277,8 +374,14 @@
                   <ColumnDefinition Width="*"/>
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
-                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7BA;" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="0"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                  <TextBlock FontFamily="Segoe MDL2 Assets"
+                      Text="&#xE7BA;"
+                      FontSize="14"
+                      Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                      VerticalAlignment="Center"/>
                   <TextBlock Text="Low Stock Alerts"
                              FontSize="15"
                              FontWeight="SemiBold"
@@ -300,9 +403,26 @@
                   <ColumnDefinition Width="60"/>
                   <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="PRODUCT" FontSize="10" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" CharacterSpacing="40"/>
-                <TextBlock Grid.Column="1" Text="STOCK" FontSize="10" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" HorizontalAlignment="Center" CharacterSpacing="40"/>
-                <TextBlock Grid.Column="2" Text="ACTION" FontSize="10" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" HorizontalAlignment="Right" CharacterSpacing="40"/>
+                <TextBlock Grid.Column="0"
+                    Text="PRODUCT"
+                    FontSize="10"
+                    Foreground="{ThemeResource TextFillColorTertiary}"
+                    FontWeight="SemiBold"
+                    CharacterSpacing="40"/>
+                <TextBlock Grid.Column="1"
+                    Text="STOCK"
+                    FontSize="10"
+                    Foreground="{ThemeResource TextFillColorTertiary}"
+                    FontWeight="SemiBold"
+                    HorizontalAlignment="Center"
+                    CharacterSpacing="40"/>
+                <TextBlock Grid.Column="2"
+                    Text="ACTION"
+                    FontSize="10"
+                    Foreground="{ThemeResource TextFillColorTertiary}"
+                    FontWeight="SemiBold"
+                    HorizontalAlignment="Right"
+                    CharacterSpacing="40"/>
               </Grid>
 
               <ItemsControl ItemsSource="{Binding LowStockItems}">
@@ -329,7 +449,9 @@
                               Padding="6,3"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center">
-                        <TextBlock FontSize="11" Foreground="#DC2626" HorizontalAlignment="Center">
+                        <TextBlock FontSize="11"
+                            Foreground="#DC2626"
+                            HorizontalAlignment="Center">
                           <Run Text="{Binding StockQuantity}"/>
                           <Run Text=" left"/>
                         </TextBlock>
@@ -356,7 +478,8 @@
         </StackPanel>
 
         <!-- ── RIGHT COLUMN ── -->
-        <StackPanel Grid.Column="2" Spacing="16">
+        <StackPanel Grid.Column="2"
+            Spacing="16">
 
           <!-- Recent Orders -->
           <Border Style="{StaticResource CardBorder}">
@@ -366,8 +489,14 @@
                   <ColumnDefinition Width="*"/>
                   <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
-                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7BC;" FontSize="14" Foreground="{StaticResource PurpleBrush}" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="0"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                  <TextBlock FontFamily="Segoe MDL2 Assets"
+                      Text="&#xE7BC;"
+                      FontSize="14"
+                      Foreground="{StaticResource PurpleBrush}"
+                      VerticalAlignment="Center"/>
                   <TextBlock Text="Recent Orders"
                              FontSize="15"
                              FontWeight="SemiBold"
@@ -410,7 +539,8 @@
                         </Grid>
 
                         <!-- Order meta -->
-                        <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorTertiary}">
+                        <TextBlock FontSize="11"
+                            Foreground="{ThemeResource TextFillColorTertiary}">
                           <Run Text="Order #"/>
                           <Run Text="{Binding IdDisplay}"/>
                           <Run Text=" • "/>
@@ -451,18 +581,24 @@
                          FontWeight="Bold"
                          Foreground="White"/>
               <TextBlock Text="Ensure your local stock matches the online storefront across all channels."
-                             FontSize="12"
-                             Foreground="White" Opacity="0.8"
-                             TextWrapping="Wrap"
-                             LineHeight="18"/>
+                         FontSize="12"
+                         Foreground="White"
+                  Opacity="0.8"
+                         TextWrapping="Wrap"
+                         LineHeight="18"/>
               <!-- Sync button -->
               <Border Background="White"
                       CornerRadius="8"
                       Padding="14,10"
                       Margin="0,4,0,0"
                       HorizontalAlignment="Left">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE895;" FontSize="13" Foreground="{StaticResource PurpleBrush}" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal"
+                    Spacing="6">
+                  <TextBlock FontFamily="Segoe MDL2 Assets"
+                      Text="&#xE895;"
+                      FontSize="13"
+                      Foreground="{StaticResource PurpleBrush}"
+                      VerticalAlignment="Center"/>
                   <TextBlock Text="Run Full Sync"
                              FontSize="13"
                              FontWeight="SemiBold"
