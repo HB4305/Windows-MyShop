@@ -16,7 +16,6 @@ public static class LoginPageEvents
     public static event Action? OnNavigateToLogin;
     public static void RaiseLoginSuccess() => OnLoginSuccess?.Invoke();
     public static void RaiseNavigateToConfig() => OnNavigateToConfig?.Invoke();
-    public static void RaiseNavigateToSignUp() => OnNavigateToSignUp?.Invoke();
     public static void RaiseNavigateToLogin() => OnNavigateToLogin?.Invoke();
 }
 
