@@ -4,36 +4,25 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:m="using:MyShop.Models"
       xmlns:conv="using:MyShop.Converters"
-      Background="#F3F4F6">
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Page.Resources>
     <!-- Purple accent color -->
-    <SolidColorBrush x:Key="PurpleBrush"
-        Color="#7C3AED"/>
-    <SolidColorBrush x:Key="PurpleLightBrush"
-        Color="#F3F0FF"/>
-    <SolidColorBrush x:Key="PurpleFaintBrush"
-        Color="#EDE9FE"/>
+    <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
+    <SolidColorBrush x:Key="PurpleLightBrush" Color="#1A8B52FF"/> <!-- Faint purple, alpha 10% -->
+    <SolidColorBrush x:Key="PurpleFaintBrush" Color="#0D8B52FF"/> <!-- Extra faint purple, alpha 5% -->
 
-    <!-- Text colors -->
-    <SolidColorBrush x:Key="DarkTextBrush"
-        Color="#1F2937"/>
-    <SolidColorBrush x:Key="GrayTextBrush"
-        Color="#6B7280"/>
-    <SolidColorBrush x:Key="MutedTextBrush"
-        Color="#9CA3AF"/>
+    <!-- Text colors -> Replaced by direct ThemeResource bindings in most places, provided here for fallback -->
+    <SolidColorBrush x:Key="DarkTextBrush" Color="{ThemeResource TextFillColorPrimary}"/>
+    <SolidColorBrush x:Key="GrayTextBrush" Color="{ThemeResource TextFillColorSecondary}"/>
+    <SolidColorBrush x:Key="MutedTextBrush" Color="{ThemeResource TextFillColorTertiary}"/>
 
     <!-- Card style -->
-    <Style x:Key="CardBorder"
-        TargetType="Border">
-      <Setter Property="Background"
-          Value="White"/>
-      <Setter Property="BorderBrush"
-          Value="#E5E7EB"/>
-      <Setter Property="BorderThickness"
-          Value="1"/>
-      <Setter Property="CornerRadius"
-          Value="12"/>
+    <Style x:Key="CardBorder" TargetType="Border">
+      <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
       <Setter Property="Padding"
           Value="20"/>
     </Style>
@@ -69,10 +58,10 @@
           <TextBlock Text="Categories"
                      FontSize="22"
                      FontWeight="Bold"
-                     Foreground="#1F2937"/>
+                     Foreground="{ThemeResource TextFillColorPrimary}"/>
           <TextBlock Text="Organize your product catalog with categories."
                      FontSize="13"
-                     Foreground="#6B7280"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
                      Margin="0,2,0,0"/>
         </StackPanel>
 
@@ -90,18 +79,15 @@
 
           <!-- Add Category button -->
           <Button Command="{Binding AddCategoryCommand}"
-                  Background="#7C3AED"
-                  BorderBrush="#7C3AED"
+                  Background="{StaticResource PurpleBrush}"
+                  BorderBrush="{StaticResource PurpleBrush}"
                   BorderThickness="0"
-                  CornerRadius="8"
+                  CornerRadius="{ThemeResource ControlCornerRadius}"
                   Padding="14,8">
             <Button.Resources>
-              <SolidColorBrush x:Key="ButtonBackgroundPointerOver"
-                  Color="#E67C3AED"/>
-              <SolidColorBrush x:Key="ButtonBorderBrushPointerOver"
-                  Color="#E67C3AED"/>
-              <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                  Color="White"/>
+              <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#9A66FF"/>
+              <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#9A66FF"/>
+              <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
             </Button.Resources>
             <StackPanel Orientation="Horizontal"
                 Spacing="6">
@@ -183,12 +169,12 @@
               <TextBlock FontFamily="Segoe MDL2 Assets"
                   Text="&#xE8EC;"
                   FontSize="14"
-                  Foreground="#7C3AED"
+                  Foreground="{StaticResource PurpleBrush}"
                   VerticalAlignment="Center"/>
               <TextBlock Text="All Categories"
                          FontSize="15"
                          FontWeight="SemiBold"
-                         Foreground="#1F2937"
+                         Foreground="{ThemeResource TextFillColorPrimary}"
                          VerticalAlignment="Center"/>
             </StackPanel>
 
@@ -198,18 +184,18 @@
               <TextBlock Text="{Binding Categories.Count, Mode=OneWay}"
                          FontSize="12"
                          FontWeight="SemiBold"
-                         Foreground="#7C3AED"
+                         Foreground="{StaticResource PurpleBrush}"
                          VerticalAlignment="Center"/>
               <TextBlock Text="items"
                          FontSize="12"
-                         Foreground="#9CA3AF"
+                         Foreground="{ThemeResource TextFillColorTertiary}"
                          VerticalAlignment="Center"/>
             </StackPanel>
           </Grid>
 
           <!-- Table Header -->
-          <Border Background="#FAFAFA"
-                  CornerRadius="8"
+          <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  CornerRadius="{ThemeResource ControlCornerRadius}"
                   Padding="12,10"
                   Margin="0,0,0,4">
             <Grid>
@@ -218,25 +204,9 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="80"/>
               </Grid.ColumnDefinitions>
-              <TextBlock Grid.Column="0"
-                  Text="NAME"
-                  FontSize="10"
-                  Foreground="#9CA3AF"
-                  FontWeight="SemiBold"
-                  CharacterSpacing="40"/>
-              <TextBlock Grid.Column="1"
-                  Text="DESCRIPTION"
-                  FontSize="10"
-                  Foreground="#9CA3AF"
-                  FontWeight="SemiBold"
-                  CharacterSpacing="40"/>
-              <TextBlock Grid.Column="2"
-                  Text="ACTIONS"
-                  FontSize="10"
-                  Foreground="#9CA3AF"
-                  FontWeight="SemiBold"
-                  HorizontalAlignment="Right"
-                  CharacterSpacing="40"/>
+              <TextBlock Grid.Column="0" Text="NAME" FontSize="10" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" CharacterSpacing="40"/>
+              <TextBlock Grid.Column="1" Text="DESCRIPTION" FontSize="10" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" CharacterSpacing="40"/>
+              <TextBlock Grid.Column="2" Text="ACTIONS" FontSize="10" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" HorizontalAlignment="Right" CharacterSpacing="40"/>
             </Grid>
           </Border>
 
@@ -244,7 +214,7 @@
           <ItemsControl ItemsSource="{Binding Categories}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="m:Category">
-                <Border BorderBrush="#F3F4F6"
+                <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                         BorderThickness="0,0,0,1"
                         Padding="12,12"
                         Margin="0,0,0,0">
@@ -260,7 +230,7 @@
                                 Orientation="Horizontal"
                                 Spacing="10"
                                 VerticalAlignment="Center">
-                      <Border Background="#F3F0FF"
+                      <Border Background="{StaticResource PurpleLightBrush}"
                               CornerRadius="6"
                               Width="28"
                               Height="28"
@@ -269,14 +239,14 @@
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    Text="&#xE8EC;"
                                    FontSize="12"
-                                   Foreground="#7C3AED"
+                                   Foreground="{StaticResource PurpleBrush}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
                       </Border>
                       <TextBlock Text="{x:Bind Name}"
                                  FontSize="13"
                                  FontWeight="SemiBold"
-                                 Foreground="#1F2937"
+                                 Foreground="{ThemeResource TextFillColorPrimary}"
                                  VerticalAlignment="Center"/>
                     </StackPanel>
 
@@ -302,13 +272,13 @@
                       <Button Style="{StaticResource IconActionButton}"
                               DataContext="{Binding}"
                               Click="EditCategory_Click">
-                        <Border Background="#F3F0FF"
+                        <Border Background="{StaticResource PurpleLightBrush}"
                                 CornerRadius="6"
                                 Padding="8,5">
                           <TextBlock FontFamily="Segoe MDL2 Assets"
                                      Text="&#xE70F;"
                                      FontSize="12"
-                                     Foreground="#7C3AED"/>
+                                     Foreground="{StaticResource PurpleBrush}"/>
                         </Border>
                       </Button>
 
@@ -316,13 +286,13 @@
                       <Button Style="{StaticResource IconActionButton}"
                               DataContext="{Binding}"
                               Click="DeleteCategory_Click">
-                        <Border Background="#FEF2F2"
+                        <Border Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
                                 CornerRadius="6"
                                 Padding="8,5">
                           <TextBlock FontFamily="Segoe MDL2 Assets"
                                      Text="&#xE74D;"
                                      FontSize="12"
-                                     Foreground="#DC2626"/>
+                                     Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
                         </Border>
                       </Button>
                     </StackPanel>
@@ -337,26 +307,26 @@
                       Spacing="12"
                       Margin="0,32,0,32"
                       Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVisibilityConverter}}">
-            <Border Background="#F3F0FF"
+            <Border Background="{StaticResource PurpleLightBrush}"
                     CornerRadius="20"
                     Width="56"
-                Height="56"
+                    Height="56"
                     HorizontalAlignment="Center">
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE14C;"
                          FontSize="24"
-                         Foreground="#7C3AED"
+                         Foreground="{StaticResource PurpleBrush}"
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"/>
             </Border>
             <TextBlock Text="No categories yet"
                        FontSize="15"
                        FontWeight="SemiBold"
-                       Foreground="#1F2937"
+                       Foreground="{ThemeResource TextFillColorPrimary}"
                        HorizontalAlignment="Center"/>
             <TextBlock Text="Create your first category to start organizing products."
                        FontSize="12"
-                       Foreground="#9CA3AF"
+                       Foreground="{ThemeResource TextFillColorSecondary}"
                        HorizontalAlignment="Center"/>
           </StackPanel>
         </StackPanel>

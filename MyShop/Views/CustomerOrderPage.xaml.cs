@@ -49,13 +49,13 @@ public sealed partial class CustomerOrderPage : Page
     }
 
     // ══ Order Selection ═══════════════════════════════════════════
-    private void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is not ListView listView) return;
         if (listView.SelectedItem is not CustomerOrder order) return;
 
-        ViewModel.SelectedOrder = order;
-        ViewModel.ShowDetailPanel = true;
+        // SelectOrderAsync loads the order details (items) from the database
+        await ViewModel.SelectOrderAsync(order);
         UpdateStatusButtons();
     }
 
@@ -75,9 +75,9 @@ public sealed partial class CustomerOrderPage : Page
         ViewModel.ActiveTab = "Processing";
     }
 
-    private void TabCompleted_Click(object sender, RoutedEventArgs e)
+    private void TabDelivered_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.ActiveTab = "Completed";
+        ViewModel.ActiveTab = "Delivered";
     }
 
     private void TabCancelled_Click(object sender, RoutedEventArgs e)
@@ -90,7 +90,7 @@ public sealed partial class CustomerOrderPage : Page
         ResetTabStyle(TabAll);
         ResetTabStyle(TabPending);
         ResetTabStyle(TabProcessing);
-        ResetTabStyle(TabCompleted);
+        ResetTabStyle(TabDelivered);
         ResetTabStyle(TabCancelled);
 
         var activeTab = ViewModel.ActiveTab switch
@@ -98,7 +98,7 @@ public sealed partial class CustomerOrderPage : Page
             "All" => TabAll,
             "Pending" => TabPending,
             "Processing" => TabProcessing,
-            "Completed" => TabCompleted,
+            "Delivered" => TabDelivered,
             "Cancelled" => TabCancelled,
             _ => TabAll
         };

@@ -54,8 +54,8 @@
     </Style>
 
     <!-- ══ Accent Colors ══ -->
-    <SolidColorBrush x:Key="PurpleBrush"       Color="#7C3AED"/>
-    <SolidColorBrush x:Key="PurpleLightBrush" Color="#F3F0FF"/>
+    <SolidColorBrush x:Key="PurpleBrush"       Color="#8B52FF"/>
+    <SolidColorBrush x:Key="PurpleLightBrush"  Color="#1A8B52FF"/> <!-- Faint purple -->
     <SolidColorBrush x:Key="AmberBrush"        Color="#D97706"/>
     <SolidColorBrush x:Key="BlueBrush"         Color="#2563EB"/>
     <SolidColorBrush x:Key="GreenBrush"        Color="#059669"/>
@@ -245,7 +245,7 @@
 
           <!-- Order ID -->
           <TextBlock Grid.Column="0"
-                     Text="{x:Bind Id, Converter={StaticResource OrderIdConverter}}"
+                     Text="{x:Bind Id, Mode=OneWay, Converter={StaticResource OrderIdConverter}}"
                      FontSize="12"
                      FontWeight="SemiBold"
                      Foreground="{StaticResource PurpleBrush}"
@@ -253,7 +253,7 @@
 
           <!-- Customer Name -->
           <TextBlock Grid.Column="1"
-                     Text="{x:Bind CustomerName}"
+                     Text="{x:Bind CustomerName, Mode=OneWay}"
                      FontSize="13"
                      FontWeight="SemiBold"
                      Foreground="{ThemeResource TextFillColorPrimary}"
@@ -263,45 +263,45 @@
 
           <!-- Customer Phone -->
           <TextBlock Grid.Column="2"
-                     Text="{x:Bind CustomerPhone}"
+                     Text="{x:Bind CustomerPhone, Mode=OneWay}"
                      FontSize="12"
                      Foreground="{ThemeResource TextFillColorTertiary}"
                      VerticalAlignment="Center"/>
 
           <!-- Date -->
           <TextBlock Grid.Column="3"
-                     Text="{x:Bind CreatedAt, Converter={StaticResource DateTimeOffsetConverter}}"
+                     Text="{x:Bind CreatedAt, Mode=OneWay, Converter={StaticResource DateTimeOffsetConverter}}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorTertiary}"
                      VerticalAlignment="Center"/>
 
           <!-- Status -->
           <Border Grid.Column="4"
                   Style="{StaticResource StatusBadgeBase}"
-                  Background="{x:Bind Status, Converter={StaticResource OrderStatusToBrushConverter}}"
+                  Background="{x:Bind Status, Mode=OneWay, Converter={StaticResource OrderStatusToBrushConverter}}"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Left">
-            <TextBlock Text="{x:Bind Status}"
+            <TextBlock Text="{x:Bind Status, Mode=OneWay}"
                        FontSize="11"
                        FontWeight="SemiBold"
-                       Foreground="{x:Bind Status, Converter={StaticResource OrderStatusToForegroundConverter}}"/>
+                       Foreground="{x:Bind Status, Mode=OneWay, Converter={StaticResource OrderStatusToForegroundConverter}}"/>
           </Border>
-
+ 
           <!-- Payment -->
           <Border Grid.Column="5"
                   Style="{StaticResource StatusBadgeBase}"
-                  Background="{x:Bind PaymentStatus, Converter={StaticResource PaymentStatusToBrushConverter}}"
+                  Background="{x:Bind PaymentStatus, Mode=OneWay, Converter={StaticResource PaymentStatusToBrushConverter}}"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Left">
-            <TextBlock Text="{x:Bind PaymentStatus}"
+            <TextBlock Text="{x:Bind PaymentStatus, Mode=OneWay}"
                        FontSize="11"
                        FontWeight="SemiBold"
-                       Foreground="{x:Bind PaymentStatus, Converter={StaticResource PaymentStatusToForegroundConverter}}"/>
+                       Foreground="{x:Bind PaymentStatus, Mode=OneWay, Converter={StaticResource PaymentStatusToForegroundConverter}}"/>
           </Border>
 
           <!-- Total -->
           <TextBlock Grid.Column="6"
-                     Text="{x:Bind TotalAmount, Converter={StaticResource CurrencyConverter}}"
+                     Text="{x:Bind TotalAmount, Mode=OneWay, Converter={StaticResource CurrencyConverter}}"
                      FontSize="14"
                      FontWeight="Bold"
                      Foreground="{ThemeResource TextFillColorPrimary}"
@@ -525,12 +525,12 @@
                 </StackPanel>
               </Button>
 
-              <!-- Completed Tab -->
-              <Button x:Name="TabCompleted"
-                      Click="TabCompleted_Click"
+              <!-- Delivered Tab -->
+              <Button x:Name="TabDelivered"
+                      Click="TabDelivered_Click"
                       Style="{StaticResource TabBtn}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="Completed"/>
+                  <TextBlock Text="Delivered"/>
                   <Border Style="{StaticResource TabCountBadge}">
                     <TextBlock Text="{Binding CompletedCount}"
                                FontSize="11" FontWeight="SemiBold"

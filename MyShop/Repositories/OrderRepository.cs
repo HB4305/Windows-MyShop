@@ -50,7 +50,7 @@ public class OrderRepository
         var (start, end) = DateTimeUtils.GetDayRange(date);
         const string sql = @"
             SELECT COALESCE(SUM(total_amount), 0) FROM customerorders
-            WHERE status = 'Completed'
+            WHERE status = 'Delivered'
               AND created_at >= @start AND created_at < @end";
 
         await using var conn = _connFactory.CreateConnection();
@@ -126,10 +126,12 @@ public class OrderRepository
     public async Task<List<RevenueReport>> GetRevenuePointsAsync(DateTime start, DateTime end)
     {
         const string sql = @"
-            SELECT date, total_orders, gross_revenue
-            FROM view_revenue_report
-            WHERE date >= @start AND date < @end
-            ORDER BY date ASC";
+            SELECT DATE(created_at) as date, COUNT(*)::int as total_orders, coalesce(SUM(total_amount), 0) as gross_revenue
+            FROM customerorders
+            WHERE status = 'Delivered' 
+              AND created_at >= @start AND created_at < @end
+            GROUP BY DATE(created_at)
+            ORDER BY DATE(created_at) ASC";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();

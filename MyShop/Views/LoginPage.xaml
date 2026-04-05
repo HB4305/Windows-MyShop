@@ -130,7 +130,7 @@
                  Foreground="{ThemeResource TextFillColorPrimary}"
                  BorderBrush="{ThemeResource TextBoxBorderBrush}"
                  CornerRadius="{ThemeResource ControlCornerRadius}"
-                 Padding="12,16,12,16"
+                 Padding="12,10,12,10"
                  Height="48"
                  VerticalContentAlignment="Center"/>
 
@@ -147,7 +147,7 @@
                        Foreground="{ThemeResource TextFillColorPrimary}"
                        BorderBrush="{ThemeResource TextBoxBorderBrush}"
                        CornerRadius="{ThemeResource ControlCornerRadius}"
-                       Padding="12,16,40,16"
+                       Padding="12,10,40,10"
                        Height="48"
                        VerticalContentAlignment="Center"/>
           <!-- Show/hide password toggle -->

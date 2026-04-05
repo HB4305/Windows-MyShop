@@ -53,7 +53,7 @@ public class CustomerOrderService
     {
         Validate(order);
 
-        if (newDetails != null)
+        if (newDetails != null && newDetails.Count > 0)
         {
             order.TotalAmount = newDetails.Sum(d => d.Quantity * d.UnitPrice);
 
@@ -62,6 +62,16 @@ public class CustomerOrderService
         }
 
         await _orderRepo.UpdateAsync(order);
+    }
+
+    public async Task UpdateStatusAsync(int id, string status)
+    {
+        await _orderRepo.UpdateStatusAsync(id, status);
+    }
+
+    public async Task UpdatePaymentStatusAsync(int id, string paymentStatus)
+    {
+        await _orderRepo.UpdatePaymentStatusAsync(id, paymentStatus);
     }
 
     public async Task DeleteOrderAsync(int id)

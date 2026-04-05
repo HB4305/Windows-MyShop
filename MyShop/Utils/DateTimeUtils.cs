@@ -4,8 +4,13 @@ public static class DateTimeUtils
 {
     public static (DateTime Start, DateTime End) GetDayRange(DateTime referenceTime)
     {
-        var start = referenceTime.Date;
-        return (start, start.AddDays(1));
+        // Convert local date boundaries to UTC for correct DB comparison
+        // DB stores created_at as UTC (DateTimeOffset.UtcNow)
+        var localStart = referenceTime.Date;
+        var localEnd = localStart.AddDays(1);
+        var utcStart = TimeZoneInfo.ConvertTimeToUtc(localStart);
+        var utcEnd = TimeZoneInfo.ConvertTimeToUtc(localEnd);
+        return (utcStart, utcEnd);
     }
 
     public static (DateTime Start, DateTime End) GetLastWeekRange(DateTime? referenceTime = null)

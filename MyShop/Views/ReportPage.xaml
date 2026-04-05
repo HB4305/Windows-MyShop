@@ -3,20 +3,17 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
       xmlns:conv="using:MyShop.Converters"
-      Background="#F3F4F6"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       Tapped="Page_Tapped">
   <Page.Resources>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-    <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="BorderBrushSoft" Color="#E8E8F2"/>
-    <SolidColorBrush x:Key="TextMuted" Color="#6B7280"/>
-    <SolidColorBrush x:Key="TextStrong" Color="#1F2937"/>
-    <SolidColorBrush x:Key="Accent" Color="#8B5CF6"/>
+    <SolidColorBrush x:Key="Accent" Color="#8B52FF"/>
+    
     <Style x:Key="CardStyle" TargetType="Border">
-      <Setter Property="Background" Value="{StaticResource CardBrush}"/>
-      <Setter Property="BorderBrush" Value="{StaticResource BorderBrushSoft}"/>
+      <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
       <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
       <Setter Property="Padding" Value="18"/>
     </Style>
   </Page.Resources>
@@ -36,22 +33,22 @@
           </Grid.RowDefinitions>
 
           <StackPanel x:Name="HeaderTitlePanel" Spacing="4" Grid.Row="0" Grid.Column="0">
-            <TextBlock Text="MyShop Reports" FontSize="34" FontWeight="Bold" Foreground="{StaticResource TextStrong}"/>
-            <TextBlock Text="Overview, product sales, revenue, profit, and top performing products" Foreground="{StaticResource TextMuted}" FontSize="14"/>
+            <TextBlock Text="MyShop Reports" FontSize="34" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+            <TextBlock Text="Overview, product sales, revenue, profit, and top performing products" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="14"/>
           </StackPanel>
 
-          <Border x:Name="HeaderPeriodCard" Grid.Row="0" Grid.Column="1" Background="#FFFFFF" CornerRadius="12" Padding="14,10">
+          <Border x:Name="HeaderPeriodCard" Grid.Row="0" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="{ThemeResource ControlCornerRadius}" Padding="14,10">
             <StackPanel Spacing="8">
               <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-                <TextBlock Text="{Binding PeriodTitle}" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" VerticalAlignment="Center"/>
-                <TextBlock Text=":" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding RangeStartDisplay, Converter={StaticResource DateFormatter}}" Foreground="{StaticResource TextStrong}" VerticalAlignment="Center"/>
-                <TextBlock Text="-" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding RangeEndDisplay, Converter={StaticResource DateFormatter}}" Foreground="{StaticResource TextStrong}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding PeriodTitle}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center"/>
+                <TextBlock Text=":" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding RangeStartDisplay, Converter={StaticResource DateFormatter}}" Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center"/>
+                <TextBlock Text="-" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding RangeEndDisplay, Converter={StaticResource DateFormatter}}" Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center"/>
               </StackPanel>
 
               <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                <TextBlock Text="Select Period" Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
+                <TextBlock Text="Select Period" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
                 <Button Content="Week"
                         Click="WeekPeriodButton_Click"
                         Background="{Binding WeekButtonBackground}"
@@ -91,32 +88,32 @@
 
           <Border x:Name="OverviewRevenueCard" Grid.Column="0" Grid.Row="0" Style="{StaticResource CardStyle}">
             <StackPanel Spacing="8">
-              <TextBlock Text="Revenue" Foreground="{StaticResource TextMuted}"/>
-              <TextBlock Text="{Binding Overview.Revenue, Converter={StaticResource CurrencyFormatter}}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextStrong}"/>
+              <TextBlock Text="Revenue" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              <TextBlock Text="{Binding Overview.Revenue, Converter={StaticResource CurrencyFormatter}}" FontSize="28" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
               <TextBlock Text="{Binding Overview.RevenueChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold"/>
             </StackPanel>
           </Border>
 
           <Border x:Name="OverviewQuantityCard" Grid.Column="1" Grid.Row="0" Style="{StaticResource CardStyle}">
             <StackPanel Spacing="8">
-              <TextBlock Text="Quantity Sold" Foreground="{StaticResource TextMuted}"/>
-              <TextBlock Text="{Binding Overview.QuantitySold}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextStrong}"/>
+              <TextBlock Text="Quantity Sold" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              <TextBlock Text="{Binding Overview.QuantitySold}" FontSize="28" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
               <TextBlock Text="{Binding Overview.QuantitySoldChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold"/>
             </StackPanel>
           </Border>
 
           <Border x:Name="OverviewProfitCard" Grid.Column="2" Grid.Row="0" Style="{StaticResource CardStyle}">
             <StackPanel Spacing="8">
-              <TextBlock Text="Profit" Foreground="{StaticResource TextMuted}"/>
-              <TextBlock Text="{Binding Overview.Profit, Converter={StaticResource CurrencyFormatter}}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextStrong}"/>
+              <TextBlock Text="Profit" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              <TextBlock Text="{Binding Overview.Profit, Converter={StaticResource CurrencyFormatter}}" FontSize="28" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
               <TextBlock Text="{Binding Overview.ProfitChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold"/>
             </StackPanel>
           </Border>
 
           <Border x:Name="OverviewCustomersCard" Grid.Column="3" Grid.Row="0" Style="{StaticResource CardStyle}">
             <StackPanel Spacing="8">
-              <TextBlock Text="Customers" Foreground="{StaticResource TextMuted}"/>
-              <TextBlock Text="{Binding Overview.CustomersCount}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextStrong}"/>
+              <TextBlock Text="Customers" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              <TextBlock Text="{Binding Overview.CustomersCount}" FontSize="28" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
               <TextBlock Text="{Binding Overview.CustomersChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold"/>
             </StackPanel>
           </Border>
@@ -125,8 +122,8 @@
         <Border Style="{StaticResource CardStyle}">
           <StackPanel Spacing="16">
             <StackPanel Spacing="4">
-              <TextBlock Text="Product Sales" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}"/>
-              <TextBlock Text="Daily sold quantity across the selected period." Foreground="{StaticResource TextMuted}"/>
+              <TextBlock Text="Product Sales" FontSize="22" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+              <TextBlock Text="Daily sold quantity across the selected period." Foreground="{ThemeResource TextFillColorSecondary}"/>
             </StackPanel>
 
             <Grid ColumnSpacing="12">
@@ -151,7 +148,6 @@
                               TextChanged="ProductSearchAutoSuggestBox_TextChanged"
                               SuggestionChosen="ProductSearchAutoSuggestBox_SuggestionChosen"
                               QuerySubmitted="ProductSearchAutoSuggestBox_QuerySubmitted"
-                              Background="#F5F1FF"
                               BorderThickness="0"
                               Padding="12,10"
                               VerticalContentAlignment="Center"/>
@@ -162,12 +158,12 @@
                       Foreground="White"
                       BorderThickness="0"
                       Padding="14,10"
-                      CornerRadius="12">
+                      CornerRadius="{ThemeResource ControlCornerRadius}">
                 <FontIcon Glyph="&#xE721;"/>
               </Button>
             </Grid>
 
-            <Border Background="#FCFBFF" BorderBrush="#ECECF4" BorderThickness="1" CornerRadius="18" Padding="12">
+            <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="18" Padding="12">
               <lvc:CartesianChart Height="280"
                                   LegendPosition="Hidden"
                                   Series="{Binding SoldQuantitySeries}"
@@ -188,10 +184,10 @@
 
           <Border x:Name="RevenueCard" Grid.Row="0" Grid.Column="0" Style="{StaticResource CardStyle}">
             <StackPanel Spacing="14">
-              <TextBlock Text="Revenue" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}"/>
-              <TextBlock Text="Daily revenue across the selected period." Foreground="{StaticResource TextMuted}"/>
+              <TextBlock Text="Revenue" FontSize="22" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+              <TextBlock Text="Daily revenue across the selected period." Foreground="{ThemeResource TextFillColorSecondary}"/>
 
-              <Border Background="#FCFBFF" BorderBrush="#ECECF4" BorderThickness="1" CornerRadius="18" Padding="12">
+              <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="18" Padding="12">
                 <lvc:CartesianChart Height="240"
                                     LegendPosition="Hidden"
                                     Series="{Binding RevenueSeries}"
@@ -203,10 +199,10 @@
 
           <Border x:Name="ProfitCard" Grid.Row="0" Grid.Column="1" Style="{StaticResource CardStyle}">
             <StackPanel Spacing="14">
-              <TextBlock Text="Profit by Category" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}"/>
-              <TextBlock Text="Profit distribution by category for the selected period." Foreground="{StaticResource TextMuted}"/>
+              <TextBlock Text="Profit by Category" FontSize="22" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+              <TextBlock Text="Profit distribution by category for the selected period." Foreground="{ThemeResource TextFillColorSecondary}"/>
 
-              <Border Background="#FCFBFF" BorderBrush="#ECECF4" BorderThickness="1" CornerRadius="18" Padding="12">
+              <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="18" Padding="12">
                 <lvc:PieChart Height="240"
                               LegendPosition="Right"
                               Series="{Binding ProfitSeries}"/>
@@ -217,7 +213,7 @@
 
         <Border Style="{StaticResource CardStyle}">
           <StackPanel Spacing="18">
-            <TextBlock Text="Top Performing Products" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}"/>
+            <TextBlock Text="Top Performing Products" FontSize="22" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
 
             <Grid ColumnSpacing="18">
               <Grid.ColumnDefinitions>
@@ -227,17 +223,17 @@
                 <ColumnDefinition Width="1.2*"/>
                 <ColumnDefinition Width="1*"/>
               </Grid.ColumnDefinitions>
-              <TextBlock Text="PRODUCT" Foreground="{StaticResource TextMuted}" FontWeight="SemiBold" FontSize="12"/>
-              <TextBlock Grid.Column="1" Text="QTY SOLD" Foreground="{StaticResource TextMuted}" FontWeight="SemiBold" FontSize="12"/>
-              <TextBlock Grid.Column="2" Text="REVENUE" Foreground="{StaticResource TextMuted}" FontWeight="SemiBold" FontSize="12"/>
-              <TextBlock Grid.Column="3" Text="PROFIT" Foreground="{StaticResource TextMuted}" FontWeight="SemiBold" FontSize="12"/>
-              <TextBlock Grid.Column="4" Text="CATEGORY" Foreground="{StaticResource TextMuted}" FontWeight="SemiBold" FontSize="12"/>
+              <TextBlock Text="PRODUCT" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" FontSize="12"/>
+              <TextBlock Grid.Column="1" Text="QTY SOLD" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" FontSize="12"/>
+              <TextBlock Grid.Column="2" Text="REVENUE" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" FontSize="12"/>
+              <TextBlock Grid.Column="3" Text="PROFIT" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" FontSize="12"/>
+              <TextBlock Grid.Column="4" Text="CATEGORY" Foreground="{ThemeResource TextFillColorTertiary}" FontWeight="SemiBold" FontSize="12"/>
             </Grid>
 
             <ItemsControl ItemsSource="{Binding TopPerformingProducts}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                  <Border BorderBrush="#ECECF4" BorderThickness="0,0,0,1" Padding="0,12">
+                  <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,12">
                     <Grid ColumnSpacing="18">
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2.4*"/>
@@ -248,13 +244,13 @@
                       </Grid.ColumnDefinitions>
 
                       <StackPanel>
-                        <TextBlock Text="{Binding ProductName}" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}"/>
-                        <TextBlock Text="{Binding ImageUrl}" FontSize="12" Foreground="{StaticResource TextMuted}" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding ProductName}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                        <TextBlock Text="{Binding ImageUrl}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}" TextTrimming="CharacterEllipsis"/>
                       </StackPanel>
 
-                      <TextBlock Grid.Column="1" Text="{Binding TotalQuantitySold}" VerticalAlignment="Center" Foreground="{StaticResource TextStrong}"/>
-                      <TextBlock Grid.Column="2" Text="{Binding GrossRevenue, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" Foreground="{StaticResource TextStrong}"/>
-                      <TextBlock Grid.Column="3" Text="{Binding Profit, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" Foreground="{StaticResource TextStrong}"/>
+                      <TextBlock Grid.Column="1" Text="{Binding TotalQuantitySold}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                      <TextBlock Grid.Column="2" Text="{Binding GrossRevenue, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                      <TextBlock Grid.Column="3" Text="{Binding Profit, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorPrimary}"/>
                       <TextBlock Grid.Column="4" Text="{Binding CategoryName}" VerticalAlignment="Center" Foreground="{StaticResource Accent}" FontWeight="SemiBold"/>
                     </Grid>
                   </Border>

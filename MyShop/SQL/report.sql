@@ -22,7 +22,7 @@ as $$
     join orderdetails od on co.id = od.order_id
     join sportitems si on si.id = od.item_id
     left join categories c on c.id = si.category_id
-    where co.status = 'Completed'
+    where co.status = 'Delivered'
       and co.created_at >= p_start_date
       and co.created_at < p_end_date
       and (
@@ -76,7 +76,7 @@ as $$
   join orderdetails od on co.id = od.order_id
   join sportitems si on si.id = od.item_id
   left join categories c on c.id = si.category_id
-  where co.status = 'Completed'
+  where co.status = 'Delivered'
     and co.created_at >= p_start_date
     and co.created_at < p_end_date
     and (
@@ -118,7 +118,7 @@ as $$
   join orderdetails od on co.id = od.order_id
   join sportitems si on si.id = od.item_id
   left join categories c on c.id = si.category_id
-  where co.status = 'Completed'
+  where co.status = 'Delivered'
     and co.created_at >= p_start_date
     and co.created_at < p_end_date
     and (
@@ -151,7 +151,7 @@ as $$
   join orderdetails od on co.id = od.order_id
   join sportitems si on si.id = od.item_id
   left join categories c on c.id = si.category_id
-  where co.status = 'Completed'
+  where co.status = 'Delivered'
     and co.created_at >= p_start_date
     and co.created_at < p_end_date
   group by coalesce(c.name, 'Uncategorized')
