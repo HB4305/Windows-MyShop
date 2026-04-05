@@ -54,8 +54,8 @@
     </Style>
 
     <!-- ══ Accent Colors ══ -->
-    <SolidColorBrush x:Key="PurpleBrush"       Color="#7C3AED"/>
-    <SolidColorBrush x:Key="PurpleLightBrush" Color="#F3F0FF"/>
+    <SolidColorBrush x:Key="PurpleBrush"       Color="#8B52FF"/>
+    <SolidColorBrush x:Key="PurpleLightBrush"  Color="#1A8B52FF"/> <!-- Faint purple -->
     <SolidColorBrush x:Key="AmberBrush"        Color="#D97706"/>
     <SolidColorBrush x:Key="BlueBrush"         Color="#2563EB"/>
     <SolidColorBrush x:Key="GreenBrush"        Color="#059669"/>

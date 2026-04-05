@@ -15,7 +15,7 @@ public partial class App : Application
     public App()
     {
         // Set global culture to Vietnamese for correct date and number formatting
-        var culture = new System.Globalization.CultureInfo("vi-VN");
+        var culture = new System.Globalization.CultureInfo("en-US");
         System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
         System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
         System.Threading.Thread.CurrentThread.CurrentCulture = culture;
@@ -45,10 +45,10 @@ public partial class App : Application
         _rootFrame = rootFrame;
 
         // Đăng ký event handlers cho authentication flow
-        LoginPageEvents.OnLoginSuccess     += OnLoginSuccess;
+        LoginPageEvents.OnLoginSuccess += OnLoginSuccess;
         LoginPageEvents.OnNavigateToConfig += OnNavigateToConfig;
-        ConfigPageEvents.OnConfigSaved     += OnConfigSaved;
-        ConfigPageEvents.OnBack            += OnConfigBack;
+        ConfigPageEvents.OnConfigSaved += OnConfigSaved;
+        ConfigPageEvents.OnBack += OnConfigBack;
         LoginPageEvents.OnNavigateToLogin += OnNavigateToLogin;
 
         // Luồng: ConfigScreen → Login → Dashboard

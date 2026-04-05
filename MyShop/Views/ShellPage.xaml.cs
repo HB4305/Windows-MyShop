@@ -44,11 +44,7 @@ public sealed partial class ShellPage : Page
         UpdateActiveNav("OrdersManagement");
     }
 
-    private void NavSalesStats_Click(object sender, RoutedEventArgs e)
-    {
-        _frame.Navigate(typeof(SalesStatsPage));
-        UpdateActiveNav("SalesStats");
-    }
+
 
     private void NavCategory_Click(object sender, RoutedEventArgs e)
     {
@@ -78,7 +74,7 @@ public sealed partial class ShellPage : Page
             nameof(ProductCatalogPage) => "ProductCatalog",
             nameof(CustomerOrderPage) => "OrdersManagement",
             nameof(OrdersManagementPage) => "OrdersManagement",
-            nameof(SalesStatsPage) => "SalesStats",
+
             nameof(CategoryPage) => "Category",
             nameof(SettingsPage) => "Settings",
             _ => null
@@ -92,7 +88,7 @@ public sealed partial class ShellPage : Page
         ResetNavStyle(NavReports);
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
-        ResetNavStyle(NavSalesStats);
+
         ResetNavStyle(NavCategory);
         ResetNavStyle(NavSettings);
 
@@ -102,7 +98,7 @@ public sealed partial class ShellPage : Page
             "Reports" => NavReports,
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
-            "SalesStats" => NavSalesStats,
+
             "Category" => NavCategory,
             "Settings" => NavSettings,
             _ => null

@@ -17,17 +17,15 @@ public partial class ReportViewModel : ObservableObject
   private readonly Dictionary<string, int> _categoryIdsByName = new(StringComparer.OrdinalIgnoreCase);
   private List<string> _availableProductOptions = [];
 
-  private static readonly SolidColorBrush SelectedButtonBrush =
-    new(ColorHelper.FromArgb(255, 139, 92, 246));
+  private static Brush SelectedButtonBrush => new SolidColorBrush(ColorHelper.FromArgb(255, 139, 82, 255));
 
-  private static readonly SolidColorBrush UnselectedButtonBrush =
-    new(ColorHelper.FromArgb(255, 243, 244, 246));
+  private static Brush UnselectedButtonBrush =>
+    Application.Current.Resources["ControlFillColorDefaultBrush"] as Brush ?? new SolidColorBrush(Colors.Transparent);
 
-  private static readonly SolidColorBrush SelectedButtonForegroundBrush =
-    new(ColorHelper.FromArgb(255, 255, 255, 255));
+  private static Brush SelectedButtonForegroundBrush => new SolidColorBrush(Colors.White);
 
-  private static readonly SolidColorBrush UnselectedButtonForegroundBrush =
-    new(ColorHelper.FromArgb(255, 31, 41, 55));
+  private static Brush UnselectedButtonForegroundBrush =>
+    Application.Current.Resources["TextFillColorPrimary"] as Brush ?? new SolidColorBrush(ColorHelper.FromArgb(255, 31, 41, 55));
 
   public ReportViewModel(
     ReportService reportService,
@@ -88,17 +86,17 @@ public partial class ReportViewModel : ObservableObject
     _ => "Selected Period"
   };
 
-  public SolidColorBrush WeekButtonBackground => GetPeriodButtonBackground(ReportPeriod.Week);
+  public Brush WeekButtonBackground => GetPeriodButtonBackground(ReportPeriod.Week);
 
-  public SolidColorBrush MonthButtonBackground => GetPeriodButtonBackground(ReportPeriod.Month);
+  public Brush MonthButtonBackground => GetPeriodButtonBackground(ReportPeriod.Month);
 
-  public SolidColorBrush YearButtonBackground => GetPeriodButtonBackground(ReportPeriod.Year);
+  public Brush YearButtonBackground => GetPeriodButtonBackground(ReportPeriod.Year);
 
-  public SolidColorBrush WeekButtonForeground => GetPeriodButtonForeground(ReportPeriod.Week);
+  public Brush WeekButtonForeground => GetPeriodButtonForeground(ReportPeriod.Week);
 
-  public SolidColorBrush MonthButtonForeground => GetPeriodButtonForeground(ReportPeriod.Month);
+  public Brush MonthButtonForeground => GetPeriodButtonForeground(ReportPeriod.Month);
 
-  public SolidColorBrush YearButtonForeground => GetPeriodButtonForeground(ReportPeriod.Year);
+  public Brush YearButtonForeground => GetPeriodButtonForeground(ReportPeriod.Year);
 
   private async Task InitializeAsync()
   {
@@ -341,10 +339,10 @@ public partial class ReportViewModel : ObservableObject
       .ToArray();
   }
 
-  private SolidColorBrush GetPeriodButtonBackground(ReportPeriod period)
+  private Brush GetPeriodButtonBackground(ReportPeriod period)
     => PeriodSelection.Period == period ? SelectedButtonBrush : UnselectedButtonBrush;
 
-  private SolidColorBrush GetPeriodButtonForeground(ReportPeriod period)
+  private Brush GetPeriodButtonForeground(ReportPeriod period)
     => PeriodSelection.Period == period ? SelectedButtonForegroundBrush : UnselectedButtonForegroundBrush;
 
   private static string? NormalizeFilter(string? value)

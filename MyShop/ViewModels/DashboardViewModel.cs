@@ -86,7 +86,29 @@ public partial class DashboardViewModel : ObservableObject
             LowStockItems = lowStockItemsTask.Result;
             TopSellerItems = topSellerItemsTask.Result;
             RecentOrders = recentOrdersTask.Result;
-            DailyRevenuePoints = dailyRevenuePointsTask.Result;
+            var rawPoints = dailyRevenuePointsTask.Result;
+            var pointsMap = new Dictionary<DateTime, RevenueReport>();
+            foreach (var p in rawPoints)
+            {
+                pointsMap[p.Date.Date] = p;
+            }
+
+            var start = new DateTime(now.Year, now.Month, 1);
+            var daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
+            var monthPoints = new List<RevenueReport>(daysInMonth);
+            for (int i = 0; i < daysInMonth; i++)
+            {
+                var day = start.AddDays(i);
+                if (pointsMap.TryGetValue(day, out var dayReport))
+                {
+                    monthPoints.Add(dayReport);
+                }
+                else
+                {
+                    monthPoints.Add(new RevenueReport { Date = day, TotalOrders = 0, GrossRevenue = 0m });
+                }
+            }
+            DailyRevenuePoints = monthPoints;
 
             // Re-evaluate computed properties
             OnPropertyChanged(nameof(TotalProductsDisplay));
