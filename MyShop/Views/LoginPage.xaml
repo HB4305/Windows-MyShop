@@ -141,41 +141,28 @@
                    Margin="0,16,0,8"/>
         <Grid>
           <PasswordBox x:Name="PasswordBox"
-                      IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
-                      PasswordRevealMode="Hidden"
-                      Background="{ThemeResource ControlFillColorDefaultBrush}"
-                      Foreground="{ThemeResource TextFillColorPrimary}"
-                      BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                      CornerRadius="{ThemeResource ControlCornerRadius}"
-                      Padding="12,16,48,16"
-                      Height="48"
-                      VerticalContentAlignment="Center"/>
-          <TextBox x:Name="PasswordTextBox"
-                   Visibility="Collapsed"
-                   IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
-                   Background="{ThemeResource ControlFillColorDefaultBrush}"
-                   Foreground="{ThemeResource TextFillColorPrimary}"
-                   BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                   CornerRadius="{ThemeResource ControlCornerRadius}"
-                   Padding="12,16,48,16"
-                   Height="48"
-                   VerticalContentAlignment="Center"
-                   FontFamily="{StaticResource InterFont}"
-                   FontSize="14"/>
-          <Button x:Name="TogglePasswordButton"
-                  HorizontalAlignment="Right"
+                       IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                       PasswordRevealMode="Hidden"
+                       Background="{ThemeResource ControlFillColorDefaultBrush}"
+                       Foreground="{ThemeResource TextFillColorPrimary}"
+                       BorderBrush="{ThemeResource TextBoxBorderBrush}"
+                       CornerRadius="{ThemeResource ControlCornerRadius}"
+                       Padding="12,16,40,16"
+                       Height="48"
+                       VerticalContentAlignment="Center"/>
+          <!-- Show/hide password toggle -->
+          <Button HorizontalAlignment="Right"
                   VerticalAlignment="Center"
                   Margin="0,0,8,0"
+                  Width="32" Height="32"
                   Background="Transparent"
                   BorderThickness="0"
-                  Padding="8,4"
-                  Click="OnTogglePasswordClick"
-                  ToolTipService.ToolTip="Show password">
-            <TextBlock x:Name="TogglePasswordIcon"
-                       FontFamily="Segoe MDL2 Assets"
-                       Text="&#xE7B3;"
-                       FontSize="18"
-                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  Click="TogglePassword_Click">
+            <Viewbox Width="17" Height="12">
+              <Path Data="M1 6C1 6 4 1 8.5 1C13 1 16 6 16 6C16 6 13 11 8.5 11C4 11 1 6 1 6ZM8.5 3C6.01 3 4 5.01 4 7.5C4 9.99 6.01 12 8.5 12C10.99 12 13 9.99 13 7.5C13 5.01 10.99 3 8.5 3ZM8.5 4.5C9.88 4.5 11 5.62 11 7C11 8.38 9.88 9.5 8.5 9.5C7.12 9.5 6 8.38 6 7C6 5.62 7.12 4.5 8.5 4.5ZM1 6V12H16V6"
+                    Stroke="{ThemeResource TextFillColorSecondary}" StrokeThickness="1"
+                    Fill="Transparent" StrokeLineJoin="Round"/>
+            </Viewbox>
           </Button>
         </Grid>
 
