@@ -1,22 +1,28 @@
 using System;
-using System.Globalization;
 using Microsoft.UI.Xaml.Data;
 
 namespace MyShop.Converters;
 
+/// <summary>
+/// Hiển thị đúng giá trị trong DB, chỉ thêm ký hiệu $ (không quy đổi).
+/// </summary>
 public class CurrencyFormatter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is decimal d)
         {
-            return d.ToString("N0") + "đ";
+            return $"${d:N2}";
         }
+
+        if (value is double db)
+        {
+            return $"${db:N2}";
+        }
+
         return value?.ToString() ?? string.Empty;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
-    {
-        throw new NotImplementedException();
-    }
+        => throw new NotImplementedException();
 }

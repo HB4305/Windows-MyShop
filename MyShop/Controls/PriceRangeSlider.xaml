@@ -1,0 +1,51 @@
+<UserControl x:Class="MyShop.Controls.PriceRangeSlider"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             MinHeight="36">
+
+  <Grid x:Name="LayoutRoot"
+        Height="40"
+        PointerMoved="LayoutRoot_PointerMoved"
+        PointerReleased="LayoutRoot_PointerReleased"
+        PointerCanceled="LayoutRoot_PointerReleased"
+        PointerCaptureLost="LayoutRoot_PointerCaptureLost">
+
+    <Border x:Name="Track"
+            Height="6"
+            VerticalAlignment="Center"
+            Margin="14,0"
+            Background="#E5E7EB"
+            CornerRadius="3"/>
+
+    <Border x:Name="ActiveTrack"
+            Height="6"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"
+            Margin="14,0,0,0"
+            Background="#7C3AED"
+            CornerRadius="3"
+            Width="40"/>
+
+    <Ellipse x:Name="ThumbLower"
+             Width="22"
+             Height="22"
+             VerticalAlignment="Center"
+             HorizontalAlignment="Left"
+             Fill="White"
+             Stroke="#7C3AED"
+             StrokeThickness="2"
+             Margin="-11,0,0,0"
+             PointerPressed="ThumbLower_PointerPressed"/>
+
+    <Ellipse x:Name="ThumbUpper"
+             Width="22"
+             Height="22"
+             VerticalAlignment="Center"
+             HorizontalAlignment="Left"
+             Fill="White"
+             Stroke="#7C3AED"
+             StrokeThickness="2"
+             Margin="-11,0,0,0"
+             PointerPressed="ThumbUpper_PointerPressed"/>
+  </Grid>
+</UserControl>

@@ -1,10 +1,10 @@
-using System.Linq;
-using System.Globalization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using MyShop.Models;
 using MyShop.ViewModels;
+using Windows.System;
 
 namespace MyShop.Views;
 
@@ -17,41 +17,31 @@ public sealed partial class SportItemPage : Page
         _ = ViewModel.LoadItemsAsync();
     }
 
-    private void OnPriceTextChanged(object sender, TextChangedEventArgs e)
+    private SportItemViewModel ViewModel => (SportItemViewModel)DataContext;
+
+    private void OnSortComboSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var textBox = (TextBox)sender;
-        var text = textBox.Text;
-
-        // Chỉ lấy các chữ số
-        var rawDigits = new string(text.Where(char.IsDigit).ToArray());
-
-        if (string.IsNullOrEmpty(rawDigits))
-        {
-            if (textBox == MinPriceBox) ViewModel.MinPrice = null;
-            else ViewModel.MaxPrice = null;
-            if (text != "") textBox.Text = "";
+        if (e.AddedItems.Count == 0 || sender is not ComboBox cb)
             return;
-        }
+        if (cb.SelectedItem is not ComboBoxItem { Tag: string tag } || string.IsNullOrEmpty(tag))
+            return;
 
-        if (long.TryParse(rawDigits, out long value))
-        {
-            // Cập nhật giá trị vào ViewModel
-            if (textBox == MinPriceBox) ViewModel.MinPrice = value;
-            else ViewModel.MaxPrice = value;
-
-            // Định dạng với dấu chấm phân cách phần nghìn
-            var formatted = value.ToString("N0", new CultureInfo("vi-VN"));
-
-            // Tránh lặp vô hạn và giữ con trỏ ở cuối
-            if (text != formatted)
-            {
-                textBox.Text = formatted;
-                textBox.SelectionStart = formatted.Length;
-            }
-        }
+        ViewModel.SortField = tag;
+        _ = ViewModel.ReloadWithCurrentSortAsync();
     }
 
-    private SportItemViewModel ViewModel => (SportItemViewModel)DataContext;
+    private void OnSearchKeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        if (e.Key != VirtualKey.Enter)
+            return;
+        e.Handled = true;
+
+        // Đảm bảo VM nhận đúng chuỗi đang gõ (một số nền tảng chưa flush binding khi Enter).
+        if (sender is TextBox tb)
+            ViewModel.SearchKeyword = tb.Text ?? string.Empty;
+
+        ViewModel.SearchCommand.Execute(null);
+    }
 
     private void OnAddItemClick(object sender, RoutedEventArgs e)
     {
@@ -60,7 +50,7 @@ public sealed partial class SportItemPage : Page
 
     private void OnItemClick(object sender, ItemClickEventArgs e)
     {
-        var item = e.ClickedItem as SportItem;
-        Frame.Navigate(typeof(SportItemDetailPage), item);
+        if (e.ClickedItem is SportItemListRow row)
+            Frame.Navigate(typeof(SportItemDetailPage), row.Item);
     }
 }

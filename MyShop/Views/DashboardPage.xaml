@@ -5,6 +5,7 @@
       Background="#F3F4F6">
 
   <Page.Resources>
+    <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <!-- Purple accent color -->
     <SolidColorBrush x:Key="PurpleBrush" Color="#7C3AED"/>
     <SolidColorBrush x:Key="PurpleLightBrush" Color="#F3F0FF"/>
@@ -105,11 +106,7 @@
             <TextBlock Text="TOTAL PRODUCTS" Style="{StaticResource KpiLabelStyle}" FontWeight="SemiBold" CharacterSpacing="40"/>
             <TextBlock Text="{Binding TotalProductsDisplay}"
                        Style="{StaticResource KpiValueStyle}"
-                       Margin="0,4,0,8"/>
-            <StackPanel Orientation="Horizontal" Spacing="4">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74A;" FontSize="11" Foreground="#059669" VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding TotalProductsTrend}" FontSize="11" Foreground="#059669" VerticalAlignment="Center"/>
-            </StackPanel>
+                       Margin="0,4,0,0"/>
           </StackPanel>
         </Border>
 
@@ -119,11 +116,7 @@
             <TextBlock Text="TODAY'S ORDERS" Style="{StaticResource KpiLabelStyle}" FontWeight="SemiBold" CharacterSpacing="40"/>
             <TextBlock Text="{Binding TotalTodayOrdersDisplay}"
                        Style="{StaticResource KpiValueStyle}"
-                       Margin="0,4,0,8"/>
-            <StackPanel Orientation="Horizontal" Spacing="4">
-              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74A;" FontSize="11" Foreground="#059669" VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding TodayOrdersTrend}" FontSize="11" Foreground="#059669" VerticalAlignment="Center"/>
-            </StackPanel>
+                       Margin="0,4,0,0"/>
           </StackPanel>
         </Border>
 
@@ -133,18 +126,7 @@
             <TextBlock Text="TODAY'S REVENUE" Style="{StaticResource KpiLabelStyle}" FontWeight="SemiBold" CharacterSpacing="40"/>
             <TextBlock Text="{Binding TodayRevenueDisplay}"
                        Style="{StaticResource KpiValueStyle}"
-                       Margin="0,4,0,8"/>
-            <StackPanel Orientation="Horizontal" Spacing="4">
-              <TextBlock FontFamily="Segoe MDL2 Assets"
-                         Text="{Binding RevenueTrendIcon}"
-                         FontSize="11"
-                         Foreground="{Binding RevenueTrendBrush}"
-                         VerticalAlignment="Center"/>
-              <TextBlock Text="{Binding TodayRevenueTrend}"
-                         FontSize="11"
-                         Foreground="{Binding RevenueTrendBrush}"
-                         VerticalAlignment="Center"/>
-            </StackPanel>
+                       Margin="0,4,0,0"/>
           </StackPanel>
         </Border>
       </Grid>

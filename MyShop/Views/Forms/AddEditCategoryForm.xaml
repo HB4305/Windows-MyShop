@@ -6,31 +6,163 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	x:Name="DialogRoot"
-	DefaultButton="Primary"
-	PrimaryButtonText="Xác nhận"
-	CloseButtonText="Hủy"
-	MinWidth="400">
+	MinWidth="460">
 
-	<StackPanel Spacing="16">
-		<StackPanel Spacing="8">
-			<TextBox x:Name="CategoryNameTextBox"
-					 Header="Tên danh mục"
-					 PlaceholderText="Nhập tên danh mục"
-					 TextChanged="CategoryNameTextBox_TextChanged"
-					 MaxLength="100"
-					 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+	<ContentDialog.Resources>
+		<SolidColorBrush x:Key="ContentDialogBackground" Color="White"/>
+		<CornerRadius x:Key="OverlayCornerRadius">12</CornerRadius>
+	</ContentDialog.Resources>
 
-			<TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}"
-					   Foreground="{ThemeResource SystemFillColorCriticalBrush}"
-					   Style="{StaticResource CaptionTextBlockStyle}"/>
+	<StackPanel Spacing="20" Margin="4,0,4,0">
+
+		<!-- Custom header with icon -->
+		<StackPanel Spacing="16">
+			<!-- Category icon circle -->
+			<Border Background="#F3F0FF"
+					CornerRadius="20"
+					Width="48" Height="48"
+					HorizontalAlignment="Left">
+				<TextBlock FontFamily="Segoe MDL2 Assets"
+						   Text="&#xE8EC;"
+						   FontSize="20"
+						   Foreground="#7C3AED"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"/>
+			</Border>
+
+			<!-- Title -->
+			<StackPanel Spacing="4">
+				<TextBlock x:Name="FormTitle"
+						   FontSize="18"
+						   FontWeight="Bold"
+						   Foreground="#1F2937"/>
+				<TextBlock x:Name="FormSubtitle"
+						   FontSize="12"
+						   Foreground="#9CA3AF"/>
+			</StackPanel>
 		</StackPanel>
 
-		<TextBox PlaceholderText="Nhập mô tả (không bắt buộc)"
-				 Header="Mô tả"
-				 TextWrapping="Wrap"
-				 AcceptsReturn="True"
-				 MinHeight="90"
-				 MaxLength="300"
-				 Text="{x:Bind CategoryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+		<!-- Divider -->
+		<Border Background="#F3F4F6" Height="1" Margin="-4,0,-4,0"/>
+
+		<!-- Form fields -->
+		<StackPanel Spacing="16">
+
+			<!-- Category Name field -->
+			<StackPanel Spacing="6">
+				<StackPanel Orientation="Horizontal" Spacing="4">
+					<TextBlock Text="Category name"
+							   FontSize="13"
+							   FontWeight="SemiBold"
+							   Foreground="#1F2937"/>
+					<TextBlock Text="*"
+							   FontSize="13"
+							   Foreground="#DC2626"/>
+				</StackPanel>
+				<TextBox x:Name="CategoryNameTextBox"
+						 PlaceholderText="e.g. Running Shoes, Basketball..."
+						 TextChanged="CategoryNameTextBox_TextChanged"
+						 MaxLength="100"
+						 CornerRadius="8"
+						 Padding="12,10"
+						 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<!-- Validation message -->
+				<Border Visibility="{x:Bind NameValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
+						Padding="0,2,0,0">
+					<StackPanel Orientation="Horizontal" Spacing="4">
+						<TextBlock FontFamily="Segoe MDL2 Assets"
+								   Text="&#xEA39;"
+								   FontSize="10"
+								   Foreground="#DC2626"
+								   VerticalAlignment="Center"/>
+						<TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}"
+								   FontSize="11"
+								   Foreground="#DC2626"/>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+
+			<!-- Description field -->
+			<StackPanel Spacing="6">
+				<StackPanel Orientation="Horizontal" Spacing="6">
+					<TextBlock Text="Description"
+							   FontSize="13"
+							   FontWeight="SemiBold"
+							   Foreground="#1F2937"/>
+					<Border Background="#F3F4F6"
+							CornerRadius="4"
+							Padding="6,1">
+						<TextBlock Text="Optional"
+								   FontSize="10"
+								   Foreground="#9CA3AF"/>
+					</Border>
+				</StackPanel>
+				<TextBox PlaceholderText="Brief description of this category..."
+						 TextWrapping="Wrap"
+						 AcceptsReturn="True"
+						 MinHeight="90"
+						 MaxLength="300"
+						 CornerRadius="8"
+						 Padding="12,10"
+						 Text="{x:Bind CategoryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			</StackPanel>
+		</StackPanel>
+
+		<!-- Divider -->
+		<Border Background="#F3F4F6" Height="1" Margin="-4,0,-4,0"/>
+
+		<!-- Action buttons -->
+		<Grid ColumnSpacing="10">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Cancel button -->
+			<Button Grid.Column="0"
+					x:Name="CancelBtn"
+					Click="CancelBtn_Click"
+					HorizontalAlignment="Stretch"
+					Background="White"
+					BorderBrush="#E5E7EB"
+					BorderThickness="1"
+					CornerRadius="8"
+					Padding="14,10">
+				<Button.Resources>
+					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F9FAFB"/>
+					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#D1D5DB"/>
+					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#374151"/>
+				</Button.Resources>
+				<TextBlock Text="Cancel"
+						   FontSize="13"
+						   FontWeight="SemiBold"
+						   Foreground="#374151"
+						   HorizontalAlignment="Center"/>
+			</Button>
+
+			<!-- Save / Confirm button (purple accent, same as Add Category) -->
+			<Button Grid.Column="1"
+					x:Name="SaveBtn"
+					Click="SaveBtn_Click"
+					HorizontalAlignment="Stretch"
+					Background="#7C3AED"
+					BorderBrush="#7C3AED"
+					BorderThickness="0"
+					CornerRadius="8"
+					Padding="14,10">
+				<Button.Resources>
+					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#E67C3AED"/>
+					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#E67C3AED"/>
+					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
+				</Button.Resources>
+				<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+					<TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" FontSize="12" Foreground="White" VerticalAlignment="Center"/>
+					<TextBlock x:Name="SaveBtnText"
+							   FontSize="13"
+							   FontWeight="SemiBold"
+							   Foreground="White"/>
+				</StackPanel>
+			</Button>
+		</Grid>
 	</StackPanel>
 </ContentDialog>

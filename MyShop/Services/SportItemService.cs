@@ -1,53 +1,67 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using MyShop.Models;
 using MyShop.Models.DashboardModels;
 using MyShop.Repositories;
-using Supabase;
 
 namespace MyShop.Services;
 
 public class SportItemService
 {
     private readonly SportItemRepository _repository;
-    private readonly Supabase.Client _client;
+    private readonly string _imagesBasePath;
 
-    public SportItemService(SportItemRepository repository, Supabase.Client client)
+    public SportItemService(SportItemRepository repository)
     {
         _repository = repository;
-        _client = client;
+
+        // Lưu ảnh vào thư mục app data
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        _imagesBasePath = Path.Combine(appData, "MyShop", "Images");
+        Directory.CreateDirectory(_imagesBasePath);
     }
 
-    // Đếm tổng sản phẩm
     public Task<int> GetTotalCountAsync()
         => _repository.GetTotalCountAsync();
 
     public Task<List<DashboardLowStockProduct>> GetLowStockProductsAsync(int threshold = 5, int limit = 5)
-            => _repository.GetLowStockProductsAsync(threshold, limit);
+        => _repository.GetLowStockProductsAsync(threshold, limit);
 
-    public async Task<(List<SportItem> Items, int TotalCount)> GetItemsAsync(
+    public Task<(List<SportItem> Items, int TotalCount)> GetItemsAsync(
         int page, int pageSize, string keyword, decimal? minPrice, decimal? maxPrice, string sortField, bool sortAscending)
-    {
-        return await _repository.GetItemsAsync(page, pageSize, keyword, minPrice, maxPrice, sortField, sortAscending);
-    }
+        => _repository.GetItemsAsync(page, pageSize, keyword, minPrice, maxPrice, sortField, sortAscending);
 
-    public async Task<int> AddAsync(SportItem item) => await _repository.AddAsync(item);
+    public Task<List<string>> GetProductNamesAsync(int? categoryId = null)
+        => _repository.GetProductNamesAsync(categoryId);
 
-    public async Task UpdateAsync(SportItem item) => await _repository.UpdateAsync(item);
+    public Task<int> AddAsync(SportItem item)
+        => _repository.AddAsync(item);
 
-    public async Task DeleteAsync(int id) => await _repository.DeleteAsync(id);
+    public Task UpdateAsync(SportItem item)
+        => _repository.UpdateAsync(item);
 
-    public async Task<List<ProductImage>> GetImagesAsync(int itemId) => await _repository.GetImagesAsync(itemId);
+    public Task DeleteAsync(int id)
+        => _repository.DeleteAsync(id);
 
-    public async Task AddImageAsync(ProductImage image) => await _repository.AddImageAsync(image);
+    public Task<List<ProductImage>> GetImagesAsync(int itemId)
+        => _repository.GetImagesAsync(itemId);
 
-    public async Task DeleteImageAsync(int imageId) => await _repository.DeleteImageAsync(imageId);
+    public Task AddImageAsync(ProductImage image)
+        => _repository.AddImageAsync(image);
 
+    public Task DeleteImageAsync(int imageId)
+        => _repository.DeleteImageAsync(imageId);
+
+    /// <summary>
+    /// Lưu ảnh vào thư mục app data, trả về file path (dùng làm URL).
+    /// </summary>
     public async Task<string> UploadImageAsync(byte[] bytes, string fileName)
     {
-        var bucket = _client.Storage.From("sport image");
-        var supabasePath = $"{Guid.NewGuid()}_{fileName}";
-        await bucket.Upload(bytes, supabasePath, new Supabase.Storage.FileOptions { Upsert = true });
-        return bucket.GetPublicUrl(supabasePath);
+        var extension = Path.GetExtension(fileName);
+        var safeName = $"{Guid.NewGuid()}{extension}";
+        var filePath = Path.Combine(_imagesBasePath, safeName);
+        await File.WriteAllBytesAsync(filePath, bytes);
+        return filePath; // dùng làm image URL
     }
 }
