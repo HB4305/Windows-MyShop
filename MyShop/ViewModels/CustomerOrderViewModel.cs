@@ -205,26 +205,14 @@ public partial class CustomerOrderViewModel : ObservableObject
     {
         if (order == null) return;
 
-        IsLoading = true;
-        try
-        {
-            var fresh = await _service.GetOrderByIdAsync(order.Id);
-            if (fresh != null)
-            {
-                SelectedOrder = fresh;
-                var details = await _service.GetOrderDetailsAsync(fresh.Id);
-                CurrentDetails = new ObservableCollection<OrderDetail>(details);
-                ShowDetailPanel = true;
-            }
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
-        finally
-        {
-            IsLoading = false;
-        }
+        // Lấy từ danh sách đã load sẵn (không query lại DB)
+        SelectedOrder = Orders.FirstOrDefault(o => o.Id == order.Id) ?? order;
+        SelectedOrderId = SelectedOrder.Id;
+        ShowDetailPanel = true;
+
+        // Chỉ load details khi cần (lazy load)
+        var details = await _service.GetOrderDetailsAsync(order.Id);
+        CurrentDetails = new ObservableCollection<OrderDetail>(details);
     }
 
     // ── Close Detail Panel ───────────────────────────────────────
@@ -232,6 +220,7 @@ public partial class CustomerOrderViewModel : ObservableObject
     public void CloseDetailPanel()
     {
         ShowDetailPanel = false;
+        SelectedOrderId = 0;
         SelectedOrder = new();
         CurrentDetails.Clear();
     }
@@ -241,21 +230,19 @@ public partial class CustomerOrderViewModel : ObservableObject
     public async Task UpdateOrderStatusAsync(string status)
     {
         if (SelectedOrder?.Id == null) return;
-        IsLoading = true;
         ErrorMessage = null;
         try
         {
             SelectedOrder.Status = status;
             await _service.UpdateOrderAsync(SelectedOrder, CurrentDetails.ToList());
-            await LoadOrdersAsync();
+            // Cập nhật dòng tương ứng trong danh sách thay vì load lại toàn bộ
+            var existing = Orders.FirstOrDefault(o => o.Id == SelectedOrder.Id);
+            if (existing != null) existing.Status = status;
+            OnPropertyChanged(nameof(SelectedOrder));
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
-        }
-        finally
-        {
-            IsLoading = false;
         }
     }
 
@@ -264,21 +251,18 @@ public partial class CustomerOrderViewModel : ObservableObject
     public async Task UpdatePaymentStatusAsync(string paymentStatus)
     {
         if (SelectedOrder?.Id == null) return;
-        IsLoading = true;
         ErrorMessage = null;
         try
         {
             SelectedOrder.PaymentStatus = paymentStatus;
             await _service.UpdateOrderAsync(SelectedOrder, CurrentDetails.ToList());
-            await LoadOrdersAsync();
+            var existing = Orders.FirstOrDefault(o => o.Id == SelectedOrder.Id);
+            if (existing != null) existing.PaymentStatus = paymentStatus;
+            OnPropertyChanged(nameof(SelectedOrder));
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
-        }
-        finally
-        {
-            IsLoading = false;
         }
     }
 
@@ -306,9 +290,16 @@ public partial class CustomerOrderViewModel : ObservableObject
     }
 
     // ── Properties for Detail Panel ─────────────────────────────
+    // ── Selected Order ID (for row highlight) ──────────────────────
+    [ObservableProperty]
+    private int _selectedOrderId = 0;
+
     [ObservableProperty]
     private CustomerOrder _selectedOrder = new();
 
     [ObservableProperty]
     private ObservableCollection<OrderDetail> _currentDetails = new();
+
+    /// <summary>Alias for CurrentDetails — used by XAML binding.</summary>
+    public ObservableCollection<OrderDetail> SelectedOrderDetails => CurrentDetails;
 }

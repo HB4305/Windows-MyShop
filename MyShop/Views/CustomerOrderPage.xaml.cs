@@ -41,27 +41,22 @@ public sealed partial class CustomerOrderPage : Page
             {
                 Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateTabStyles);
             }
+            if (e.PropertyName == nameof(ViewModel.SelectedOrder))
+            {
+                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateStatusButtons);
+            }
         };
     }
 
     // ══ Order Selection ═══════════════════════════════════════════
-    private async void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (sender is not ListView listView) return;
         if (listView.SelectedItem is not CustomerOrder order) return;
 
-        try
-        {
-            await ViewModel.SelectOrderAsync(order);
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"[CustomerOrderPage] SelectOrder failed: {ex.Message}");
-        }
-        finally
-        {
-            listView.SelectedItem = null;
-        }
+        ViewModel.SelectedOrder = order;
+        ViewModel.ShowDetailPanel = true;
+        UpdateStatusButtons();
     }
 
     // ══ Tab Handlers ═══════════════════════════════════════════════
@@ -243,43 +238,97 @@ public sealed partial class CustomerOrderPage : Page
         ViewModel.CloseDetailPanelCommand.Execute(null);
     }
 
-    private void StatusPending_Click(object sender, RoutedEventArgs e)
+    private async void StatusPending_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdateOrderStatusCommand.Execute("Pending");
+        SetButtonsEnabled(false);
+        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Pending");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
     }
 
-    private void StatusProcessing_Click(object sender, RoutedEventArgs e)
+    private async void StatusProcessing_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdateOrderStatusCommand.Execute("Processing");
+        SetButtonsEnabled(false);
+        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Processing");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
     }
 
-    private void StatusShipped_Click(object sender, RoutedEventArgs e)
+    private async void StatusShipped_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdateOrderStatusCommand.Execute("Shipped");
+        SetButtonsEnabled(false);
+        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Shipped");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
     }
 
-    private void StatusDelivered_Click(object sender, RoutedEventArgs e)
+    private async void StatusDelivered_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdateOrderStatusCommand.Execute("Delivered");
+        SetButtonsEnabled(false);
+        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Delivered");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
     }
 
-    private void StatusCancelled_Click(object sender, RoutedEventArgs e)
+    private async void StatusCancelled_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdateOrderStatusCommand.Execute("Cancelled");
+        SetButtonsEnabled(false);
+        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Cancelled");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
     }
 
-    private void PayPaid_Click(object sender, RoutedEventArgs e)
+    private async void PayPaid_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdatePaymentStatusCommand.Execute("Paid");
+        SetButtonsEnabled(false);
+        await ViewModel.UpdatePaymentStatusCommand.ExecuteAsync("Paid");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
     }
 
-    private void PayUnpaid_Click(object sender, RoutedEventArgs e)
+    private async void PayUnpaid_Click(object sender, RoutedEventArgs e)
     {
-        ViewModel.UpdatePaymentStatusCommand.Execute("Unpaid");
+        SetButtonsEnabled(false);
+        await ViewModel.UpdatePaymentStatusCommand.ExecuteAsync("Unpaid");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
     }
 
     private async void DeleteOrder_Click(object sender, RoutedEventArgs e)
     {
         await ViewModel.DeleteOrderCommand.ExecuteAsync(null);
+    }
+
+    // ══ Update Status & Payment Button Highlights ═════════════════
+    private void UpdateStatusButtons()
+    {
+        var orderStatus = ViewModel.SelectedOrder?.Status ?? "";
+        SetStatusButtonStyle(BtnStatusPending,    orderStatus, "Pending");
+        SetStatusButtonStyle(BtnStatusProcessing, orderStatus, "Processing");
+        SetStatusButtonStyle(BtnStatusShipped,   orderStatus, "Shipped");
+        SetStatusButtonStyle(BtnStatusDelivered,  orderStatus, "Delivered");
+        SetStatusButtonStyle(BtnStatusCancelled,  orderStatus, "Cancelled");
+
+        var payStatus = ViewModel.SelectedOrder?.PaymentStatus ?? "";
+        SetStatusButtonStyle(BtnPayPaid,   payStatus, "Paid");
+        SetStatusButtonStyle(BtnPayUnpaid, payStatus, "Unpaid");
+    }
+
+    private void SetStatusButtonStyle(Button btn, string currentStatus, string btnStatus)
+    {
+        var isActive = string.Equals(currentStatus, btnStatus, System.StringComparison.OrdinalIgnoreCase);
+        btn.Style = (Style)Resources[isActive ? "PrimaryBtn" : "SecondaryBtn"];
+    }
+
+    // ══ Status update loading feedback ══════════════════════════════
+    private void SetButtonsEnabled(bool enabled)
+    {
+        BtnStatusPending.IsEnabled = enabled;
+        BtnStatusProcessing.IsEnabled = enabled;
+        BtnStatusShipped.IsEnabled = enabled;
+        BtnStatusDelivered.IsEnabled = enabled;
+        BtnStatusCancelled.IsEnabled = enabled;
+        BtnPayPaid.IsEnabled = enabled;
+        BtnPayUnpaid.IsEnabled = enabled;
     }
 }

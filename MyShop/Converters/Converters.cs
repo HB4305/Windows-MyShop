@@ -398,6 +398,41 @@ public class CountToVisibilityConverter : IValueConverter
 }
 
 /// <summary>
+/// Tính end index của trang hiện tại: CurrentPage * PageSize
+/// </summary>
+public class CurrentPageEndConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (parameter is string pageSizeStr && int.TryParse(pageSizeStr, out var pageSize))
+        {
+            if (value is int currentPage)
+                return Math.Min(currentPage * pageSize, 9999); // sẽ bind TotalOrders thực tế
+        }
+        return 0;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
+/// Lấy index của item trong danh sách để hiển thị "1, 2, 3..."
+/// </summary>
+public class ItemIndexConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        if (value is int index)
+            return (index + 1).ToString();
+        return "0";
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>
 /// Chuyển int Count → Visibility. >0 → Visible, 0 → Collapsed.
 /// </summary>
 public class CountToVisibilityInverseConverter : IValueConverter
