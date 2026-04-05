@@ -13,11 +13,9 @@ public static class LoginPageEvents
 {
     public static event Action? OnLoginSuccess;
     public static event Action? OnNavigateToConfig;
-    public static event Action? OnNavigateToSignUp;
     public static event Action? OnNavigateToLogin;
     public static void RaiseLoginSuccess() => OnLoginSuccess?.Invoke();
     public static void RaiseNavigateToConfig() => OnNavigateToConfig?.Invoke();
-    public static void RaiseNavigateToSignUp() => OnNavigateToSignUp?.Invoke();
     public static void RaiseNavigateToLogin() => OnNavigateToLogin?.Invoke();
 }
 
@@ -149,57 +147,6 @@ public partial class LoginViewModel : ObservableObject
         => LoginPageEvents.RaiseNavigateToConfig();
 
     [RelayCommand]
-    public void OpenSignUp()
-        => LoginPageEvents.RaiseNavigateToSignUp();
-
-    [RelayCommand]
     public void BackToLogin()
         => LoginPageEvents.RaiseNavigateToLogin();
-
-    /// <summary>
-    /// Đăng ký tài khoản mới (ghi vào bảng users).
-    /// </summary>
-    [RelayCommand]
-    public async Task SignUpAsync()
-    {
-        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
-        {
-            ErrorMessage = "Vui lòng nhập email và mật khẩu.";
-            return;
-        }
-
-        if (Password != ConfirmPassword)
-        {
-            ErrorMessage = "Mật khẩu xác nhận không khớp.";
-            return;
-        }
-
-        try
-        {
-            IsLoading = true;
-            ErrorMessage = string.Empty;
-
-            // 1. Ghi vào bảng users (plain text password)
-            var success = await _userRepository.CreateAsync(Email.Trim().ToLowerInvariant(), Password);
-            if (!success)
-            {
-                ErrorMessage = "Email đã được sử dụng. Vui lòng dùng email khác.";
-                return;
-            }
-
-            // 2. Lưu credentials
-            _credentialManager.SaveCredentials(Email.Trim().ToLowerInvariant(), Password);
-
-            // 4. Chuyển sang màn hình chính
-            LoginPageEvents.RaiseLoginSuccess();
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Đăng ký thất bại: {ex.Message}";
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-    }
 }

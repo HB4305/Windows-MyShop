@@ -49,8 +49,7 @@ public partial class App : Application
         LoginPageEvents.OnNavigateToConfig += OnNavigateToConfig;
         ConfigPageEvents.OnConfigSaved     += OnConfigSaved;
         ConfigPageEvents.OnBack            += OnConfigBack;
-        LoginPageEvents.OnNavigateToSignUp += OnNavigateToSignUp;
-        LoginPageEvents.OnNavigateToLogin  += OnNavigateToLogin;
+        LoginPageEvents.OnNavigateToLogin += OnNavigateToLogin;
 
         // Luồng: ConfigScreen → Login → Dashboard
         // Lần đầu chưa có config → vào ConfigPage; có config → vào LoginPage
@@ -68,9 +67,6 @@ public partial class App : Application
 
     private void OnNavigateToConfig()
         => _rootFrame?.Navigate(typeof(ConfigPage));
-
-    private void OnNavigateToSignUp()
-        => _rootFrame?.Navigate(typeof(SignUpPage));
 
     private void OnNavigateToLogin()
         => _rootFrame?.Navigate(typeof(LoginPage));

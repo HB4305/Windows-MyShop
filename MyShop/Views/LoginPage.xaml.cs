@@ -1,4 +1,3 @@
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -8,12 +7,7 @@ namespace MyShop.Views;
 
 public sealed partial class LoginPage : Page
 {
-    private bool _passwordVisible;
-
-    /// <summary>
-    /// Exposes AppVersion as an instance property for XAML binding.
-    /// </summary>
-    public string AppVersion => LoginViewModel.AppVersion;
+    public static string AppVersion => LoginViewModel.AppVersion;
 
     public LoginPage()
     {
@@ -38,16 +32,8 @@ public sealed partial class LoginPage : Page
 
     private void TogglePassword_Click(object sender, RoutedEventArgs e)
     {
-        _passwordVisible = !_passwordVisible;
-
-        if (_passwordVisible)
-        {
-            // Show password in TextBox overlay
-            PasswordBox.PasswordRevealMode = PasswordRevealMode.Visible;
-        }
-        else
-        {
-            PasswordBox.PasswordRevealMode = PasswordRevealMode.Hidden;
-        }
+        PasswordBox.PasswordRevealMode = PasswordBox.PasswordRevealMode == PasswordRevealMode.Visible
+            ? PasswordRevealMode.Hidden
+            : PasswordRevealMode.Visible;
     }
 }
