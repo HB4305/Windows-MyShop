@@ -60,8 +60,10 @@ public partial class LoginViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Đăng nhập bằng credentials đã lưu (auto-login).
-    /// Thử khôi phục session từ credentials đã lưu.
+    /// Đăng nhập tự động bằng credentials đã lưu (EncryptedPassword + PasswordHash).
+    /// Không cần DB trong bước xác thực cuối — chỉ dùng hash đã lưu.
+    /// Nếu thành công → RaiseLoginSuccess().
+    /// Nếu thất bại → form vẫn hiển thị với email + password đã điền sẵn.
     /// </summary>
     public async Task<bool> TryAutoLoginAsync()
     {
@@ -74,16 +76,24 @@ public partial class LoginViewModel : ObservableObject
             ErrorMessage = string.Empty;
 
             var savedEmail = _credentialManager.GetSavedEmail() ?? "";
-            var savedPassword = _credentialManager.GetSavedPassword() ?? "";
+            var savedPassword = _credentialManager.GetSavedPassword();
+            if (string.IsNullOrEmpty(savedPassword))
+                return false;
 
-            // Tìm user trong DB và so sánh plain text password
+            // 1. Xác thực bằng hash đã lưu — không cần DB
+            if (!_credentialManager.ValidatePassword(savedPassword))
+                return false;
+
+            // 2. Gọi DB để đảm bảo user vẫn tồn tại và không bị disable
             var user = await _userRepository.GetByEmailAsync(savedEmail);
-            if (user != null && user.Password == savedPassword)
-            {
-                Email = savedEmail;
-                LoginPageEvents.RaiseLoginSuccess();
-                return true;
-            }
+            if (user == null)
+                return false;
+
+            // 3. Điền sẵn email + password vào form (nếu cần nhìn thấy)
+            Email = savedEmail;
+            Password = savedPassword;
+            LoginPageEvents.RaiseLoginSuccess();
+            return true;
         }
         catch (Exception ex)
         {
@@ -111,7 +121,10 @@ public partial class LoginViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            // 1. Tìm user trong bảng users
+            // 1. Hash password nhập vào để so sánh với DB (DB lưu hash SHA256 base64)
+            var hashedInput = CredentialManager.ComputeHash(Password);
+
+            // 2. Tìm user trong bảng users — DB trả về SHA256 hash
             var user = await _userRepository.GetByEmailAsync(Email.Trim().ToLowerInvariant());
             if (user == null)
             {
@@ -119,17 +132,17 @@ public partial class LoginViewModel : ObservableObject
                 return;
             }
 
-            // 2. So sánh plain text password
-            if (user.Password != Password)
+            // 3. So sánh hash của input với hash trong DB
+            if (user.Password != hashedInput)
             {
                 ErrorMessage = "Email hoặc mật khẩu không đúng.";
                 return;
             }
 
-            // 3. Lưu credentials nếu thành công
-            _credentialManager.SaveCredentials(user.Email, user.Password);
+            // 4. Lưu credentials: plain text (DPAPI) + hash (để auto-login)
+            _credentialManager.SaveCredentials(user.Email, Password);
 
-            // 4. Chuyển sang màn hình chính
+            // 5. Chuyển sang màn hình chính
             LoginPageEvents.RaiseLoginSuccess();
         }
         catch (Exception ex)

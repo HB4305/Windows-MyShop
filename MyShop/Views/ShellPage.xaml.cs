@@ -73,6 +73,9 @@ public sealed partial class ShellPage : Page
         // TODO: Show notifications panel
     }
 
+    private void Logout_Click(object sender, RoutedEventArgs e)
+        => ShellPageEvents.RaiseLogout();
+
     private void ContentFrame_Navigated(object sender, Microsoft.UI.Xaml.Navigation.NavigationEventArgs e)
     {
         if (e.SourcePageType == null) return;

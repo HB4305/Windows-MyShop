@@ -206,57 +206,75 @@
         </StackPanel>
       </ScrollViewer>
 
-      <!-- User Profile Footer -->
-      <Border Grid.Row="2"
-              Margin="12,12,12,16"
-              Padding="10"
-              CornerRadius="{ThemeResource ControlCornerRadius}"
-              Background="{ThemeResource ControlFillColorDefaultBrush}"
-              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-              BorderThickness="1">
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
+      <!-- User Profile Card -->
+      <Grid Grid.Row="2" Margin="12,12,12,16">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
-          <!-- Avatar -->
-          <Border Grid.Column="0"
-                  Width="32"
-                  Height="32"
-                  CornerRadius="16"
-                  Background="{StaticResource PurpleLightBrush}"
-                  Margin="0,0,10,0">
-            <TextBlock Text="AM"
-                       FontSize="11"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource PurpleBrush}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-          </Border>
+        <!-- Profile Info -->
+        <Border Grid.Column="0"
+                Padding="10"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Background="{StaticResource PurpleLightBrush}">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-          <!-- Name & Role -->
-          <StackPanel Grid.Column="1"
-                      VerticalAlignment="Center">
-            <TextBlock Text="Alex Morgan"
-                       FontSize="12"
-                       FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"/>
-            <TextBlock Text="Store Owner"
-                       FontSize="10"
-                       Foreground="{ThemeResource TextFillColorTertiary}"/>
-          </StackPanel>
+            <!-- Avatar -->
+            <Border Grid.Column="0"
+                    Width="36"
+                    Height="36"
+                    CornerRadius="18"
+                    Background="#FFFFFF"
+                    Margin="0,0,10,0">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE77B;"
+                         FontSize="16"
+                         Foreground="{StaticResource PurpleBrush}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </Border>
 
-          <!-- Logout icon -->
-          <TextBlock Grid.Column="2"
-                     FontFamily="Segoe MDL2 Assets"
+            <!-- Name & Role -->
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Center">
+              <TextBlock Text="Coach Rivera"
+                         FontSize="12"
+                         FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorPrimary}"/>
+              <TextBlock Text="HEAD COACH"
+                         FontSize="10"
+                         FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         CharacterSpacing="80"/>
+            </StackPanel>
+          </Grid>
+        </Border>
+
+        <!-- Logout Button -->
+        <Button Grid.Column="1"
+                Click="Logout_Click"
+                Width="40"
+                Height="40"
+                Margin="6,0,0,0"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                ToolTipService.ToolTip="Sign Out"
+                VerticalAlignment="Center">
+          <TextBlock FontFamily="Segoe MDL2 Assets"
                      Text="&#xE8E8;"
-                     FontSize="12"
-                     Foreground="{ThemeResource TextFillColorTertiary}"
+                     FontSize="14"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     HorizontalAlignment="Center"
                      VerticalAlignment="Center"/>
-        </Grid>
-      </Border>
+        </Button>
+      </Grid>
 
     </Grid>
 

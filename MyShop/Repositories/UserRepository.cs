@@ -46,6 +46,7 @@ public class UserRepository
 
     /// <summary>
     /// Tạo user mới (đăng ký).
+    /// Password được hash SHA256 base64 trước khi lưu vào DB.
     /// Trả về true nếu thành công.
     /// </summary>
     public async Task<bool> CreateAsync(string email, string password)
@@ -61,7 +62,7 @@ public class UserRepository
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("email", email.Trim().ToLowerInvariant());
-            cmd.Parameters.AddWithValue("password", password);
+            cmd.Parameters.AddWithValue("password", CredentialManager.ComputeHash(password));
 
             var rows = await cmd.ExecuteNonQueryAsync();
             return rows > 0;
