@@ -14,12 +14,16 @@ public partial class SportItemViewModel : ObservableObject
 
     private readonly SportItemService _service;
     private readonly CategoryService _categoryService;
+    private readonly SettingsManager _settingsManager;
     private int _priceFilterDebounce;
 
-    public SportItemViewModel(SportItemService service, CategoryService categoryService)
+    public SportItemViewModel(SportItemService service, CategoryService categoryService, SettingsManager settingsManager)
     {
         _service = service;
         _categoryService = categoryService;
+        _settingsManager = settingsManager;
+        var savedPageSize = _settingsManager.GetItemsPerPage();
+        PageSize = Math.Max(1, savedPageSize);
     }
 
     [ObservableProperty]
