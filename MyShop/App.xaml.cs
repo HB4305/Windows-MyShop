@@ -50,6 +50,7 @@ public partial class App : Application
         ConfigPageEvents.OnConfigSaved += OnConfigSaved;
         ConfigPageEvents.OnBack += OnConfigBack;
         LoginPageEvents.OnNavigateToLogin += OnNavigateToLogin;
+        ShellPageEvents.OnLogout += OnLogout;
 
         // Luồng: ConfigScreen → Login → Dashboard
         // Lần đầu chưa có config → vào ConfigPage; có config → vào LoginPage
@@ -87,6 +88,17 @@ public partial class App : Application
         if (_rootFrame == null) return;
         _rootFrame.BackStack.Clear();
         _rootFrame.Navigate(typeof(ShellPage));
+    }
+
+    private void OnLogout()
+    {
+        if (_rootFrame == null) return;
+        // Xóa password đã lưu, GIỮ LẠI email để user không cần nhập lại
+        var credMgr = Services.GetRequiredService<CredentialManager>();
+        credMgr.ClearCredentials();
+        // Xóa backstack và quay về Login
+        _rootFrame.BackStack.Clear();
+        _rootFrame.Navigate(typeof(LoginPage));
     }
 
     void OnNavigationFailed(object sender, NavigationFailedEventArgs e)

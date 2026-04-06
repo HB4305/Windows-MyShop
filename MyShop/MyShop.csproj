@@ -26,5 +26,6 @@
     <PackageReference Include="LiveChartsCore.SkiaSharpView" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
     <PackageReference Include="Npgsql" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" />
   </ItemGroup>
 </Project>
