@@ -308,40 +308,52 @@
           <!-- Right side icons -->
           <StackPanel Grid.Column="1"
                       Orientation="Horizontal"
-                      Spacing="4">
+                      Spacing="6"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Right">
 
             <!-- Notification bell -->
             <Button Tag="Notifications"
                     Click="NavNotifications_Click"
-                    Width="36"
-                    Height="36"
+                Width="40"
+                Height="40"
+                Padding="0"
                     Background="Transparent"
                     BorderThickness="0"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
                     ToolTipService.ToolTip="Notifications">
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE7E3;"
                          FontSize="16"
-                         Foreground="{ThemeResource TextFillColorSecondary}"/>
+                 Foreground="{ThemeResource TextFillColorSecondary}"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"/>
             </Button>
 
             <!-- Settings gear -->
             <Button Tag="Settings"
                     Click="NavSettings_Click"
-                    Width="36"
-                    Height="36"
+                  Width="40"
+                  Height="40"
+                  Padding="0"
                     Background="Transparent"
                     BorderThickness="0"
+                  HorizontalContentAlignment="Center"
+                  VerticalContentAlignment="Center"
                     ToolTipService.ToolTip="Settings">
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE713;"
                          FontSize="16"
-                         Foreground="{ThemeResource TextFillColorSecondary}"/>
+                 Foreground="{ThemeResource TextFillColorSecondary}"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"/>
             </Button>
 
             <!-- User avatar -->
-            <Border Width="36"
-                    Height="36"
-                    CornerRadius="18"
+                    <Border Width="40"
+                      Height="40"
+                      CornerRadius="20"
                     Background="{StaticResource PurpleLightBrush}"
                     Margin="8,0,0,0">
               <TextBlock Text="AM"
