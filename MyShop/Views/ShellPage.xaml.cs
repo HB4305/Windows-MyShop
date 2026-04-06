@@ -1,9 +1,11 @@
 using System;
+using Microsoft.Extensions.DependencyInjection;
 using Windows.UI;
 using Windows.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using MyShop.Services;
 using WpfFontWeights = Microsoft.UI.Text.FontWeights;
 
 namespace MyShop.Views;
@@ -11,13 +13,21 @@ namespace MyShop.Views;
 public sealed partial class ShellPage : Page
 {
     private readonly Frame _frame;
+    private readonly SettingsManager _settingsManager;
 
     public ShellPage()
     {
         this.InitializeComponent();
+        _settingsManager = App.Services.GetRequiredService<SettingsManager>();
         _frame = ContentFrame;
-        _frame.Navigate(typeof(DashboardPage));
-        UpdateActiveNav("Dashboard");
+        var remember = _settingsManager.GetRememberLastActivity();
+        var lastActivity = remember ? _settingsManager.GetLastActivity() : null;
+
+        if (!TryNavigateToTag(lastActivity))
+        {
+            _frame.Navigate(typeof(DashboardPage));
+            UpdateActiveNav("Dashboard");
+        }
     }
 
     private void NavDashboard_Click(object sender, RoutedEventArgs e)
@@ -79,7 +89,12 @@ public sealed partial class ShellPage : Page
             nameof(SettingsPage) => "Settings",
             _ => null
         };
-        if (tag != null) UpdateActiveNav(tag);
+        if (tag != null)
+        {
+            UpdateActiveNav(tag);
+            if (_settingsManager.GetRememberLastActivity())
+                _settingsManager.SetLastActivity(tag);
+        }
     }
 
     private void UpdateActiveNav(string activeTag)
@@ -104,6 +119,30 @@ public sealed partial class ShellPage : Page
             _ => null
         };
         if (activeBtn != null) SetActiveNavStyle(activeBtn);
+    }
+
+    private bool TryNavigateToTag(string? tag)
+    {
+        if (string.IsNullOrWhiteSpace(tag))
+            return false;
+
+        var pageType = tag switch
+        {
+            "Dashboard" => typeof(DashboardPage),
+            "Reports" => typeof(ReportPage),
+            "ProductCatalog" => typeof(SportItemPage),
+            "OrdersManagement" => typeof(CustomerOrderPage),
+            "Category" => typeof(CategoryPage),
+            "Settings" => typeof(SettingsPage),
+            _ => null
+        };
+
+        if (pageType == null)
+            return false;
+
+        _frame.Navigate(pageType);
+        UpdateActiveNav(tag);
+        return true;
     }
 
     private void ResetNavStyle(Button btn)

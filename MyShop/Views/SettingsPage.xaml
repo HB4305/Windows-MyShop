@@ -1,20 +1,106 @@
 <Page x:Class="MyShop.Views.SettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Background="#F3F4F6">
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  <Page.Resources>
+    <!-- Accent colors (matching Dashboard / Login) -->
+    <SolidColorBrush x:Key="PurpleBrush"
+        Color="#8B52FF"/>
+    <SolidColorBrush x:Key="PurpleLightBrush"
+        Color="#8B52FF"
+        Opacity="0.12"/>
+
+    <!-- Card style (theme-aware) -->
+    <Style x:Key="CardBorder"
+        TargetType="Border">
+      <Setter Property="Background"
+          Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+      <Setter Property="BorderBrush"
+          Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness"
+          Value="1"/>
+      <Setter Property="CornerRadius"
+          Value="{ThemeResource ControlCornerRadius}"/>
+      <Setter Property="Padding"
+          Value="16"/>
+    </Style>
+
+    <!-- Secondary button style -->
+    <Style x:Key="SecondaryButton"
+        TargetType="Button">
+      <Setter Property="Background"
+          Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+      <Setter Property="Foreground"
+          Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+      <Setter Property="BorderThickness"
+          Value="1"/>
+      <Setter Property="BorderBrush"
+          Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="Padding"
+          Value="18,8"/>
+    </Style>
+  </Page.Resources>
+
   <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="24" Spacing="16">
-      <TextBlock Text="Settings"
-                 FontSize="24"
-                 FontWeight="Bold"
-                 Foreground="#1F2937"/>
-      <Border Padding="24" CornerRadius="12" Background="White" BorderBrush="#E5E7EB" BorderThickness="1">
-        <StackPanel HorizontalAlignment="Center" Spacing="8">
-          <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="48" Foreground="#D1D5DB" HorizontalAlignment="Center"/>
-          <TextBlock Text="Settings" FontSize="18" FontWeight="SemiBold" Foreground="#6B7280" HorizontalAlignment="Center"/>
-          <TextBlock Text="This page is under construction." FontSize="13" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
+    <Grid HorizontalAlignment="Stretch" Padding="28,24,28,40">
+      <Border Style="{StaticResource CardBorder}">
+        <StackPanel Spacing="16">
+          <TextBlock Text="Settings"
+                     FontSize="24"
+                     FontWeight="Bold"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+
+          <Grid ColumnSpacing="12" RowSpacing="12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Pagination:"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                       VerticalAlignment="Center"/>
+            <ComboBox Grid.Column="1"
+                      ItemsSource="{Binding ItemsPerPageOptions}"
+                      SelectedItem="{Binding SelectedItemsPerPage, Mode=TwoWay}"
+                      PlaceholderText="Products per page"/>
+
+            <TextBlock Grid.Row="1"
+                       Text="Save last activity:"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                       VerticalAlignment="Center"/>
+            <ToggleSwitch Grid.Row="1" Grid.Column="1"
+                          OnContent="On"
+                          OffContent="Off"
+                          Foreground="{StaticResource PurpleBrush}"
+                          IsOn="{Binding RememberLastActivity, Mode=TwoWay}">
+              <ToggleSwitch.Resources>
+                <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="#8B52FF"/>
+                <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="#8B52FF"/>
+                <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="#7C3AED"/>
+                <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="#FFFFFF"/>
+                <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="#FFFFFF"/>
+                <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPressed" Color="#FFFFFF"/>
+              </ToggleSwitch.Resources>
+            </ToggleSwitch>
+          </Grid>
+
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Content="Save Changes"
+                    Background="{StaticResource PurpleBrush}"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Padding="18,8"
+                    Click="SaveChanges_Click"/>
+            <Button Content="Reset"
+                    Style="{StaticResource SecondaryButton}"
+                    Command="{Binding ResetCommand}"/>
+          </StackPanel>
         </StackPanel>
       </Border>
-    </StackPanel>
+    </Grid>
   </ScrollViewer>
 </Page>
