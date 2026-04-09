@@ -9,10 +9,13 @@ public sealed partial class LoginPage : Page
 {
     public static string AppVersion => LoginViewModel.AppVersion;
 
+    private LoginViewModel? _vm;
+
     public LoginPage()
     {
         this.InitializeComponent();
         DataContext = App.Services.GetRequiredService<LoginViewModel>();
+        _vm = DataContext as LoginViewModel;
 
         Loaded += OnLoaded;
         PasswordBox.PasswordChanged += OnPasswordChanged;
@@ -20,14 +23,12 @@ public sealed partial class LoginPage : Page
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        // Reset form — tránh PasswordBox giữ giá trị cũ khi reused từ backstack
-        // Email giữ nguyên (CredentialManager vẫn lưu SavedEmail sau logout)
         PasswordBox.Password = string.Empty;
 
-        if (DataContext is LoginViewModel vm)
+        if (_vm != null)
         {
-            vm.Password = string.Empty;
-            vm.ErrorMessage = string.Empty;
+            _vm.Password = string.Empty;
+            _vm.ErrorMessage = string.Empty;
         }
 
         _ = TryAutoLoginAsync();
@@ -35,19 +36,14 @@ public sealed partial class LoginPage : Page
 
     private async Task TryAutoLoginAsync()
     {
-        if (DataContext is not LoginViewModel vm)
-            return;
-
-        // Nếu auto-login thành công, vm.Password đã được set
-        // → RaiseLoginSuccess → App.xaml.cs NavigateToMain → thoát khỏi trang này
-        // Nếu thất bại → form vẫn hiển thị với email đã điền sẵn, user tự nhập pass
-        await vm.TryAutoLoginAsync();
+        if (_vm == null) return;
+        await _vm.TryAutoLoginAsync();
     }
 
     private void OnPasswordChanged(object sender, RoutedEventArgs e)
     {
-        if (DataContext is LoginViewModel vm)
-            vm.Password = PasswordBox.Password;
+        if (_vm != null)
+            _vm.Password = PasswordBox.Password;
     }
 
     private void TogglePassword_Click(object sender, RoutedEventArgs e)
@@ -55,5 +51,12 @@ public sealed partial class LoginPage : Page
         PasswordBox.PasswordRevealMode = PasswordBox.PasswordRevealMode == PasswordRevealMode.Visible
             ? PasswordRevealMode.Hidden
             : PasswordRevealMode.Visible;
+    }
+
+    private async void PrimaryActionButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_vm == null) return;
+        _vm.Password = PasswordBox.Password;
+        await _vm.LoginCommand.ExecuteAsync(null);
     }
 }

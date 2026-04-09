@@ -15,22 +15,32 @@ public class CustomerOrderService
         _detailRepo = detailRepo;
     }
 
+    /// <summary>
+    /// Lấy tất cả đơn hàng (dùng cho owner).
+    /// </summary>
     public async Task<List<CustomerOrder>> GetAllOrdersAsync()
-    {
-        return await _orderRepo.GetAllAsync();
-    }
+        => await _orderRepo.GetAllAsync();
+
+    /// <summary>
+    /// Lấy đơn hàng của một sale cụ thể (dùng cho role sale).
+    /// </summary>
+    public async Task<List<CustomerOrder>> GetOrdersBySellerAsync(int sellerId)
+        => await _orderRepo.GetBySellerIdAsync(sellerId);
 
     public async Task<CustomerOrder?> GetOrderByIdAsync(int id)
-    {
-        return await _orderRepo.GetByIdAsync(id);
-    }
+        => await _orderRepo.GetByIdAsync(id);
 
     public async Task<List<OrderDetail>> GetOrderDetailsAsync(int orderId)
-    {
-        return await _detailRepo.GetByOrderIdAsync(orderId);
-    }
-    
-    public async Task<CustomerOrder> CreateOrderAsync(CustomerOrder order, List<OrderDetail> details)
+        => await _detailRepo.GetByOrderIdAsync(orderId);
+
+    /// <summary>
+    /// Tạo đơn hàng mới. Tự động gán seller_id và seller_name.
+    /// </summary>
+    public async Task<CustomerOrder> CreateOrderAsync(
+        CustomerOrder order,
+        List<OrderDetail> details,
+        int sellerId,
+        string sellerName)
     {
         Validate(order);
 
@@ -39,7 +49,7 @@ public class CustomerOrderService
         order.PaymentStatus = "Unpaid";
         order.TotalAmount = details.Sum(d => d.Quantity * d.UnitPrice);
 
-        var createdOrder = await _orderRepo.CreateAsync(order);
+        var createdOrder = await _orderRepo.CreateAsync(order, sellerId, sellerName);
 
         foreach (var detail in details)
             detail.OrderId = createdOrder.Id;
@@ -65,20 +75,13 @@ public class CustomerOrderService
     }
 
     public async Task UpdateStatusAsync(int id, string status)
-    {
-        await _orderRepo.UpdateStatusAsync(id, status);
-    }
+        => await _orderRepo.UpdateStatusAsync(id, status);
 
     public async Task UpdatePaymentStatusAsync(int id, string paymentStatus)
-    {
-        await _orderRepo.UpdatePaymentStatusAsync(id, paymentStatus);
-    }
+        => await _orderRepo.UpdatePaymentStatusAsync(id, paymentStatus);
 
     public async Task DeleteOrderAsync(int id)
-    {
-        // OrderDetails auto deleted via CASCADE
-        await _orderRepo.DeleteAsync(id);
-    }
+        => await _orderRepo.DeleteAsync(id);
 
     private void Validate(CustomerOrder order)
     {

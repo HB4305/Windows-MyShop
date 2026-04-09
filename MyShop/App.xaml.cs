@@ -44,7 +44,7 @@ public partial class App : Application
         }
         _rootFrame = rootFrame;
 
-        // Đăng ký event handlers cho authentication flow
+        // Register event handlers for authentication flow
         LoginPageEvents.OnLoginSuccess += OnLoginSuccess;
         LoginPageEvents.OnNavigateToConfig += OnNavigateToConfig;
         ConfigPageEvents.OnConfigSaved += OnConfigSaved;
@@ -52,8 +52,8 @@ public partial class App : Application
         LoginPageEvents.OnNavigateToLogin += OnNavigateToLogin;
         ShellPageEvents.OnLogout += OnLogout;
 
-        // Luồng: ConfigScreen → Login → Dashboard
-        // Lần đầu chưa có config → vào ConfigPage; có config → vào LoginPage
+        // Flow: ConfigScreen → Login → Dashboard
+        // No config yet → ConfigPage; has config → LoginPage
         var credMgr = Services.GetRequiredService<CredentialManager>();
         if (credMgr.HasDatabaseConfig())
             rootFrame.Navigate(typeof(LoginPage), args.Arguments);
@@ -74,7 +74,7 @@ public partial class App : Application
 
     private void OnConfigSaved()
     {
-        // Invalidate connection cache để dùng config mới
+        // Invalidate connection cache to use new config
         var connFactory = Services.GetRequiredService<DbConnectionFactory>();
         connFactory.InvalidateCache();
         _rootFrame?.Navigate(typeof(LoginPage));
@@ -93,10 +93,13 @@ public partial class App : Application
     private void OnLogout()
     {
         if (_rootFrame == null) return;
-        // Xóa password đã lưu, GIỮ LẠI email để user không cần nhập lại
+        // Clear saved credentials, KEEP email for convenience
         var credMgr = Services.GetRequiredService<CredentialManager>();
         credMgr.ClearCredentials();
-        // Xóa backstack và quay về Login
+        // Clear current user session
+        var currentUser = Services.GetRequiredService<CurrentUserService>();
+        currentUser.Clear();
+        // Clear backstack and go back to Login
         _rootFrame.BackStack.Clear();
         _rootFrame.Navigate(typeof(LoginPage));
     }

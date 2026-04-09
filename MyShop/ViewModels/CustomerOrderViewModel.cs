@@ -9,10 +9,12 @@ namespace MyShop.ViewModels;
 public partial class CustomerOrderViewModel : ObservableObject
 {
     private readonly CustomerOrderService _service;
+    private readonly CurrentUserService _currentUserService;
 
-    public CustomerOrderViewModel(CustomerOrderService orderService)
+    public CustomerOrderViewModel(CustomerOrderService orderService, CurrentUserService currentUserService)
     {
         _service = orderService;
+        _currentUserService = currentUserService;
     }
 
     // ── Collections ──────────────────────────────────────────────
@@ -28,6 +30,9 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _showDetailPanel = false;
+
+    [ObservableProperty]
+    private bool _isOwnerView = true; // Owner thấy hết; Sale chỉ thấy đơn của mình
 
     // ── Active Tab ──────────────────────────────────────────────────
     [ObservableProperty]
@@ -96,7 +101,20 @@ public partial class CustomerOrderViewModel : ObservableObject
         ErrorMessage = null;
         try
         {
-            var orders = await _service.GetAllOrdersAsync();
+            List<CustomerOrder> orders;
+
+            // Phân quyền: sale chỉ thấy đơn của mình
+            if (_currentUserService.IsSale && _currentUserService.UserId.HasValue)
+            {
+                IsOwnerView = false;
+                orders = await _service.GetOrdersBySellerAsync(_currentUserService.UserId.Value);
+            }
+            else
+            {
+                IsOwnerView = true;
+                orders = await _service.GetAllOrdersAsync();
+            }
+
             Orders = new ObservableCollection<CustomerOrder>(orders);
             RefreshStats();
             ApplyPagination();
@@ -239,7 +257,7 @@ public partial class CustomerOrderViewModel : ObservableObject
             // Cập nhật dòng tương ứng trong danh sách thay vì load lại toàn bộ
             var existing = Orders.FirstOrDefault(o => o.Id == SelectedOrder.Id);
             if (existing != null) existing.Status = status;
-            
+
             RefreshStats();
             ApplyPagination();
             OnPropertyChanged(nameof(SelectedOrder));
@@ -262,7 +280,7 @@ public partial class CustomerOrderViewModel : ObservableObject
             SelectedOrder.PaymentStatus = paymentStatus;
             var existing = Orders.FirstOrDefault(o => o.Id == SelectedOrder.Id);
             if (existing != null) existing.PaymentStatus = paymentStatus;
-            
+
             RefreshStats();
             ApplyPagination();
             OnPropertyChanged(nameof(SelectedOrder));

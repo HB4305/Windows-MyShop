@@ -9,11 +9,11 @@ namespace MyShop.Services;
 /// Quản lý credentials đăng nhập và cấu hình database.
 /// Lưu vào %APPDATA%\MyShop\config.json.
 ///
-/// Bảo mật credentials:
-///   - DPAPI (Windows): Mã hóa password trước khi lưu file. Chỉ user hiện tại
-///     trên máy này mới giải mã được.
+/// Bảo mật:
+///   - DPAPI + Random Entropy: Mã hóa password trước khi lưu file.
+///     Entropy ngẫu nhiên 20 bytes → mỗi lần encrypt cho kết quả khác nhau.
+///     Chỉ user hiện tại trên máy này mới giải mã được.
 ///   - SHA256 hash: Dùng để so sánh với DB mà không cần giải mã.
-///   - Backward-compatible: Nếu config cũ lưu plain text (SavedPassword) vẫn đọc được.
 /// </summary>
 public class CredentialManager
 {
@@ -28,117 +28,114 @@ public class CredentialManager
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    // Password helpers — mã hóa / giải mã / hash
+    // DPAPI + Random Entropy — mã hóa / giải mã password cho config.json
     // ═══════════════════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Băm SHA256 (base64). Dùng để so sánh với DB và lưu PasswordHash.
+    /// Mã hóa password bằng DPAPI với entropy ngẫu nhiên (20 bytes).
+    /// Mỗi lần gọi → entropy KHÁC NHAU → kết quả mã hóa cũng khác nhau.
+    /// Trả về: (encryptedPasswordBase64, entropyBase64).
+    /// </summary>
+    public static (string encrypted, string entropy) EncryptPassword(string plaintext)
+    {
+        var passwordBytes = Encoding.UTF8.GetBytes(plaintext);
+
+        // Tạo entropy ngẫu nhiên 20 bytes
+        byte[] entropyBytes = new byte[20];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(entropyBytes);
+        }
+
+        var encryptedBytes = ProtectedData.Protect(
+            passwordBytes,
+            entropyBytes,
+            DataProtectionScope.CurrentUser);
+
+        return (
+            Convert.ToBase64String(encryptedBytes),
+            Convert.ToBase64String(entropyBytes)
+        );
+    }
+
+    /// <summary>
+    /// Giải mã password đã mã hóa bằng DPAPI + entropy.
+    /// Trả về null nếu giải mã thất bại.
+    /// </summary>
+    public static string? DecryptPassword(string encryptedBase64, string entropyBase64)
+    {
+        try
+        {
+            var encryptedBytes = Convert.FromBase64String(encryptedBase64);
+            var entropyBytes = Convert.FromBase64String(entropyBase64);
+            var decryptedBytes = ProtectedData.Unprotect(
+                encryptedBytes,
+                entropyBytes,
+                DataProtectionScope.CurrentUser);
+            return Encoding.UTF8.GetString(decryptedBytes);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Băm SHA256 (Base64). Dùng để so sánh với DB.
     /// </summary>
     public static string ComputeHash(string plaintext)
         => Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(plaintext)));
-
-    /// <summary>
-    /// Mã hóa DPAPI — CurrentUser scope. Chỉ hỗ trợ trên Windows.
-    /// Throws PlatformNotSupportedException trên các nền tảng khác.
-    /// </summary>
-    private static string EncryptDpapi(string plaintext)
-    {
-#if __WINDOWS__
-        var plaintextBytes = Encoding.UTF8.GetBytes(plaintext);
-        var encryptedBytes = ProtectedData.Protect(
-            plaintextBytes,
-            optionalEntropy: null,
-            scope: DataProtectionScope.CurrentUser);
-        return Convert.ToBase64String(encryptedBytes);
-#else
-        throw new PlatformNotSupportedException(
-            "DPAPI is only supported on Windows. Credential storage requires Windows.");
-#endif
-    }
-
-    /// <summary>
-    /// Giải mã DPAPI. Chỉ hỗ trợ trên Windows.
-    /// Ném ngoại lệ nếu không giải mã được (sai user / config hỏng).
-    /// </summary>
-    private static string DecryptDpapi(string encryptedBase64)
-    {
-#if __WINDOWS__
-        var encryptedBytes = Convert.FromBase64String(encryptedBase64);
-        var decryptedBytes = ProtectedData.Unprotect(
-            encryptedBytes,
-            optionalEntropy: null,
-            scope: DataProtectionScope.CurrentUser);
-        return Encoding.UTF8.GetString(decryptedBytes);
-#else
-        throw new PlatformNotSupportedException(
-            "DPAPI is only supported on Windows. Credential storage requires Windows.");
-#endif
-    }
-
-    /// <summary>
-    /// Xác thực password thuần (plaintext) với hash đã lưu.
-    /// </summary>
-    private static bool VerifyPassword(string plaintext, string storedHash)
-    {
-        var hash = ComputeHash(plaintext);
-        return CryptographicOperations.FixedTimeEquals(
-            Encoding.UTF8.GetBytes(hash),
-            Encoding.UTF8.GetBytes(storedHash));
-    }
 
     // ═══════════════════════════════════════════════════════════════════════
     // Credentials — Lưu / Đọc / Xóa
     // ═══════════════════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Lưu email + password khi đăng nhập thành công.
-    /// Password được mã hóa DPAPI + lưu SHA256 hash.
+    /// Lưu credentials khi đăng nhập thành công.
+    /// Mã hóa password bằng DPAPI + random entropy.
     /// </summary>
-    public void SaveCredentials(string email, string password)
+    public void SaveCredentials(string email, string password, int userId, string userRole)
     {
         var config = LoadConfig();
         config.SavedEmail = email;
         config.PasswordHash = ComputeHash(password);
+        config.CurrentUserId = userId;
+        config.CurrentUserRole = userRole?.ToLowerInvariant();
 
-        try
-        {
-            config.EncryptedPassword = EncryptDpapi(password);
-            config.SavedPassword = null; // Xóa plain text cũ
-        }
-        catch (PlatformNotSupportedException)
-        {
-            // Non-Windows platform: fallback lưu plain text
-            config.EncryptedPassword = null;
-            config.SavedPassword = password;
-        }
+        // Mã hóa password với entropy ngẫu nhiên
+        var (encrypted, entropy) = EncryptPassword(password);
+        config.EncryptedPassword = encrypted;
+        config.PasswordEntropy = entropy;
 
         SaveConfig(config);
     }
 
     /// <summary>
-    /// Xóa toàn bộ credentials. Gọi khi logout hoặc credentials hỏng.
+    /// Xóa toàn bộ credentials. Gọi khi logout.
     /// Vẫn giữ lại email để user không phải nhập lại.
     /// </summary>
     public void ClearCredentials()
     {
         var config = LoadConfig();
-        config.SavedPassword = null;
         config.EncryptedPassword = null;
+        config.PasswordEntropy = null;
         config.PasswordHash = null;
         SaveConfig(config);
     }
 
     /// <summary>
-    /// Xóa toàn bộ credentials BAO GỒM email.
-    /// Dùng khi cần reset hoàn toàn (first-time setup).
+    /// Xóa toàn bộ credentials BAO GỒM email và user session.
+    /// Dùng khi cần reset hoàn toàn.
     /// </summary>
     public void WipeAllCredentials()
     {
         var config = LoadConfig();
         config.SavedEmail = null;
-        config.SavedPassword = null;
         config.EncryptedPassword = null;
+        config.PasswordEntropy = null;
         config.PasswordHash = null;
+        config.CurrentUserId = null;
+        config.CurrentUserRole = null;
         SaveConfig(config);
     }
 
@@ -149,58 +146,53 @@ public class CredentialManager
     {
         var config = LoadConfig();
         return !string.IsNullOrWhiteSpace(config.SavedEmail)
-            && (!string.IsNullOrWhiteSpace(config.PasswordHash)
-                || !string.IsNullOrWhiteSpace(config.EncryptedPassword)
-                || !string.IsNullOrWhiteSpace(config.SavedPassword));
+            && !string.IsNullOrWhiteSpace(config.EncryptedPassword)
+            && !string.IsNullOrWhiteSpace(config.PasswordEntropy);
     }
 
     /// <summary>
-    /// Lấy password đã lưu (giải mã nếu có EncryptedPassword, fallback plain text).
-    /// Trả về null nếu không có.
+    /// Lấy password đã lưu (giải mã DPAPI + entropy).
+    /// Trả về null nếu không có hoặc giải mã thất bại.
     /// </summary>
     public string? GetSavedPassword()
     {
         var config = LoadConfig();
+        if (string.IsNullOrWhiteSpace(config.EncryptedPassword)
+            || string.IsNullOrWhiteSpace(config.PasswordEntropy))
+            return null;
 
-        // Ưu tiên EncryptedPassword (DPAPI)
-        if (!string.IsNullOrWhiteSpace(config.EncryptedPassword))
-        {
-            try { return DecryptDpapi(config.EncryptedPassword); }
-            catch { /* config hỏng → fallback */ }
-        }
-
-        // Fallback: plain text cũ (backward compatible)
-        return config.SavedPassword;
+        return DecryptPassword(config.EncryptedPassword, config.PasswordEntropy);
     }
 
     /// <summary>
-    /// Lấy SHA256 hash của password đã lưu.
-    /// Dùng cho LoginViewModel so sánh với DB mà không cần giải mã.
+    /// Lấy hash SHA256 đã lưu (dùng để xác thực không qua DB).
     /// </summary>
     public string? GetSavedPasswordHash()
         => LoadConfig().PasswordHash;
 
     /// <summary>
+    /// Lấy thông tin user đã lưu trong config.
+    /// </summary>
+    public (int? id, string? role) GetSavedUserInfo()
+    {
+        var config = LoadConfig();
+        return (config.CurrentUserId, config.CurrentUserRole);
+    }
+
+    /// <summary>
     /// Xác thực password thuần (plaintext) với hash đã lưu trong config.
-    /// Dùng cho TryAutoLoginAsync — không cần truy cập DB.
+    /// Dùng cho auto-login — không cần DB.
     /// </summary>
     public bool ValidatePassword(string plaintext)
     {
         var config = LoadConfig();
         if (string.IsNullOrWhiteSpace(config.PasswordHash))
             return false;
-        return VerifyPassword(plaintext, config.PasswordHash);
-    }
 
-    /// <summary>
-    /// Kiểm tra xem password đã được lưu hash/encrypted chưa.
-    /// Nếu chưa → cần lưu (first-time login).
-    /// </summary>
-    public bool NeedsCredentialMigration()
-    {
-        var config = LoadConfig();
-        return string.IsNullOrWhiteSpace(config.PasswordHash)
-            || string.IsNullOrWhiteSpace(config.EncryptedPassword);
+        var hash = ComputeHash(plaintext);
+        return CryptographicOperations.FixedTimeEquals(
+            Encoding.UTF8.GetBytes(hash),
+            Encoding.UTF8.GetBytes(config.PasswordHash));
     }
 
     /// <summary>
@@ -210,7 +202,7 @@ public class CredentialManager
         => LoadConfig().SavedEmail;
 
     // ═══════════════════════════════════════════════════════════════════════
-    // Database Config — 5 trường: Host, Port, DatabaseName, Username, Password
+    // Database Config
     // ═══════════════════════════════════════════════════════════════════════
 
     public (string? host, int port, string? dbName, string? username, string? password) GetDatabaseConfig()
@@ -230,9 +222,6 @@ public class CredentialManager
         SaveConfig(config);
     }
 
-    /// <summary>
-    /// Kiểm tra đã có đủ config chưa.
-    /// </summary>
     public bool HasDatabaseConfig()
     {
         var (host, port, dbName, username, password) = GetDatabaseConfig();

@@ -17,15 +17,18 @@ public partial class DashboardViewModel : ObservableObject
     private readonly SportItemService _sportItemService;
     private readonly OrderService _orderService;
     private readonly CustomerOrderService _customerOrderService;
+    private readonly CurrentUserService _currentUserService;
 
     public DashboardViewModel(
         SportItemService sportItemService,
         OrderService orderService,
-        CustomerOrderService customerOrderService)
+        CustomerOrderService customerOrderService,
+        CurrentUserService currentUserService)
     {
         _sportItemService = sportItemService;
         _orderService = orderService;
         _customerOrderService = customerOrderService;
+        _currentUserService = currentUserService;
         TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
         Console.Error.WriteLine("[DashboardVM] Created, starting LoadDashboardAsync...");
         _ = LoadDashboardAsync();
@@ -85,7 +88,10 @@ public partial class DashboardViewModel : ObservableObject
             {
                 var order = dialog.ViewModel.Order;
                 var details = dialog.ViewModel.OrderDetails.ToList();
-                await _customerOrderService.CreateOrderAsync(order, details);
+                // Assign current user's seller_id and seller_name to the new order
+                var sellerId = _currentUserService.UserId ?? 0;
+                var sellerName = _currentUserService.UserEmail ?? "";
+                await _customerOrderService.CreateOrderAsync(order, details, sellerId, sellerName);
                 
                 // Refresh dashboard stats
                 await LoadDashboardAsync();
@@ -163,7 +169,7 @@ public partial class DashboardViewModel : ObservableObject
         catch (Exception e)
         {
             Console.Error.WriteLine($"[DashboardVM] LoadDashboardAsync ERROR: {e}");
-            ErrorMessage = $"Loi: {e.Message}";
+            ErrorMessage = $"Error: {e.Message}";
         }
         finally
         {

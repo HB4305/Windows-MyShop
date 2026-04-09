@@ -196,7 +196,7 @@ public partial class SportItemViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Lỗi: {ex.Message}";
+            ErrorMessage = $"Error: {ex.Message}";
         }
         finally
         {

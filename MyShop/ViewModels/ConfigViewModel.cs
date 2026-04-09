@@ -6,7 +6,7 @@ using MyShop.Services;
 namespace MyShop.ViewModels;
 
 /// <summary>
-/// Sự kiện khi lưu cấu hình thành công → quay lại login.
+/// Events fired when config is saved or user goes back.
 /// </summary>
 public static class ConfigPageEvents
 {
@@ -26,7 +26,6 @@ public partial class ConfigViewModel : ObservableObject
         _credentialManager = credentialManager;
         _connFactory = connFactory;
 
-        // Load cấu hình hiện tại
         var (host, port, dbName, username, password) = _credentialManager.GetDatabaseConfig();
         DbHost = host ?? string.Empty;
         DbPort = port > 0 ? port.ToString() : "6543";
@@ -74,19 +73,19 @@ public partial class ConfigViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(DbHost))
         {
-            Message = "Vui lòng nhập Host.";
+            Message = "Please enter Host.";
             IsSuccess = false;
             return;
         }
         if (string.IsNullOrWhiteSpace(DbName))
         {
-            Message = "Vui lòng nhập Database Name.";
+            Message = "Please enter Database Name.";
             IsSuccess = false;
             return;
         }
         if (string.IsNullOrWhiteSpace(DbUsername))
         {
-            Message = "Vui lòng nhập Username.";
+            Message = "Please enter Username.";
             IsSuccess = false;
             return;
         }
@@ -94,36 +93,32 @@ public partial class ConfigViewModel : ObservableObject
         try
         {
             IsLoading = true;
-            Message = "Đang kiểm tra kết nối...";
+            Message = "Testing connection...";
             IsSuccess = false;
 
-            // Test kết nối trước khi lưu (dùng giá trị từ form)
             var port = int.TryParse(DbPort, out var p) ? p : 5432;
             var error = await _connFactory.TestConnectionAsync(
                 DbHost.Trim(), port, DbName.Trim(), DbUsername.Trim(), DbPassword);
             if (error != null)
             {
-                Message = $"Kết nối thất bại: {error}";
+                Message = $"Connection failed: {error}";
                 IsSuccess = false;
                 return;
             }
 
-            // Lưu config
             _credentialManager.SaveDatabaseConfig(
                 DbHost.Trim(), port, DbName.Trim(), DbUsername.Trim(), DbPassword);
 
-            // Invalidate cache để rebuild connection
             _connFactory.InvalidateCache();
 
-            Message = "Lưu cấu hình thành công!";
+            Message = "Configuration saved successfully!";
             IsSuccess = true;
 
-            // Báo App đã lưu config → quay lại login
             ConfigPageEvents.RaiseConfigSaved();
         }
         catch (Exception ex)
         {
-            Message = $"Lỗi: {ex.Message}";
+            Message = $"Error: {ex.Message}";
             IsSuccess = false;
         }
         finally

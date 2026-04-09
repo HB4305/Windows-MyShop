@@ -1,48 +1,36 @@
 <Page x:Class="MyShop.Views.SettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:conv="using:MyShop.Converters"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
   <Page.Resources>
-    <!-- Accent colors (matching Dashboard / Login) -->
-    <SolidColorBrush x:Key="PurpleBrush"
-        Color="#8B52FF"/>
-    <SolidColorBrush x:Key="PurpleLightBrush"
-        Color="#8B52FF"
-        Opacity="0.12"/>
+    <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="#EF4444"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#22C55E"/>
 
-    <!-- Card style (theme-aware) -->
-    <Style x:Key="CardBorder"
-        TargetType="Border">
-      <Setter Property="Background"
-          Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
-      <Setter Property="BorderBrush"
-          Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
-      <Setter Property="BorderThickness"
-          Value="1"/>
-      <Setter Property="CornerRadius"
-          Value="{ThemeResource ControlCornerRadius}"/>
-      <Setter Property="Padding"
-          Value="16"/>
+    <Style x:Key="CardBorder" TargetType="Border">
+      <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
+      <Setter Property="Padding" Value="16"/>
     </Style>
 
-    <!-- Secondary button style -->
-    <Style x:Key="SecondaryButton"
-        TargetType="Button">
-      <Setter Property="Background"
-          Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground"
-          Value="{ThemeResource TextFillColorPrimaryBrush}"/>
-      <Setter Property="BorderThickness"
-          Value="1"/>
-      <Setter Property="BorderBrush"
-          Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
-      <Setter Property="Padding"
-          Value="18,8"/>
+    <Style x:Key="SecondaryButton" TargetType="Button">
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="Padding" Value="18,8"/>
     </Style>
   </Page.Resources>
 
   <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <Grid HorizontalAlignment="Stretch" Padding="28,24,28,40">
+    <StackPanel Padding="28,24,28,40" Spacing="24">
+
+      <!-- ── App Settings ── -->
       <Border Style="{StaticResource CardBorder}">
         <StackPanel Spacing="16">
           <TextBlock Text="Settings"
@@ -101,6 +89,87 @@
           </StackPanel>
         </StackPanel>
       </Border>
-    </Grid>
+
+      <!-- ── User Management (owner only) ── -->
+      <Border Style="{StaticResource CardBorder}"
+              Visibility="{Binding IsOwnerView, Converter={StaticResource BoolToVisibilityConverter}}">
+        <StackPanel Spacing="16">
+
+          <TextBlock Text="User Management"
+                     FontSize="24"
+                     FontWeight="Bold"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+
+          <TextBlock Text="Create a new sale account. Sales can only see their own orders."
+                     FontSize="13"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                     TextWrapping="Wrap"/>
+
+          <!-- Create sale user -->
+          <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  CornerRadius="{ThemeResource ControlCornerRadius}"
+                  Padding="16">
+            <StackPanel Spacing="12">
+              <TextBlock Text="Create Sale User"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+
+              <!-- Email -->
+              <StackPanel Spacing="4">
+                <TextBlock Text="Email"
+                           FontSize="12"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                <TextBox Text="{Binding NewUserEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="sale@prosport.com"
+                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                         BorderBrush="{ThemeResource TextBoxBorderBrush}"
+                         Padding="10,8"
+                         CornerRadius="{ThemeResource ControlCornerRadius}"/>
+              </StackPanel>
+
+              <!-- Password -->
+              <StackPanel Spacing="4">
+                <TextBlock Text="Password"
+                           FontSize="12"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                <PasswordBox x:Name="NewUserPasswordBox"
+                             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                             BorderBrush="{ThemeResource TextBoxBorderBrush}"
+                             Padding="10,8"
+                             CornerRadius="{ThemeResource ControlCornerRadius}"
+                             PasswordChanged="NewUserPasswordBox_PasswordChanged"/>
+              </StackPanel>
+
+              <!-- Messages -->
+              <TextBlock Text="{Binding NewUserErrorMessage}"
+                         FontSize="13"
+                         Foreground="{StaticResource ErrorBrush}"
+                         Visibility="{Binding NewUserErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                         TextWrapping="Wrap"/>
+              <TextBlock Text="{Binding NewUserSuccessMessage}"
+                         FontSize="13"
+                         Foreground="{StaticResource SuccessBrush}"
+                         Visibility="{Binding NewUserSuccessMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                         TextWrapping="Wrap"/>
+
+              <!-- Create button -->
+              <Button Content="Create Sale User"
+                      Background="{StaticResource PurpleBrush}"
+                      Foreground="White"
+                      BorderThickness="0"
+                      Padding="18,8"
+                      HorizontalAlignment="Left"
+                      Command="{Binding CreateSaleUserCommand}"/>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
   </ScrollViewer>
 </Page>

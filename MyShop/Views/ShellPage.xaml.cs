@@ -14,12 +14,17 @@ public sealed partial class ShellPage : Page
 {
     private readonly Frame _frame;
     private readonly SettingsManager _settingsManager;
+    private readonly CurrentUserService _currentUserService;
 
     public ShellPage()
     {
         this.InitializeComponent();
         _settingsManager = App.Services.GetRequiredService<SettingsManager>();
+        _currentUserService = App.Services.GetRequiredService<CurrentUserService>();
         _frame = ContentFrame;
+
+        Loaded += ShellPage_OnLoaded;
+
         var remember = _settingsManager.GetRememberLastActivity();
         var lastActivity = remember ? _settingsManager.GetLastActivity() : null;
 
@@ -30,6 +35,49 @@ public sealed partial class ShellPage : Page
         }
     }
 
+    private void ShellPage_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        ApplyRolePermissions();
+        UpdateUserCard();
+    }
+
+    /// <summary>
+    /// Ẩn/hiện menu items dựa trên role của user hiện tại.
+    /// - Owner: thấy tất cả menu
+    /// - Sale: ẩn Reports, Category
+    /// </summary>
+    private void ApplyRolePermissions()
+    {
+        var isOwner = _currentUserService.IsOwner;
+
+        // Ẩn Reports và Category với role sale
+        NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+
+        // Sale không được phép click vào Reports/Category
+        NavReports.IsEnabled = isOwner;
+        NavCategory.IsEnabled = isOwner;
+    }
+
+    /// <summary>
+    /// Cập nhật thông tin user trong card (email + role) từ session.
+    /// </summary>
+    private void UpdateUserCard()
+    {
+        var email = _currentUserService.UserEmail ?? "User";
+        ProfileNameText.Text = email;
+        ProfileRoleText.Text = _currentUserService.UserRole?.ToUpperInvariant() ?? "";
+        ProfileAvatarText.Text = GetInitials(email);
+    }
+
+    private static string GetInitials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length >= 2)
+            return (parts[0][0] + "" + parts[1][0]).ToUpperInvariant();
+        return parts.Length > 0 ? parts[0][0].ToString().ToUpperInvariant() : "U";
+    }
+
     private void NavDashboard_Click(object sender, RoutedEventArgs e)
     {
         _frame.Navigate(typeof(DashboardPage));
@@ -38,6 +86,7 @@ public sealed partial class ShellPage : Page
 
     private void NavReports_Click(object sender, RoutedEventArgs e)
     {
+        if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(ReportPage));
         UpdateActiveNav("Reports");
     }
@@ -54,10 +103,9 @@ public sealed partial class ShellPage : Page
         UpdateActiveNav("OrdersManagement");
     }
 
-
-
     private void NavCategory_Click(object sender, RoutedEventArgs e)
     {
+        if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(CategoryPage));
         UpdateActiveNav("Category");
     }
@@ -87,7 +135,6 @@ public sealed partial class ShellPage : Page
             nameof(ProductCatalogPage) => "ProductCatalog",
             nameof(CustomerOrderPage) => "OrdersManagement",
             nameof(OrdersManagementPage) => "OrdersManagement",
-
             nameof(CategoryPage) => "Category",
             nameof(SettingsPage) => "Settings",
             _ => null
@@ -106,7 +153,6 @@ public sealed partial class ShellPage : Page
         ResetNavStyle(NavReports);
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
-
         ResetNavStyle(NavCategory);
         ResetNavStyle(NavSettings);
 
@@ -116,7 +162,6 @@ public sealed partial class ShellPage : Page
             "Reports" => NavReports,
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
-
             "Category" => NavCategory,
             "Settings" => NavSettings,
             _ => null
@@ -127,6 +172,11 @@ public sealed partial class ShellPage : Page
     private bool TryNavigateToTag(string? tag)
     {
         if (string.IsNullOrWhiteSpace(tag))
+            return false;
+
+        // Sale không thể navigate đến trang bị cấm
+        if (_currentUserService.IsSale &&
+            (tag == "Reports" || tag == "Category"))
             return false;
 
         var pageType = tag switch
