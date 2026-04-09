@@ -10,14 +10,21 @@ public class CustomerOrderRepository
 
     public CustomerOrderRepository(DbConnectionFactory connFactory) => _connFactory = connFactory;
 
+    // ═══════════════════════════════════════════════════════════════════════
+    // Read
+    // ═══════════════════════════════════════════════════════════════════════
+
+    private const string SelectColumns =
+        @"id, created_at, customer_name, customer_phone,
+          shipping_address, order_type, status, payment_status,
+          total_amount, notes, COALESCE(seller_id, 0), COALESCE(seller_name, '')";
+
+    /// <summary>
+    /// Lấy tất cả đơn hàng (chỉ dùng cho owner).
+    /// </summary>
     public async Task<List<CustomerOrder>> GetAllAsync()
     {
-        const string sql = @"
-            SELECT id, created_at, customer_name, customer_phone,
-                   shipping_address, order_type, status, payment_status,
-                   total_amount, notes
-            FROM customerorders
-            ORDER BY created_at DESC";
+        string sql = $"SELECT {SelectColumns} FROM customerorders ORDER BY created_at DESC";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
@@ -30,14 +37,32 @@ public class CustomerOrderRepository
         return orders;
     }
 
+    /// <summary>
+    /// Lấy đơn hàng của một sale cụ thể (chỉ dùng cho role sale).
+    /// </summary>
+    public async Task<List<CustomerOrder>> GetBySellerIdAsync(int sellerId)
+    {
+        string sql = $@"
+            SELECT {SelectColumns}
+            FROM customerorders
+            WHERE seller_id = @sellerId
+            ORDER BY created_at DESC";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("sellerId", sellerId);
+
+        var orders = new List<CustomerOrder>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+            orders.Add(ReadCustomerOrder(reader));
+        return orders;
+    }
+
     public async Task<CustomerOrder?> GetByIdAsync(int id)
     {
-        const string sql = @"
-            SELECT id, created_at, customer_name, customer_phone,
-                   shipping_address, order_type, status, payment_status,
-                   total_amount, notes
-            FROM customerorders
-            WHERE id = @id";
+        string sql = $"SELECT {SelectColumns} FROM customerorders WHERE id = @id";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
@@ -50,25 +75,38 @@ public class CustomerOrderRepository
         return null;
     }
 
-    public async Task<CustomerOrder> CreateAsync(CustomerOrder order)
+    // ═══════════════════════════════════════════════════════════════════════
+    // Create / Update / Delete
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /// <summary>
+    /// Tạo đơn hàng mới. Tự động gán seller_id và seller_name.
+    /// </summary>
+    public async Task<CustomerOrder> CreateAsync(CustomerOrder order, int sellerId, string sellerName)
     {
         const string sql = @"
             INSERT INTO customerorders
                 (customer_name, customer_phone, shipping_address,
-                 order_type, status, payment_status, total_amount, notes)
+                 order_type, status, payment_status, total_amount, notes,
+                 seller_id, seller_name)
             VALUES (@customerName, @customerPhone, @shippingAddress,
-                    @orderType, @status, @paymentStatus, @totalAmount, @notes)
+                    @orderType, @status, @paymentStatus, @totalAmount, @notes,
+                    @sellerId, @sellerName)
             RETURNING id, created_at";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
         await using var cmd = new NpgsqlCommand(sql, conn);
         AddOrderParams(cmd, order);
+        cmd.Parameters.AddWithValue("sellerId", sellerId);
+        cmd.Parameters.AddWithValue("sellerName", sellerName ?? "");
 
         await using var reader = await cmd.ExecuteReaderAsync();
         await reader.ReadAsync();
         order.Id = reader.GetInt32(0);
         order.CreatedAt = reader.GetFieldValue<DateTimeOffset>(1);
+        order.SellerId = sellerId;
+        order.SellerName = sellerName;
         return order;
     }
 
@@ -127,6 +165,10 @@ public class CustomerOrderRepository
         await cmd.ExecuteNonQueryAsync();
     }
 
+    // ═══════════════════════════════════════════════════════════════════════
+    // Helpers
+    // ═══════════════════════════════════════════════════════════════════════
+
     private static void AddOrderParams(NpgsqlCommand cmd, CustomerOrder o)
     {
         cmd.Parameters.AddWithValue("customerName", o.CustomerName);
@@ -152,7 +194,9 @@ public class CustomerOrderRepository
             Status = r.IsDBNull(6) ? null : r.GetString(6),
             PaymentStatus = r.IsDBNull(7) ? null : r.GetString(7),
             TotalAmount = r.IsDBNull(8) ? 0m : r.GetDecimal(8),
-            Notes = r.IsDBNull(9) ? null : r.GetString(9)
+            Notes = r.IsDBNull(9) ? null : r.GetString(9),
+            SellerId = r.IsDBNull(10) ? null : r.GetInt32(10),
+            SellerName = r.IsDBNull(11) ? null : r.GetString(11)
         };
     }
 }
