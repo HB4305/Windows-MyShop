@@ -25,4 +25,12 @@ public class AppConfig
     // SHA256 hash of plaintext password (base64). Used for DB comparison
     // without needing to decrypt EncryptedPassword on every check.
     public string? PasswordHash { get; set; }
+
+    // DPAPI entropy (Base64, 20 bytes, random per encryption).
+    // Used to decrypt EncryptedPassword stored in config.json.
+    public string? PasswordEntropy { get; set; }
+
+    // Current logged-in user info (stored after successful login)
+    public int? CurrentUserId { get; set; }
+    public string? CurrentUserRole { get; set; }
 }

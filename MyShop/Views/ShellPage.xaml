@@ -231,7 +231,8 @@
                     CornerRadius="18"
                     Background="#FFFFFF"
                     Margin="0,0,10,0">
-              <TextBlock FontFamily="Segoe MDL2 Assets"
+              <TextBlock x:Name="ProfileAvatarText"
+                         FontFamily="Segoe MDL2 Assets"
                          Text="&#xE77B;"
                          FontSize="16"
                          Foreground="{StaticResource PurpleBrush}"
@@ -242,11 +243,13 @@
             <!-- Name & Role -->
             <StackPanel Grid.Column="1"
                         VerticalAlignment="Center">
-              <TextBlock Text="Coach Rivera"
+              <TextBlock x:Name="ProfileNameText"
+                         Text="User"
                          FontSize="12"
                          FontWeight="SemiBold"
                          Foreground="{ThemeResource TextFillColorPrimary}"/>
-              <TextBlock Text="HEAD COACH"
+              <TextBlock x:Name="ProfileRoleText"
+                         Text=""
                          FontSize="10"
                          FontWeight="SemiBold"
                          Foreground="{ThemeResource TextFillColorSecondary}"

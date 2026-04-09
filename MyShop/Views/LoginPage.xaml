@@ -113,91 +113,92 @@
       </StackPanel>
 
       <!-- ── Form Fields ── -->
-      <StackPanel Grid.Row="2" VerticalAlignment="Top">
+      <ScrollViewer Grid.Row="2" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
 
-        <!-- Email field -->
-        <TextBlock Text="Organization Email"
-                   Style="{StaticResource BodyStrongTextBlockStyle}"
-                   Foreground="{ThemeResource TextFillColorSecondary}"
-                   Margin="0,0,0,8"/>
-        <TextBox x:Name="EmailInput"
-                 Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 PlaceholderText="admin@prosport.com"
-                 FontFamily="{StaticResource InterFont}"
-                 FontSize="14"
-                 IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
-                 Background="{ThemeResource ControlFillColorDefaultBrush}"
-                 Foreground="{ThemeResource TextFillColorPrimary}"
-                 BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                 CornerRadius="{ThemeResource ControlCornerRadius}"
-                 Padding="12,10,12,10"
-                 Height="48"
-                 VerticalContentAlignment="Center"/>
-
-        <!-- Password field -->
-        <TextBlock Text="Security Key"
-                   Style="{StaticResource BodyStrongTextBlockStyle}"
-                   Foreground="{ThemeResource TextFillColorSecondary}"
-                   Margin="0,16,0,8"/>
-        <Grid>
-          <PasswordBox x:Name="PasswordBox"
-                       IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
-                       PasswordRevealMode="Hidden"
-                       Background="{ThemeResource ControlFillColorDefaultBrush}"
-                       Foreground="{ThemeResource TextFillColorPrimary}"
-                       BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                       CornerRadius="{ThemeResource ControlCornerRadius}"
-                       Padding="12,10,40,10"
-                       Height="48"
-                       VerticalContentAlignment="Center"/>
-          <!-- Show/hide password toggle -->
-          <Button HorizontalAlignment="Right"
-                  VerticalAlignment="Center"
-                  Margin="0,0,8,0"
-                  Width="32" Height="32"
-                  Background="Transparent"
-                  BorderThickness="0"
-                  Click="TogglePassword_Click">
-            <Viewbox Width="17" Height="12">
-              <Path Data="M1 6C1 6 4 1 8.5 1C13 1 16 6 16 6C16 6 13 11 8.5 11C4 11 1 6 1 6ZM8.5 3C6.01 3 4 5.01 4 7.5C4 9.99 6.01 12 8.5 12C10.99 12 13 9.99 13 7.5C13 5.01 10.99 3 8.5 3ZM8.5 4.5C9.88 4.5 11 5.62 11 7C11 8.38 9.88 9.5 8.5 9.5C7.12 9.5 6 8.38 6 7C6 5.62 7.12 4.5 8.5 4.5ZM1 6V12H16V6"
-                    Stroke="{ThemeResource TextFillColorSecondary}" StrokeThickness="1"
-                    Fill="Transparent" StrokeLineJoin="Round"/>
-            </Viewbox>
-          </Button>
-        </Grid>
-
-        <!-- Error message -->
-        <TextBlock Text="{Binding ErrorMessage}"
+          <!-- Email field -->
+          <TextBlock Text="Organization Email"
+                     Style="{StaticResource BodyStrongTextBlockStyle}"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Margin="0,0,0,8"/>
+          <TextBox x:Name="EmailInput"
+                   Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                   PlaceholderText="admin@prosport.com"
                    FontFamily="{StaticResource InterFont}"
                    FontSize="14"
-                   Foreground="{StaticResource ErrorBrush}"
-                   TextWrapping="Wrap"
-                   Margin="0,12,0,0"
-                   Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                   IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                   Background="{ThemeResource ControlFillColorDefaultBrush}"
+                   Foreground="{ThemeResource TextFillColorPrimary}"
+                   BorderBrush="{ThemeResource TextBoxBorderBrush}"
+                   CornerRadius="{ThemeResource ControlCornerRadius}"
+                   Padding="12,10,12,10"
+                   Height="48"
+                   VerticalContentAlignment="Center"/>
 
-        <!-- Progress bar -->
-        <ProgressBar IsIndeterminate="True"
-                      Height="4"
-                      Margin="0,16,0,0"
-                      Foreground="{StaticResource PrimaryBrush}"
-                      Background="{ThemeResource ControlFillColorDefaultBrush}"
-                      Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+          <!-- Password field -->
+          <TextBlock Text="Security Key"
+                     Style="{StaticResource BodyStrongTextBlockStyle}"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Margin="0,16,0,8"/>
+          <Grid>
+            <PasswordBox x:Name="PasswordBox"
+                         IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                         PasswordRevealMode="Hidden"
+                         Background="{ThemeResource ControlFillColorDefaultBrush}"
+                         Foreground="{ThemeResource TextFillColorPrimary}"
+                         BorderBrush="{ThemeResource TextBoxBorderBrush}"
+                         CornerRadius="{ThemeResource ControlCornerRadius}"
+                         Padding="12,10,40,10"
+                         Height="48"
+                         VerticalContentAlignment="Center"/>
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,8,0"
+                    Width="32" Height="32"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="TogglePassword_Click">
+              <Viewbox Width="17" Height="12">
+                <Path Data="M1 6C1 6 4 1 8.5 1C13 1 16 6 16 6C16 6 13 11 8.5 11C4 11 1 6 1 6ZM8.5 3C6.01 3 4 5.01 4 7.5C4 9.99 6.01 12 8.5 12C10.99 12 13 9.99 13 7.5C13 5.01 10.99 3 8.5 3ZM8.5 4.5C9.88 4.5 11 5.62 11 7C11 8.38 9.88 9.5 8.5 9.5C7.12 9.5 6 8.38 6 7C6 5.62 7.12 4.5 8.5 4.5ZM1 6V12H16V6"
+                      Stroke="{ThemeResource TextFillColorSecondary}" StrokeThickness="1"
+                      Fill="Transparent" StrokeLineJoin="Round"/>
+              </Viewbox>
+            </Button>
+          </Grid>
 
-        <!-- Primary Sign In button -->
-        <Button Command="{Binding LoginCommand}"
-                HorizontalAlignment="Stretch"
-                Height="48"
-                Margin="0,20,0,0"
-                CornerRadius="{ThemeResource ControlCornerRadius}"
-                Background="{StaticResource PrimaryBrush}"
-                BorderThickness="0"
-                IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
-          <TextBlock Text="Sign In to Hub"
+          <!-- Error message -->
+          <TextBlock Text="{Binding ErrorMessage}"
                      FontFamily="{StaticResource InterFont}"
-                     FontSize="14" FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"/>
-        </Button>
-      </StackPanel>
+                     FontSize="14"
+                     Foreground="{StaticResource ErrorBrush}"
+                     TextWrapping="Wrap"
+                     Margin="0,12,0,0"
+                     Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+          <!-- Progress bar -->
+          <ProgressBar IsIndeterminate="True"
+                       Height="4"
+                       Margin="0,16,0,0"
+                       Foreground="{StaticResource PrimaryBrush}"
+                       Background="{ThemeResource ControlFillColorDefaultBrush}"
+                       Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+          <!-- Primary Sign In button -->
+          <Button Command="{Binding LoginCommand}"
+                  HorizontalAlignment="Stretch"
+                  Height="48"
+                  Margin="0,20,0,0"
+                  CornerRadius="{ThemeResource ControlCornerRadius}"
+                  Background="{StaticResource PrimaryBrush}"
+                  BorderThickness="0"
+                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
+            <TextBlock Text="Sign In to Hub"
+                       FontFamily="{StaticResource InterFont}"
+                       FontSize="14" FontWeight="SemiBold"
+                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+          </Button>
+        </StackPanel>
+      </ScrollViewer>
 
       <!-- ── Version Footer ── -->
       <TextBlock Grid.Row="4"

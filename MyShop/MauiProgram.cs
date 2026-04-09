@@ -28,6 +28,10 @@ public static class MauiProgram
         _credentialManager = new CredentialManager();
         Services.AddSingleton(_credentialManager);
 
+        // ── 1b. CurrentUserService (Singleton) ───────────────────
+        // Lưu trữ thông tin user đang đăng nhập, dùng cho phân quyền RBAC
+        Services.AddSingleton<CurrentUserService>();
+
         // ── 2. DbConnectionFactory (Singleton) ─────────────────────
         Services.AddSingleton<DbConnectionFactory>();
 
