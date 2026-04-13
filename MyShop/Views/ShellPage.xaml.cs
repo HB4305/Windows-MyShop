@@ -142,8 +142,9 @@ public sealed partial class ShellPage : Page
         if (tag != null)
         {
             UpdateActiveNav(tag);
-            if (_settingsManager.GetRememberLastActivity())
-                _settingsManager.SetLastActivity(tag);
+            // Always save the current page as last activity — the settings toggle
+            // only controls whether it is RESTORED on next startup, not whether it is saved.
+            _settingsManager.SetLastActivity(tag);
         }
     }
 

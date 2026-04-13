@@ -22,4 +22,8 @@ public class OrderDetail
     public decimal UnitPrice { get; set; }
 
     public string TotalPriceDisplay => (Quantity * UnitPrice).ToString("C");
+
+    public string UnitPriceDisplay => UnitPrice.ToString("C");
+
+    public string QuantityPriceDisplay => $"{Quantity} x {UnitPriceDisplay}";
 }

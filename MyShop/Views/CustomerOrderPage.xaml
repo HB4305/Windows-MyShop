@@ -348,24 +348,21 @@
                        FontWeight="SemiBold"
                        Foreground="{ThemeResource TextFillColorPrimary}"
                        TextTrimming="CharacterEllipsis"/>
-            <TextBlock FontSize="11"
+            <TextBlock Text="{x:Bind QuantityPriceDisplay}"
+                       FontSize="11"
                        Foreground="{ThemeResource TextFillColorSecondary}"
-                       Margin="0,2,0,0">
-              <Run Text="{x:Bind Quantity, Mode=OneWay}"/>
-              <Run Text=" x "/>
-              <Run Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}, Mode=OneWay}"/>
-            </TextBlock>
+                       Margin="0,2,0,0"/>
           </StackPanel>
 
           <TextBlock Grid.Column="2"
-                     Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}}"
+                     Text="{x:Bind UnitPriceDisplay}"
                      FontSize="12"
                      Foreground="{ThemeResource TextFillColorSecondary}"
                      VerticalAlignment="Center"
                      Margin="12,0"/>
 
           <TextBlock Grid.Column="3"
-                     Text="{x:Bind Converter={StaticResource LineTotalConverter}}"
+                     Text="{x:Bind TotalPriceDisplay}"
                      FontSize="13"
                      FontWeight="Bold"
                      Foreground="{ThemeResource TextFillColorPrimary}"
@@ -863,7 +860,7 @@
                   </Border>
                 </Grid>
 
-                <ItemsControl ItemsSource="{Binding CurrentDetails}"
+                <ItemsControl ItemsSource="{Binding CurrentDetails, Mode=OneWay}"
                               ItemTemplate="{StaticResource OrderDetailItemTemplate}"/>
 
                 <TextBlock Text="No items in this order."
