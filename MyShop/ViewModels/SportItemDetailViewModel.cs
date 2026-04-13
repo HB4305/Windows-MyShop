@@ -292,6 +292,7 @@ public partial class SportItemDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task PickImageAsync()
     {
+#if WINDOWS
         try
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
@@ -309,7 +310,7 @@ public partial class SportItemDetailViewModel : ObservableObject
 
                 using var stream = await file.OpenStreamForReadAsync();
                 var buffer = new byte[stream.Length];
-                await stream.ReadAsync(buffer, 0, buffer.Length);
+                await stream.ReadExactlyAsync(buffer);
 
                 var publicUrl = await _service.UploadImageAsync(buffer, file.Name);
                 ImageUrls.Add(publicUrl);
@@ -323,6 +324,9 @@ public partial class SportItemDetailViewModel : ObservableObject
         {
             IsLoading = false;
         }
+#else
+        ErrorMessage = "Image upload is only available on Windows.";
+#endif
     }
 
     [RelayCommand]

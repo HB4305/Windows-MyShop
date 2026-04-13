@@ -70,7 +70,7 @@ public partial class DashboardViewModel : ObservableObject
             var dialog = new CreateOrderDialog();
             
             // In WinUI 3 Desktop, we MUST set XamlRoot for ContentDialog
-            var mainWindow = ((App)App.Current).MainWindow;
+            var mainWindow = App.MainWindow;
             if (mainWindow?.Content?.XamlRoot != null)
             {
                 dialog.XamlRoot = mainWindow.Content.XamlRoot;

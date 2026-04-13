@@ -42,12 +42,28 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private int _selectedItemsPerPage;
 
-    partial void OnSelectedItemsPerPageChanged(int value) { }
+    partial void OnSelectedItemsPerPageChanged(int value)
+    {
+        // Auto-save pagination preference when user changes the value
+        _settingsManager.SetItemsPerPage(value);
+    }
 
     [ObservableProperty]
     private bool _rememberLastActivity;
 
-    partial void OnRememberLastActivityChanged(bool value) { }
+    partial void OnRememberLastActivityChanged(bool value)
+    {
+        // Auto-save RememberLastActivity preference immediately when toggled
+        _settingsManager.SetRememberLastActivity(value);
+        NewUserSuccessMessage = value
+            ? "Last activity will be restored on next startup."
+            : "Last activity tracking has been disabled.";
+        // Auto-clear last activity when disabled
+        if (!value)
+        {
+            _settingsManager.SetLastActivity(null);
+        }
+    }
 
     [RelayCommand]
     private void SaveChanges()

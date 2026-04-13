@@ -35,15 +35,15 @@ public sealed partial class CustomerOrderPage : Page
         {
             if (e.PropertyName == nameof(ViewModel.CurrentPage) || e.PropertyName == nameof(ViewModel.TotalPages))
             {
-                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, BuildPaginationButtons);
+                DispatcherQueue.TryEnqueue(() => BuildPaginationButtons());
             }
             if (e.PropertyName == nameof(ViewModel.ActiveTab))
             {
-                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateTabStyles);
+                DispatcherQueue.TryEnqueue(() => UpdateTabStyles());
             }
             if (e.PropertyName == nameof(ViewModel.SelectedOrder))
             {
-                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateStatusButtons);
+                DispatcherQueue.TryEnqueue(() => UpdateStatusButtons());
             }
         };
     }

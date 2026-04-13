@@ -147,12 +147,72 @@
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="ListViewItem">
-            <ListViewItemPresenter
-              SelectedBackground="#F4F3FF"
-              SelectedBorderBrush="#7C3AED"
-              SelectedBorderThickness="1"
-              Background="Transparent"
-              BorderThickness="0"/>
+            <Border x:Name="Root"
+                    Background="Transparent"
+                    CornerRadius="8"
+                    BorderThickness="0">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="4"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Selection indicator bar -->
+                <Border x:Name="SelectionBar"
+                        Grid.Column="0"
+                        Width="4"
+                        CornerRadius="0,2,2,0"
+                        Background="{StaticResource PurpleBrush}"
+                        Margin="0,4"
+                        VerticalAlignment="Stretch"
+                        Visibility="Collapsed"/>
+
+                <ContentPresenter Grid.Column="1"/>
+              </Grid>
+
+              <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="SelectionStates">
+                  <VisualState x:Name="Selected">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root"
+                                                     Storyboard.TargetProperty="Background">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="#F4F3FF"/>
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SelectionBar"
+                                                     Storyboard.TargetProperty="Visibility">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Unselected"/>
+                  <VisualState x:Name="SelectedUnfocused">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root"
+                                                     Storyboard.TargetProperty="Background">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="#F4F3FF"/>
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SelectionBar"
+                                                     Storyboard.TargetProperty="Visibility">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="InteractionStates">
+                  <VisualState x:Name="Normal"/>
+                  <VisualState x:Name="PointerOver">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root"
+                                                     Storyboard.TargetProperty="Background">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="#FAFAFA"/>
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Pressed"/>
+                  <VisualState x:Name="Disabled"/>
+                </VisualStateGroup>
+              </VisualStateManager.VisualStateGroups>
+            </Border>
           </ControlTemplate>
         </Setter.Value>
       </Setter>
@@ -163,7 +223,7 @@
       <Border x:Name="RowBorder"
               Background="Transparent"
               CornerRadius="8"
-              Padding="12,12"
+              Padding="10,12"
               Margin="0,0,0,4"
               BorderThickness="0">
         <Grid VerticalAlignment="Center">

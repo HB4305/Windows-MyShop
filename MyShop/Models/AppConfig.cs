@@ -19,15 +19,15 @@ public class AppConfig
     // Plain text — kept for migration from old config, prefer EncryptedPassword
     public string? SavedPassword { get; set; }
 
-    // DPAPI-encrypted password (base64). Recommended over SavedPassword.
+    // AES-256-GCM encrypted password (Base64). Stored as: [nonce(12)] [ciphertext+auth_tag(16)].
     public string? EncryptedPassword { get; set; }
 
-    // SHA256 hash of plaintext password (base64). Used for DB comparison
+    // SHA256 hash of plaintext password (Base64). Used for DB comparison
     // without needing to decrypt EncryptedPassword on every check.
     public string? PasswordHash { get; set; }
 
-    // DPAPI entropy (Base64, 20 bytes, random per encryption).
-    // Used to decrypt EncryptedPassword stored in config.json.
+    // PBKDF2 salt (Base64, 16 bytes, random per encryption).
+    // Combined with app constant salt to derive AES key for EncryptedPassword.
     public string? PasswordEntropy { get; set; }
 
     // Current logged-in user info (stored after successful login)
