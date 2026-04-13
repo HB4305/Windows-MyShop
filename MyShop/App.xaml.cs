@@ -9,7 +9,9 @@ namespace MyShop;
 public partial class App : Application
 {
     public static IServiceProvider Services { get; private set; } = null!;
-    public Window? MainWindow { get; private set; }
+
+    public static Window? MainWindow { get; private set; }
+
     private Frame? _rootFrame;
 
     public App()
@@ -60,8 +62,10 @@ public partial class App : Application
         else
             rootFrame.Navigate(typeof(ConfigPage), args.Arguments);
 
-        MainWindow.SetWindowIcon();
         MainWindow.Activate();
+#if WINDOWS
+        MainWindow.SetWindowIcon();
+#endif
     }
 
     private void OnLoginSuccess() => NavigateToMain();
