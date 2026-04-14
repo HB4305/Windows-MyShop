@@ -230,7 +230,11 @@
             BorderThickness="1"
             CornerRadius="{ThemeResource ControlCornerRadius}"
             Padding="0">
-      <Grid>
+      <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                    HorizontalScrollMode="Enabled"
+                    VerticalScrollBarVisibility="Disabled"
+                    VerticalScrollMode="Disabled">
+        <Grid MinWidth="820">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
@@ -382,7 +386,8 @@
             </StackPanel>
           </Grid>
         </Border>
-      </Grid>
+        </Grid>
+      </ScrollViewer>
     </Border>
 
     <TextBlock Grid.Row="5"

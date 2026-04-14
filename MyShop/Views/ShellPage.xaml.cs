@@ -12,9 +12,12 @@ namespace MyShop.Views;
 
 public sealed partial class ShellPage : Page
 {
+    private const double CompactBreakpoint = 1100;
     private readonly Frame _frame;
     private readonly SettingsManager _settingsManager;
     private readonly CurrentUserService _currentUserService;
+    private bool _compactMode;
+    private bool _compactSidebarExpanded;
 
     public ShellPage()
     {
@@ -24,6 +27,7 @@ public sealed partial class ShellPage : Page
         _frame = ContentFrame;
 
         Loaded += ShellPage_OnLoaded;
+        SizeChanged += ShellPage_SizeChanged;
 
         var remember = _settingsManager.GetRememberLastActivity();
         var lastActivity = remember ? _settingsManager.GetLastActivity() : null;
@@ -39,6 +43,52 @@ public sealed partial class ShellPage : Page
     {
         ApplyRolePermissions();
         UpdateUserCard();
+        ApplyResponsiveLayout(ActualWidth);
+    }
+
+    private void ShellPage_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ApplyResponsiveLayout(e.NewSize.Width);
+    }
+
+    private void ToggleSidebar_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_compactMode)
+            return;
+
+        _compactSidebarExpanded = !_compactSidebarExpanded;
+        ApplyResponsiveLayout(ActualWidth);
+    }
+
+    private void ApplyResponsiveLayout(double width)
+    {
+        var isCompact = width < CompactBreakpoint;
+        _compactMode = isCompact;
+
+        if (isCompact)
+        {
+            NavToggleButton.Visibility = Visibility.Visible;
+            HeaderTitleText.Text = "Welcome back";
+            HeaderTitleText.FontSize = 18;
+
+            SidebarColumn.Width = _compactSidebarExpanded ? new GridLength(220) : new GridLength(0);
+            SidebarPanel.Visibility = _compactSidebarExpanded ? Visibility.Visible : Visibility.Collapsed;
+            return;
+        }
+
+        NavToggleButton.Visibility = Visibility.Collapsed;
+        HeaderTitleText.Text = "Welcome back, Alex";
+        HeaderTitleText.FontSize = 22;
+        SidebarColumn.Width = new GridLength(240);
+        SidebarPanel.Visibility = Visibility.Visible;
+    }
+
+    private void MaintainSidebarAfterNavigation()
+    {
+        if (!_compactMode)
+            return;
+
+        ApplyResponsiveLayout(ActualWidth);
     }
 
     /// <summary>
@@ -82,6 +132,7 @@ public sealed partial class ShellPage : Page
     {
         _frame.Navigate(typeof(DashboardPage));
         UpdateActiveNav("Dashboard");
+        MaintainSidebarAfterNavigation();
     }
 
     private void NavReports_Click(object sender, RoutedEventArgs e)
@@ -89,18 +140,21 @@ public sealed partial class ShellPage : Page
         if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(ReportPage));
         UpdateActiveNav("Reports");
+        MaintainSidebarAfterNavigation();
     }
 
     private void NavProductCatalog_Click(object sender, RoutedEventArgs e)
     {
         _frame.Navigate(typeof(SportItemPage));
         UpdateActiveNav("ProductCatalog");
+        MaintainSidebarAfterNavigation();
     }
 
     private void NavOrders_Click(object sender, RoutedEventArgs e)
     {
         _frame.Navigate(typeof(CustomerOrderPage));
         UpdateActiveNav("OrdersManagement");
+        MaintainSidebarAfterNavigation();
     }
 
     private void NavCategory_Click(object sender, RoutedEventArgs e)
@@ -108,12 +162,14 @@ public sealed partial class ShellPage : Page
         if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(CategoryPage));
         UpdateActiveNav("Category");
+        MaintainSidebarAfterNavigation();
     }
 
     private void NavSettings_Click(object sender, RoutedEventArgs e)
     {
         _frame.Navigate(typeof(SettingsPage));
         UpdateActiveNav("Settings");
+        MaintainSidebarAfterNavigation();
     }
 
     private void NavNotifications_Click(object sender, RoutedEventArgs e)

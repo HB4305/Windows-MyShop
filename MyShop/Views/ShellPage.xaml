@@ -5,12 +5,12 @@
 
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="240"/>
+      <ColumnDefinition x:Name="SidebarColumn" Width="240"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
 
     <!-- ═══════════════════════════════════ SIDEBAR ═══════════════════════════════════ -->
-    <Grid Grid.Column="0"
+    <Grid x:Name="SidebarPanel" Grid.Column="0"
           Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
 
       <Grid.RowDefinitions>
@@ -301,7 +301,7 @@
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
-          <TextBlock Grid.Column="0"
+          <TextBlock x:Name="HeaderTitleText" Grid.Column="0"
                      Text="Welcome back, Alex"
                      FontSize="22"
                      FontWeight="SemiBold"
@@ -314,6 +314,25 @@
                       Spacing="6"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Right">
+
+              <Button x:Name="NavToggleButton"
+                Click="ToggleSidebar_Click"
+                Width="40"
+                Height="40"
+                Padding="0"
+                Background="Transparent"
+                BorderThickness="0"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                ToolTipService.ToolTip="Toggle navigation"
+                Visibility="Collapsed">
+                <TextBlock FontFamily="Segoe MDL2 Assets"
+               Text="&#xE700;"
+               FontSize="16"
+               Foreground="{ThemeResource TextFillColorSecondary}"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
+              </Button>
 
             <!-- Notification bell -->
             <Button Tag="Notifications"
@@ -371,10 +390,15 @@
         </Grid>
       </Border>
 
-      <!-- Page Content Frame -->
-      <Frame x:Name="ContentFrame"
-             Grid.Row="1"
-             Navigated="ContentFrame_Navigated"/>
+            <!-- Page Content Frame -->
+            <ScrollViewer Grid.Row="1"
+                      HorizontalScrollBarVisibility="Disabled"
+                      HorizontalScrollMode="Disabled"
+                VerticalScrollBarVisibility="Auto"
+                VerticalScrollMode="Enabled">
+         <Frame x:Name="ContentFrame"
+           Navigated="ContentFrame_Navigated"/>
+            </ScrollViewer>
 
       <!-- Footer -->
       <Border Grid.Row="2"
