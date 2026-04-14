@@ -43,8 +43,7 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="24"
+  <StackPanel Margin="24"
         Spacing="20">
 
       <!-- ═══════════════════════════ PAGE TITLE ═══════════════════════════ -->
@@ -332,5 +331,4 @@
         </StackPanel>
       </Border>
     </StackPanel>
-  </ScrollViewer>
 </Page>

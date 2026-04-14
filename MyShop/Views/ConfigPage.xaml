@@ -25,18 +25,49 @@
     <SolidColorBrush x:Key="PurpleFaintBrush" Color="#8B52FF" Opacity="0.08"/>
   </Page.Resources>
 
-  <Grid>
+  <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                HorizontalScrollMode="Enabled"
+                VerticalScrollBarVisibility="Auto"
+                VerticalScrollMode="Enabled">
+    <Grid x:Name="RootGrid">
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="NarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="LeftPanel.Visibility" Value="Collapsed"/>
+            <Setter Target="LeftColumn.Width" Value="0"/>
+            <Setter Target="RightColumn.Width" Value="*"/>
+            <Setter Target="RightPanel.Margin" Value="20,24,20,24"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="WideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1100"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="LeftPanel.Visibility" Value="Visible"/>
+            <Setter Target="LeftColumn.Width" Value="*"/>
+            <Setter Target="RightColumn.Width" Value="600"/>
+            <Setter Target="RightPanel.Margin" Value="48,48,48,48"/>
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
     <Grid.ColumnDefinitions>
       <!-- LEFT: Hero decoration -->
-      <ColumnDefinition Width="*"/>
+      <ColumnDefinition x:Name="LeftColumn" Width="*"/>
       <!-- RIGHT: Config Form -->
-      <ColumnDefinition Width="600"/>
+      <ColumnDefinition x:Name="RightColumn" Width="600"/>
     </Grid.ColumnDefinitions>
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!-- RIGHT PANEL: Config Form (600px) -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <Grid Grid.Column="1" Margin="48,48,48,48">
+    <Grid x:Name="RightPanel" Grid.Column="1" Margin="48,48,48,48">
 
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
@@ -266,7 +297,7 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!-- LEFT PANEL: Hero decoration -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-    <Grid Grid.Column="0" Background="{StaticResource PrimaryBrush}">
+    <Grid x:Name="LeftPanel" Grid.Column="0" Background="{StaticResource PrimaryBrush}">
       <Grid Margin="138,0,138,0">
         <Ellipse Width="600" Height="600"
                  HorizontalAlignment="Center"
@@ -318,5 +349,6 @@
         </StackPanel>
       </Grid>
     </Grid>
-  </Grid>
+    </Grid>
+  </ScrollViewer>
 </Page>

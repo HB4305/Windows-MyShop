@@ -65,16 +65,74 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Margin="24"
+  <StackPanel x:Name="RootStack"
+              Margin="24"
         Spacing="20">
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="NarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="1"/>
+            <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="0"/>
+            <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Left"/>
+            <Setter Target="HeaderActionsPanel.Margin" Value="0,12,0,0"/>
+            <Setter Target="HeaderActionsPanel.Orientation" Value="Vertical"/>
+            <Setter Target="KpiSpacerColumn1.Width" Value="0"/>
+            <Setter Target="KpiSpacerColumn2.Width" Value="0"/>
+            <Setter Target="KpiValueColumn2.Width" Value="0"/>
+            <Setter Target="KpiValueColumn3.Width" Value="0"/>
+            <Setter Target="KpiCardTwo.(Grid.Row)" Value="1"/>
+            <Setter Target="KpiCardTwo.(Grid.Column)" Value="0"/>
+            <Setter Target="KpiCardThree.(Grid.Row)" Value="2"/>
+            <Setter Target="KpiCardThree.(Grid.Column)" Value="0"/>
+            <Setter Target="MainSpacerColumn.Width" Value="0"/>
+            <Setter Target="MainRightColumn.Width" Value="0"/>
+            <Setter Target="RightContentPanel.(Grid.Row)" Value="1"/>
+            <Setter Target="RightContentPanel.(Grid.Column)" Value="0"/>
+            <Setter Target="RightContentPanel.Margin" Value="0,16,0,0"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="WideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1200"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="0"/>
+            <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="1"/>
+            <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Stretch"/>
+            <Setter Target="HeaderActionsPanel.Margin" Value="0"/>
+            <Setter Target="HeaderActionsPanel.Orientation" Value="Horizontal"/>
+            <Setter Target="KpiSpacerColumn1.Width" Value="16"/>
+            <Setter Target="KpiSpacerColumn2.Width" Value="16"/>
+            <Setter Target="KpiValueColumn2.Width" Value="*"/>
+            <Setter Target="KpiValueColumn3.Width" Value="*"/>
+            <Setter Target="KpiCardTwo.(Grid.Row)" Value="0"/>
+            <Setter Target="KpiCardTwo.(Grid.Column)" Value="2"/>
+            <Setter Target="KpiCardThree.(Grid.Row)" Value="0"/>
+            <Setter Target="KpiCardThree.(Grid.Column)" Value="4"/>
+            <Setter Target="MainSpacerColumn.Width" Value="16"/>
+            <Setter Target="MainRightColumn.Width" Value="*"/>
+            <Setter Target="RightContentPanel.(Grid.Row)" Value="0"/>
+            <Setter Target="RightContentPanel.(Grid.Column)" Value="2"/>
+            <Setter Target="RightContentPanel.Margin" Value="0"/>
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
 
       <!-- ═══════════════════════════ PAGE TITLE ═══════════════════════════ -->
-      <Grid>
+      <Grid x:Name="HeaderGrid">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0">
           <TextBlock Text="Executive Dashboard"
@@ -88,7 +146,8 @@
         </StackPanel>
 
         <!-- Controls -->
-        <StackPanel Grid.Column="1"
+        <StackPanel x:Name="HeaderActionsPanel"
+          Grid.Column="1"
             Orientation="Horizontal"
             Spacing="10">
 
@@ -138,14 +197,19 @@
       </Grid>
 
       <!-- ═══════════════════════════ KPI CARDS ═══════════════════════════ -->
-      <Grid>
+      <Grid x:Name="KpiGrid">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="16"/>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="16"/>
-          <ColumnDefinition Width="*"/>
+          <ColumnDefinition x:Name="KpiSpacerColumn1" Width="16"/>
+          <ColumnDefinition x:Name="KpiValueColumn2" Width="*"/>
+          <ColumnDefinition x:Name="KpiSpacerColumn2" Width="16"/>
+          <ColumnDefinition x:Name="KpiValueColumn3" Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
         <!-- Card 1: Total Products -->
         <Border Grid.Column="0"
@@ -162,7 +226,8 @@
         </Border>
 
         <!-- Card 2: Today's Orders -->
-        <Border Grid.Column="2"
+        <Border x:Name="KpiCardTwo"
+          Grid.Column="2"
             Style="{StaticResource CardBorder}">
           <StackPanel>
             <TextBlock Text="TODAY'S ORDERS"
@@ -176,7 +241,8 @@
         </Border>
 
         <!-- Card 3: Today's Revenue -->
-        <Border Grid.Column="4"
+        <Border x:Name="KpiCardThree"
+          Grid.Column="4"
             Style="{StaticResource CardBorder}">
           <StackPanel>
             <TextBlock Text="TODAY'S REVENUE"
@@ -274,12 +340,16 @@
       </Border>
 
       <!-- ═══════════════════════════ TWO COLUMN: LEFT + RIGHT ═══════════════════════════ -->
-      <Grid>
+      <Grid x:Name="MainContentGrid">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="16"/>
-          <ColumnDefinition Width="*"/>
+          <ColumnDefinition x:Name="MainSpacerColumn" Width="16"/>
+          <ColumnDefinition x:Name="MainRightColumn" Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
         <!-- ── LEFT COLUMN ── -->
         <StackPanel Grid.Column="0"
@@ -478,7 +548,8 @@
         </StackPanel>
 
         <!-- ── RIGHT COLUMN ── -->
-        <StackPanel Grid.Column="2"
+        <StackPanel x:Name="RightContentPanel"
+          Grid.Column="2"
             Spacing="16">
 
           <!-- Recent Orders -->
@@ -613,5 +684,4 @@
       </Grid>
 
     </StackPanel>
-  </ScrollViewer>
 </Page>

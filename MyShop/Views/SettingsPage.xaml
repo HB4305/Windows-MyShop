@@ -27,8 +27,7 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel Padding="28,24,28,40" Spacing="24">
+  <StackPanel Padding="28,24,28,40" Spacing="24">
 
       <!-- ── App Settings ── -->
       <Border Style="{StaticResource CardBorder}">
@@ -171,5 +170,4 @@
       </Border>
 
     </StackPanel>
-  </ScrollViewer>
 </Page>

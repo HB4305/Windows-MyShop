@@ -376,6 +376,67 @@
   </Page.Resources>
 
   <Grid Margin="0">
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="StatsNarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="StatsSpacerCol1.Width" Value="0"/>
+            <Setter Target="StatsSpacerCol2.Width" Value="0"/>
+            <Setter Target="StatsSpacerCol3.Width" Value="0"/>
+            <Setter Target="StatsValueCol2.Width" Value="0"/>
+            <Setter Target="StatsValueCol3.Width" Value="0"/>
+            <Setter Target="StatsValueCol4.Width" Value="0"/>
+            <Setter Target="StatsPendingCard.(Grid.Row)" Value="1"/>
+            <Setter Target="StatsPendingCard.(Grid.Column)" Value="0"/>
+            <Setter Target="StatsProcessingCard.(Grid.Row)" Value="2"/>
+            <Setter Target="StatsProcessingCard.(Grid.Column)" Value="0"/>
+            <Setter Target="StatsRevenueCard.(Grid.Row)" Value="3"/>
+            <Setter Target="StatsRevenueCard.(Grid.Column)" Value="0"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="StatsMediumState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="900"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="StatsSpacerCol1.Width" Value="12"/>
+            <Setter Target="StatsSpacerCol2.Width" Value="0"/>
+            <Setter Target="StatsSpacerCol3.Width" Value="0"/>
+            <Setter Target="StatsValueCol2.Width" Value="*"/>
+            <Setter Target="StatsValueCol3.Width" Value="0"/>
+            <Setter Target="StatsValueCol4.Width" Value="0"/>
+            <Setter Target="StatsPendingCard.(Grid.Row)" Value="0"/>
+            <Setter Target="StatsPendingCard.(Grid.Column)" Value="2"/>
+            <Setter Target="StatsProcessingCard.(Grid.Row)" Value="1"/>
+            <Setter Target="StatsProcessingCard.(Grid.Column)" Value="0"/>
+            <Setter Target="StatsRevenueCard.(Grid.Row)" Value="1"/>
+            <Setter Target="StatsRevenueCard.(Grid.Column)" Value="2"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="StatsWideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1300"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="StatsSpacerCol1.Width" Value="8"/>
+            <Setter Target="StatsSpacerCol2.Width" Value="8"/>
+            <Setter Target="StatsSpacerCol3.Width" Value="8"/>
+            <Setter Target="StatsValueCol2.Width" Value="*"/>
+            <Setter Target="StatsValueCol3.Width" Value="*"/>
+            <Setter Target="StatsValueCol4.Width" Value="*"/>
+            <Setter Target="StatsPendingCard.(Grid.Row)" Value="0"/>
+            <Setter Target="StatsPendingCard.(Grid.Column)" Value="2"/>
+            <Setter Target="StatsProcessingCard.(Grid.Row)" Value="0"/>
+            <Setter Target="StatsProcessingCard.(Grid.Column)" Value="4"/>
+            <Setter Target="StatsRevenueCard.(Grid.Row)" Value="0"/>
+            <Setter Target="StatsRevenueCard.(Grid.Column)" Value="6"/>
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
 
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
@@ -404,19 +465,25 @@
 
       <!-- Stats Cards Row -->
       <Border Grid.Row="1" Margin="24,0,24,16">
-        <Grid>
+        <Grid x:Name="StatsCardsGrid" RowSpacing="8">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="8"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="8"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="8"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition x:Name="StatsSpacerCol1" Width="8"/>
+            <ColumnDefinition x:Name="StatsValueCol2" Width="*"/>
+            <ColumnDefinition x:Name="StatsSpacerCol2" Width="8"/>
+            <ColumnDefinition x:Name="StatsValueCol3" Width="*"/>
+            <ColumnDefinition x:Name="StatsSpacerCol3" Width="8"/>
+            <ColumnDefinition x:Name="StatsValueCol4" Width="*"/>
           </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
 
           <!-- Total -->
-          <Border Grid.Column="0" CornerRadius="10" Padding="16,12"
+          <Border x:Name="StatsTotalCard" Grid.Column="0" CornerRadius="10" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -430,7 +497,7 @@
           </Border>
 
           <!-- Pending -->
-          <Border Grid.Column="2" CornerRadius="10" Padding="16,12"
+            <Border x:Name="StatsPendingCard" Grid.Column="2" CornerRadius="10" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -442,7 +509,7 @@
           </Border>
 
           <!-- Processing -->
-          <Border Grid.Column="4" CornerRadius="10" Padding="16,12"
+            <Border x:Name="StatsProcessingCard" Grid.Column="4" CornerRadius="10" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -454,7 +521,7 @@
           </Border>
 
           <!-- Revenue -->
-          <Border Grid.Column="6" CornerRadius="10" Padding="16,12"
+            <Border x:Name="StatsRevenueCard" Grid.Column="6" CornerRadius="10" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -604,77 +671,83 @@
                   BorderThickness="1"
                   Padding="0">
 
-            <Grid>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Enabled"
+                          VerticalScrollBarVisibility="Disabled"
+                          VerticalScrollMode="Disabled">
+              <Grid MinWidth="920">
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-              <!-- Table Header (fixed, outside scroll) -->
-              <Border Grid.Row="0"
-                      BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
-                      BorderThickness="0,0,0,1"
-                      Padding="12,10">
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="130"/>
-                    <ColumnDefinition Width="140"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="90"/>
-                    <ColumnDefinition Width="*"/>
-                  </Grid.ColumnDefinitions>
-                  <TextBlock Grid.Column="0" Text="ID"     Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                  <TextBlock Grid.Column="1" Text="Customer Name" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                  <TextBlock Grid.Column="2" Text="Phone"  Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                  <TextBlock Grid.Column="3" Text="Date"   Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                  <TextBlock Grid.Column="4" Text="Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                  <TextBlock Grid.Column="5" Text="Payment" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                  <TextBlock Grid.Column="6" Text="Total" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" TextAlignment="Right"/>
-                </Grid>
-              </Border>
-
-              <!-- Table Body: ListView (clickable rows) -->
-              <ListView Grid.Row="1"
-                        ItemsSource="{Binding PaginatedOrders}"
-                        ItemTemplate="{StaticResource OrderTableRowTemplate}"
-                        ItemContainerStyle="{StaticResource OrderListViewItem}"
-                        SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
-                        SelectionMode="Single"
-                        SelectionChanged="OrderList_SelectionChanged"
-                        BorderThickness="0"
-                        Background="Transparent"
-                        Padding="0,4"
-                        ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-
-              <!-- Empty State (fixed overlay, shows when Count==0) -->
-              <StackPanel Grid.Row="1"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          Spacing="10"
-                          Canvas.ZIndex="10"
-                          Visibility="{Binding PaginatedOrders.Count, Converter={StaticResource CountToVisibilityConverter}}">
-                <Border Width="60" Height="60" CornerRadius="30"
-                        Background="{StaticResource PurpleLightBrush}" HorizontalAlignment="Center">
-                  <TextBlock FontFamily="Segoe MDL2 Assets"
-                             Text="&#xE7BC;"
-                             FontSize="28"
-                             Foreground="{StaticResource PurpleBrush}"
-                             HorizontalAlignment="Center"
-                             VerticalAlignment="Center"/>
+                <!-- Table Header (fixed, outside scroll) -->
+                <Border Grid.Row="0"
+                        BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+                        BorderThickness="0,0,0,1"
+                        Padding="12,10">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="80"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="130"/>
+                      <ColumnDefinition Width="140"/>
+                      <ColumnDefinition Width="110"/>
+                      <ColumnDefinition Width="90"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="ID"     Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="Customer Name" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="Phone"  Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="Date"   Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Text="Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Text="Payment" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Text="Total" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" TextAlignment="Right"/>
+                  </Grid>
                 </Border>
-                <TextBlock Text="No orders found"
-                           FontSize="15" FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorSecondary}"
-                           HorizontalAlignment="Center"/>
-                <TextBlock Text="No orders in this category yet."
-                           FontSize="13"
-                           Foreground="{ThemeResource TextFillColorTertiary}"
-                           HorizontalAlignment="Center"/>
-              </StackPanel>
 
-            </Grid>
+                <!-- Table Body: ListView (clickable rows) -->
+                <ListView Grid.Row="1"
+                          ItemsSource="{Binding PaginatedOrders}"
+                          ItemTemplate="{StaticResource OrderTableRowTemplate}"
+                          ItemContainerStyle="{StaticResource OrderListViewItem}"
+                          SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
+                          SelectionMode="Single"
+                          SelectionChanged="OrderList_SelectionChanged"
+                          BorderThickness="0"
+                          Background="Transparent"
+                          Padding="0,4"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+                <!-- Empty State (fixed overlay, shows when Count==0) -->
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="10"
+                            Canvas.ZIndex="10"
+                            Visibility="{Binding PaginatedOrders.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                  <Border Width="60" Height="60" CornerRadius="30"
+                          Background="{StaticResource PurpleLightBrush}" HorizontalAlignment="Center">
+                    <TextBlock FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE7BC;"
+                               FontSize="28"
+                               Foreground="{StaticResource PurpleBrush}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                  </Border>
+                  <TextBlock Text="No orders found"
+                             FontSize="15" FontWeight="SemiBold"
+                             Foreground="{ThemeResource TextFillColorSecondary}"
+                             HorizontalAlignment="Center"/>
+                  <TextBlock Text="No orders in this category yet."
+                             FontSize="13"
+                             Foreground="{ThemeResource TextFillColorTertiary}"
+                             HorizontalAlignment="Center"/>
+                </StackPanel>
+
+              </Grid>
+            </ScrollViewer>
           </Border>
         </Grid>
       </Border>
