@@ -1,5 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
 using MyShop.Models;
+using MyShop.Services;
 using MyShop.ViewModels;
+using MyShop.Views.Dialogs;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System.Diagnostics;
@@ -292,6 +295,38 @@ public sealed partial class CustomerOrderPage : Page
         await ViewModel.UpdatePaymentStatusCommand.ExecuteAsync("Unpaid");
         UpdateStatusButtons();
         SetButtonsEnabled(true);
+    }
+
+    private async void OrderManifest_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.SelectedOrder == null || ViewModel.SelectedOrder.Id == 0)
+        {
+            var errDialog = new ConfirmationDialog(
+                "No Order Selected",
+                "Please select an order from the list before generating an invoice.");
+            errDialog.XamlRoot = XamlRoot;
+            await errDialog.ShowAsync();
+            return;
+        }
+
+        var dialogVm = new InvoiceDialogViewModel(
+            ViewModel.SelectedOrder,
+            ViewModel.CurrentDetails,
+            App.Services.GetRequiredService<IInvoiceService>(),
+            App.Services.GetRequiredService<IFilePickerService>(),
+            XamlRoot);
+
+        string result = await dialogVm.ExportAsync();
+
+        // Give the UI thread time to fully settle after Export dialog and File Picker
+        await Task.Delay(500);
+
+        DispatcherQueue.TryEnqueue(async () =>
+        {
+            var successDialog = new SuccessDialog("Invoice Export", result);
+            successDialog.XamlRoot = XamlRoot;
+            await successDialog.ShowAsync();
+        });
     }
 
     private async void DeleteOrder_Click(object sender, RoutedEventArgs e)

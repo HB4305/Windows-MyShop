@@ -983,22 +983,35 @@
           </StackPanel>
         </ScrollViewer>
 
-        <!-- Footer: Delete -->
+        <!-- Footer: Order Manifest + Delete -->
         <Border Grid.Row="2"
                 BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
                 BorderThickness="0,1,0,0"
                 Padding="20,14">
-          <Button Content="Delete Order"
-                  Click="DeleteOrder_Click"
-                  HorizontalAlignment="Right"
-                  Background="{StaticResource RedLightBrush}"
-                  Foreground="{StaticResource RedBrush}"
-                  BorderBrush="{StaticResource RedBorderBrush}"
-                  BorderThickness="1"
-                  CornerRadius="8"
-                  Padding="16,8"
-                  FontWeight="SemiBold"
-                  FontSize="13"/>
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="Order Manifest"
+                    Style="{StaticResource SecondaryBtn}"
+                    Click="OrderManifest_Click"
+                    HorizontalAlignment="Left"/>
+
+            <Button Grid.Column="1"
+                    Content="Delete Order"
+                    Click="DeleteOrder_Click"
+                    Background="{StaticResource RedLightBrush}"
+                    Foreground="{StaticResource RedBrush}"
+                    BorderBrush="{StaticResource RedBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16,8"
+                    FontWeight="SemiBold"
+                    FontSize="13"/>
+          </Grid>
         </Border>
 
       </Grid>

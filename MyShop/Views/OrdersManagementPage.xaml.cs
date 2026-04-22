@@ -2,7 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MyShop.Models;
+using MyShop.Services;
 using MyShop.ViewModels;
+using MyShop.Views.Dialogs;
 
 namespace MyShop.Views;
 
@@ -55,9 +57,37 @@ public sealed partial class OrdersManagementPage : Page
         // TODO: Navigate to New Sale / Create Order page
     }
 
-    private void OrderManifest_Click(object sender, RoutedEventArgs e)
+    private async void OrderManifest_Click(object sender, RoutedEventArgs e)
     {
-        // TODO: Generate / print order manifest for SelectedOrder
+        if (_vm.SelectedOrder == null || _vm.SelectedOrder.Id == 0)
+        {
+            var errDialog = new ConfirmationDialog(
+                "No Order Selected",
+                "Please select an order from the list before generating an invoice.");
+            errDialog.XamlRoot = XamlRoot;
+            await errDialog.ShowAsync();
+            return;
+        }
+
+        var xamlRoot = XamlRoot;
+        var dialogVm = new InvoiceDialogViewModel(
+            _vm.SelectedOrder,
+            _vm.CurrentDetails,
+            App.Services.GetRequiredService<IInvoiceService>(),
+            App.Services.GetRequiredService<IFilePickerService>(),
+            xamlRoot);
+
+        string result = await dialogVm.ExportAsync();
+
+        // Give the UI thread time to fully settle after Export dialog and File Picker
+        await Task.Delay(500);
+
+        DispatcherQueue.TryEnqueue(async () =>
+        {
+            var successDialog = new SuccessDialog("Invoice Export", result);
+            successDialog.XamlRoot = xamlRoot;
+            await successDialog.ShowAsync();
+        });
     }
 
     private void FulfillGear_Click(object sender, RoutedEventArgs e)

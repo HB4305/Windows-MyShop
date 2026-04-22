@@ -54,6 +54,8 @@ public static class MauiProgram
         Services.AddScoped<ReportService>();
         Services.AddScoped<CustomerOrderService>();
         Services.AddScoped<OrderDetailService>();
+        Services.AddSingleton<IInvoiceService, InvoiceService>();
+        Services.AddSingleton<IFilePickerService>(new FilePickerServiceFactory().Create());
 
         // ── 5. ViewModels ─────────────────────────────────────────
         Services.AddTransient<LoginViewModel>();
