@@ -153,6 +153,30 @@
             </StackPanel>
           </Button>
 
+          <!-- Customers -->
+          <Button x:Name="NavCustomers"
+                  Click="NavCustomers_Click"
+                  Tag="Customers"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Padding="10,8"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Left">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE77B;"
+                         FontSize="14"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Customers"
+                         FontSize="13"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+
 
 
           <!-- Category -->
