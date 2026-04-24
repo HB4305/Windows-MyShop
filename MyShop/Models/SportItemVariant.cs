@@ -10,7 +10,7 @@ public class SportItemVariant
 
     public string? Size { get; set; }
 
-    /// <summary>String wrapper for Size — enforces numeric-only input.</summary>
+    /// <summary>String wrapper for Size — supports both numeric and alphanumeric input (e.g., "9", "XL").</summary>
     public string SizeText
     {
         get => Size ?? string.Empty;

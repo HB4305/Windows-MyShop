@@ -527,14 +527,14 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <controls:NumericTextBox Grid.Column="0"
-                                                                             Text="{Binding SizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                             PlaceholderText="Size"
-                                                                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                                                             Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                                             Foreground="{ThemeResource TextFillColorPrimary}"
-                                                                             BorderThickness="1"
-                                                                             Padding="10,8"/>
+                                                    <TextBox Grid.Column="0"
+                                                             Text="{Binding SizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PlaceholderText="Size (e.g. 9, XL)"
+                                                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                                             Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                                             Foreground="{ThemeResource TextFillColorPrimary}"
+                                                             BorderThickness="1"
+                                                             Padding="10,8"/>
                                                     <TextBox Grid.Column="1"
                                                              Text="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              PlaceholderText="Color"
