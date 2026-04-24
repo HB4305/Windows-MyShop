@@ -47,6 +47,7 @@ public static class MauiProgram
         Services.AddScoped<CustomerOrderRepository>();
         Services.AddScoped<OrderDetailRepository>();
         Services.AddScoped<UserRepository>();
+        Services.AddScoped<CustomerRepository>();
         Services.AddSingleton<SettingsManager>();
 
         // ── 4. Services ────────────────────────────────────────────
@@ -57,6 +58,7 @@ public static class MauiProgram
         Services.AddScoped<ReportService>();
         Services.AddScoped<CustomerOrderService>();
         Services.AddScoped<OrderDetailService>();
+        Services.AddScoped<CustomerService>();
         Services.AddSingleton<IInvoiceService, InvoiceService>();
         Services.AddSingleton<IFilePickerService>(new FilePickerServiceFactory().Create());
         Services.AddSingleton<IAiService, GeminiService>();
@@ -71,6 +73,7 @@ public static class MauiProgram
         Services.AddTransient<SportItemDetailViewModel>();
         Services.AddTransient<CustomerOrderViewModel>();
         Services.AddTransient<OrderDetailViewModel>();
+        Services.AddTransient<CustomerViewModel>();
         Services.AddTransient<SettingsViewModel>();
 
         // ── 6. Build ───────────────────────────────────────────────
