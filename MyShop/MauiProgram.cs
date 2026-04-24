@@ -22,6 +22,9 @@ public static class MauiProgram
     /// </summary>
     public static IServiceProvider Build()
     {
+        // Load environment variables from .env file
+        Utils.EnvLoader.Load();
+
         Services.Clear();
 
         // ── 1. CredentialManager (Singleton) ──────────────────────
@@ -56,6 +59,7 @@ public static class MauiProgram
         Services.AddScoped<OrderDetailService>();
         Services.AddSingleton<IInvoiceService, InvoiceService>();
         Services.AddSingleton<IFilePickerService>(new FilePickerServiceFactory().Create());
+        Services.AddSingleton<IAiService, GeminiService>();
 
         // ── 5. ViewModels ─────────────────────────────────────────
         Services.AddTransient<LoginViewModel>();
