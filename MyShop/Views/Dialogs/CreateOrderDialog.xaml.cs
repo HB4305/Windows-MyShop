@@ -45,7 +45,7 @@ public class CreateOrderDialogViewModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(query)) return new List<SportItem>();
         var result = await _itemService.GetItemsAsync(1, 20, query, null, null, "Name", true); 
-        return result.Items;
+        return result.Items.Select(r => r.Item).ToList();
     }
 
     public void AddProduct(SportItem item)
