@@ -79,7 +79,7 @@ public class SportItemRepository
         var dataSql = $@"
              SELECT id, category_id, name,
                  cost_price, selling_price, stock_quantity,
-                   low_stock_threshold, image_urls
+                   low_stock_threshold, image_urls, description
             FROM sportitems
             {where}
             ORDER BY {safeSort} {order}
@@ -145,10 +145,10 @@ public class SportItemRepository
         const string sql = @"
             INSERT INTO sportitems (category_id, name,
                                    cost_price, selling_price, stock_quantity,
-                                   low_stock_threshold, image_urls)
+                                   low_stock_threshold, image_urls, description)
             VALUES (@categoryId, @name,
                     @costPrice, @sellingPrice, @stockQuantity,
-                    @lowStockThreshold, @imageUrls)
+                    @lowStockThreshold, @imageUrls, @description)
             RETURNING id";
 
         await using var conn = _connFactory.CreateConnection();
@@ -168,7 +168,8 @@ public class SportItemRepository
             UPDATE sportitems SET
                 category_id = @categoryId, name = @name, cost_price = @costPrice,
                 selling_price = @sellingPrice, stock_quantity = @stockQuantity,
-                low_stock_threshold = @lowStockThreshold, image_urls = @imageUrls
+                low_stock_threshold = @lowStockThreshold, image_urls = @imageUrls,
+                description = @description
             WHERE id = @id";
 
         await using var conn = _connFactory.CreateConnection();
@@ -242,6 +243,7 @@ public class SportItemRepository
         cmd.Parameters.AddWithValue("stockQuantity", item.StockQuantity ?? 0);
         cmd.Parameters.AddWithValue("lowStockThreshold", (object?)item.LowStockThreshold ?? DBNull.Value);
         cmd.Parameters.AddWithValue("imageUrls", item.ImageUrls.ToArray());
+        cmd.Parameters.AddWithValue("description", (object?)item.Description ?? DBNull.Value);
     }
 
     private static async Task ReplaceVariantsAsync(NpgsqlConnection conn, int itemId, List<SportItemVariant> variants)
@@ -315,7 +317,8 @@ public class SportItemRepository
             SellingPrice = reader.IsDBNull(4) ? null : reader.GetDecimal(4),
             StockQuantity = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
             LowStockThreshold = reader.IsDBNull(6) ? null : reader.GetInt32(6),
-            ImageUrls = reader.IsDBNull(7) ? new List<string>() : reader.GetFieldValue<string[]>(7).ToList()
+            ImageUrls = reader.IsDBNull(7) ? new List<string>() : reader.GetFieldValue<string[]>(7).ToList(),
+            Description = reader.IsDBNull(8) ? null : reader.GetString(8)
         };
     }
 }
