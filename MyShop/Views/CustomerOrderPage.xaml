@@ -995,7 +995,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
-                    Content="Order Manifest"
+                    Content="Print Invoice"
                     Style="{StaticResource SecondaryBtn}"
                     Click="OrderManifest_Click"
                     HorizontalAlignment="Left"/>
