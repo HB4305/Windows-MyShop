@@ -93,7 +93,13 @@ FIELDS TO FILL:
 - low_stock_threshold: (Suggested alert level, e.g., 5 or 10)
 - color: (Main color)
 - description: (Engaging 2-3 sentence sales copy)
-- suggested_variants: (List of 3 size/color objects, e.g., [{{""size"": ""8"", ""color"": ""White"", ""sku"": ""AF1-WHT-8""}}, {{""size"": ""9"", ""color"": ""White"", ""sku"": ""AF1-WHT-9""}}, {{""size"": ""10"", ""color"": ""White"", ""sku"": ""AF1-WHT-10""}}])
+- suggested_variants: (List of 3 size/color objects. Use industry-standard sizing based on the detected category:
+    * FOOTWEAR/SHOES: Use US numeric sizes (e.g., ""8"", ""9"", ""10.5"") or EU sizes (e.g., ""40"", ""42"").
+    * APPAREL/CLOTHING: Use standard letter sizes (e.g., ""S"", ""M"", ""L"", ""XL"", ""XXL"").
+    * TENNIS/BADMINTON RACKETS: Use grip sizes (e.g., ""G2"", ""G3"", ""4 1/4"").
+    * BALLS (Football/Basketball): Use official sizes (e.g., ""Size 5"", ""Size 7"").
+    * OTHER EQUIPMENT: Use ""One Size"" or relevant measurements like ""Standard"", ""Junior"".
+    Example: [{{""size"": ""9.5"", ""color"": ""Black"", ""sku"": ""NIKE-BLK-95""}}, {{""size"": ""10"", ""color"": ""Black"", ""sku"": ""NIKE-BLK-10""}}])
 
 IMPORTANT: Return ONLY a raw JSON object. Do NOT include markdown code blocks (```json), conversational text, or any other formatting. Ensure all numbers are valid JSON numbers.";
 

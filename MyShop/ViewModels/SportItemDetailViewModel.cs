@@ -412,12 +412,13 @@ public partial class SportItemDetailViewModel : ObservableObject
             ErrorMessage = string.Empty;
 
             var sb = new StringBuilder();
-            sb.AppendLine("You are an expert sports equipment copywriter. Your task is to write a high-converting, professional product description based on the provided details and image.");
+            sb.AppendLine("You are an expert sports equipment copywriter.");
             sb.AppendLine("CRITICAL INSTRUCTIONS:");
-            sb.AppendLine("1. Analyze the image provided to identify visual features, materials, and design.");
-            sb.AppendLine("2. Do NOT ask any questions to the user. Do NOT say 'Please provide...'.");
-            sb.AppendLine("3. If information is missing, use your expert knowledge to infer professional sport features based on the item type.");
-            sb.AppendLine("4. Provide ONLY the final description text. No conversational filler.");
+            sb.AppendLine("1. Write a CONCISE and EFFECTIVE product description (max 2-3 short paragraphs).");
+            sb.AppendLine("2. Focus on the product's unique value proposition and professional features.");
+            sb.AppendLine("3. Do NOT include technical specification tables or excessive marketing fluff.");
+            sb.AppendLine("4. Analyze the image to identify key visual materials and design elements.");
+            sb.AppendLine("5. Provide ONLY the description text. No conversational filler.");
             sb.AppendLine("\nPRODUCT DATA:");
             sb.AppendLine($"- Name: {Item.Name}");
             if (SelectedCategory != null)
@@ -433,7 +434,7 @@ public partial class SportItemDetailViewModel : ObservableObject
                 if (colors.Count > 0) sb.AppendLine($"- Available Colors: {string.Join(", ", colors)}");
             }
 
-            sb.AppendLine("\nWrite the description now:");
+            sb.AppendLine("\nWrite a concise, high-impact description now:");
 
             byte[]? imageBytes = _lastUploadedImageBytes;
             
