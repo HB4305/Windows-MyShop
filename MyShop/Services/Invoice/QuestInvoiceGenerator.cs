@@ -39,11 +39,15 @@ public static class QuestInvoiceGenerator
     public static Task SaveXpsAsync(InvoiceDocumentData data, string path, CancellationToken ct = default)
         => Task.Run(() =>
         {
-#if WINDOWS
-            Document.Create(doc => Compose(doc, data)).GenerateXps(path);
-#else
-            throw new NotSupportedException("XPS generation is only supported on Windows.");
-#endif
+            // Use runtime check instead of preprocessor for Skia compatibility
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                Document.Create(doc => Compose(doc, data)).GenerateXps(path);
+            }
+            else
+            {
+                throw new NotSupportedException("XPS generation is only supported on Windows systems.");
+            }
         }, ct);
 
     private static void Compose(IDocumentContainer doc, InvoiceDocumentData d)

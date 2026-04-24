@@ -91,7 +91,7 @@ public partial class InvoiceDialogViewModel : ObservableObject
 
         // If user cancelled, ensure we don't proceed
         if (result != Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary)
-            return "Export cancelled.";
+            return null;
 
         var selectedMode = dialog.SelectedMode;
         var data = ToDocumentData();

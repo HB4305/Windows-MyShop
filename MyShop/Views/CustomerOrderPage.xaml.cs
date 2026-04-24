@@ -321,6 +321,8 @@ public sealed partial class CustomerOrderPage : Page
         // Give the UI thread time to fully settle after Export dialog and File Picker
         await Task.Delay(500);
 
+        if (string.IsNullOrEmpty(result)) return;
+        
         DispatcherQueue.TryEnqueue(async () =>
         {
             var successDialog = new SuccessDialog("Invoice Export", result);
