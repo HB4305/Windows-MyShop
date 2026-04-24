@@ -315,9 +315,7 @@ public partial class SportItemDetailViewModel : ObservableObject
                 
                 var publicUrl = await _service.UploadImageAsync(bytes, Path.GetFileName(path));
                 ImageUrls.Add(publicUrl);
-
-                // Auto-fill trigger
-                await AnalyzeAndFillAsync(bytes);
+                SelectedImageIndex = ImageUrls.Count - 1;
             }
         }
         catch (Exception ex)
@@ -456,6 +454,50 @@ public partial class SportItemDetailViewModel : ObservableObject
         catch (Exception ex)
         {
             ErrorMessage = $"AI Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task AutoFillDetailsAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            ErrorMessage = string.Empty;
+
+            byte[]? imageBytes = _lastUploadedImageBytes;
+
+            // If we don't have cached bytes, try to download from current preview URL
+            if (imageBytes == null && !string.IsNullOrEmpty(PreviewImageUrl))
+            {
+                try
+                {
+                    ErrorMessage = "Downloading image for analysis...";
+                    using var client = new HttpClient();
+                    imageBytes = await client.GetByteArrayAsync(PreviewImageUrl);
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = $"Failed to download image: {ex.Message}";
+                    return;
+                }
+            }
+
+            if (imageBytes == null)
+            {
+                ErrorMessage = "Please upload an image first to use AI Auto-fill.";
+                return;
+            }
+
+            await AnalyzeAndFillAsync(imageBytes);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"AI Auto-fill Error: {ex.Message}";
         }
         finally
         {

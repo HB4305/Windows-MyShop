@@ -362,14 +362,14 @@
                                     Foreground="{StaticResource SportPurpleBrush}"
                                     CornerRadius="10"
                                     Padding="12,8"
-                                    Command="{Binding GenerateAiDescriptionCommand}">
+                                    Command="{Binding AutoFillDetailsCommand}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="8"
                                                 HorizontalAlignment="Center"
                                                 Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                                         <FontIcon Glyph="&#xEF58;"/>
-                                        <TextBlock Text="AI Generate Description"/>
+                                        <TextBlock Text="AI Auto-fill Details"/>
                                     </StackPanel>
                                     <ProgressRing IsActive="True"
                                                   Width="20"
