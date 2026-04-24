@@ -1,19 +1,19 @@
 namespace MyShop.Models;
 
 /// <summary>
-/// Lưu cấu hình và credentials.
+/// Stores configurations and credentials.
 /// File: %APPDATA%\MyShop\config.json
 /// </summary>
 public class AppConfig
 {
-    // Database Config (ConfigScreen — 5 trường)
+    // Database Config (ConfigScreen - 5 fields)
     public string? DbHost { get; set; }
     public int    DbPort { get; set; }
     public string? DbName { get; set; }
     public string? DbUsername { get; set; }
     public string? DbPassword { get; set; }
 
-    // Credentials (Login — lưu sau khi đăng nhập thành công)
+    // Credentials (Login - saved after successful login)
     public string? SavedEmail { get; set; }
 
     // Plain text — kept for migration from old config, prefer EncryptedPassword

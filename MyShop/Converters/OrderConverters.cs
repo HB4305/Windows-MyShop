@@ -7,7 +7,7 @@ using Microsoft.UI.Xaml.Media;
 namespace MyShop.Converters;
 
 /// <summary>
-/// Format OrderId → "#ATH-XXXXX" với số 5 chữ số, prefix "ATH-".
+/// Formats OrderId → "#ATH-XXXXX" with a 5-digit number and "ATH-" prefix.
 /// </summary>
 public class OrderAthIdConverter : IValueConverter
 {
@@ -23,7 +23,7 @@ public class OrderAthIdConverter : IValueConverter
 }
 
 /// <summary>
-/// Lấy chữ cái đầu của tên (Avatar initials).
+/// Gets the initials of a name (Avatar initials).
 /// </summary>
 public class InitialsConverter : IValueConverter
 {
@@ -57,8 +57,8 @@ public class OrderDateConverter : IValueConverter
 }
 
 /// <summary>
-/// Chuyển Order.PaymentStatus → SolidColorBrush cho badge background.
-/// Hỗ trợ thêm trạng thái "Created".
+/// Converts Order.PaymentStatus → SolidColorBrush for the badge background.
+/// Also supports "Created" status.
 /// </summary>
 public class PayBadgeBgConverter : IValueConverter
 {
@@ -85,8 +85,8 @@ public class PayBadgeBgConverter : IValueConverter
 }
 
 /// <summary>
-/// Chuyển Order.PaymentStatus → SolidColorBrush cho text foreground.
-/// Hỗ trợ thêm trạng thái "Created".
+/// Converts Order.PaymentStatus → SolidColorBrush for the text foreground.
+/// Also supports "Created" status.
 /// </summary>
 public class PayBadgeFgConverter : IValueConverter
 {

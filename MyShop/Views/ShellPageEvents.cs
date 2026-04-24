@@ -1,7 +1,7 @@
 namespace MyShop.Views;
 
 /// <summary>
-/// Sự kiện điều hướng từ ShellPage.
+/// Navigation events from ShellPage.
 /// </summary>
 public static class ShellPageEvents
 {

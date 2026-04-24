@@ -24,7 +24,7 @@ public sealed partial class SportItemPage : Page
 
     private void SportItemPage_OnLoaded(object sender, RoutedEventArgs e)
     {
-        // Sale không thấy cột giá nhập (import price)
+        // Sale roles cannot see the cost price column (import price)
         var currentUser = App.Services.GetRequiredService<CurrentUserService>();
         if (currentUser.IsSale)
         {
@@ -33,28 +33,28 @@ public sealed partial class SportItemPage : Page
     }
 
     /// <summary>
-    /// Ẩn cột giá nhập trong bảng sản phẩm.
-    /// Cột này chỉ visible với owner.
+    /// Hides the cost price column in the product table.
+    /// This column is only visible to the owner.
     /// </summary>
     private void HideImportPriceColumn()
     {
-        // Tìm GridView/ListView body để thay đổi column width
+        // Find the GridView/ListView body to change column widths
         var listView = FindChild<ListView>(this);
         if (listView == null) return;
 
-        // Thay đổi ColumnDefinition của header row (Grid bên trong)
-        // Header Grid trong XAML định nghĩa 6 cột.
-        // Với sale: ẩn cột Price (cột 2 = index 2) bằng cách set Width=0
-        // Nhưng cách tốt nhất là dùng Converter trên binding.
-        // Tạm thời: không làm gì ở đây vì giá nhập KHÔNG nằm trong SportItemPage table
-        // (table SportItemPage chỉ hiển thị selling price)
+        // Update column definitions for the header row (internal Grid)
+        // Header Grid in XAML defines 6 columns.
+        // For sales: hide the Price column (index 2) by setting Width=0.
+        // However, the best practice is to use a Converter on the binding.
+        // Currently: no action taken here as the cost price is NOT in the SportItemPage table
+        // (the table only displays selling price).
         //
-        // Nếu cần ẩn selling price với sale: làm tương tự.
+        // If selling price needs to be hidden for sales, follow the same logic.
         // XAML columns: 0=Product, 1=Category, 2=Price(SELL), 3=Stock, 4=Status, 5=Actions
     }
 
     /// <summary>
-    /// Tìm child element theo type.
+    /// Finds a child element by type.
     /// </summary>
     private static T? FindChild<T>(DependencyObject parent) where T : DependencyObject
     {
@@ -88,7 +88,7 @@ public sealed partial class SportItemPage : Page
             return;
         e.Handled = true;
 
-        // Đảm bảo VM nhận đúng chuỗi đang gõ (một số nền tảng chưa flush binding khi Enter).
+        // Ensure the VM receives the exact typed string (some platforms don't flush binding on Enter).
         if (sender is TextBox tb)
             ViewModel.SearchKeyword = tb.Text ?? string.Empty;
 

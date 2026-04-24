@@ -7,7 +7,7 @@ using Microsoft.UI.Xaml.Media;
 
 namespace MyShop.Converters;
 
-/// <summary>Chuyển null → Visibility.Collapsed, non-null → Visibility.Visible</summary>
+/// <summary>Converts null → Visibility.Collapsed, non-null → Visibility.Visible</summary>
 public class NullToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -19,7 +19,7 @@ public class NullToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Chuyển null → false, non-null → true</summary>
+/// <summary>Converts null → false, non-null → true</summary>
 public class NullToBoolConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -29,7 +29,7 @@ public class NullToBoolConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Chuyển true → Visibility.Visible, false → Visibility.Collapsed</summary>
+/// <summary>Converts true → Visibility.Visible, false → Visibility.Collapsed</summary>
 public class BoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -39,7 +39,7 @@ public class BoolToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Chuyển true → Collapsed, false → Visible (tiêu đề “tạo mới” khi chưa có Id).</summary>
+/// <summary>Converts true → Collapsed, false → Visible (used for "Create New" title when no Id exists).</summary>
 public class InverseBoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -49,7 +49,7 @@ public class InverseBoolToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Đảo ngược bool: true → false, false → true</summary>
+/// <summary>Inverts bool: true → false, false → true</summary>
 public class InverseBoolConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -59,7 +59,7 @@ public class InverseBoolConverter : IValueConverter
         => value is bool b ? !b : true;
 }
 
-/// <summary>Chuyển string rỗng → Collapsed, có nội dung → Visible</summary>
+/// <summary>Converts empty string → Collapsed, has content → Visible</summary>
 public class StringToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -71,7 +71,7 @@ public class StringToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Chuỗi rỗng → Visible (placeholder); có URL → Collapsed.</summary>
+/// <summary>Empty string → Visible (placeholder); has URL → Collapsed.</summary>
 public class InverseStringToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -83,11 +83,9 @@ public class InverseStringToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Chuyển bool → Foreground color. Dùng cho ConfigPage message.
-/// true  → xanh lá (0, 200, 0)
-/// false → đỏ   (255, 80, 80)
-/// </summary>
+/// Converts bool → Foreground color. Used for ConfigPage messages.
+/// true  → green (#22C55E)
+/// false → red   (#EF4444)
 public class BoolToForegroundConverter : IValueConverter
 {
     private static readonly SolidColorBrush GreenBrush = new(
@@ -109,7 +107,7 @@ public class BoolToForegroundConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Chuyển hex color string (#RRGGBB) thành SolidColorBrush</summary>
+/// <summary>Converts hex color string (#RRGGBB) to SolidColorBrush</summary>
 public class HexToBrushConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -134,7 +132,7 @@ public class HexToBrushConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Lấy ảnh đầu tiên trong danh sách ảnh (array text) để hiển thị thumbnail</summary>
+/// <summary>Gets the first image from an image list (array text) for thumbnail display</summary>
 public class FirstImageConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, string language)
@@ -161,7 +159,7 @@ public class FirstImageConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Chuyển string URL thành BitmapImage để dùng cho Image.Source trong DataTemplate</summary>
+/// <summary>Converts string URL to BitmapImage for Image.Source in DataTemplate</summary>
 public class StringToImageConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, string language)
@@ -181,7 +179,7 @@ public class StringToImageConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Chuyển string rỗng -> false, có nội dung -> true</summary>
+/// <summary>Converts empty string -> false, has content -> true</summary>
 public class StringToBoolConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -191,9 +189,7 @@ public class StringToBoolConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Chuyển Order.Status → SolidColorBrush cho badge background.
-/// </summary>
+/// Converts Order.Status → SolidColorBrush for the badge background.
 public class OrderStatusToBrushConverter : IValueConverter
 {
     private static readonly Dictionary<string, (string bg, string fg)> StatusStyles = new(StringComparer.OrdinalIgnoreCase)
@@ -228,9 +224,7 @@ public class OrderStatusToBrushConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Chuyển Order.PaymentStatus → SolidColorBrush cho text foreground.
-/// </summary>
+/// Converts Order.PaymentStatus → SolidColorBrush for the text foreground.
 public class PaymentStatusToForegroundConverter : IValueConverter
 {
     private static readonly Dictionary<string, string> PayFg = new(StringComparer.OrdinalIgnoreCase)
@@ -254,9 +248,7 @@ public class PaymentStatusToForegroundConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Chuyển Order.PaymentStatus → SolidColorBrush.
-/// </summary>
+/// Converts Order.PaymentStatus → SolidColorBrush.
 public class PaymentStatusToBrushConverter : IValueConverter
 {
     private static readonly Dictionary<string, (string bg, string fg)> PayStyles = new(StringComparer.OrdinalIgnoreCase)
@@ -288,9 +280,7 @@ public class PaymentStatusToBrushConverter : IValueConverter
     }
 }
 
-/// <summary>
-/// Chuyển Order.Status → SolidColorBrush cho text foreground.
-/// </summary>
+/// Converts Order.Status → SolidColorBrush for the text foreground.
 public class OrderStatusToForegroundConverter : IValueConverter
 {
     private static readonly Dictionary<string, string> StatusFg = new(StringComparer.OrdinalIgnoreCase)
@@ -333,9 +323,7 @@ public class CurrencyConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Format DateTimeOffset? → "dd/MM/yyyy HH:mm"
-/// </summary>
+/// Formats DateTimeOffset? → "dd/MM/yyyy HH:mm"
 public class DateTimeOffsetConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -349,9 +337,7 @@ public class DateTimeOffsetConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Tính line total: Quantity × UnitPrice
-/// </summary>
+/// Calculates line total: Quantity × UnitPrice
 public class LineTotalConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -368,9 +354,7 @@ public class LineTotalConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Format OrderId → "#123" string (dùng trong x:Bind Run without mixed Run)
-/// </summary>
+/// Formats OrderId → "#123" string (used in x:Bind Run)
 public class OrderIdConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -384,9 +368,7 @@ public class OrderIdConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Chuyển int Count → Visibility. 0 → Visible (empty state), >0 → Collapsed.
-/// </summary>
+/// Converts int Count → Visibility. 0 → Visible (empty state), >0 → Collapsed.
 public class CountToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -400,9 +382,7 @@ public class CountToVisibilityConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Tính end index của trang hiện tại: CurrentPage * PageSize
-/// </summary>
+/// Calculates the end index of the current page: CurrentPage * PageSize
 public class CurrentPageEndConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -410,7 +390,7 @@ public class CurrentPageEndConverter : IValueConverter
         if (parameter is string pageSizeStr && int.TryParse(pageSizeStr, out var pageSize))
         {
             if (value is int currentPage)
-                return Math.Min(currentPage * pageSize, 9999); // sẽ bind TotalOrders thực tế
+                return Math.Min(currentPage * pageSize, 9999); // Will bind to actual TotalOrders
         }
         return 0;
     }
@@ -419,9 +399,7 @@ public class CurrentPageEndConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Lấy index của item trong danh sách để hiển thị "1, 2, 3..."
-/// </summary>
+/// Gets the index of an item in the list to display "1, 2, 3..."
 public class ItemIndexConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
@@ -435,9 +413,7 @@ public class ItemIndexConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>
-/// Chuyển int Count → Visibility. >0 → Visible, 0 → Collapsed.
-/// </summary>
+/// Converts int Count → Visibility. >0 → Visible, 0 → Collapsed.
 public class CountToVisibilityInverseConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)

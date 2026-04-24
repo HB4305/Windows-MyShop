@@ -16,7 +16,7 @@ public class SportItemService
     {
         _repository = repository;
 
-        // Lưu ảnh vào thư mục app data
+        // Save image to the app data folder
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         _imagesBasePath = Path.Combine(appData, "MyShop", "Images");
         Directory.CreateDirectory(_imagesBasePath);
@@ -54,7 +54,7 @@ public class SportItemService
         => _repository.DeleteImageAsync(imageId);
 
     /// <summary>
-    /// Lưu ảnh vào thư mục app data, trả về file path (dùng làm URL).
+    /// Saves an image to the app data folder and returns the file path (used as a URL).
     /// </summary>
     public async Task<string> UploadImageAsync(byte[] bytes, string fileName)
     {
@@ -62,6 +62,6 @@ public class SportItemService
         var safeName = $"{Guid.NewGuid()}{extension}";
         var filePath = Path.Combine(_imagesBasePath, safeName);
         await File.WriteAllBytesAsync(filePath, bytes);
-        return filePath; // dùng làm image URL
+        return filePath; // used as image URL
     }
 }

@@ -10,12 +10,7 @@ using MyShop.Models;
 /// </summary>
 public sealed class InvoiceService : IInvoiceService
 {
-    public bool SupportsXps =>
-#if WINDOWS
-        true;
-#else
-        false;
-#endif
+    public bool SupportsXps => System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows);
 
     public bool SupportsPdf => true;
 
@@ -53,12 +48,13 @@ public sealed class InvoiceService : IInvoiceService
 
     public async Task SaveXpsAsync(Models.InvoiceDocumentData data, string path, CancellationToken ct = default)
     {
-#if WINDOWS
-        await QuestInvoiceGenerator.SaveXpsAsync(data, path, ct);
-#else
-        // On non-Windows, QuestPDF doesn't support native XPS.
-        // We could generate a PDF and rename it, but it's better to be explicit.
-        throw new NotSupportedException("XPS export is only available on Windows.");
-#endif
+        if (SupportsXps)
+        {
+            await QuestInvoiceGenerator.SaveXpsAsync(data, path, ct);
+        }
+        else
+        {
+            throw new NotSupportedException("XPS export is only available on Windows.");
+        }
     }
 }

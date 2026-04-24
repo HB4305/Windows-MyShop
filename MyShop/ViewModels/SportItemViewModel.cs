@@ -35,7 +35,7 @@ public partial class SportItemViewModel : ObservableObject
     [ObservableProperty]
     private string _errorMessage = string.Empty;
 
-    // Phân trang
+    // Pagination
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TotalPages))]
     [NotifyPropertyChangedFor(nameof(DisplayFrom))]
@@ -58,7 +58,7 @@ public partial class SportItemViewModel : ObservableObject
     public int DisplayFrom => TotalItems == 0 ? 0 : (CurrentPage - 1) * PageSize + 1;
     public int DisplayTo => Math.Min(CurrentPage * PageSize, TotalItems);
 
-    // Lọc và Tìm kiếm
+    // Filtering and Searching
     [ObservableProperty]
     private string _searchKeyword = string.Empty;
 
@@ -76,7 +76,7 @@ public partial class SportItemViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(PriceRangeSummary))]
     private double _priceUsdMax = PriceUsdSliderMax;
 
-    /// <summary>Khoảng giá đang lọc (chỉ hiển thị; đồng bộ với thanh range).</summary>
+    /// <summary>Filtered price range summary (display only; synchronized with range sliders).</summary>
     public string PriceRangeSummary
     {
         get
@@ -89,14 +89,14 @@ public partial class SportItemViewModel : ObservableObject
         }
     }
 
-    // Sắp xếp
+    // Sorting
     [ObservableProperty]
     private string _sortField = "name";
 
     [ObservableProperty]
     private bool _isSortAscending = true;
 
-    /// <summary>Gọi sau khi UI sort (ComboBox) đã có giá trị cột — tải lại danh sách.</summary>
+    /// <summary>Called after the UI sort field (ComboBox) changes to reload the list.</summary>
     public Task ReloadWithCurrentSortAsync()
     {
         CurrentPage = 1;

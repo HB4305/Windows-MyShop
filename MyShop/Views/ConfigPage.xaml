@@ -147,7 +147,7 @@
                    VerticalContentAlignment="Center"
                    Margin="0,0,0,16"/>
 
-          <!-- Port + Database Name (2 cột) -->
+          <!-- Port + Database Name (2 columns) -->
           <Grid Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="140"/>

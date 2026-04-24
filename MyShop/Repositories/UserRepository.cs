@@ -5,8 +5,8 @@ using Npgsql;
 namespace MyShop.Repositories;
 
 /// <summary>
-/// Repository cho bảng users.
-/// Dùng để đăng nhập, lấy thông tin user theo email.
+/// Repository for the users table.
+/// Used for login and retrieving user info by email.
 /// </summary>
 public class UserRepository
 {
@@ -15,7 +15,7 @@ public class UserRepository
     public UserRepository(DbConnectionFactory connFactory) => _connFactory = connFactory;
 
     /// <summary>
-    /// Tìm user theo email. Trả về null nếu không tìm thấy.
+    /// Finds a user by email. Returns null if not found.
     /// </summary>
     public async Task<UserRecord?> GetByEmailAsync(string email)
     {
@@ -47,9 +47,9 @@ public class UserRepository
     }
 
     /// <summary>
-    /// Tạo user mới (đăng ký owner hoặc sale).
-    /// Password được hash SHA256 trước khi lưu vào DB.
-    /// Trả về UserRecord nếu thành công, null nếu thất bại.
+    /// Creates a new user (register owner or sale).
+    /// Password is SHA256 hashed before being stored in the database.
+    /// Returns UserRecord if successful, null if failed.
     /// </summary>
     public async Task<UserRecord?> CreateAsync(string email, string password, string role)
     {
@@ -85,12 +85,12 @@ public class UserRepository
         }
         catch (NpgsqlException)
         {
-            return null; // email đã tồn tại hoặc lỗi khác
+            return null; // email already exists or other error
         }
     }
 
     /// <summary>
-    /// Kiểm tra đã có user nào trong hệ thống chưa.
+    /// Checks if any users exist in the system.
     /// </summary>
     public async Task<bool> HasAnyUserAsync()
     {
@@ -104,20 +104,20 @@ public class UserRepository
     }
 
     /// <summary>
-    /// Tạo owner đầu tiên.
+    /// Creates the initial owner.
     /// </summary>
     public async Task<UserRecord?> CreateOwnerAsync(string email, string password)
         => await CreateAsync(email, password, "owner");
 }
 
 /// <summary>
-/// DTO cho bảng users.
+/// DTO for the users table.
 /// </summary>
 public record UserRecord
 {
     public int Id { get; init; }
     public string Email { get; init; } = string.Empty;
-    /// <summary>SHA256 hash của password (Base64).</summary>
+    /// <summary>SHA256 hash of the password (Base64).</summary>
     public string Password { get; init; } = string.Empty;
     public string? Role { get; init; }
 }

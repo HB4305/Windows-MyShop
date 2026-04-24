@@ -10,7 +10,7 @@
     <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
     <conv:BoolToForegroundConverter x:Key="BoolToForegroundConverter"/>
 
-    <!-- Font: Inter (Google Font) - fallback Segoe UI nếu Inter không load -->
+    <!-- Font: Inter (Google Font) - fallback to Segoe UI if Inter is not loaded -->
     <FontFamily x:Key="InterFont">Segoe UI, Segoe UI Variable Display</FontFamily>
 
     <!-- Theme-aware accent brushes -->

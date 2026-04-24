@@ -8,7 +8,7 @@ using Npgsql;
 namespace MyShop;
 
 /// <summary>
-/// Cấu hình Dependency Injection cho toàn bộ ứng dụng.
+/// Dependency Injection configuration for the entire application.
 /// </summary>
 public static class MauiProgram
 {
@@ -18,7 +18,7 @@ public static class MauiProgram
     private static IServiceProvider? _provider;
 
     /// <summary>
-    /// Gọi khi app khởi động — đăng ký DI.
+    /// Called on app startup to register DI services.
     /// </summary>
     public static IServiceProvider Build()
     {
@@ -32,7 +32,7 @@ public static class MauiProgram
         Services.AddSingleton(_credentialManager);
 
         // ── 1b. CurrentUserService (Singleton) ───────────────────
-        // Lưu trữ thông tin user đang đăng nhập, dùng cho phân quyền RBAC
+        // Stores the currently logged-in user information for RBAC permissions.
         Services.AddSingleton<CurrentUserService>();
 
         // ── 2. DbConnectionFactory (Singleton) ─────────────────────
@@ -79,7 +79,7 @@ public static class MauiProgram
     }
 
     /// <summary>
-    /// Lấy CredentialManager hiện tại.
+    /// Gets the current CredentialManager.
     /// </summary>
     public static CredentialManager GetCredentialManager()
         => _credentialManager!;

@@ -4,8 +4,8 @@ using MyShop.Models.SettingModels;
 namespace MyShop.Services;
 
 /// <summary>
-/// Quản lý cấu hình người dùng cho Settings page.
-/// Lưu vào %APPDATA%\MyShop\settings.json.
+/// Manages user configurations for the Settings page.
+/// Saves to %APPDATA%\MyShop\settings.json.
 /// </summary>
 public class SettingsManager
 {

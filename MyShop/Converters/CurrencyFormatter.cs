@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml.Data;
 namespace MyShop.Converters;
 
 /// <summary>
-/// Hiển thị đúng giá trị trong DB, chỉ thêm ký hiệu $ (không quy đổi).
+/// Displays the value from DB correctly with a $ symbol (no conversion).
 /// </summary>
 public class CurrencyFormatter : IValueConverter
 {

@@ -71,10 +71,10 @@ public class CustomerOrder : INotifyPropertyChanged
         set => SetProperty(ref _notes, value);
     }
 
-    // Ai tạo đơn hàng này (FK → users.id)
+    // Who created this order (FK -> users.id)
     public int? SellerId { get; set; }
 
-    // Tên người bán (denormalized, để hiển thị nhanh)
+    // Seller name (denormalized, for fast display)
     public string? SellerName { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;

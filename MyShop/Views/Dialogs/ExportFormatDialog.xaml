@@ -122,7 +122,7 @@
                     HorizontalAlignment="Stretch"
                     Foreground="White"
                     Padding="0,10"
-                    CornerRadius="4"
+                    CornerRadius="8"
                     Click="ExportButton_Click">
                 <Button.Resources>
                     <!-- Reference Global Accent Colors -->
@@ -137,7 +137,7 @@
                     HorizontalAlignment="Stretch"
                     Background="{ThemeResource ControlFillColorDefaultBrush}"
                     Padding="0,10"
-                    CornerRadius="4"
+                    CornerRadius="8"
                     Click="CancelButton_Click">
                 <TextBlock Text="Cancel" FontWeight="SemiBold"/>
             </Button>

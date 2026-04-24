@@ -161,13 +161,13 @@ public partial class CredentialManager
     }
 
     /// <summary>
-    /// Băm SHA256 (Base64). Dùng để so sánh với DB.
+    /// SHA256 hash (Base64). Used for comparing with the database.
     /// </summary>
     public static string ComputeHash(string plaintext)
         => Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(plaintext)));
 
     // ═══════════════════════════════════════════════════════════════════════
-    // Credentials — Lưu / Đọc / Xóa
+    // Credentials - Save / Read / Delete
     // ═══════════════════════════════════════════════════════════════════════
 
     /// <summary>
@@ -182,7 +182,7 @@ public partial class CredentialManager
         config.CurrentUserId = userId;
         config.CurrentUserRole = userRole?.ToLowerInvariant();
 
-        // Mã hóa password với entropy ngẫu nhiên
+        // Encrypt password with random entropy
         var (encrypted, entropy) = EncryptPassword(password);
         config.EncryptedPassword = encrypted;
         config.PasswordEntropy = entropy;
@@ -191,8 +191,8 @@ public partial class CredentialManager
     }
 
     /// <summary>
-    /// Xóa toàn bộ credentials. Gọi khi logout.
-    /// Vẫn giữ lại email để user không phải nhập lại.
+    /// Clears all credentials. Called on logout.
+    /// Still keeps the email so the user doesn't have to re-enter it.
     /// </summary>
     public void ClearCredentials()
     {
@@ -204,8 +204,8 @@ public partial class CredentialManager
     }
 
     /// <summary>
-    /// Xóa toàn bộ credentials BAO GỒM email và user session.
-    /// Dùng khi cần reset hoàn toàn.
+    /// Clears all credentials INCLUDING email and user session.
+    /// Used for a complete reset.
     /// </summary>
     public void WipeAllCredentials()
     {
@@ -220,7 +220,7 @@ public partial class CredentialManager
     }
 
     /// <summary>
-    /// Kiểm tra có credentials đã lưu chưa.
+    /// Checks if there are saved credentials.
     /// </summary>
     public bool HasSavedCredentials()
     {
@@ -245,13 +245,13 @@ public partial class CredentialManager
     }
 
     /// <summary>
-    /// Lấy hash SHA256 đã lưu (dùng để xác thực không qua DB).
+    /// Gets the saved SHA256 hash (used for authentication without DB).
     /// </summary>
     public string? GetSavedPasswordHash()
         => LoadConfig().PasswordHash;
 
     /// <summary>
-    /// Lấy thông tin user đã lưu trong config.
+    /// Gets user information saved in the config.
     /// </summary>
     public (int? id, string? role) GetSavedUserInfo()
     {
@@ -260,8 +260,8 @@ public partial class CredentialManager
     }
 
     /// <summary>
-    /// Xác thực password thuần (plaintext) với hash đã lưu trong config.
-    /// Dùng cho auto-login — không cần DB.
+    /// Authenticates plaintext password with the hash saved in the config.
+    /// Used for auto-login - no DB needed.
     /// </summary>
     public bool ValidatePassword(string plaintext)
     {
@@ -276,7 +276,7 @@ public partial class CredentialManager
     }
 
     /// <summary>
-    /// Lấy email đã lưu.
+    /// Gets the saved email.
     /// </summary>
     public string? GetSavedEmail()
         => LoadConfig().SavedEmail;
