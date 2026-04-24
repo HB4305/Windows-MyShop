@@ -78,7 +78,7 @@ public partial class InvoiceDialogViewModel : ObservableObject
     /// </summary>
     public async Task<string> ExportAsync()
     {
-        var dialog = new ExportFormatDialog($"#ATH-{Order.Id:D5}", _invoiceService.SupportsXps)
+        var dialog = new ExportFormatDialog($"#ATH-{Order.Id:D5}")
         {
             XamlRoot = _xamlRoot
         };
@@ -147,26 +147,6 @@ public partial class InvoiceDialogViewModel : ObservableObject
         catch (Exception ex)
         {
             return $"XPS export failed:\n{ex.Message}";
-        }
-        finally
-        {
-            IsExporting = false;
-            StatusMessage = "";
-        }
-    }
-
-    private async Task<string> ExportPrintAsync(InvoiceDocumentData data)
-    {
-        IsExporting = true;
-        StatusMessage = "Opening print dialog…";
-        try
-        {
-            await _invoiceService.PrintAsync(data);
-            return "Print job sent to your default printer.";
-        }
-        catch (Exception ex)
-        {
-            return $"Print failed:\n{ex.Message}";
         }
         finally
         {

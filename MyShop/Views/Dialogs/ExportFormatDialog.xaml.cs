@@ -13,8 +13,7 @@ public enum ExportFormatMode
 {
     None,
     Pdf,
-    Xps,
-    // Print option removed as per user request
+    Xps
 }
 
 /// <summary>
@@ -29,12 +28,12 @@ public sealed partial class ExportFormatDialog : ContentDialog
     public ExportFormatMode SelectedMode => _selectedMode;
     public ContentDialogResult CustomResult => _customResult;
 
-    public ExportFormatDialog(string orderNumber, bool supportsXps)
+    public ExportFormatDialog(string orderNumber)
     {
         InitializeComponent();
         OrderIdText.Text = $"Order {orderNumber}";
 
-        XpsOptionBorder.Visibility    = Visibility.Visible;
+        XpsOptionBorder.Visibility = Visibility.Visible;
         
         RefreshSelection();
     }

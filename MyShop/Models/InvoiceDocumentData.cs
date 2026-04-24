@@ -9,7 +9,7 @@ public sealed class InvoiceDocumentData
     // ── Company header ─────────────────────────────────────────────
     // ── Company header ─────────────────────────────────────────────
     public string CompanyName    { get; init; } = "MYSHOP - SNEAKER & FASHION";
-    public string CompanyAddress { get; init; } = "123 Street, District 1, HCMC";
+    public string CompanyAddress { get; init; } = "123 Street, District 1, Ho Chi Minh City";
     public string CompanyPhone   { get; init; } = "Hotline: 1900 1234";
 
     // ── Order identity ─────────────────────────────────────────────
