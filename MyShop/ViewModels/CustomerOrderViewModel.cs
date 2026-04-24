@@ -32,7 +32,7 @@ public partial class CustomerOrderViewModel : ObservableObject
     private bool _showDetailPanel = false;
 
     [ObservableProperty]
-    private bool _isOwnerView = true; // Owner thấy hết; Sale chỉ thấy đơn của mình
+    private bool _isOwnerView = true; // Owner sees all; Sale only sees their own orders
 
     // ── Active Tab ──────────────────────────────────────────────────
     [ObservableProperty]
@@ -103,7 +103,7 @@ public partial class CustomerOrderViewModel : ObservableObject
         {
             List<CustomerOrder> orders;
 
-            // Phân quyền: sale chỉ thấy đơn của mình
+            // Permissions: sale only sees their own orders
             if (_currentUserService.IsSale && _currentUserService.UserId.HasValue)
             {
                 IsOwnerView = false;
@@ -224,12 +224,12 @@ public partial class CustomerOrderViewModel : ObservableObject
     {
         if (order == null) return;
 
-        // Lấy từ danh sách đã load sẵn (không query lại DB)
+        // Get from the already loaded list (no DB query)
         SelectedOrder = Orders.FirstOrDefault(o => o.Id == order.Id) ?? order;
         SelectedOrderId = SelectedOrder.Id;
         ShowDetailPanel = true;
 
-        // Chỉ load details khi cần (lazy load)
+        // Only load details when needed (lazy load)
         var details = await _service.GetOrderDetailsAsync(order.Id);
         CurrentDetails = new ObservableCollection<OrderDetail>(details);
     }
@@ -254,7 +254,7 @@ public partial class CustomerOrderViewModel : ObservableObject
         {
             await _service.UpdateStatusAsync(SelectedOrder!.Id, status);
             SelectedOrder.Status = status;
-            // Cập nhật dòng tương ứng trong danh sách thay vì load lại toàn bộ
+            // Update the corresponding row in the list instead of reloading everything
             var existing = Orders.FirstOrDefault(o => o.Id == SelectedOrder.Id);
             if (existing != null) existing.Status = status;
 

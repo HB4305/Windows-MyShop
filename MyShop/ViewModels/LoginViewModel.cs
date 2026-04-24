@@ -7,7 +7,7 @@ using MyShop.Services;
 namespace MyShop.ViewModels;
 
 /// <summary>
-/// Sự kiện điều hướng từ LoginPage.
+/// Navigation events from LoginPage.
 /// </summary>
 public static class LoginPageEvents
 {
@@ -49,7 +49,7 @@ public partial class LoginViewModel : ObservableObject
     private string _errorMessage = string.Empty;
 
     /// <summary>
-    /// Phiên bản ứng dụng hiển thị ở màn hình login.
+    /// App version displayed on the login screen.
     /// </summary>
     public static string AppVersion
     {
@@ -62,7 +62,7 @@ public partial class LoginViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Thử auto-login bằng credentials đã lưu trong config.json.
+    /// Attempts to auto-login using credentials saved in config.json.
     /// </summary>
     public async Task<bool> TryAutoLoginAsync()
     {
@@ -130,7 +130,7 @@ public partial class LoginViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            // 1. Tìm user trong bảng users
+            // 1. Find user in the users table
             var user = await _userRepository.GetByEmailAsync(Email.Trim().ToLowerInvariant());
             if (user == null)
             {
@@ -138,7 +138,7 @@ public partial class LoginViewModel : ObservableObject
                 return;
             }
 
-            // 2. So sánh SHA256 hash
+            // 2. Compare SHA256 hashes
             var hashedInput = CredentialManager.ComputeHash(Password);
             if (user.Password != hashedInput)
             {
@@ -146,11 +146,11 @@ public partial class LoginViewModel : ObservableObject
                 return;
             }
 
-            // 3. Lưu credentials + session
+            // 3. Save credentials and session
             _credentialManager.SaveCredentials(user.Email, Password, user.Id, user.Role ?? "sale");
             _currentUserService.SetUser(user.Id, user.Email, user.Role ?? "sale");
 
-            // 4. Chuyển sang màn hình chính
+            // 4. Navigate to main screen
             LoginPageEvents.RaiseLoginSuccess();
         }
         catch (Exception ex)
