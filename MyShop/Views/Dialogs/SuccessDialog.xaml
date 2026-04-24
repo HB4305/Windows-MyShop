@@ -10,60 +10,57 @@
 	MinWidth="420">
 
 	<ContentDialog.Resources>
-		<SolidColorBrush x:Key="ContentDialogBackground" Color="White"/>
 		<CornerRadius x:Key="OverlayCornerRadius">12</CornerRadius>
 	</ContentDialog.Resources>
 
 	<StackPanel Spacing="20" Margin="4,0,4,0">
 		<StackPanel Spacing="16">
-			<Border Background="#ECFDF3"
-					CornerRadius="20"
+			<!-- Success Icon with Theme-aware background -->
+			<Border Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}"
+					CornerRadius="24"
 					Width="48" Height="48"
 					HorizontalAlignment="Left">
 				<TextBlock FontFamily="Segoe MDL2 Assets"
 						   Text="&#xE73E;"
 						   FontSize="20"
-						   Foreground="#16A34A"
+						   Foreground="{ThemeResource SystemFillColorSuccessBrush}"
 						   HorizontalAlignment="Center"
 						   VerticalAlignment="Center"/>
 			</Border>
 
 			<TextBlock Text="{x:Bind DialogTitle, Mode=OneWay}"
-					   FontSize="18"
+					   FontSize="20"
 					   FontWeight="Bold"
-					   Foreground="#1F2937"/>
+					   Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
 		</StackPanel>
 
 		<TextBlock Text="{x:Bind DialogContent, Mode=OneWay}"
-				   FontSize="13"
-				   Foreground="#6B7280"
+				   FontSize="14"
+				   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
 				   TextWrapping="Wrap"
 				   LineHeight="20"/>
 
-		<Border Background="#F3F4F6" Height="1" Margin="-4,0,-4,0"/>
+		<!-- Separator line -->
+		<Border Background="{ThemeResource ControlStrokeColorDefaultBrush}" 
+				Height="1" 
+				Margin="-4,0,-4,0"/>
 
 		<Grid ColumnSpacing="10">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
-
-			<Button Grid.ColumnSpan="2"
-					x:Name="CloseBtn"
+			<!-- OK Button using Global App Purple color -->
+			<Button x:Name="CloseBtn"
 					Click="CloseBtn_Click"
 					HorizontalAlignment="Stretch"
-					Background="#8B5CF6"
-					BorderBrush="#8B5CF6"
+					Background="{StaticResource AppAccentBrush}"
 					BorderThickness="0"
 					CornerRadius="8"
 					Padding="14,10">
 				<Button.Resources>
-					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#7C3AED"/>
-					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#7C3AED"/>
+					<!-- Standard hover states -->
+					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#7C4DFF"/>
 					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
 				</Button.Resources>
 				<TextBlock Text="OK"
-						   FontSize="13"
+						   FontSize="14"
 						   FontWeight="SemiBold"
 						   Foreground="White"
 						   HorizontalAlignment="Center"/>

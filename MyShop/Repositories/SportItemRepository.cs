@@ -52,35 +52,41 @@ public class SportItemRepository
         return results;
     }
 
-    public async Task<(List<SportItem> Items, int TotalCount)> GetItemsAsync(
+    public async Task<(List<SportItemListRow> Items, int TotalCount)> GetItemsAsync(
         int page, int pageSize, string keyword, decimal? minPrice, decimal? maxPrice, string sortField, bool sortAscending)
     {
-        var items = new List<SportItem>();
-        int totalCount;
+        var results = new List<SportItemListRow>();
+        int totalCount = 0;
 
-        // Build ORDER BY safely (only allow known columns)
-        var allowedSortFields = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-            { "id", "name", "selling_price", "stock_quantity", "category_id", "created_at" };
-        var safeSort = allowedSortFields.Contains(sortField) ? sortField : "id";
+        var allowedSortFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "id", "s.id" },
+            { "name", "s.name" },
+            { "selling_price", "s.selling_price" },
+            { "stock_quantity", "s.stock_quantity" },
+            { "category_id", "s.category_id" },
+            { "created_at", "s.created_at" }
+        };
+        var safeSort = allowedSortFields.TryGetValue(sortField, out var field) ? field : "s.id";
         var order = sortAscending ? "ASC" : "DESC";
         var offset = (page - 1) * pageSize;
 
-        // Build WHERE clause
         var conditions = new List<string>();
         if (!string.IsNullOrWhiteSpace(keyword))
-            conditions.Add("name ILIKE @keyword");
+            conditions.Add("s.name ILIKE @keyword");
         if (minPrice.HasValue)
-            conditions.Add("selling_price >= @minPrice");
+            conditions.Add("s.selling_price >= @minPrice");
         if (maxPrice.HasValue)
-            conditions.Add("selling_price <= @maxPrice");
+            conditions.Add("s.selling_price <= @maxPrice");
         var where = conditions.Count > 0 ? "WHERE " + string.Join(" AND ", conditions) : "";
 
-        const string countSql = "SELECT COUNT(*) FROM sportitems";
         var dataSql = $@"
-             SELECT id, category_id, name,
-                 cost_price, selling_price, stock_quantity,
-                   low_stock_threshold, image_urls
-            FROM sportitems
+             SELECT COUNT(*) OVER() as full_count, 
+                    s.id, s.category_id, s.name, s.cost_price, s.selling_price, 
+                    s.stock_quantity, s.low_stock_threshold, s.image_urls, s.description,
+                    c.name as category_name
+            FROM sportitems s
+            LEFT JOIN categories c ON s.category_id = c.id
             {where}
             ORDER BY {safeSort} {order}
             OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY";
@@ -88,37 +94,48 @@ public class SportItemRepository
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
 
-        // Count
-        await using (var cmd = new NpgsqlCommand(countSql, conn))
-        {
-            totalCount = Convert.ToInt32(await cmd.ExecuteScalarAsync());
-        }
-
-        // Data
         await using (var cmd = new NpgsqlCommand(dataSql, conn))
         {
-            if (!string.IsNullOrWhiteSpace(keyword))
-                cmd.Parameters.AddWithValue("keyword", $"%{keyword}%");
-            if (minPrice.HasValue)
-                cmd.Parameters.AddWithValue("minPrice", minPrice.Value);
-            if (maxPrice.HasValue)
-                cmd.Parameters.AddWithValue("maxPrice", maxPrice.Value);
+            AddFilterParameters(cmd, keyword, minPrice, maxPrice);
             cmd.Parameters.AddWithValue("offset", offset);
             cmd.Parameters.AddWithValue("pageSize", pageSize);
 
             await using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                items.Add(ReadSportItem(reader));
+                totalCount = reader.GetInt32(0);
+                var item = ReadSportItemFromJoined(reader);
+                results.Add(new SportItemListRow
+                {
+                    Item = item,
+                    CategoryName = reader.IsDBNull(10) ? "—" : reader.GetString(10)
+                });
             }
         }
 
-        if (items.Count > 0)
+        if (results.Count > 0)
         {
-            await LoadVariantsForItemsAsync(conn, items);
+            await LoadVariantsForItemsAsync(conn, results.Select(r => r.Item).ToList());
         }
 
-        return (items, totalCount);
+        return (results, totalCount);
+    }
+
+    private static SportItem ReadSportItemFromJoined(NpgsqlDataReader reader)
+    {
+        // Offset by 1 because index 0 is full_count
+        return new SportItem
+        {
+            Id = reader.GetInt32(1),
+            CategoryId = reader.IsDBNull(2) ? 0 : reader.GetInt32(2),
+            Name = reader.IsDBNull(3) ? "" : reader.GetString(3),
+            CostPrice = reader.IsDBNull(4) ? null : reader.GetDecimal(4),
+            SellingPrice = reader.IsDBNull(5) ? null : reader.GetDecimal(5),
+            StockQuantity = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+            LowStockThreshold = reader.IsDBNull(7) ? null : reader.GetInt32(7),
+            ImageUrls = reader.IsDBNull(8) ? new List<string>() : reader.GetFieldValue<string[]>(8).ToList(),
+            Description = reader.IsDBNull(9) ? null : reader.GetString(9)
+        };
     }
 
     public async Task<List<string>> GetProductNamesAsync(int? categoryId = null)
@@ -145,10 +162,10 @@ public class SportItemRepository
         const string sql = @"
             INSERT INTO sportitems (category_id, name,
                                    cost_price, selling_price, stock_quantity,
-                                   low_stock_threshold, image_urls)
+                                   low_stock_threshold, image_urls, description)
             VALUES (@categoryId, @name,
                     @costPrice, @sellingPrice, @stockQuantity,
-                    @lowStockThreshold, @imageUrls)
+                    @lowStockThreshold, @imageUrls, @description)
             RETURNING id";
 
         await using var conn = _connFactory.CreateConnection();
@@ -168,7 +185,8 @@ public class SportItemRepository
             UPDATE sportitems SET
                 category_id = @categoryId, name = @name, cost_price = @costPrice,
                 selling_price = @sellingPrice, stock_quantity = @stockQuantity,
-                low_stock_threshold = @lowStockThreshold, image_urls = @imageUrls
+                low_stock_threshold = @lowStockThreshold, image_urls = @imageUrls,
+                description = @description
             WHERE id = @id";
 
         await using var conn = _connFactory.CreateConnection();
@@ -242,6 +260,7 @@ public class SportItemRepository
         cmd.Parameters.AddWithValue("stockQuantity", item.StockQuantity ?? 0);
         cmd.Parameters.AddWithValue("lowStockThreshold", (object?)item.LowStockThreshold ?? DBNull.Value);
         cmd.Parameters.AddWithValue("imageUrls", item.ImageUrls.ToArray());
+        cmd.Parameters.AddWithValue("description", (object?)item.Description ?? DBNull.Value);
     }
 
     private static async Task ReplaceVariantsAsync(NpgsqlConnection conn, int itemId, List<SportItemVariant> variants)
@@ -315,7 +334,18 @@ public class SportItemRepository
             SellingPrice = reader.IsDBNull(4) ? null : reader.GetDecimal(4),
             StockQuantity = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
             LowStockThreshold = reader.IsDBNull(6) ? null : reader.GetInt32(6),
-            ImageUrls = reader.IsDBNull(7) ? new List<string>() : reader.GetFieldValue<string[]>(7).ToList()
+            ImageUrls = reader.IsDBNull(7) ? new List<string>() : reader.GetFieldValue<string[]>(7).ToList(),
+            Description = reader.IsDBNull(8) ? null : reader.GetString(8)
         };
+    }
+
+    private static void AddFilterParameters(NpgsqlCommand cmd, string keyword, decimal? minPrice, decimal? maxPrice)
+    {
+        if (!string.IsNullOrWhiteSpace(keyword))
+            cmd.Parameters.AddWithValue("keyword", $"%{keyword}%");
+        if (minPrice.HasValue)
+            cmd.Parameters.AddWithValue("minPrice", minPrice.Value);
+        if (maxPrice.HasValue)
+            cmd.Parameters.AddWithValue("maxPrice", maxPrice.Value);
     }
 }

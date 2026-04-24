@@ -171,10 +171,7 @@ public partial class SportItemViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            var categories = await _categoryService.GetAllAsync();
-            var catNames = categories.ToDictionary(c => c.Id, c => c.Name);
-
-            var (rawItems, totalCount) = await _service.GetItemsAsync(
+            var (rows, totalCount) = await _service.GetItemsAsync(
                 CurrentPage,
                 PageSize,
                 SearchKeyword,
@@ -182,14 +179,6 @@ public partial class SportItemViewModel : ObservableObject
                 (decimal?)MaxPrice,
                 SortField,
                 IsSortAscending);
-
-            var rows = rawItems
-                .Select(i => new SportItemListRow
-                {
-                    Item = i,
-                    CategoryName = catNames.TryGetValue(i.CategoryId, out var n) ? n : "—"
-                })
-                .ToList();
 
             Items = new ObservableCollection<SportItemListRow>(rows);
             TotalItems = totalCount;

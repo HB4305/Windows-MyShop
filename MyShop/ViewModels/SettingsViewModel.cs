@@ -27,6 +27,7 @@ public partial class SettingsViewModel : ObservableObject
         SelectedItemsPerPage = ItemsPerPageOptions.Contains(saved) ? saved : 5;
 
         RememberLastActivity = _settingsManager.GetRememberLastActivity();
+        
 
         // Load user list when owner
         if (_currentUserService.IsOwner)
@@ -64,6 +65,7 @@ public partial class SettingsViewModel : ObservableObject
             _settingsManager.SetLastActivity(null);
         }
     }
+
 
     [RelayCommand]
     private void SaveChanges()

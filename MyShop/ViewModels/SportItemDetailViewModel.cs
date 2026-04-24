@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
+using System.Text;
+using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyShop.Models;
@@ -13,13 +15,18 @@ public partial class SportItemDetailViewModel : ObservableObject
 {
     private readonly SportItemService _service;
     private readonly CategoryService _catService;
+    private readonly IAiService _aiService;
+    private readonly IFilePickerService _filePickerService;
+    private byte[]? _lastUploadedImageBytes;
 
     public Func<string, string, Task<bool>>? ShowConfirmationDialogAsync { get; set; }
 
-    public SportItemDetailViewModel(SportItemService service, CategoryService catService)
+    public SportItemDetailViewModel(SportItemService service, CategoryService catService, IAiService aiService, IFilePickerService filePickerService)
     {
         _service = service;
         _catService = catService;
+        _aiService = aiService;
+        _filePickerService = filePickerService;
         ImageUrls.CollectionChanged += OnImageUrlsCollectionChanged;
     }
 
@@ -161,6 +168,7 @@ public partial class SportItemDetailViewModel : ObservableObject
             {
                 Item = item;
                 SelectedCategory = Categories.FirstOrDefault(c => c.Id == Item.CategoryId);
+                ProductDescriptionUi = Item.Description ?? string.Empty;
                 
                 // Load images for existing product
                 ImageUrls.Clear();
@@ -233,6 +241,7 @@ public partial class SportItemDetailViewModel : ObservableObject
             Item.Variants = Variants.ToList();
             SyncLegacyFieldsFromVariants();
             Item.ImageUrls = ImageUrls.ToList();
+            Item.Description = ProductDescriptionUi;
 
             if (Item.Id == 0) 
             {
@@ -292,28 +301,21 @@ public partial class SportItemDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task PickImageAsync()
     {
-#if WINDOWS
         try
         {
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
-            picker.FileTypeFilter.Add(".jpg");
-            picker.FileTypeFilter.Add(".jpeg");
-            picker.FileTypeFilter.Add(".png");
-
-            var file = await picker.PickSingleFileAsync();
-            if (file != null)
+            var path = await _filePickerService.PickOpenFileAsync("Image files", new[] { ".jpg", ".jpeg", ".png" });
+            
+            if (!string.IsNullOrEmpty(path))
             {
                 IsLoading = true;
                 ErrorMessage = string.Empty;
 
-                using var stream = await file.OpenStreamForReadAsync();
-                var buffer = new byte[stream.Length];
-                await stream.ReadExactlyAsync(buffer);
-
-                var publicUrl = await _service.UploadImageAsync(buffer, file.Name);
+                var bytes = await File.ReadAllBytesAsync(path);
+                _lastUploadedImageBytes = bytes; // Cache the bytes for AI
+                
+                var publicUrl = await _service.UploadImageAsync(bytes, Path.GetFileName(path));
                 ImageUrls.Add(publicUrl);
+                SelectedImageIndex = ImageUrls.Count - 1;
             }
         }
         catch (Exception ex)
@@ -324,9 +326,6 @@ public partial class SportItemDetailViewModel : ObservableObject
         {
             IsLoading = false;
         }
-#else
-        ErrorMessage = "Image upload is only available on Windows.";
-#endif
     }
 
     [RelayCommand]
@@ -402,5 +401,228 @@ public partial class SportItemDetailViewModel : ObservableObject
     private void SyncLegacyFieldsFromVariants()
     {
         Item.StockQuantity = Variants.Sum(v => Math.Max(0, v.StockQuantity));
+    }
+
+    [RelayCommand]
+    private async Task GenerateAiDescriptionAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            ErrorMessage = string.Empty;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("You are an expert sports equipment copywriter.");
+            sb.AppendLine("CRITICAL INSTRUCTIONS:");
+            sb.AppendLine("1. Write a CONCISE and EFFECTIVE product description (max 2-3 short paragraphs).");
+            sb.AppendLine("2. Focus on the product's unique value proposition and professional features.");
+            sb.AppendLine("3. Do NOT include technical specification tables or excessive marketing fluff.");
+            sb.AppendLine("4. Analyze the image to identify key visual materials and design elements.");
+            sb.AppendLine("5. Provide ONLY the description text. No conversational filler.");
+            sb.AppendLine("\nPRODUCT DATA:");
+            sb.AppendLine($"- Name: {Item.Name}");
+            if (SelectedCategory != null)
+                sb.AppendLine($"- Category: {SelectedCategory.Name}");
+            if (Item.SellingPrice.HasValue)
+                sb.AppendLine($"- Price: ${Item.SellingPrice.Value}");
+            
+            if (Variants.Count > 0)
+            {
+                var sizes = Variants.Select(v => v.Size).Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList();
+                var colors = Variants.Select(v => v.Color).Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
+                if (sizes.Count > 0) sb.AppendLine($"- Available Sizes: {string.Join(", ", sizes)}");
+                if (colors.Count > 0) sb.AppendLine($"- Available Colors: {string.Join(", ", colors)}");
+            }
+
+            sb.AppendLine("\nWrite a concise, high-impact description now:");
+
+            byte[]? imageBytes = _lastUploadedImageBytes;
+            
+            // If we don't have cached bytes, try to download from URL
+            if (imageBytes == null && !string.IsNullOrEmpty(PreviewImageUrl))
+            {
+                try
+                {
+                    using var client = new HttpClient();
+                    imageBytes = await client.GetByteArrayAsync(PreviewImageUrl);
+                }
+                catch { /* Ignore */ }
+            }
+
+            var description = await _aiService.GenerateDescriptionAsync(sb.ToString(), imageBytes);
+            ProductDescriptionUi = description;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"AI Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    private async Task AutoFillDetailsAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            ErrorMessage = string.Empty;
+
+            byte[]? imageBytes = _lastUploadedImageBytes;
+
+            // If we don't have cached bytes, try to download from current preview URL
+            if (imageBytes == null && !string.IsNullOrEmpty(PreviewImageUrl))
+            {
+                try
+                {
+                    ErrorMessage = "Downloading image for analysis...";
+                    using var client = new HttpClient();
+                    imageBytes = await client.GetByteArrayAsync(PreviewImageUrl);
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = $"Failed to download image: {ex.Message}";
+                    return;
+                }
+            }
+
+            if (imageBytes == null)
+            {
+                ErrorMessage = "Please upload an image first to use AI Auto-fill.";
+                return;
+            }
+
+            await AnalyzeAndFillAsync(imageBytes);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"AI Auto-fill Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task AnalyzeAndFillAsync(byte[] bytes)
+    {
+        try
+        {
+            IsLoading = true;
+            ErrorMessage = "AI is analyzing product details...";
+            
+            // Pass the list of available category names to the AI
+            var categoryNames = Categories.Select(c => c.Name).ToArray();
+            var json = await _aiService.AnalyzeItemAsync(bytes, categoryNames);
+            System.Console.WriteLine($"[AI] Raw JSON: {json}");
+
+            // Clean JSON from any markdown wrappers
+            if (json.Contains("```"))
+            {
+                int start = json.IndexOf("{");
+                int end = json.LastIndexOf("}");
+                if (start >= 0 && end > start)
+                {
+                    json = json.Substring(start, end - start + 1);
+                }
+            }
+            json = json.Trim();
+            
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+
+            // 1. Name
+            if (root.TryGetProperty("name", out var nameProp))
+            {
+                Item.Name = nameProp.GetString();
+            }
+
+            // 2. Price
+            if (root.TryGetProperty("price", out var priceProp))
+            {
+                if (priceProp.ValueKind == JsonValueKind.Number)
+                    SellingPriceText = priceProp.GetDouble().ToString(CultureInfo.InvariantCulture);
+                else if (priceProp.ValueKind == JsonValueKind.String)
+                    SellingPriceText = priceProp.GetString();
+            }
+
+            // 3. Cost Price
+            if (root.TryGetProperty("cost_price", out var costProp))
+            {
+                if (costProp.ValueKind == JsonValueKind.Number)
+                    CostPriceText = costProp.GetDouble().ToString(CultureInfo.InvariantCulture);
+                else if (costProp.ValueKind == JsonValueKind.String)
+                    CostPriceText = costProp.GetString();
+            }
+
+            // 4. Low Stock Threshold
+            if (root.TryGetProperty("low_stock_threshold", out var lowStockProp))
+            {
+                if (lowStockProp.ValueKind == JsonValueKind.Number)
+                    LowStockThresholdText = lowStockProp.GetInt32().ToString();
+                else if (lowStockProp.ValueKind == JsonValueKind.String)
+                    LowStockThresholdText = lowStockProp.GetString();
+            }
+
+            // 5. Description
+            if (root.TryGetProperty("description", out var descProp))
+            {
+                ProductDescriptionUi = descProp.GetString() ?? string.Empty;
+            }
+
+            // 6. Category Matching
+            if (root.TryGetProperty("category", out var catProp))
+            {
+                var catName = catProp.GetString();
+                var found = Categories.FirstOrDefault(c => c.Name.Equals(catName, StringComparison.OrdinalIgnoreCase));
+                if (found != null)
+                {
+                    SelectedCategory = found;
+                }
+            }
+
+            // 7. Suggested Variants
+            if (root.TryGetProperty("suggested_variants", out var variantsProp) && variantsProp.ValueKind == JsonValueKind.Array)
+            {
+                Variants.Clear();
+                foreach (var vElement in variantsProp.EnumerateArray())
+                {
+                    var variant = new SportItemVariant { SportItemId = Item.Id };
+                    if (vElement.TryGetProperty("size", out var s)) variant.Size = s.GetString();
+                    if (vElement.TryGetProperty("color", out var c)) variant.Color = c.GetString();
+                    if (vElement.TryGetProperty("sku", out var sk)) variant.Sku = sk.GetString();
+                    variant.StockQuantity = 10; // Default initial stock
+                    Variants.Add(variant);
+                }
+            }
+            else if (root.TryGetProperty("color", out var colorProp) && Variants.Count > 0)
+            {
+                // Fallback for single color
+                Variants[0].Color = colorProp.GetString();
+            }
+
+            // Notify all property changes
+            OnPropertyChanged(nameof(Item));
+            OnPropertyChanged(nameof(SellingPriceText));
+            OnPropertyChanged(nameof(CostPriceText));
+            OnPropertyChanged(nameof(LowStockThresholdText));
+            OnPropertyChanged(nameof(ProductDescriptionUi));
+            OnPropertyChanged(nameof(SelectedCategory));
+            OnPropertyChanged(nameof(Variants));
+
+            ErrorMessage = string.Empty;
+            System.Console.WriteLine("[AI] Auto-fill complete.");
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine($"[AI AutoFill] Error: {ex.Message}");
+            ErrorMessage = string.Empty;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 }

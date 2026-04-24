@@ -89,6 +89,7 @@
         </StackPanel>
       </Border>
 
+
       <!-- ── User Management (owner only) ── -->
       <Border Style="{StaticResource CardBorder}"
               Visibility="{Binding IsOwnerView, Converter={StaticResource BoolToVisibilityConverter}}">

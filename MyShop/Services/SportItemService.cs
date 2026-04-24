@@ -28,7 +28,7 @@ public class SportItemService
     public Task<List<DashboardLowStockProduct>> GetLowStockProductsAsync(int threshold = 5, int limit = 5)
         => _repository.GetLowStockProductsAsync(threshold, limit);
 
-    public Task<(List<SportItem> Items, int TotalCount)> GetItemsAsync(
+    public Task<(List<SportItemListRow> Items, int TotalCount)> GetItemsAsync(
         int page, int pageSize, string keyword, decimal? minPrice, decimal? maxPrice, string sortField, bool sortAscending)
         => _repository.GetItemsAsync(page, pageSize, keyword, minPrice, maxPrice, sortField, sortAscending);
 

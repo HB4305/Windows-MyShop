@@ -146,7 +146,10 @@ public class FirstImageConverter : IValueConverter
             {
                 try
                 {
-                    return new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new System.Uri(url));
+                    var bitmap = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+                    bitmap.DecodePixelWidth = 88; // 44px * 2 for high DPI
+                    bitmap.UriSource = new System.Uri(url);
+                    return bitmap;
                 }
                 catch { }
             }

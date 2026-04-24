@@ -11,6 +11,11 @@
         <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls"/>
       </ResourceDictionary.MergedDictionaries>
 
+      <!-- ── Branding Colors ── -->
+      <Color x:Key="AppAccentColor">#8B52FF</Color>
+      <SolidColorBrush x:Key="AppAccentBrush" Color="{StaticResource AppAccentColor}" />
+      <SolidColorBrush x:Key="AppAccentBrushLow" Color="{StaticResource AppAccentColor}" Opacity="0.12" />
+
       <!-- ── Value Converters ── -->
       <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
       <conv:NullToBoolConverter x:Key="NullToBoolConverter"/>

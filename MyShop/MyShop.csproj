@@ -21,11 +21,14 @@
       Mvvm;
       SkiaRenderer;
     </UnoFeatures>
+    <!-- Disable RemoteControl (Hot Reload) to silence console errors -->
+    <UnoRemoteControlPort>0</UnoRemoteControlPort>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LiveChartsCore.SkiaSharpView" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
     <PackageReference Include="Npgsql" />
+    <PackageReference Include="QuestPDF" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />
   </ItemGroup>
 </Project>

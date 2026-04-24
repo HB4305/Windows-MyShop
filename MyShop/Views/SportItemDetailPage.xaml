@@ -148,12 +148,12 @@
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimary}"
-                           Visibility="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                           Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <TextBlock Text="Create product"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimary}"
-                           Visibility="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                           Visibility="{Binding IsEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                 <TextBlock Text="Enter details and images, then save to persist."
                            FontSize="13"
                            Foreground="{ThemeResource TextFillColorSecondary}"
@@ -166,12 +166,12 @@
                         VerticalAlignment="Center">
                 <Button Content="Delete"
                         Style="{StaticResource DetailDeleteOutlineButtonStyle}"
-                        Command="{x:Bind ViewModel.DeleteCommand}"
-                        Visibility="{x:Bind ViewModel.IsEditMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        Command="{Binding DeleteCommand}"
+                        Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <Button Content="Discard"
                         Style="{StaticResource DetailOutlineButtonStyle}"
                         Click="OnDiscardClick"/>
-                <Button Command="{x:Bind ViewModel.SaveCommand}"
+                <Button Command="{Binding SaveCommand}"
                         Style="{StaticResource DetailPurplePrimaryButtonStyle}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="8">
@@ -206,15 +206,15 @@
                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                         BorderThickness="1"
                                         CornerRadius="12"
-                                        Visibility="{x:Bind ViewModel.PreviewImageUrl, Mode=OneWay, Converter={StaticResource InverseStringToVisibilityConverter}}">
+                                        Visibility="{Binding PreviewImageUrl, Converter={StaticResource InverseStringToVisibilityConverter}}">
                                     <TextBlock Text="No image"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Foreground="{ThemeResource TextFillColorTertiary}"/>
                                 </Border>
-                                <Image Source="{x:Bind ViewModel.PreviewImageUrl, Mode=OneWay, Converter={StaticResource StringToImageConverter}}"
+                                <Image Source="{Binding PreviewImageUrl, Converter={StaticResource StringToImageConverter}}"
                                        Stretch="UniformToFill"
-                                       Visibility="{x:Bind ViewModel.PreviewImageUrl, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"/>
+                                       Visibility="{Binding PreviewImageUrl, Converter={StaticResource StringToVisibilityConverter}}"/>
                                 <Button HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
                                         Margin="8"
@@ -237,8 +237,8 @@
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="10">
                                     <ListView x:Name="ImageThumbnailsListView"
-                                              ItemsSource="{x:Bind ViewModel.ImageUrls, Mode=TwoWay}"
-                                              SelectedIndex="{x:Bind ViewModel.SelectedImageIndex, Mode=TwoWay}"
+                                              ItemsSource="{Binding ImageUrls, Mode=TwoWay}"
+                                              SelectedIndex="{Binding SelectedImageIndex, Mode=TwoWay}"
                                               SelectionMode="Single"
                                               Padding="0"
                                               Width="Auto"
@@ -294,7 +294,7 @@
                                     <StackPanel Orientation="Vertical"
                                                 Spacing="6"
                                                 VerticalAlignment="Center">
-                                        <Button Command="{x:Bind ViewModel.MoveSelectedImageEarlierCommand}"
+                                        <Button Command="{Binding MoveSelectedImageEarlierCommand}"
                                                 Style="{StaticResource DetailOutlineButtonStyle}"
                                                 MinWidth="44"
                                                 MinHeight="36"
@@ -303,7 +303,7 @@
                                             <FontIcon Glyph="&#xE76B;"
                                                       FontSize="12"/>
                                         </Button>
-                                        <Button Command="{x:Bind ViewModel.MoveSelectedImageLaterCommand}"
+                                        <Button Command="{Binding MoveSelectedImageLaterCommand}"
                                                 Style="{StaticResource DetailOutlineButtonStyle}"
                                                 MinWidth="44"
                                                 MinHeight="36"
@@ -314,7 +314,7 @@
                                         </Button>
                                     </StackPanel>
 
-                                    <Button Command="{x:Bind ViewModel.PickImageCommand}"
+                                    <Button Command="{Binding PickImageCommand}"
                                             Width="72"
                                             Height="72"
                                             Padding="0"
@@ -345,13 +345,13 @@
                         <StackPanel Spacing="12">
                             <StackPanel Orientation="Horizontal"
                                         Spacing="8">
-                                <FontIcon Glyph="&#xE8FF;"
+                                <FontIcon Glyph="&#xEF58;"
                                           Foreground="{StaticResource SportPurpleBrush}"/>
-                                <TextBlock Text="AI content assistant"
+                                <TextBlock Text="AI Content Assistant"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource SportPurpleBrush}"/>
                             </StackPanel>
-                            <TextBlock Text="Product copy and keyword suggestions — UI placeholder only."
+                            <TextBlock Text="Generate professional product descriptions using AI based on your images and specs."
                                        FontSize="12"
                                        Foreground="{ThemeResource TextFillColorSecondary}"
                                        TextWrapping="Wrap"/>
@@ -362,20 +362,26 @@
                                     Foreground="{StaticResource SportPurpleBrush}"
                                     CornerRadius="10"
                                     Padding="12,8"
-                                    IsEnabled="False">
-                                <StackPanel Orientation="Horizontal"
-                                            Spacing="8"
-                                            HorizontalAlignment="Center">
-                                    <FontIcon Glyph="&#xE8FF;"/>
-                                    <TextBlock Text="AI generate description"/>
-                                </StackPanel>
+                                    Command="{Binding AutoFillDetailsCommand}">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="8"
+                                                HorizontalAlignment="Center"
+                                                Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                                        <FontIcon Glyph="&#xEF58;"/>
+                                        <TextBlock Text="AI Auto-fill Details"/>
+                                    </StackPanel>
+                                    <ProgressRing IsActive="True"
+                                                  Width="20"
+                                                  Height="20"
+                                                  Foreground="{StaticResource SportPurpleBrush}"
+                                                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                </Grid>
                             </Button>
-                            <HyperlinkButton Content="OPTIMIZE EXISTING KEYWORDS (SEO)"
-                                             FontSize="11"
-                                             Foreground="{StaticResource SportPurpleBrush}"
-                                             IsEnabled="False"
-                                             HorizontalAlignment="Left"
-                                             Padding="0"/>
+                            <TextBlock Text="Tip: Upload an image first for better results!"
+                                       FontSize="11"
+                                       FontStyle="Italic"
+                                       Foreground="{ThemeResource TextFillColorTertiary}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -389,7 +395,7 @@
                         <StackPanel Spacing="6">
                             <TextBlock Text="PRODUCT NAME"
                                        Style="{StaticResource DetailFieldLabelStyle}"/>
-                            <TextBox Text="{x:Bind ViewModel.Item.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding Item.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      PlaceholderText="e.g. Apex Carbon Pro Tennis Racket"
                                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                      Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -425,7 +431,7 @@
                                                    Foreground="{ThemeResource TextFillColorPrimary}"/>
                                     </Border>
                                     <controls:DecimalTextBox Grid.Column="1"
-                                                             Text="{x:Bind ViewModel.SellingPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Text="{Binding SellingPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              PlaceholderText="0.00"
                                                              BorderThickness="1"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -438,7 +444,7 @@
                                         Spacing="6">
                                 <TextBlock Text="COST PRICE (USD)"
                                            Style="{StaticResource DetailFieldLabelStyle}"/>
-                                <controls:DecimalTextBox Text="{x:Bind ViewModel.CostPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                <controls:DecimalTextBox Text="{Binding CostPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                          PlaceholderText="0.00"
                                                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                          Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -450,8 +456,8 @@
                         <StackPanel Spacing="6">
                             <TextBlock Text="CATEGORY"
                                        Style="{StaticResource DetailFieldLabelStyle}"/>
-                            <ComboBox ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}"
-                                      SelectedItem="{x:Bind ViewModel.SelectedCategory, Mode=TwoWay}"
+                            <ComboBox ItemsSource="{Binding Categories, Mode=OneWay}"
+                                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                                       DisplayMemberPath="Name"
                                       HorizontalAlignment="Stretch"
                                       BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -474,7 +480,7 @@
                                         Style="{StaticResource DetailOutlineButtonStyle}"
                                         Foreground="{StaticResource SportPurpleBrush}"
                                         BorderBrush="{StaticResource SportPurpleLightBrush}"
-                                        Command="{x:Bind ViewModel.AddVariantCommand}"/>
+                                        Command="{Binding AddVariantCommand}"/>
                             </Grid>
                             <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                     BorderThickness="1"
@@ -508,7 +514,7 @@
                                                    Margin="0,0,0,4"/>
                                     </Grid>
 
-                                    <ItemsControl ItemsSource="{x:Bind ViewModel.Variants, Mode=OneWay}">
+                                    <ItemsControl ItemsSource="{Binding Variants, Mode=OneWay}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate x:DataType="models:SportItemVariant">
                                                 <Grid ColumnSpacing="12"
@@ -521,16 +527,16 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <controls:NumericTextBox Grid.Column="0"
-                                                                             Text="{x:Bind SizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                             PlaceholderText="Size"
-                                                                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                                                             Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                                             Foreground="{ThemeResource TextFillColorPrimary}"
-                                                                             BorderThickness="1"
-                                                                             Padding="10,8"/>
+                                                    <TextBox Grid.Column="0"
+                                                             Text="{Binding SizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             PlaceholderText="Size (e.g. 9, XL)"
+                                                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                                             Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                                             Foreground="{ThemeResource TextFillColorPrimary}"
+                                                             BorderThickness="1"
+                                                             Padding="10,8"/>
                                                     <TextBox Grid.Column="1"
-                                                             Text="{x:Bind Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Text="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              PlaceholderText="Color"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -538,7 +544,7 @@
                                                              BorderThickness="1"
                                                              Padding="10,8"/>
                                                     <controls:NumericTextBox Grid.Column="2"
-                                                                             Text="{x:Bind StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                             Text="{Binding StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                              PlaceholderText="Stock"
                                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -546,7 +552,7 @@
                                                                              BorderThickness="1"
                                                                              Padding="10,8"/>
                                                     <TextBox Grid.Column="3"
-                                                             Text="{x:Bind Sku, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Text="{Binding Sku, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              PlaceholderText="SKU"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -556,7 +562,7 @@
                                                     <Button Grid.Column="4"
                                                             Content="Remove"
                                                             Style="{StaticResource DetailDeleteOutlineButtonStyle}"
-                                                            Command="{Binding ElementName=Root, Path=ViewModel.RemoveVariantCommand}"
+                                                            Command="{Binding ElementName=Root, Path=DataContext.RemoveVariantCommand}"
                                                             CommandParameter="{Binding}"
                                                             MinWidth="86"/>
                                                 </Grid>
@@ -570,7 +576,7 @@
                         <StackPanel Spacing="6">
                             <TextBlock Text="LOW STOCK THRESHOLD"
                                        Style="{StaticResource DetailFieldLabelStyle}"/>
-                            <controls:NumericTextBox Text="{x:Bind ViewModel.LowStockThresholdText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            <controls:NumericTextBox Text="{Binding LowStockThresholdText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                      PlaceholderText="0"
                                                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                      Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -579,36 +585,34 @@
                                                      Padding="10,8"/>
                         </StackPanel>
 
-                        <!-- <StackPanel Spacing="10">
-                            <TextBlock Text="PRODUCT DESCRIPTION" Style="{StaticResource DetailFieldLabelStyle}"/>
-                            <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
-                                <StackPanel>
-                                    <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="8,6" Background="{ThemeResource ControlFillColorDefaultBrush}">
-                                        <StackPanel Orientation="Horizontal" Spacing="4">
-                                            <ToggleButton Width="36" Padding="0" IsEnabled="False" ToolTipService.ToolTip="Bold">
-                                                <FontIcon Glyph="&#xE8DD;" FontSize="14"/>
-                                            </ToggleButton>
-                                            <ToggleButton Width="36" Padding="0" IsEnabled="False" ToolTipService.ToolTip="Italic">
-                                                <FontIcon Glyph="&#xE8DB;" FontSize="14"/>
-                                            </ToggleButton>
-                                            <ToggleButton Width="36" Padding="0" IsEnabled="False" ToolTipService.ToolTip="Bulleted list">
-                                                <FontIcon Glyph="&#xE8FD;" FontSize="14"/>
-                                            </ToggleButton>
-                                            <ToggleButton Width="36" Padding="0" IsEnabled="False" ToolTipService.ToolTip="Link">
-                                                <FontIcon Glyph="&#xE71B;" FontSize="14"/>
-                                            </ToggleButton>
-                                        </StackPanel>
-                                    </Border>
-                                    <TextBox Text="{x:Bind ViewModel.ProductDescriptionUi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             AcceptsReturn="True"
-                                             TextWrapping="Wrap"
-                                             MinHeight="120"
-                                             BorderThickness="0"
-                                             Padding="12,10"
-                                             PlaceholderText="Enter description (form-only until a DB column is added)."/>
-                                </StackPanel>
+                        <StackPanel Spacing="10">
+                            <Grid>
+                                <TextBlock Text="PRODUCT DESCRIPTION" Style="{StaticResource DetailFieldLabelStyle}"/>
+                                <Button HorizontalAlignment="Right"
+                                        Command="{Binding GenerateAiDescriptionCommand}"
+                                        Padding="8,4"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        ToolTipService.ToolTip="Regenerate with AI">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <FontIcon Glyph="&#xEF58;" FontSize="14" Foreground="{StaticResource SportPurpleBrush}"/>
+                                        <TextBlock Text="AI Magic" FontSize="11" Foreground="{StaticResource SportPurpleBrush}" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                            <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
+                                    BorderThickness="1" 
+                                    CornerRadius="8"
+                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                                <TextBox Text="{Binding ProductDescriptionUi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         MinHeight="160"
+                                         BorderThickness="0"
+                                         Padding="12,10"
+                                         PlaceholderText="Describe your product or use AI to generate it..."/>
                             </Border>
-                        </StackPanel> -->
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -618,11 +622,11 @@
                     Spacing="8"
                     Margin="0,16,0,0">
             <ProgressBar IsIndeterminate="True"
-                         Visibility="{x:Bind ViewModel.IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-            <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                         Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding ErrorMessage}"
                        Foreground="{StaticResource DangerBrush}"
                        TextWrapping="Wrap"
-                       Visibility="{x:Bind ViewModel.ErrorMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"/>
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
         </StackPanel>
     </Grid>
 </Page>

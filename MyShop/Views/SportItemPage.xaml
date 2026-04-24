@@ -9,6 +9,7 @@
   <Page.Resources>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
     <conv:FirstImageConverter x:Key="FirstImageConverter"/>
     <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
@@ -269,84 +270,93 @@
           </Grid>
         </Border>
 
-        <ListView Grid.Row="1"
-                  ItemsSource="{Binding Items}"
-                  IsItemClickEnabled="True"
-                  ItemClick="OnItemClick"
-                  Padding="0,4,0,8"
-                  SelectionMode="None">
-          <ListView.ItemContainerStyle>
-            <Style TargetType="ListViewItem">
-              <Setter Property="Padding" Value="16,0"/>
-              <Setter Property="MinHeight" Value="64"/>
-              <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-              <Setter Property="Background" Value="Transparent"/>
-            </Style>
-          </ListView.ItemContainerStyle>
-          <ListView.ItemTemplate>
-            <DataTemplate x:DataType="m:SportItemListRow">
-              <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
-                <Grid ColumnSpacing="12">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="200"/>
-                    <ColumnDefinition Width="130"/>
-                    <ColumnDefinition Width="96"/>
-                    <ColumnDefinition Width="168"/>
-                    <ColumnDefinition Width="118"/>
-                    <ColumnDefinition Width="40"/>
-                  </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1">
+          <ListView ItemsSource="{Binding Items}"
+                    IsItemClickEnabled="True"
+                    ItemClick="OnItemClick"
+                    Padding="0,4,0,8"
+                    SelectionMode="None"
+                    Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+            <ListView.ItemContainerStyle>
+              <Style TargetType="ListViewItem">
+                <Setter Property="Padding" Value="16,0"/>
+                <Setter Property="MinHeight" Value="64"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="Background" Value="Transparent"/>
+              </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+              <DataTemplate x:DataType="m:SportItemListRow">
+                <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
+                  <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*" MinWidth="200"/>
+                      <ColumnDefinition Width="130"/>
+                      <ColumnDefinition Width="96"/>
+                      <ColumnDefinition Width="168"/>
+                      <ColumnDefinition Width="118"/>
+                      <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
 
-                  <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-                    <Border Width="44" Height="44" CornerRadius="8" Background="{ThemeResource ControlFillColorSecondaryBrush}">
-                      <Image Source="{x:Bind Item.ImageUrls, Converter={StaticResource FirstImageConverter}}"
-                             Width="44" Height="44" Stretch="UniformToFill"/>
-                    </Border>
-                    <TextBlock Text="{x:Bind Item.Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"
-                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>
-                  </StackPanel>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                      <Border Width="44" Height="44" CornerRadius="8" Background="{ThemeResource ControlFillColorSecondaryBrush}">
+                        <Image Source="{x:Bind Item.ImageUrls, Converter={StaticResource FirstImageConverter}}"
+                               Width="44" Height="44" Stretch="UniformToFill"/>
+                      </Border>
+                      <TextBlock Text="{x:Bind Item.Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"
+                                 VerticalAlignment="Center" TextTrimming="CharacterEllipsis" MaxLines="2"/>
+                    </StackPanel>
 
-                  <TextBlock Grid.Column="1" Text="{x:Bind CategoryName}" VerticalAlignment="Center"
-                             Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Grid.Column="1" Text="{x:Bind CategoryName}" VerticalAlignment="Center"
+                               Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" TextTrimming="CharacterEllipsis"/>
 
-                  <TextBlock Grid.Column="2"
-                             Text="{x:Bind Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}"
-                             VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
+                    <TextBlock Grid.Column="2"
+                               Text="{x:Bind Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}"
+                               VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
 
-                  <StackPanel Grid.Column="3" VerticalAlignment="Center" Spacing="4">
-                    <ProgressBar Minimum="0" Maximum="100"
-                                 Value="{Binding Item, Converter={StaticResource SportItemStockPercentConverter}}"
-                                 Foreground="{Binding Item, Converter={StaticResource SportItemStockBarForegroundConverter}}"
-                                 Background="{ThemeResource ControlFillColorSecondaryBrush}"
-                                 Height="6"/>
-                    <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}">
-                      <Run Text="{x:Bind Item.EffectiveStockQuantity}"/>
-                      <Run Text=" in stock"/>
-                    </TextBlock>
-                  </StackPanel>
+                    <StackPanel Grid.Column="3" VerticalAlignment="Center" Spacing="4">
+                      <ProgressBar Minimum="0" Maximum="100"
+                                   Value="{Binding Item, Converter={StaticResource SportItemStockPercentConverter}}"
+                                   Foreground="{Binding Item, Converter={StaticResource SportItemStockBarForegroundConverter}}"
+                                   Background="{ThemeResource ControlFillColorSecondaryBrush}"
+                                   Height="6"/>
+                      <TextBlock FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}">
+                        <Run Text="{x:Bind Item.EffectiveStockQuantity}"/>
+                        <Run Text=" in stock"/>
+                      </TextBlock>
+                    </StackPanel>
 
-                    <Border Grid.Column="4"
-                          CornerRadius="20"
-                          Padding="10,5"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Center"
-                          Background="{Binding Item, Converter={StaticResource SportItemStatusBadgeBackgroundConverter}}">
-                    <TextBlock FontSize="11" FontWeight="SemiBold"
-                               Foreground="{Binding Item, Converter={StaticResource SportItemStatusBadgeForegroundConverter}}"
-                               Text="{Binding Item, Converter={StaticResource SportItemStatusTextConverter}}"/>
-                  </Border>
-
-                  <FontIcon Grid.Column="5"
-                            Glyph="&#xE10C;"
-                            FontSize="16"
-                            Foreground="{ThemeResource TextFillColorSecondary}"
+                      <Border Grid.Column="4"
+                            CornerRadius="20"
+                            Padding="10,5"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            IsHitTestVisible="False"/>
-                </Grid>
-              </Border>
-            </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>
+                            Background="{Binding Item, Converter={StaticResource SportItemStatusBadgeBackgroundConverter}}">
+                      <TextBlock FontSize="11" FontWeight="SemiBold"
+                                 Foreground="{Binding Item, Converter={StaticResource SportItemStatusBadgeForegroundConverter}}"
+                                 Text="{Binding Item, Converter={StaticResource SportItemStatusTextConverter}}"/>
+                    </Border>
+
+                    <FontIcon Grid.Column="5"
+                              Glyph="&#xE10C;"
+                              FontSize="16"
+                              Foreground="{ThemeResource TextFillColorSecondary}"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              IsHitTestVisible="False"/>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+
+          <!-- Loading overlay -->
+          <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
+                      Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ProgressRing IsActive="True" Width="32" Height="32" Foreground="{StaticResource SportPurpleBrush}"/>
+            <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
+          </StackPanel>
+        </Grid>
 
         <Border Grid.Row="2"
                 Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -355,15 +365,15 @@
                 BorderThickness="0,1,0,0"
                 Padding="16,14">
           <Grid>
-            <TextBlock VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" HorizontalAlignment="Left">
-              <Run Text="Showing "/>
-              <Run Text="{Binding DisplayFrom}"/>
-              <Run Text=" to "/>
-              <Run Text="{Binding DisplayTo}"/>
-              <Run Text=" of "/>
-              <Run Text="{Binding TotalItems}"/>
-              <Run Text=" sports items"/>
-            </TextBlock>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
+              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
+              <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
+              <TextBlock Text="–" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
+              <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
+              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
+              <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
+              <TextBlock Text="sports items" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
+            </StackPanel>
 
             <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
               <Button Style="{StaticResource PagerIconButtonStyle}"

@@ -36,6 +36,8 @@ public class SportItem
     [JsonIgnore]
     public string? PrimaryVariantSku => Variants.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.Sku))?.Sku;
 
+    public string? Description { get; set; }
+
     /// <summary>Convenience for UI; must not be serialized — DB only has <c>image_urls</c>.</summary>
     [JsonIgnore]
     public string? ImageUrl => ImageUrls.FirstOrDefault();
