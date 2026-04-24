@@ -62,6 +62,42 @@ internal sealed class WindowsFilePickerService : IFilePickerService
             return null;
         }
     }
+
+    public async Task<string?> PickOpenFileAsync(string fileTypeLabel, string[] fileExtensions)
+    {
+        return await Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(400);
+
+                var picker = new FileOpenPicker();
+                picker.ViewMode = PickerViewMode.Thumbnail;
+                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                
+                foreach (var ext in fileExtensions)
+                {
+                    picker.FileTypeFilter.Add(ext.StartsWith('.') ? ext : $".{ext}");
+                }
+
+#if WINDOWS && !HAS_UNO
+                if (App.MainWindow != null)
+                {
+                    var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+                    WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+                }
+#endif
+
+                var file = await picker.PickSingleFileAsync();
+                return file?.Path;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"[FilePicker] Open Exception: {ex.Message}");
+                return null;
+            }
+        });
+    }
 }
 
 #endif

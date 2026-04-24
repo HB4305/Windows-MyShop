@@ -28,4 +28,6 @@ internal sealed class DefaultFilePickerService : IFilePickerService
         var path = Path.Combine(docs, defaultFileName);
         return Task.FromResult<string?>(path);
     }
+
+    public Task<string?> PickOpenFileAsync(string fileTypeLabel, string[] fileExtensions) => Task.FromResult<string?>(null);
 }

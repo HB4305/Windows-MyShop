@@ -72,6 +72,28 @@ internal sealed class MacFilePickerService : IFilePickerService
         });
         return tcs;
     }
+
+    public Task<string?> PickOpenFileAsync(string fileTypeLabel, string[] fileExtensions)
+    {
+        return InvokeOnMainThread(() =>
+        {
+            var panel = new NSOpenPanel
+            {
+                CanChooseFiles = true,
+                CanChooseDirectories = false,
+                AllowsMultipleSelection = false,
+                Message = $"Select an image file ({string.Join(", ", fileExtensions)})",
+            };
+
+            var result = panel.RunModal();
+
+            if (result == 1)  // NSModalResponse.OK
+            {
+                return panel.Url?.Path;
+            }
+            return null;
+        });
+    }
 }
 
 #endif
