@@ -42,25 +42,25 @@ public sealed partial class ShellPage : Page
     }
 
     /// <summary>
-    /// Ẩn/hiện menu items dựa trên role của user hiện tại.
-    /// - Owner: thấy tất cả menu
-    /// - Sale: ẩn Reports, Category
+    /// Shows/hides menu items based on the current user's role.
+    /// - Owner: sees all menus
+    /// - Sale: hides Reports, Category
     /// </summary>
     private void ApplyRolePermissions()
     {
         var isOwner = _currentUserService.IsOwner;
 
-        // Ẩn Reports và Category với role sale
+        // Hide Reports and Category for sales roles
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
 
-        // Sale không được phép click vào Reports/Category
+        // Sales are not allowed to access Reports/Category
         NavReports.IsEnabled = isOwner;
         NavCategory.IsEnabled = isOwner;
     }
 
     /// <summary>
-    /// Cập nhật thông tin user trong card (email + role) từ session.
+    /// Updates user information in the card (email + role) from the session.
     /// </summary>
     private void UpdateUserCard()
     {
@@ -175,7 +175,7 @@ public sealed partial class ShellPage : Page
         if (string.IsNullOrWhiteSpace(tag))
             return false;
 
-        // Sale không thể navigate đến trang bị cấm
+        // Sales cannot navigate to forbidden pages
         if (_currentUserService.IsSale &&
             (tag == "Reports" || tag == "Category"))
             return false;

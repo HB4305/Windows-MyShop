@@ -60,7 +60,7 @@
       <Setter Property="MinHeight" Value="40"/>
     </Style>
 
-    <!-- Hai panel Price / Sort: cùng kiểu khung -->
+    <!-- Price / Sort panels: shared frame style -->
     <Style x:Key="FilterPanelCardStyle" TargetType="Border">
       <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
       <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
@@ -168,7 +168,7 @@
                Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
 
 
-    <!-- Price range & Sort: hai box trắng tách riêng -->
+    <!-- Price range & Sort: two separate white boxes -->
     <Grid Grid.Row="3" ColumnSpacing="16" Margin="0,0,0,14">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>

@@ -37,7 +37,7 @@ public sealed partial class OrdersManagementPage : Page
     private void CloseDetail_Click(object sender, RoutedEventArgs e)
         => _vm.CloseDetailPanel();
 
-    // ── Tab clicks ──────────────────────────────────────────────────
+    // -- Tab clicks --------------------------------------------------
     private void TabAll_Click(object sender, RoutedEventArgs e) => SwitchTab("All");
     private void TabPending_Click(object sender, RoutedEventArgs e) => SwitchTab("Pending");
     private void TabProcessing_Click(object sender, RoutedEventArgs e) => SwitchTab("Processing");
@@ -51,7 +51,7 @@ public sealed partial class OrdersManagementPage : Page
         BuildPagination();
     }
 
-    // ── Action buttons ──────────────────────────────────────────────
+    // -- Action buttons ----------------------------------------------
     private void NewSale_Click(object sender, RoutedEventArgs e)
     {
         // TODO: Navigate to New Sale / Create Order page
@@ -99,7 +99,7 @@ public sealed partial class OrdersManagementPage : Page
         _ = _vm.UpdateOrderStatusAsync("Processing");
     }
 
-    // ── Pagination ──────────────────────────────────────────────────
+    // -- Pagination --------------------------------------------------
     private void BuildPagination()
     {
         PaginationPanel.Children.Clear();
@@ -168,7 +168,7 @@ public sealed partial class OrdersManagementPage : Page
             AddPageBtn(1, current == 1);
             if (current > 3) PaginationPanel.Children.Add(new TextBlock
             {
-                Text = "…",
+                Text = "...",
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(4, 0, 4, 0),
                 Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondary"],
@@ -179,7 +179,7 @@ public sealed partial class OrdersManagementPage : Page
 
             if (current < total - 2) PaginationPanel.Children.Add(new TextBlock
             {
-                Text = "…",
+                Text = "...",
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(4, 0, 4, 0),
                 Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondary"],
