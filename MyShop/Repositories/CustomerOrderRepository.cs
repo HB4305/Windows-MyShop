@@ -20,7 +20,7 @@ public class CustomerOrderRepository
           total_amount, notes, COALESCE(seller_id, 0), COALESCE(seller_name, '')";
 
     /// <summary>
-    /// Lấy tất cả đơn hàng (chỉ dùng cho owner).
+    /// Gets all orders (owner only).
     /// </summary>
     public async Task<List<CustomerOrder>> GetAllAsync()
     {
@@ -38,7 +38,7 @@ public class CustomerOrderRepository
     }
 
     /// <summary>
-    /// Lấy đơn hàng của một sale cụ thể (chỉ dùng cho role sale).
+    /// Gets orders for a specific sale (sale role only).
     /// </summary>
     public async Task<List<CustomerOrder>> GetBySellerIdAsync(int sellerId)
     {
@@ -80,7 +80,7 @@ public class CustomerOrderRepository
     // ═══════════════════════════════════════════════════════════════════════
 
     /// <summary>
-    /// Tạo đơn hàng mới. Tự động gán seller_id và seller_name.
+    /// Creates a new order. Automatically assigns seller_id and seller_name.
     /// </summary>
     public async Task<CustomerOrder> CreateAsync(CustomerOrder order, int sellerId, string sellerName)
     {

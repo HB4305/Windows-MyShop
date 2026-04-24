@@ -5,8 +5,8 @@ using Npgsql;
 namespace MyShop.Services;
 
 /// <summary>
-/// Factory tạo NpgsqlConnection từ DatabaseConfig.
-/// Dùng singleton — config chỉ đổi khi user lưu ở ConfigScreen.
+/// Factory for creating NpgsqlConnections from DatabaseConfig.
+/// Uses a singleton pattern - config only changes when the user saves in ConfigScreen.
 /// </summary>
 public class DbConnectionFactory
 {
@@ -19,7 +19,7 @@ public class DbConnectionFactory
     }
 
     /// <summary>
-    /// Lấy connection string hiện tại (cache trong memory).
+    /// Gets the current connection string (cached in memory).
     /// </summary>
     public string GetConnectionString()
     {
@@ -35,7 +35,7 @@ public class DbConnectionFactory
     }
 
     /// <summary>
-    /// Tạo mới một NpgsqlConnection.
+    /// Creates a new NpgsqlConnection.
     /// </summary>
     public NpgsqlConnection CreateConnection()
     {
@@ -44,13 +44,13 @@ public class DbConnectionFactory
     }
 
     /// <summary>
-    /// Tạo mới IDbConnection (interface).
+    /// Creates a new IDbConnection (interface).
     /// </summary>
     public IDbConnection CreateDbConnection()
         => CreateConnection();
 
     /// <summary>
-    /// Test kết nối với config truyền vào — trả về null nếu OK, message lỗi nếu thất bại.
+    /// Tests the connection with the provided config - returns null if OK, error message if failed.
     /// </summary>
     public async Task<string?> TestConnectionAsync(string host, int port, string dbName, string username, string password)
     {
@@ -64,14 +64,14 @@ public class DbConnectionFactory
                 Username = username,
                 Password = password,
                 Timeout = 10,
-                // Tương thích với Supabase Connection Pooler (Supavisor/PgBouncer transaction mode)
+                // Compatibility with Supabase Connection Pooler (Supavisor/PgBouncer transaction mode)
                 MaxAutoPrepare = 0,
                 NoResetOnClose = true,
             };
             await using var conn = new NpgsqlConnection(builder.ToString());
             await conn.OpenAsync();
             await conn.CloseAsync();
-            return null; // thành công
+            return null; // success
         }
         catch (Exception ex)
         {
@@ -80,7 +80,7 @@ public class DbConnectionFactory
     }
 
     /// <summary>
-    /// Gọi sau khi user lưu config mới — clear cache để rebuild.
+    /// Called after the user saves a new config - clears cache to rebuild.
     /// </summary>
     public void InvalidateCache()
     {

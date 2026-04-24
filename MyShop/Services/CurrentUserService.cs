@@ -1,7 +1,7 @@
 namespace MyShop.Services;
 
 /// <summary>
-/// Singleton lưu trữ thông tin user đang đăng nhập trong phiên làm việc.
+/// Singleton storing the currently logged-in user information during the session.
 /// </summary>
 public class CurrentUserService
 {
@@ -9,16 +9,16 @@ public class CurrentUserService
     public string? UserEmail { get; private set; }
     public string? UserRole { get; private set; }
 
-    /// <summary>True nếu đã đăng nhập.</summary>
+    /// <summary>True if logged in.</summary>
     public bool IsLoggedIn => UserId.HasValue;
 
-    /// <summary>True nếu role là "owner".</summary>
+    /// <summary>True if the role is "owner".</summary>
     public bool IsOwner => UserRole == "owner";
 
-    /// <summary>True nếu role là "sale".</summary>
+    /// <summary>True if the role is "sale".</summary>
     public bool IsSale => UserRole == "sale";
 
-    /// <summary>Lưu thông tin user sau khi đăng nhập.</summary>
+    /// <summary>Saves user information after login.</summary>
     public void SetUser(int id, string email, string role)
     {
         UserId = id;
@@ -26,7 +26,7 @@ public class CurrentUserService
         UserRole = role?.ToLowerInvariant();
     }
 
-    /// <summary>Xóa toàn bộ thông tin user khi logout.</summary>
+    /// <summary>Clears all user information on logout.</summary>
     public void Clear()
     {
         UserId = null;

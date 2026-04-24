@@ -1,7 +1,7 @@
 namespace MyShop.Models;
 
 /// <summary>
-/// Một dòng hiển thị trong danh sách sản phẩ — gắn thêm tên danh mục từ bảng categories.
+/// A row displayed in the product list - includes the category name from the categories table.
 /// </summary>
 public sealed class SportItemListRow
 {

@@ -16,13 +16,13 @@ public class CustomerOrderService
     }
 
     /// <summary>
-    /// Lấy tất cả đơn hàng (dùng cho owner).
+    /// Gets all orders (owner only).
     /// </summary>
     public async Task<List<CustomerOrder>> GetAllOrdersAsync()
         => await _orderRepo.GetAllAsync();
 
     /// <summary>
-    /// Lấy đơn hàng của một sale cụ thể (dùng cho role sale).
+    /// Gets orders for a specific sale (sale role only).
     /// </summary>
     public async Task<List<CustomerOrder>> GetOrdersBySellerAsync(int sellerId)
         => await _orderRepo.GetBySellerIdAsync(sellerId);
@@ -34,7 +34,7 @@ public class CustomerOrderService
         => await _detailRepo.GetByOrderIdAsync(orderId);
 
     /// <summary>
-    /// Tạo đơn hàng mới. Tự động gán seller_id và seller_name.
+    /// Creates a new order. Automatically assigns seller_id and seller_name.
     /// </summary>
     public async Task<CustomerOrder> CreateOrderAsync(
         CustomerOrder order,

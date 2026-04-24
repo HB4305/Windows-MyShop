@@ -3,7 +3,7 @@ using Npgsql;
 namespace MyShop.Models;
 
 /// <summary>
-/// 5 trường cấu hình database, dùng chung cho ConfigScreen và MauiProgram.
+/// Five database configuration fields, shared between ConfigScreen and MauiProgram.
 /// </summary>
 public class DatabaseConfig
 {
@@ -25,7 +25,7 @@ public class DatabaseConfig
     }
 
     /// <summary>
-    /// Build Npgsql connection string từ 5 trường.
+    /// Builds Npgsql connection string from the 5 fields.
     /// </summary>
     public string BuildConnectionString()
     {
@@ -37,8 +37,8 @@ public class DatabaseConfig
             Username = Username,
             Password = Password,
             Timeout = 10,
-            // Cần thiết khi dùng Supabase Connection Pooler (Supavisor/PgBouncer transaction mode):
-            // Pooler không hỗ trợ prepared statements nên phải tắt.
+            // Necessary when using Supabase Connection Pooler (Supavisor/PgBouncer transaction mode):
+            // Poolers do not support prepared statements so they must be disabled.
             MaxAutoPrepare = 0,
             NoResetOnClose = true,
         };
@@ -46,7 +46,7 @@ public class DatabaseConfig
     }
 
     /// <summary>
-    /// Kiểm tra tất cả trường đã được điền chưa.
+    /// Checks if all fields have been filled.
     /// </summary>
     public bool IsValid()
         => !string.IsNullOrWhiteSpace(Host)
