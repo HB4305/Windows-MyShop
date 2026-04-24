@@ -154,8 +154,24 @@
       </StackPanel>
 
       <!-- ═══════════════════════════ CATEGORY LIST CARD ═══════════════════════════ -->
-      <Border Style="{StaticResource CardBorder}">
-        <StackPanel>
+      <Border Style="{StaticResource CardBorder}" Padding="0">
+        <Grid>
+          <!-- Loading overlay -->
+          <Border Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}"
+                  CornerRadius="12"
+                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Canvas.ZIndex="10">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+              <ProgressBar IsIndeterminate="True" Width="120" Foreground="{StaticResource PurpleBrush}"/>
+              <TextBlock Text="Loading categories..."
+                         FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}"
+                         HorizontalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+
+          <StackPanel Padding="20">
           <!-- Card Header -->
           <Grid Margin="0,0,0,16">
             <Grid.ColumnDefinitions>
@@ -330,7 +346,8 @@
                        HorizontalAlignment="Center"/>
           </StackPanel>
         </StackPanel>
-      </Border>
+      </Grid>
+    </Border>
     </StackPanel>
   </ScrollViewer>
 </Page>
