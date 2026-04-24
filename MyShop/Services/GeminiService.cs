@@ -89,13 +89,13 @@ FIELDS TO FILL:
 - name: (Professional product name)
 - price: (Suggested retail price in USD, number only)
 - cost_price: (Suggested cost price, usually 60-70% of price)
-- category: (MUST be exactly one from the AVAILABLE CATEGORIES list above)
+- category: (MUST be exactly one from the AVAILABLE CATEGORIES list above. If unsure, pick the most relevant one)
 - low_stock_threshold: (Suggested alert level, e.g., 5 or 10)
 - color: (Main color)
 - description: (Engaging 2-3 sentence sales copy)
-- suggested_variants: (List of 3 size/color objects, e.g., [{{""size"": ""8"", ""color"": ""White"", ""sku"": ""AF1-WHT-8""}}])
+- suggested_variants: (List of 3 size/color objects, e.g., [{{""size"": ""8"", ""color"": ""White"", ""sku"": ""AF1-WHT-8""}}, {{""size"": ""9"", ""color"": ""White"", ""sku"": ""AF1-WHT-9""}}, {{""size"": ""10"", ""color"": ""White"", ""sku"": ""AF1-WHT-10""}}])
 
-Return ONLY valid JSON.";
+IMPORTANT: Return ONLY a raw JSON object. Do NOT include markdown code blocks (```json), conversational text, or any other formatting. Ensure all numbers are valid JSON numbers.";
 
         return await GenerateDescriptionAsync(prompt, imageBytes, mimeType);
     }
