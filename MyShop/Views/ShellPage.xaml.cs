@@ -157,6 +157,12 @@ public sealed partial class ShellPage : Page
         MaintainSidebarAfterNavigation();
     }
 
+    private void NavCustomers_Click(object sender, RoutedEventArgs e)
+    {
+        _frame.Navigate(typeof(CustomerPage));
+        UpdateActiveNav("Customers");
+    }
+
     private void NavCategory_Click(object sender, RoutedEventArgs e)
     {
         if (!_currentUserService.IsOwner) return;
@@ -191,6 +197,7 @@ public sealed partial class ShellPage : Page
             nameof(ProductCatalogPage) => "ProductCatalog",
             nameof(CustomerOrderPage) => "OrdersManagement",
             nameof(OrdersManagementPage) => "OrdersManagement",
+            nameof(CustomerPage) => "Customers",
             nameof(CategoryPage) => "Category",
             nameof(SettingsPage) => "Settings",
             _ => null
@@ -210,6 +217,7 @@ public sealed partial class ShellPage : Page
         ResetNavStyle(NavReports);
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
+        ResetNavStyle(NavCustomers);
         ResetNavStyle(NavCategory);
         ResetNavStyle(NavSettings);
 
@@ -219,6 +227,7 @@ public sealed partial class ShellPage : Page
             "Reports" => NavReports,
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
+            "Customers" => NavCustomers,
             "Category" => NavCategory,
             "Settings" => NavSettings,
             _ => null
@@ -242,6 +251,7 @@ public sealed partial class ShellPage : Page
             "Reports" => typeof(ReportPage),
             "ProductCatalog" => typeof(SportItemPage),
             "OrdersManagement" => typeof(CustomerOrderPage),
+            "Customers" => typeof(CustomerPage),
             "Category" => typeof(CategoryPage),
             "Settings" => typeof(SettingsPage),
             _ => null
