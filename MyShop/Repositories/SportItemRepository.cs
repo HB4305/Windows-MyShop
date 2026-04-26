@@ -198,6 +198,36 @@ public class SportItemRepository
         await ReplaceVariantsAsync(conn, item.Id, item.Variants);
     }
 
+    public async Task DeductVariantStockAsync(long variantId, int quantity)
+    {
+        const string sql = @"
+            UPDATE sportitem_variants 
+            SET stock_quantity = stock_quantity - @quantity 
+            WHERE id = @variantId";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("quantity", quantity);
+        cmd.Parameters.AddWithValue("variantId", variantId);
+        await cmd.ExecuteNonQueryAsync();
+    }
+
+    public async Task DeductStockAsync(int itemId, int quantity)
+    {
+        const string sql = @"
+            UPDATE sportitems 
+            SET stock_quantity = stock_quantity - @quantity 
+            WHERE id = @itemId";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("quantity", quantity);
+        cmd.Parameters.AddWithValue("itemId", itemId);
+        await cmd.ExecuteNonQueryAsync();
+    }
+
     public async Task DeleteAsync(int id)
     {
         const string sql = "DELETE FROM sportitems WHERE id = @id";

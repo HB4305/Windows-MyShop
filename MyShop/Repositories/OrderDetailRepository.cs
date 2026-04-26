@@ -8,12 +8,35 @@ public class OrderDetailRepository
 {
     private readonly DbConnectionFactory _connFactory;
 
-    public OrderDetailRepository(DbConnectionFactory connFactory) => _connFactory = connFactory;
+    public OrderDetailRepository(DbConnectionFactory connFactory)
+    {
+        _connFactory = connFactory;
+        EnsureDatabaseSchema();
+    }
+
+    private void EnsureDatabaseSchema()
+    {
+        try
+        {
+            using var conn = _connFactory.CreateConnection();
+            conn.Open();
+            using var cmd = new NpgsqlCommand(@"
+                ALTER TABLE public.orderdetails ADD COLUMN IF NOT EXISTS variant_id bigint;
+                ALTER TABLE public.orderdetails ADD COLUMN IF NOT EXISTS size text;
+                ALTER TABLE public.orderdetails ADD COLUMN IF NOT EXISTS color text;
+            ", conn);
+            cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[OrderDetailRepository] Failed to ensure schema: {ex.Message}");
+        }
+    }
 
     public async Task<List<OrderDetail>> GetAllAsync()
     {
         const string sql = @"
-            SELECT id, order_id, item_id, item_name, quantity, unit_price
+            SELECT id, order_id, item_id, item_name, quantity, unit_price, variant_id, size, color
             FROM orderdetails";
 
         await using var conn = _connFactory.CreateConnection();
@@ -30,7 +53,7 @@ public class OrderDetailRepository
     public async Task<List<OrderDetail>> GetByOrderIdAsync(int orderId)
     {
         const string sql = @"
-            SELECT id, order_id, item_id, item_name, quantity, unit_price
+            SELECT id, order_id, item_id, item_name, quantity, unit_price, variant_id, size, color
             FROM orderdetails
             WHERE order_id = @orderId";
 
@@ -49,8 +72,8 @@ public class OrderDetailRepository
     public async Task<OrderDetail> CreateAsync(OrderDetail detail)
     {
         const string sql = @"
-            INSERT INTO orderdetails (order_id, item_id, item_name, quantity, unit_price)
-            VALUES (@orderId, @itemId, @itemName, @quantity, @unitPrice)
+            INSERT INTO orderdetails (order_id, item_id, item_name, quantity, unit_price, variant_id, size, color)
+            VALUES (@orderId, @itemId, @itemName, @quantity, @unitPrice, @variantId, @size, @color)
             RETURNING id";
 
         await using var conn = _connFactory.CreateConnection();
@@ -70,7 +93,7 @@ public class OrderDetailRepository
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
         await using var writer = await conn.BeginBinaryImportAsync(
-            "COPY orderdetails (order_id, item_id, item_name, quantity, unit_price) FROM STDIN (FORMAT BINARY)");
+            "COPY orderdetails (order_id, item_id, item_name, quantity, unit_price, variant_id, size, color) FROM STDIN (FORMAT BINARY)");
 
         foreach (var detail in details)
         {
@@ -80,6 +103,9 @@ public class OrderDetailRepository
             await writer.WriteAsync((object?)detail.ItemName ?? DBNull.Value, NpgsqlTypes.NpgsqlDbType.Varchar);
             await writer.WriteAsync(detail.Quantity, NpgsqlTypes.NpgsqlDbType.Integer);
             await writer.WriteAsync(detail.UnitPrice, NpgsqlTypes.NpgsqlDbType.Numeric);
+            await writer.WriteAsync((object?)detail.VariantId ?? DBNull.Value, NpgsqlTypes.NpgsqlDbType.Bigint);
+            await writer.WriteAsync((object?)detail.Size ?? DBNull.Value, NpgsqlTypes.NpgsqlDbType.Varchar);
+            await writer.WriteAsync((object?)detail.Color ?? DBNull.Value, NpgsqlTypes.NpgsqlDbType.Varchar);
         }
 
         await writer.CompleteAsync();
@@ -90,7 +116,8 @@ public class OrderDetailRepository
         const string sql = @"
             UPDATE orderdetails SET
                 order_id = @orderId, item_id = @itemId,
-                item_name = @itemName, quantity = @quantity, unit_price = @unitPrice
+                item_name = @itemName, quantity = @quantity, unit_price = @unitPrice,
+                variant_id = @variantId, size = @size, color = @color
             WHERE id = @id";
 
         await using var conn = _connFactory.CreateConnection();
@@ -129,6 +156,9 @@ public class OrderDetailRepository
         cmd.Parameters.AddWithValue("itemName", (object?)d.ItemName ?? DBNull.Value);
         cmd.Parameters.AddWithValue("quantity", d.Quantity);
         cmd.Parameters.AddWithValue("unitPrice", d.UnitPrice);
+        cmd.Parameters.AddWithValue("variantId", (object?)d.VariantId ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("size", (object?)d.Size ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("color", (object?)d.Color ?? DBNull.Value);
     }
 
     private static OrderDetail ReadOrderDetail(NpgsqlDataReader r)
@@ -140,7 +170,10 @@ public class OrderDetailRepository
             ItemId = r.IsDBNull(2) ? null : r.GetInt32(2),
             ItemName = r.IsDBNull(3) ? null : r.GetString(3),
             Quantity = r.IsDBNull(4) ? 0 : r.GetInt32(4),
-            UnitPrice = r.IsDBNull(5) ? 0m : r.GetDecimal(5)
+            UnitPrice = r.IsDBNull(5) ? 0m : r.GetDecimal(5),
+            VariantId = r.IsDBNull(6) ? null : r.GetInt64(6),
+            Size = r.IsDBNull(7) ? null : r.GetString(7),
+            Color = r.IsDBNull(8) ? null : r.GetString(8)
         };
     }
 }
