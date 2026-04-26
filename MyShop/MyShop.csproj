@@ -27,6 +27,7 @@
   <ItemGroup>
     <PackageReference Include="LiveChartsCore.SkiaSharpView" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Uno.WinUI" />
+    <PackageReference Include="ClosedXML" />
     <PackageReference Include="Npgsql" />
     <PackageReference Include="QuestPDF" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />

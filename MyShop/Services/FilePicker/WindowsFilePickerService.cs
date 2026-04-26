@@ -16,7 +16,26 @@ internal sealed class WindowsFilePickerService : IFilePickerService
 {
     public async Task<string?> PickSavePathAsync(string defaultFileName, string fileTypeLabel, string fileExtension)
     {
-        System.Console.WriteLine($"[FilePicker] Invoking picker in background for: {defaultFileName}");
+        System.Console.WriteLine($"[FilePicker] Invoking picker for: {defaultFileName}");
+
+        if (System.OperatingSystem.IsMacOS())
+        {
+            try
+            {
+                var picker = new FileSavePicker();
+                var ext = fileExtension.StartsWith('.') ? fileExtension : $".{fileExtension}";
+                picker.FileTypeChoices.Add(fileTypeLabel, new List<string> { ext });
+                picker.SuggestedFileName = Path.GetFileNameWithoutExtension(defaultFileName);
+
+                var file = await picker.PickSaveFileAsync();
+                return file?.Path;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"[FilePicker] Mac Save Exception: {ex.Message}");
+                return null;
+            }
+        }
 
         try
         {
@@ -65,6 +84,29 @@ internal sealed class WindowsFilePickerService : IFilePickerService
 
     public async Task<string?> PickOpenFileAsync(string fileTypeLabel, string[] fileExtensions)
     {
+        if (System.OperatingSystem.IsMacOS())
+        {
+            try
+            {
+                var picker = new FileOpenPicker();
+                picker.ViewMode = PickerViewMode.Thumbnail;
+                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                
+                foreach (var ext in fileExtensions)
+                {
+                    picker.FileTypeFilter.Add(ext.StartsWith('.') ? ext : $".{ext}");
+                }
+
+                var file = await picker.PickSingleFileAsync();
+                return file?.Path;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"[FilePicker] Mac Open Exception: {ex.Message}");
+                return null;
+            }
+        }
+
         return await Task.Run(async () =>
         {
             try
