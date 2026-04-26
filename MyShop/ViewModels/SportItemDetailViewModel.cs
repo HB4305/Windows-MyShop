@@ -593,7 +593,7 @@ public partial class SportItemDetailViewModel : ObservableObject
                     if (vElement.TryGetProperty("size", out var s)) variant.Size = s.GetString();
                     if (vElement.TryGetProperty("color", out var c)) variant.Color = c.GetString();
                     if (vElement.TryGetProperty("sku", out var sk)) variant.Sku = sk.GetString();
-                    variant.StockQuantity = 10; // Default initial stock
+                    variant.StockQuantity = 0; // Enforce 0 initial stock
                     Variants.Add(variant);
                 }
             }

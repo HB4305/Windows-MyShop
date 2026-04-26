@@ -179,6 +179,30 @@
 
 
 
+          <!-- Suppliers -->
+          <Button x:Name="NavSuppliers"
+                  Click="NavSuppliers_Click"
+                  Tag="Suppliers"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Padding="10,8"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Left">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE8B8;"
+                         FontSize="14"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="Suppliers"
+                         FontSize="13"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+
           <!-- Category -->
           <Button x:Name="NavCategory"
                   Click="NavCategory_Click"

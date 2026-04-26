@@ -100,13 +100,15 @@ public sealed partial class ShellPage : Page
     {
         var isOwner = _currentUserService.IsOwner;
 
-        // Hide Reports and Category for sales roles
+        // Hide Reports, Category and Suppliers for sales roles
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavSuppliers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
 
-        // Sales are not allowed to access Reports/Category
+        // Sales are not allowed to access Reports/Category/Suppliers
         NavReports.IsEnabled = isOwner;
         NavCategory.IsEnabled = isOwner;
+        NavSuppliers.IsEnabled = isOwner;
     }
 
     /// <summary>
@@ -161,6 +163,15 @@ public sealed partial class ShellPage : Page
     {
         _frame.Navigate(typeof(CustomerPage));
         UpdateActiveNav("Customers");
+        MaintainSidebarAfterNavigation();
+    }
+
+    private void NavSuppliers_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_currentUserService.IsOwner) return;
+        _frame.Navigate(typeof(SuppliersPage));
+        UpdateActiveNav("Suppliers");
+        MaintainSidebarAfterNavigation();
     }
 
     private void NavCategory_Click(object sender, RoutedEventArgs e)
@@ -198,6 +209,7 @@ public sealed partial class ShellPage : Page
             nameof(CustomerOrderPage) => "OrdersManagement",
             nameof(OrdersManagementPage) => "OrdersManagement",
             nameof(CustomerPage) => "Customers",
+            nameof(SuppliersPage) => "Suppliers",
             nameof(CategoryPage) => "Category",
             nameof(SettingsPage) => "Settings",
             _ => null
@@ -218,6 +230,7 @@ public sealed partial class ShellPage : Page
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
         ResetNavStyle(NavCustomers);
+        ResetNavStyle(NavSuppliers);
         ResetNavStyle(NavCategory);
         ResetNavStyle(NavSettings);
 
@@ -228,6 +241,7 @@ public sealed partial class ShellPage : Page
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
             "Customers" => NavCustomers,
+            "Suppliers" => NavSuppliers,
             "Category" => NavCategory,
             "Settings" => NavSettings,
             _ => null
@@ -252,6 +266,7 @@ public sealed partial class ShellPage : Page
             "ProductCatalog" => typeof(SportItemPage),
             "OrdersManagement" => typeof(CustomerOrderPage),
             "Customers" => typeof(CustomerPage),
+            "Suppliers" => typeof(SuppliersPage),
             "Category" => typeof(CategoryPage),
             "Settings" => typeof(SettingsPage),
             _ => null

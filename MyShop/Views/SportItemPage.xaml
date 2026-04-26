@@ -147,7 +147,8 @@
 
       <Button Grid.Column="1"
               Style="{StaticResource BulkImportButtonStyle}"
-              ToolTipService.ToolTip="Coming soon">
+              Click="OnBulkImportClick"
+              ToolTipService.ToolTip="Import products from Excel file">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <FontIcon Glyph="&#xE898;" FontSize="15"/>
           <TextBlock Text="Bulk Import" VerticalAlignment="Center"/>
