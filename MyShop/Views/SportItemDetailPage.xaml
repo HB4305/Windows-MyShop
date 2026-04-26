@@ -445,6 +445,7 @@
                                 <TextBlock Text="COST PRICE (USD)"
                                            Style="{StaticResource DetailFieldLabelStyle}"/>
                                 <controls:DecimalTextBox Text="{Binding CostPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         IsEnabled="{Binding IsEditMode}"
                                                          PlaceholderText="0.00"
                                                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                          Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -544,6 +545,7 @@
                                                              BorderThickness="1"
                                                              Padding="10,8"/>
                                                     <controls:NumericTextBox Grid.Column="2"
+                                                                             IsEnabled="{Binding DataContext.IsEditMode, ElementName=Root}"
                                                                              Text="{Binding StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                              PlaceholderText="Stock"
                                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"

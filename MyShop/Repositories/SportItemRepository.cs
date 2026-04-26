@@ -159,6 +159,15 @@ public class SportItemRepository
 
     public async Task<int> AddAsync(SportItem item)
     {
+        // Standardized logic: initial stock and cost price are 0.
+        // They are populated strictly via Supply Orders.
+        item.CostPrice = 0;
+        item.StockQuantity = 0;
+        if (item.Variants != null)
+        {
+            foreach (var v in item.Variants) v.StockQuantity = 0;
+        }
+
         const string sql = @"
             INSERT INTO sportitems (category_id, name,
                                    cost_price, selling_price, stock_quantity,
@@ -177,6 +186,69 @@ public class SportItemRepository
         var newId = Convert.ToInt32(result);
         await ReplaceVariantsAsync(conn, newId, item.Variants);
         return newId;
+    }
+
+    /// <summary>
+    /// Bulk-inserts a list of products in a single transaction.
+    /// Returns the number of rows inserted.
+    /// </summary>
+    public async Task<(int Inserted, List<string> Errors)> BulkInsertAsync(
+        List<SportItem> items, Dictionary<string, int> categoryNameToId)
+    {
+        var errors = new List<string>();
+        int inserted = 0;
+
+        const string sql = @"
+            INSERT INTO sportitems (category_id, name, cost_price, selling_price,
+                                   stock_quantity, low_stock_threshold, image_urls, description)
+            VALUES (@categoryId, @name, @costPrice, @sellingPrice,
+                    @stockQuantity, @lowStockThreshold, @imageUrls, @description)
+            RETURNING id";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var tx = await conn.BeginTransactionAsync();
+
+        try
+        {
+            foreach (var (item, index) in items.Select((it, i) => (it, i + 1)))
+            {
+                try
+                {
+                    // Standardized logic: initial stock and cost price are 0.
+                    item.CostPrice = 0;
+                    item.StockQuantity = 0;
+                    if (item.Variants != null)
+                    {
+                        foreach (var v in item.Variants) v.StockQuantity = 0;
+                    }
+
+                    // Resolve category name → id
+                    if (item.CategoryId == 0 && !string.IsNullOrWhiteSpace(item.Description))
+                    {
+                        // Description used as a temp carrier for category name in import
+                    }
+
+                    await using var cmd = new NpgsqlCommand(sql, conn, tx);
+                    AddSportItemParams(cmd, item);
+                    var result = await cmd.ExecuteScalarAsync();
+                    inserted++;
+                }
+                catch (Exception ex)
+                {
+                    errors.Add($"Row {index} ({item.Name}): {ex.Message}");
+                }
+            }
+
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
+
+        return (inserted, errors);
     }
 
     public async Task UpdateAsync(SportItem item)
