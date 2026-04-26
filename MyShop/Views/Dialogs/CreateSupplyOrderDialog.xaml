@@ -1,0 +1,154 @@
+<ContentDialog
+    x:Class="MyShop.Views.Dialogs.CreateSupplyOrderDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="using:MyShop.Converters"
+    Title="Create Supply Order"
+    PrimaryButtonText="Create"
+    CloseButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    Style="{StaticResource DefaultContentDialogStyle}"
+    MinWidth="900" MaxWidth="1200">
+
+    <ContentDialog.Resources>
+        <x:Double x:Key="ContentDialogMaxWidth">1200</x:Double>
+        <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
+    </ContentDialog.Resources>
+
+    <Grid RowSpacing="16" Margin="0,12,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Spacing="16">
+            <Grid Width="950" Height="1"/> <!-- Spacer to force dialog width -->
+            <TextBlock x:Name="ErrorText" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed"/>
+            
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Supplier Selection -->
+                <ComboBox x:Name="SupplierComboBox" 
+                          Header="Supplier *"
+                          PlaceholderText="Select supplier"
+                          DisplayMemberPath="Name"
+                          HorizontalAlignment="Stretch"/>
+
+                <!-- Product Search -->
+                <AutoSuggestBox x:Name="ProductSearchBox"
+                                Grid.Column="1"
+                                Header="Add Product"
+                                PlaceholderText="Search by name..."
+                                TextChanged="ProductSearchBox_TextChanged"
+                                SuggestionChosen="ProductSearchBox_SuggestionChosen"
+                                DisplayMemberPath="Name"
+                                TextMemberPath="Name"
+                                VerticalAlignment="Bottom"/>
+            </Grid>
+        </StackPanel>
+
+        <!-- Selected Products List -->
+        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" MinHeight="200">
+            <ListView x:Name="ItemsListView" SelectionMode="None">
+                <ListView.Header>
+                    <Grid Padding="16,12" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="40"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Product" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Column="1" Text="Size" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Column="2" Text="Color" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Column="3" Text="Quantity" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="4" Text="Import Price" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Column="5" Text="Total" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="16,8" ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1.2*"/>
+                                <ColumnDefinition Width="1.2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="Auto" MinWidth="40"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <StackPanel>
+                                <TextBlock Text="{Binding ItemName}" FontWeight="SemiBold" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+
+                            <ComboBox Grid.Column="1" 
+                                      ItemsSource="{Binding AvailableSizes, Mode=OneWay}" 
+                                      SelectedItem="{Binding SelectedSize, Mode=TwoWay}" 
+                                      PlaceholderText="Size"
+                                      HorizontalAlignment="Stretch" 
+                                      Margin="0,0,8,0"
+                                      VerticalAlignment="Center"/>
+
+                            <ComboBox Grid.Column="2" 
+                                      ItemsSource="{Binding AvailableColors, Mode=OneWay}" 
+                                      SelectedItem="{Binding SelectedColor, Mode=TwoWay}" 
+                                      PlaceholderText="Color"
+                                      HorizontalAlignment="Stretch" 
+                                      Margin="0,0,8,0"
+                                      VerticalAlignment="Center"/>
+                            
+                            <NumberBox Grid.Column="3" 
+                                       Value="{Binding Quantity, Mode=TwoWay}" 
+                                       Minimum="1" 
+                                       SpinButtonPlacementMode="Compact"
+                                       HorizontalAlignment="Stretch"
+                                       ValueChanged="NumberBox_ValueChanged"
+                                       Margin="0,0,8,0"
+                                       VerticalAlignment="Center"/>
+                            
+                            <NumberBox Grid.Column="4" 
+                                       Value="{Binding ImportPrice, Mode=TwoWay}" 
+                                       Minimum="0" 
+                                       HorizontalAlignment="Stretch"
+                                       ValueChanged="NumberBox_ValueChanged"
+                                       Margin="0,0,8,0"
+                                       VerticalAlignment="Center"/>
+                                       
+                            <TextBlock Grid.Column="5" 
+                                       Text="{Binding TotalPriceDisplay}" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Right" 
+                                       FontWeight="SemiBold"/>
+
+                            <Button Grid.Column="6" 
+                                    Click="RemoveItem_Click" 
+                                    Background="Transparent" 
+                                    Foreground="Red" 
+                                    ToolTipService.ToolTip="Remove">
+                                <FontIcon Glyph="&#xE74D;" FontSize="14"/>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
+
+        <!-- Summary -->
+        <Border Grid.Row="2" Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16" CornerRadius="8">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="16">
+                <TextBlock Text="Total Cost:" VerticalAlignment="Center" FontSize="16"/>
+                <TextBlock x:Name="TotalCostText" Text="0" FontWeight="Bold" FontSize="20" Foreground="{ThemeResource TextFillColorPrimary}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</ContentDialog>
