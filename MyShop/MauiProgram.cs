@@ -43,6 +43,7 @@ public static class MauiProgram
         Services.AddScoped<SportItemRepository>();
         Services.AddScoped<OrderRepository>();
         Services.AddScoped<SupplyRepository>();
+        Services.AddScoped<SupplierRepository>();
         Services.AddScoped<ReportRepository>();
         Services.AddScoped<CustomerOrderRepository>();
         Services.AddScoped<OrderDetailRepository>();
@@ -74,6 +75,7 @@ public static class MauiProgram
         Services.AddTransient<CustomerOrderViewModel>();
         Services.AddTransient<OrderDetailViewModel>();
         Services.AddTransient<CustomerViewModel>();
+        Services.AddTransient<SuppliersViewModel>();
         Services.AddTransient<SettingsViewModel>();
 
         // ── 6. Build ───────────────────────────────────────────────
