@@ -36,4 +36,6 @@ public class SportItemVariant
     }
 
     public string? Sku { get; set; }
+
+    public string DisplayText => $"Size: {Size ?? "N/A"}, Color: {Color ?? "N/A"} (Stock: {StockQuantity})";
 }

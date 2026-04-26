@@ -50,24 +50,17 @@ public class CreateOrderDialogViewModel : INotifyPropertyChanged
 
     public void AddProduct(SportItem item)
     {
-        var existing = OrderDetails.FirstOrDefault(d => d.ItemId == item.Id);
-        if (existing != null)
+        var firstVariant = item.Variants.FirstOrDefault();
+        var detail = new OrderDetail
         {
-            existing.Quantity++;
-            RecalculateTotal();
-            // Force re-render of item by replacing if needed or rely on property change if implemented
-        }
-        else
-        {
-            var detail = new OrderDetail
-            {
-                ItemId = item.Id,
-                ItemName = item.Name,
-                UnitPrice = item.SellingPrice ?? 0m,
-                Quantity = 1
-            };
-            OrderDetails.Add(detail);
-        }
+            ItemId = item.Id,
+            ItemName = item.Name,
+            UnitPrice = item.SellingPrice ?? 0m,
+            Quantity = 1,
+            AvailableVariants = item.Variants,
+            LowStockThreshold = item.LowStockThreshold ?? 5
+        };
+        OrderDetails.Add(detail);
         RecalculateTotal();
     }
 
@@ -86,14 +79,36 @@ public class CreateOrderDialogViewModel : INotifyPropertyChanged
         TotalAmount = OrderDetails.Sum(d => d.Quantity * d.UnitPrice);
     }
 
-    public bool Validate()
+    public (bool IsValid, string ErrorMessage) Validate()
     {
-        bool basicValid = !string.IsNullOrWhiteSpace(Order.CustomerName) && OrderDetails.Count > 0;
-        if (Order.OrderType == "Delivery")
+        if (string.IsNullOrWhiteSpace(Order.CustomerName))
+            return (false, "Please enter Customer Name.");
+            
+        if (OrderDetails.Count == 0)
+            return (false, "Please add at least one item.");
+            
+        if (Order.OrderType == "Delivery" && string.IsNullOrWhiteSpace(Order.ShippingAddress))
+            return (false, "Shipping Address is required for Delivery orders.");
+
+        foreach (var detail in OrderDetails)
         {
-            return basicValid && !string.IsNullOrWhiteSpace(Order.ShippingAddress);
+            if (detail.SelectedVariant == null)
+            {
+                if (!string.IsNullOrEmpty(detail.SelectedSize) && !string.IsNullOrEmpty(detail.SelectedColor))
+                {
+                    return (false, $"The variant for {detail.ItemName} does not exist.");
+                }
+                return (false, $"Please select a valid variant for {detail.ItemName}.");
+            }
+
+            if (detail.SelectedVariant.StockQuantity <= 0)
+                return (false, $"{detail.ItemName} is out of stock.");
+
+            if (detail.Quantity > detail.SelectedVariant.StockQuantity)
+                return (false, $"Not enough stock for {detail.ItemName}. Max available: {detail.SelectedVariant.StockQuantity}.");
         }
-        return basicValid;
+
+        return (true, string.Empty);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -137,30 +152,30 @@ public sealed partial class CreateOrderDialog : ContentDialog
     {
         if (sender.DataContext is OrderDetail detail)
         {
-            // detail.Quantity is bound Mode=TwoWay, so it's already updated.
+            if (!double.IsNaN(args.NewValue))
+            {
+                detail.Quantity = (int)args.NewValue;
+            }
             ViewModel.RecalculateTotal();
         }
     }
 
     private void RemoveItem_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.Tag is int itemId)
+        if (sender is Button btn && btn.Tag is OrderDetail detail)
         {
-            ViewModel.RemoveProduct(itemId);
+            ViewModel.OrderDetails.Remove(detail);
+            ViewModel.RecalculateTotal();
         }
     }
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        if (!ViewModel.Validate())
+        var validation = ViewModel.Validate();
+        if (!validation.IsValid)
         {
             args.Cancel = true;
-            string msg = "Please enter Customer Name and add at least one item.";
-            if (ViewModel.Order.OrderType == "Delivery" && string.IsNullOrWhiteSpace(ViewModel.Order.ShippingAddress))
-            {
-                msg = "Shipping Address is required for Delivery orders.";
-            }
-            ErrorTextBlock.Text = msg;
+            ErrorTextBlock.Text = validation.ErrorMessage;
             ErrorTextBlock.Visibility = Visibility.Visible;
             return;
         }

@@ -8,11 +8,13 @@ public class CustomerOrderService
 {
     private readonly CustomerOrderRepository _orderRepo;
     private readonly OrderDetailRepository _detailRepo;
+    private readonly SportItemRepository _itemRepo;
 
-    public CustomerOrderService(CustomerOrderRepository orderRepo, OrderDetailRepository detailRepo)
+    public CustomerOrderService(CustomerOrderRepository orderRepo, OrderDetailRepository detailRepo, SportItemRepository itemRepo)
     {
         _orderRepo = orderRepo;
         _detailRepo = detailRepo;
+        _itemRepo = itemRepo;
     }
 
     /// <summary>
@@ -52,7 +54,17 @@ public class CustomerOrderService
         var createdOrder = await _orderRepo.CreateAsync(order, sellerId, sellerName);
 
         foreach (var detail in details)
+        {
             detail.OrderId = createdOrder.Id;
+            if (detail.VariantId.HasValue)
+            {
+                await _itemRepo.DeductVariantStockAsync(detail.VariantId.Value, detail.Quantity);
+            }
+            if (detail.ItemId.HasValue)
+            {
+                await _itemRepo.DeductStockAsync(detail.ItemId.Value, detail.Quantity);
+            }
+        }
 
         await _detailRepo.CreateBulkAsync(details);
 
