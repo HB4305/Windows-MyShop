@@ -1,10 +1,14 @@
+using System.IO;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using MyShop.Models;
 using MyShop.Services;
+using MyShop.Repositories;
 using MyShop.ViewModels;
+using MyShop.Views.Dialogs;
 using Windows.System;
 
 namespace MyShop.Views;
@@ -98,6 +102,89 @@ public sealed partial class SportItemPage : Page
     private void OnAddItemClick(object sender, RoutedEventArgs e)
     {
         Frame.Navigate(typeof(SportItemDetailPage), null);
+    }
+
+    private async void OnBulkImportClick(object sender, RoutedEventArgs e)
+    {
+        var filePicker = App.Services.GetRequiredService<IFilePickerService>();
+        var path = await filePicker.PickOpenFileAsync("Excel Files", new[] { ".xlsx" });
+        
+        if (string.IsNullOrEmpty(path)) return;
+
+        try
+        {
+            var excelService = new ExcelImportService();
+            await using var stream = File.OpenRead(path);
+            var parsedRows = excelService.ParseExcel(stream);
+
+            var validRows = parsedRows.Where(r => r.IsValid).ToList();
+            if (validRows.Count == 0)
+            {
+                var errorDialog = new ConfirmationDialog("Bulk Import", "The selected file contains no valid product rows.");
+                errorDialog.XamlRoot = this.XamlRoot;
+                await errorDialog.ShowAsync();
+                return;
+            }
+
+            var confirmDialog = new BulkImportDialog()
+            {
+                XamlRoot = this.XamlRoot,
+                Message = $"Do you want to import {validRows.Count} product(s) from \"{Path.GetFileName(path)}\"?"
+            };
+            await confirmDialog.ShowAsync();
+            var result = confirmDialog.Result;
+
+            if (result == ContentDialogResult.Primary)
+            {
+                var itemRepo = App.Services.GetRequiredService<SportItemRepository>();
+                var categoryRepo = App.Services.GetRequiredService<CategoryRepository>();
+
+                var categories = await categoryRepo.GetAllAsync();
+                var categoryMap = categories
+                    .Where(c => c.Name != null)
+                    .ToDictionary(c => c.Name.Trim(), c => c.Id, System.StringComparer.OrdinalIgnoreCase);
+
+                var items = new List<SportItem>();
+                foreach (var row in validRows)
+                {
+                    int catId = 0;
+                    if (!string.IsNullOrWhiteSpace(row.CategoryName))
+                    {
+                        var trimmedCat = row.CategoryName.Trim();
+                        if (categoryMap.TryGetValue(trimmedCat, out catId))
+                        {
+                            // Found!
+                        }
+                        else
+                        {
+                            // Add to DB!
+                            var newCat = new Category { Name = trimmedCat };
+                            catId = await categoryRepo.AddAsync(newCat);
+                            categoryMap[trimmedCat] = catId;
+                        }
+                    }
+                    items.Add(row.ToSportItem(catId));
+                }
+
+                var (inserted, errors) = await itemRepo.BulkInsertAsync(items, categoryMap);
+
+                var successDialog = new SuccessDialog(
+                    "Bulk Import Success",
+                    $"{inserted} product(s) imported successfully!"
+                );
+                successDialog.XamlRoot = this.XamlRoot;
+                await successDialog.ShowAsync();
+
+                // Refresh the product list
+                await ViewModel.LoadItemsAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            var failDialog = new ConfirmationDialog("Bulk Import Error", $"Failed to import products: {ex.Message}");
+            failDialog.XamlRoot = this.XamlRoot;
+            await failDialog.ShowAsync();
+        }
     }
 
     private void OnItemClick(object sender, ItemClickEventArgs e)
