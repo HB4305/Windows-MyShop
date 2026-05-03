@@ -350,32 +350,118 @@ public class SportItemRepository
 
     public async Task DeductVariantStockAsync(long variantId, int quantity)
     {
+        if (quantity <= 0)
+        {
+            return;
+        }
+
         const string sql = @"
             UPDATE sportitem_variants 
             SET stock_quantity = stock_quantity - @quantity 
-            WHERE id = @variantId";
+            WHERE id = @variantId
+              AND stock_quantity >= @quantity";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
         await using var cmd = new NpgsqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("quantity", quantity);
         cmd.Parameters.AddWithValue("variantId", variantId);
-        await cmd.ExecuteNonQueryAsync();
+        var affected = await cmd.ExecuteNonQueryAsync();
+        if (affected == 0)
+        {
+            throw new InvalidOperationException("Not enough stock for the selected variant.");
+        }
     }
 
     public async Task DeductStockAsync(int itemId, int quantity)
     {
-        const string sql = @"
-            UPDATE sportitems 
-            SET stock_quantity = stock_quantity - @quantity 
-            WHERE id = @itemId";
+        if (quantity <= 0)
+        {
+            return;
+        }
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("quantity", quantity);
-        cmd.Parameters.AddWithValue("itemId", itemId);
-        await cmd.ExecuteNonQueryAsync();
+        await using var tx = await conn.BeginTransactionAsync();
+
+        try
+        {
+            var variants = new List<(long Id, int Stock)>();
+            const string variantsSql = @"
+                SELECT id, stock_quantity
+                FROM sportitem_variants
+                WHERE sportitem_id = @itemId
+                  AND stock_quantity > 0
+                ORDER BY id
+                FOR UPDATE";
+
+            await using (var cmd = new NpgsqlCommand(variantsSql, conn, tx))
+            {
+                cmd.Parameters.AddWithValue("itemId", itemId);
+                await using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    variants.Add((reader.GetInt64(0), reader.GetInt32(1)));
+                }
+            }
+
+            if (variants.Count > 0)
+            {
+                var available = variants.Sum(variant => variant.Stock);
+                if (available < quantity)
+                {
+                    throw new InvalidOperationException($"Not enough stock. Available: {available}.");
+                }
+
+                var remaining = quantity;
+                const string updateVariantSql = @"
+                    UPDATE sportitem_variants
+                    SET stock_quantity = stock_quantity - @quantity
+                    WHERE id = @variantId";
+
+                foreach (var variant in variants)
+                {
+                    if (remaining <= 0)
+                    {
+                        break;
+                    }
+
+                    var deduct = Math.Min(variant.Stock, remaining);
+                    await using var updateCmd = new NpgsqlCommand(updateVariantSql, conn, tx);
+                    updateCmd.Parameters.AddWithValue("quantity", deduct);
+                    updateCmd.Parameters.AddWithValue("variantId", variant.Id);
+                    await updateCmd.ExecuteNonQueryAsync();
+                    remaining -= deduct;
+                }
+
+                await tx.CommitAsync();
+                return;
+            }
+
+            const string updateItemSql = @"
+                UPDATE sportitems
+                SET stock_quantity = stock_quantity - @quantity
+                WHERE id = @itemId
+                  AND stock_quantity >= @quantity";
+
+            await using (var cmd = new NpgsqlCommand(updateItemSql, conn, tx))
+            {
+                cmd.Parameters.AddWithValue("quantity", quantity);
+                cmd.Parameters.AddWithValue("itemId", itemId);
+                var affected = await cmd.ExecuteNonQueryAsync();
+                if (affected == 0)
+                {
+                    throw new InvalidOperationException("Not enough stock for this item.");
+                }
+            }
+
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task AddVariantStockAsync(long variantId, int quantity)

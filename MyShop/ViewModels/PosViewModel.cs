@@ -8,6 +8,8 @@ namespace MyShop.ViewModels;
 public partial class PosViewModel : ObservableObject
 {
     private const decimal TaxRate = 0.085m;
+    private const string WalkInCustomerName = "Walk-in Customer";
+    private const string WalkInCustomerPhone = "0000000000";
 
     private readonly SportItemService _sportItemService;
     private readonly CategoryService _categoryService;
@@ -53,8 +55,8 @@ public partial class PosViewModel : ObservableObject
     [ObservableProperty] private string _selectedCategory = "All Gear";
     [ObservableProperty] private string _searchText = string.Empty;
     [ObservableProperty] private string _customerSearchText = string.Empty;
-    [ObservableProperty] private string _customerName = "Walk-in Customer";
-    [ObservableProperty] private string _customerPhone = "0000000000";
+    [ObservableProperty] private string _customerName = WalkInCustomerName;
+    [ObservableProperty] private string _customerPhone = WalkInCustomerPhone;
     [ObservableProperty] private string _customerAddress = string.Empty;
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private bool _isLoading;
@@ -87,6 +89,7 @@ public partial class PosViewModel : ObservableObject
     public decimal Total => Subtotal + Tax - Discount;
     public int CartCount => CartItems.Sum(item => item.Quantity);
     public bool HasCartItems => CartItems.Count > 0;
+    public Func<string, string, bool, Task>? ShowCheckoutResultDialogAsync { get; set; }
 
     private async Task InitializeAsync()
     {
@@ -231,8 +234,8 @@ public partial class PosViewModel : ObservableObject
         CartItems.Clear();
         SelectedCustomer = null;
         CustomerSearchText = string.Empty;
-        CustomerName = "Walk-in Customer";
-        CustomerPhone = "0000000000";
+        CustomerName = WalkInCustomerName;
+        CustomerPhone = WalkInCustomerPhone;
         CustomerAddress = string.Empty;
         StatusMessage = string.Empty;
     }
@@ -242,13 +245,17 @@ public partial class PosViewModel : ObservableObject
     {
         if (CartItems.Count == 0)
         {
-            StatusMessage = "Add at least one product before checkout.";
+            var message = "Add at least one product before checkout.";
+            StatusMessage = message;
+            await ShowCheckoutResultAsync("Checkout Failed", message, isSuccess: false);
             return;
         }
 
         if (!_currentUserService.UserId.HasValue)
         {
-            StatusMessage = "Please sign in before checkout.";
+            var message = "Please sign in before checkout.";
+            StatusMessage = message;
+            await ShowCheckoutResultAsync("Checkout Failed", message, isSuccess: false);
             return;
         }
 
@@ -285,13 +292,17 @@ public partial class PosViewModel : ObservableObject
             await _orderService.UpdateStatusAsync(created.Id, "Completed");
             await _orderService.UpdatePaymentStatusAsync(created.Id, "Paid");
 
+            var successMessage = $"Order #{created.Id} checked out successfully.";
             CartItems.Clear();
-            StatusMessage = $"Order #{created.Id} checked out successfully.";
             await LoadProductsAsync();
+            StatusMessage = successMessage;
+            await ShowCheckoutResultAsync("Checkout Complete", successMessage, isSuccess: true);
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Checkout failed: {ex.Message}";
+            var message = $"Checkout failed: {ex.Message}";
+            StatusMessage = message;
+            await ShowCheckoutResultAsync("Checkout Failed", message, isSuccess: false);
         }
         finally
         {
@@ -310,15 +321,21 @@ public partial class PosViewModel : ObservableObject
         CustomerSearchText = value ?? string.Empty;
 
         var keyword = Normalize(CustomerSearchText);
+        if (!_isApplyingCustomer)
+        {
+            CustomerName = keyword ?? WalkInCustomerName;
+        }
+
         if (keyword is null)
         {
+            SelectedCustomer = null;
             CustomerSuggestions = [];
             return;
         }
 
         try
         {
-            var (customers, _) = await _customerService.GetCustomersAsync(1, 8, keyword);
+            var (customers, _) = await _customerService.SearchCustomersByNameAsync(1, 8, keyword);
             CustomerSuggestions = new ObservableCollection<Customer>(customers);
         }
         catch (Exception ex)
@@ -340,11 +357,21 @@ public partial class PosViewModel : ObservableObject
         StatusMessage = string.Empty;
     }
 
-    public void UseCustomerSearchTextAsName(string? value)
+    public async Task UseCustomerSearchTextAsNameAsync(string? value)
     {
         var keyword = Normalize(value);
         if (keyword is null)
         {
+            return;
+        }
+
+        var existing = CustomerSuggestions.FirstOrDefault(customer =>
+            string.Equals(customer.Name, keyword, StringComparison.OrdinalIgnoreCase));
+
+        existing ??= await _customerService.GetCustomerByNameAsync(keyword);
+        if (existing is not null)
+        {
+            SelectCustomer(existing);
             return;
         }
 
@@ -445,6 +472,23 @@ public partial class PosViewModel : ObservableObject
         }
     }
 
+    private async Task ShowCheckoutResultAsync(string title, string message, bool isSuccess)
+    {
+        if (ShowCheckoutResultDialogAsync is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await ShowCheckoutResultDialogAsync(title, message, isSuccess);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[POS] Failed to show checkout dialog: {ex.Message}");
+        }
+    }
+
     private void RefreshCartTotals()
     {
         OnPropertyChanged(nameof(Subtotal));
@@ -457,8 +501,8 @@ public partial class PosViewModel : ObservableObject
 
     private async Task<Customer> ResolveCheckoutCustomerAsync()
     {
-        var name = Normalize(CustomerName) ?? "Walk-in Customer";
-        var phone = Normalize(CustomerPhone) ?? "0000000000";
+        var name = Normalize(CustomerName) ?? Normalize(CustomerSearchText) ?? WalkInCustomerName;
+        var phone = Normalize(CustomerPhone) ?? WalkInCustomerPhone;
         var address = Normalize(CustomerAddress);
 
         if (SelectedCustomer is not null
@@ -469,12 +513,26 @@ public partial class PosViewModel : ObservableObject
             return SelectedCustomer;
         }
 
-        var existing = await _customerService.GetCustomerByPhoneAsync(phone);
-        if (existing is not null)
+        if (HasDefaultCustomerDetails(phone, address))
         {
-            SelectedCustomer = existing;
-            ApplyCustomerToForm(existing);
-            return existing;
+            var existingByName = await _customerService.GetCustomerByNameAsync(name);
+            if (existingByName is not null)
+            {
+                SelectedCustomer = existingByName;
+                ApplyCustomerToForm(existingByName);
+                return existingByName;
+            }
+        }
+
+        if (!string.Equals(phone, WalkInCustomerPhone, StringComparison.Ordinal))
+        {
+            var existingByPhone = await _customerService.GetCustomerByPhoneAsync(phone);
+            if (existingByPhone is not null)
+            {
+                SelectedCustomer = existingByPhone;
+                ApplyCustomerToForm(existingByPhone);
+                return existingByPhone;
+            }
         }
 
         var createdCustomer = new Customer
@@ -515,6 +573,10 @@ public partial class PosViewModel : ObservableObject
             SelectedCustomer = null;
         }
     }
+
+    private static bool HasDefaultCustomerDetails(string phone, string? address)
+        => string.Equals(phone, WalkInCustomerPhone, StringComparison.Ordinal)
+            && string.IsNullOrWhiteSpace(address);
 
     private static string? Normalize(string? value)
     {

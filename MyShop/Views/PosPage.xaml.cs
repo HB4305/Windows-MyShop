@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Input;
 using MyShop.Controls;
 using MyShop.Models;
 using MyShop.ViewModels;
+using MyShop.Views.Dialogs;
 
 namespace MyShop.Views;
 
@@ -16,9 +17,32 @@ public sealed partial class PosPage : Page
     {
         InitializeComponent();
         DataContext = App.Services.GetRequiredService<PosViewModel>();
+        if (ViewModel is not null)
+        {
+            ViewModel.ShowCheckoutResultDialogAsync = ShowCheckoutResultDialogAsync;
+        }
     }
 
     private PosViewModel? ViewModel => DataContext as PosViewModel;
+
+    private async Task ShowCheckoutResultDialogAsync(string title, string content, bool isSuccess)
+    {
+        if (isSuccess)
+        {
+            var dialog = new SuccessDialog(title, content)
+            {
+                XamlRoot = XamlRoot
+            };
+            await dialog.ShowAsync();
+            return;
+        }
+
+        var errorDialog = new ErrorDialog(title, content)
+        {
+            XamlRoot = XamlRoot
+        };
+        await errorDialog.ShowAsync();
+    }
 
     private void ProductsGrid_ItemClick(object sender, ItemClickEventArgs e)
     {
@@ -97,7 +121,7 @@ public sealed partial class PosPage : Page
         }
     }
 
-    private void CustomerSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    private async void CustomerSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
         if (args.ChosenSuggestion is Customer customer)
         {
@@ -105,7 +129,10 @@ public sealed partial class PosPage : Page
             return;
         }
 
-        ViewModel?.UseCustomerSearchTextAsName(sender.Text);
+        if (ViewModel is not null)
+        {
+            await ViewModel.UseCustomerSearchTextAsNameAsync(sender.Text);
+        }
     }
 
     private void Page_Tapped(object sender, TappedRoutedEventArgs e)

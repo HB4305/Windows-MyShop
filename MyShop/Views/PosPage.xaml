@@ -148,7 +148,7 @@
             </StackPanel>
           </Grid>
           <AutoSuggestBox x:Name="CustomerSearchBox"
-                          PlaceholderText="Search customer by name or phone..."
+                          PlaceholderText="Search customer by name..."
                           Text="{Binding CustomerSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           ItemsSource="{Binding CustomerSuggestions}"
                           TextChanged="CustomerSearchBox_TextChanged"
@@ -173,9 +173,6 @@
               </DataTemplate>
             </AutoSuggestBox.ItemTemplate>
           </AutoSuggestBox>
-          <TextBox PlaceholderText="Customer name"
-                   Text="{Binding CustomerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   MinHeight="42"/>
           <TextBox PlaceholderText="Phone"
                    Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    MinHeight="42"/>

@@ -60,7 +60,7 @@ public class CustomerOrderService
             {
                 await _itemRepo.DeductVariantStockAsync(detail.VariantId.Value, detail.Quantity);
             }
-            if (detail.ItemId.HasValue)
+            else if (detail.ItemId.HasValue)
             {
                 await _itemRepo.DeductStockAsync(detail.ItemId.Value, detail.Quantity);
             }
