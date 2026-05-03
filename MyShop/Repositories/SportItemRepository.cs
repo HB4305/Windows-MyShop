@@ -121,6 +121,84 @@ public class SportItemRepository
         return (results, totalCount);
     }
 
+    public async Task<PagedResult<SportItemListRow>> SearchForPosAsync(
+        int page,
+        int pageSize,
+        string? keyword,
+        int? categoryId)
+    {
+        var results = new List<SportItemListRow>();
+        var totalCount = 0;
+        var offset = (Math.Max(1, page) - 1) * Math.Max(1, pageSize);
+
+        var conditions = new List<string>();
+        if (categoryId.HasValue)
+        {
+            conditions.Add("s.category_id = @categoryId");
+        }
+
+        if (!string.IsNullOrWhiteSpace(keyword))
+        {
+            conditions.Add(@"
+                to_tsvector('simple', coalesce(s.name, '') || ' ' || coalesce(c.name, ''))
+                @@ plainto_tsquery('simple', @keyword)");
+        }
+
+        var where = conditions.Count > 0 ? "WHERE " + string.Join(" AND ", conditions) : "";
+
+        var dataSql = $@"
+            SELECT COUNT(*) OVER() as full_count,
+                   s.id, s.category_id, s.name, s.cost_price, s.selling_price,
+                   s.stock_quantity, s.low_stock_threshold, s.image_urls, s.description,
+                   c.name as category_name
+            FROM sportitems s
+            LEFT JOIN categories c ON s.category_id = c.id
+            {where}
+            ORDER BY s.name ASC
+            OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using (var cmd = new NpgsqlCommand(dataSql, conn))
+        {
+            if (categoryId.HasValue)
+            {
+                cmd.Parameters.AddWithValue("categoryId", categoryId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                cmd.Parameters.AddWithValue("keyword", keyword.Trim());
+            }
+
+            cmd.Parameters.AddWithValue("offset", offset);
+            cmd.Parameters.AddWithValue("pageSize", Math.Max(1, pageSize));
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                totalCount = reader.GetInt32(0);
+                var item = ReadSportItemFromJoined(reader);
+                results.Add(new SportItemListRow
+                {
+                    Item = item,
+                    CategoryName = reader.IsDBNull(10) ? "-" : reader.GetString(10)
+                });
+            }
+        }
+
+        if (results.Count > 0)
+        {
+            await LoadVariantsForItemsAsync(conn, results.Select(r => r.Item).ToList());
+        }
+
+        return new PagedResult<SportItemListRow>
+        {
+            Items = results,
+            TotalCount = totalCount
+        };
+    }
+
     private static SportItem ReadSportItemFromJoined(NpgsqlDataReader reader)
     {
         // Offset by 1 because index 0 is full_count

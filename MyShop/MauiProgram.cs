@@ -70,6 +70,7 @@ public static class MauiProgram
         Services.AddTransient<CategoryViewModel>();
         Services.AddTransient<DashboardViewModel>();
         Services.AddTransient<ReportViewModel>();
+        Services.AddTransient<PosViewModel>();
         Services.AddTransient<SportItemViewModel>();
         Services.AddTransient<SportItemDetailViewModel>();
         Services.AddTransient<CustomerOrderViewModel>();

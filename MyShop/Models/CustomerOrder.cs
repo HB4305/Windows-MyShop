@@ -10,6 +10,8 @@ public class CustomerOrder : INotifyPropertyChanged
 
     public DateTimeOffset? CreatedAt { get; set; }
 
+    public int? CustomerId { get; set; }
+
     private string _customerName = string.Empty;
     [Required(ErrorMessage = "Customer name is required")]
     public string CustomerName

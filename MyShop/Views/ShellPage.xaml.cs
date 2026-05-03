@@ -137,6 +137,13 @@ public sealed partial class ShellPage : Page
         MaintainSidebarAfterNavigation();
     }
 
+    private void NavPos_Click(object sender, RoutedEventArgs e)
+    {
+        _frame.Navigate(typeof(PosPage));
+        UpdateActiveNav("POS");
+        MaintainSidebarAfterNavigation();
+    }
+
     private void NavReports_Click(object sender, RoutedEventArgs e)
     {
         if (!_currentUserService.IsOwner) return;
@@ -203,6 +210,7 @@ public sealed partial class ShellPage : Page
         var tag = e.SourcePageType.Name switch
         {
             nameof(DashboardPage) => "Dashboard",
+            nameof(PosPage) => "POS",
             nameof(ReportPage) => "Reports",
             nameof(SportItemPage) => "ProductCatalog",
             nameof(ProductCatalogPage) => "ProductCatalog",
@@ -226,6 +234,7 @@ public sealed partial class ShellPage : Page
     private void UpdateActiveNav(string activeTag)
     {
         ResetNavStyle(NavDashboard);
+        ResetNavStyle(NavPos);
         ResetNavStyle(NavReports);
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
@@ -237,6 +246,7 @@ public sealed partial class ShellPage : Page
         var activeBtn = activeTag switch
         {
             "Dashboard" => NavDashboard,
+            "POS" => NavPos,
             "Reports" => NavReports,
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
@@ -262,6 +272,7 @@ public sealed partial class ShellPage : Page
         var pageType = tag switch
         {
             "Dashboard" => typeof(DashboardPage),
+            "POS" => typeof(PosPage),
             "Reports" => typeof(ReportPage),
             "ProductCatalog" => typeof(SportItemPage),
             "OrdersManagement" => typeof(CustomerOrderPage),

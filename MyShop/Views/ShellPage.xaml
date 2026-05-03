@@ -105,6 +105,30 @@
             </StackPanel>
           </Button>
 
+          <!-- POS -->
+          <Button x:Name="NavPos"
+                  Click="NavPos_Click"
+                  Tag="POS"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Padding="10,8"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Left">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="10">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE8C7;"
+                         FontSize="14"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         VerticalAlignment="Center"
+                         Width="20"/>
+              <TextBlock Text="POS"
+                         FontSize="13"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+
           <!-- Product Catalog -->
           <Button x:Name="NavProductCatalog"
                   Click="NavProductCatalog_Click"

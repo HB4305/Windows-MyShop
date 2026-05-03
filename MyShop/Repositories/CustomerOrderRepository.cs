@@ -15,7 +15,7 @@ public class CustomerOrderRepository
     // ═══════════════════════════════════════════════════════════════════════
 
     private const string SelectColumns =
-        @"id, created_at, customer_name, customer_phone,
+        @"id, created_at, COALESCE(customer_id, 0), customer_name, customer_phone,
           shipping_address, order_type, status, payment_status,
           total_amount, notes, COALESCE(seller_id, 0), COALESCE(seller_name, '')";
 
@@ -86,10 +86,10 @@ public class CustomerOrderRepository
     {
         const string sql = @"
             INSERT INTO customerorders
-                (customer_name, customer_phone, shipping_address,
+                (customer_id, customer_name, customer_phone, shipping_address,
                  order_type, status, payment_status, total_amount, notes,
                  seller_id, seller_name)
-            VALUES (@customerName, @customerPhone, @shippingAddress,
+            VALUES (@customerId, @customerName, @customerPhone, @shippingAddress,
                     @orderType, @status, @paymentStatus, @totalAmount, @notes,
                     @sellerId, @sellerName)
             RETURNING id, created_at";
@@ -116,6 +116,7 @@ public class CustomerOrderRepository
             UPDATE customerorders SET
                 customer_name = @customerName,
                 customer_phone = @customerPhone,
+                customer_id = @customerId,
                 shipping_address = @shippingAddress,
                 order_type = @orderType,
                 status = @status,
@@ -171,6 +172,7 @@ public class CustomerOrderRepository
 
     private static void AddOrderParams(NpgsqlCommand cmd, CustomerOrder o)
     {
+        cmd.Parameters.AddWithValue("customerId", (object?)o.CustomerId ?? DBNull.Value);
         cmd.Parameters.AddWithValue("customerName", o.CustomerName);
         cmd.Parameters.AddWithValue("customerPhone", o.CustomerPhone);
         cmd.Parameters.AddWithValue("shippingAddress", (object?)o.ShippingAddress ?? DBNull.Value);
@@ -187,16 +189,17 @@ public class CustomerOrderRepository
         {
             Id = r.GetInt32(0),
             CreatedAt = r.IsDBNull(1) ? null : r.GetFieldValue<DateTimeOffset>(1),
-            CustomerName = r.IsDBNull(2) ? "" : r.GetString(2),
-            CustomerPhone = r.IsDBNull(3) ? "" : r.GetString(3),
-            ShippingAddress = r.IsDBNull(4) ? null : r.GetString(4),
-            OrderType = r.IsDBNull(5) ? null : r.GetString(5),
-            Status = r.IsDBNull(6) ? null : r.GetString(6),
-            PaymentStatus = r.IsDBNull(7) ? null : r.GetString(7),
-            TotalAmount = r.IsDBNull(8) ? 0m : r.GetDecimal(8),
-            Notes = r.IsDBNull(9) ? null : r.GetString(9),
-            SellerId = r.IsDBNull(10) ? null : r.GetInt32(10),
-            SellerName = r.IsDBNull(11) ? null : r.GetString(11)
+            CustomerId = r.IsDBNull(2) || r.GetInt32(2) == 0 ? null : r.GetInt32(2),
+            CustomerName = r.IsDBNull(3) ? "" : r.GetString(3),
+            CustomerPhone = r.IsDBNull(4) ? "" : r.GetString(4),
+            ShippingAddress = r.IsDBNull(5) ? null : r.GetString(5),
+            OrderType = r.IsDBNull(6) ? null : r.GetString(6),
+            Status = r.IsDBNull(7) ? null : r.GetString(7),
+            PaymentStatus = r.IsDBNull(8) ? null : r.GetString(8),
+            TotalAmount = r.IsDBNull(9) ? 0m : r.GetDecimal(9),
+            Notes = r.IsDBNull(10) ? null : r.GetString(10),
+            SellerId = r.IsDBNull(11) ? null : r.GetInt32(11),
+            SellerName = r.IsDBNull(12) ? null : r.GetString(12)
         };
     }
 }

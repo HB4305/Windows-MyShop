@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using MyShop.Controls;
 using MyShop.Models.ReportModels;
 using MyShop.ViewModels;
 
@@ -37,15 +38,15 @@ public sealed partial class ReportPage : Page
     UpdateRevenueProfitLayout();
   }
 
-  private void ProductSearchAutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+  private void ProductFilterBar_SearchTextChanged(ProductSearchFilterBar sender, AutoSuggestBoxTextChangedEventArgs args)
   {
     if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
     {
-      ViewModel?.UpdateProductName(sender.Text);
+      ViewModel?.UpdateProductName(sender.SearchText);
     }
   }
 
-  private void ProductSearchAutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+  private void ProductFilterBar_SearchSuggestionChosen(ProductSearchFilterBar sender, AutoSuggestBoxSuggestionChosenEventArgs args)
   {
     if (args.SelectedItem is string selectedProduct)
     {
@@ -53,9 +54,9 @@ public sealed partial class ReportPage : Page
     }
   }
 
-  private void ProductSearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+  private void ProductFilterBar_SearchQuerySubmitted(ProductSearchFilterBar sender, AutoSuggestBoxQuerySubmittedEventArgs args)
   {
-    ViewModel?.UpdateProductName(args.ChosenSuggestion?.ToString() ?? sender.Text);
+    ViewModel?.UpdateProductName(args.ChosenSuggestion?.ToString() ?? sender.SearchText);
   }
 
   private void WeekPeriodButton_Click(object sender, RoutedEventArgs e)
@@ -67,21 +68,18 @@ public sealed partial class ReportPage : Page
   private void YearPeriodButton_Click(object sender, RoutedEventArgs e)
     => ViewModel?.SetPeriod(ReportPeriod.Year);
 
-  private async void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+  private async void ProductFilterBar_CategorySelectionChanged(ProductSearchFilterBar sender, SelectionChangedEventArgs e)
   {
-    if (sender is ComboBox comboBox)
+    if (ViewModel is not null)
     {
-      if (ViewModel is not null)
-      {
-        await ViewModel.UpdateCategoryAsync(comboBox.SelectedItem?.ToString());
-      }
-
-      CloseOpenDropDowns();
-      Focus(FocusState.Programmatic);
+      await ViewModel.UpdateCategoryAsync(sender.SelectedCategory?.ToString());
     }
+
+    CloseOpenDropDowns();
+    Focus(FocusState.Programmatic);
   }
 
-  private void SearchButton_Click(object sender, RoutedEventArgs e)
+  private void ProductFilterBar_SearchClicked(object sender, RoutedEventArgs e)
     => ViewModel?.ApplyFilters();
 
   private void PageScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
@@ -221,8 +219,7 @@ public sealed partial class ReportPage : Page
 
   private void CloseOpenDropDowns()
   {
-    CategoryComboBox.IsDropDownOpen = false;
-    ProductSearchAutoSuggestBox.IsSuggestionListOpen = false;
+    ProductFilterBar.CloseFlyouts();
   }
 
   private bool IsInsideFilterControl(DependencyObject source)
@@ -230,8 +227,7 @@ public sealed partial class ReportPage : Page
     DependencyObject? current = source;
     while (current is not null)
     {
-      if (ReferenceEquals(current, CategoryComboBox)
-          || ReferenceEquals(current, ProductSearchAutoSuggestBox))
+      if (ReferenceEquals(current, ProductFilterBar))
       {
         return true;
       }
