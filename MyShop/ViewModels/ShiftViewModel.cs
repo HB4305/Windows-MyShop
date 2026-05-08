@@ -21,11 +21,17 @@ public partial class ShiftViewModel : ObservableObject
     [ObservableProperty] private decimal _actualCashTotal;
     [ObservableProperty] private string _actualCashTotalText = string.Empty;
     [ObservableProperty] private decimal _expectedCash;
+    [ObservableProperty] private decimal _shiftRevenue;
+    [ObservableProperty] private int _shiftCustomerCount;
     [ObservableProperty] private string _notes = string.Empty;
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private bool _isBusy;
+    public Func<decimal, string?, Task<string?>>? PromptNegativeDiscrepancyReasonAsync { get; set; }
 
     public decimal Discrepancy => ActualCashTotal - ExpectedCash;
+    public decimal AverageSpendPerCustomer => ShiftCustomerCount <= 0
+        ? 0m
+        : Math.Round(ShiftRevenue / ShiftCustomerCount, 2);
     public bool HasActiveShift => ActiveShift is not null;
 
     [RelayCommand]
@@ -44,10 +50,12 @@ public partial class ShiftViewModel : ObservableObject
             if (ActiveShift is not null)
             {
                 ExpectedCash = await _shiftService.GetExpectedCashAsync(ActiveShift.Id);
+                ApplyMetrics(await _shiftService.GetMetricsAsync(ActiveShift.Id));
             }
             else
             {
                 ExpectedCash = 0m;
+                ApplyMetrics(new ShiftMetrics());
             }
         }
         catch (Exception ex)
@@ -77,6 +85,7 @@ public partial class ShiftViewModel : ObservableObject
             StatusMessage = string.Empty;
             ActiveShift = await _shiftService.OpenShiftAsync(_currentUserService.UserId.Value, StartingCash);
             ExpectedCash = 0m;
+            ApplyMetrics(new ShiftMetrics());
             ActualCashTotal = 0m;
             ActualCashTotalText = string.Empty;
             Notes = string.Empty;
@@ -108,11 +117,27 @@ public partial class ShiftViewModel : ObservableObject
             IsBusy = true;
             StatusMessage = string.Empty;
 
+            if (Discrepancy < 0m)
+            {
+                var capturedReason = PromptNegativeDiscrepancyReasonAsync is null
+                    ? Notes
+                    : await PromptNegativeDiscrepancyReasonAsync(Discrepancy, Notes);
+
+                if (string.IsNullOrWhiteSpace(capturedReason) || capturedReason.Trim().Length < 10)
+                {
+                    StatusMessage = "A clear reason is required before submitting a shift report with negative discrepancy.";
+                    return;
+                }
+
+                Notes = capturedReason.Trim();
+            }
+
             var (closedShift, expectedCash) = await _shiftService.CloseShiftAsync(
                 ActiveShift.Id,
                 ActualCashTotal,
                 string.IsNullOrWhiteSpace(Notes) ? null : Notes.Trim());
 
+            ApplyMetrics(await _shiftService.GetMetricsAsync(closedShift.Id));
             ExpectedCash = expectedCash;
             ActiveShift = null;
             StatusMessage = $"Shift #{closedShift.Id} closed successfully.";
@@ -140,6 +165,16 @@ public partial class ShiftViewModel : ObservableObject
     partial void OnActualCashTotalChanged(decimal value) => OnPropertyChanged(nameof(Discrepancy));
 
     partial void OnExpectedCashChanged(decimal value) => OnPropertyChanged(nameof(Discrepancy));
+
+    partial void OnShiftRevenueChanged(decimal value) => OnPropertyChanged(nameof(AverageSpendPerCustomer));
+
+    partial void OnShiftCustomerCountChanged(int value) => OnPropertyChanged(nameof(AverageSpendPerCustomer));
+
+    private void ApplyMetrics(ShiftMetrics metrics)
+    {
+        ShiftRevenue = metrics.TotalRevenue;
+        ShiftCustomerCount = metrics.CustomerCount;
+    }
 
     private static decimal ParseDecimalOrZero(string? value)
     {

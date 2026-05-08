@@ -80,6 +80,93 @@ public class ShiftRepository
         return Convert.ToDecimal(scalar);
     }
 
+    public async Task<ShiftMetrics> GetMetricsAsync(int shiftId)
+    {
+        const string sql = @"
+            SELECT
+                COALESCE(SUM(CASE WHEN COALESCE(status, 'Pending') <> 'Cancelled' THEN COALESCE(total_amount, 0) ELSE 0 END), 0) AS total_revenue,
+                COUNT(*) FILTER (WHERE COALESCE(status, 'Pending') <> 'Cancelled') AS customer_count
+            FROM customerorders
+            WHERE shift_id = @shiftId";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("shiftId", shiftId);
+
+        await using var reader = await cmd.ExecuteReaderAsync();
+        if (!await reader.ReadAsync())
+        {
+            return new ShiftMetrics();
+        }
+
+        return new ShiftMetrics
+        {
+            TotalRevenue = reader.IsDBNull(0) ? 0m : reader.GetDecimal(0),
+            CustomerCount = reader.IsDBNull(1) ? 0 : Convert.ToInt32(reader.GetInt64(1))
+        };
+    }
+
+    public async Task<List<ShiftReportLogEntry>> GetClosedReportLogsAsync(int? userId = null)
+    {
+        var sql = @"
+            SELECT
+                s.id,
+                s.user_id,
+                COALESCE(u.email, '') AS staff_email,
+                s.start_time,
+                s.end_time,
+                COALESCE(s.starting_cash, 0) AS starting_cash,
+                COALESCE(s.actual_cash_total, 0) AS actual_cash_total,
+                COALESCE(s.notes, '') AS notes,
+                COALESCE(SUM(CASE WHEN COALESCE(co.status, 'Pending') <> 'Cancelled' THEN COALESCE(co.total_amount, 0) ELSE 0 END), 0) AS total_revenue,
+                COUNT(*) FILTER (WHERE co.id IS NOT NULL AND COALESCE(co.status, 'Pending') <> 'Cancelled') AS customer_count,
+                COALESCE(SUM(CASE WHEN COALESCE(co.payment_method, '') = 'Cash' AND COALESCE(co.status, 'Pending') <> 'Cancelled' THEN COALESCE(co.total_amount, 0) ELSE 0 END), 0) AS expected_cash
+            FROM shifts s
+            INNER JOIN users u ON u.id = s.user_id
+            LEFT JOIN customerorders co ON co.shift_id = s.id
+            WHERE s.status = 'Closed'";
+
+        if (userId.HasValue)
+        {
+            sql += " AND s.user_id = @userId";
+        }
+
+        sql += @"
+            GROUP BY s.id, s.user_id, u.email, s.start_time, s.end_time, s.starting_cash, s.actual_cash_total, s.notes
+            ORDER BY s.end_time DESC, s.id DESC";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        if (userId.HasValue)
+        {
+            cmd.Parameters.AddWithValue("userId", userId.Value);
+        }
+
+        var items = new List<ShiftReportLogEntry>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            items.Add(new ShiftReportLogEntry
+            {
+                ShiftId = reader.GetInt32(0),
+                UserId = reader.GetInt32(1),
+                StaffEmail = reader.GetString(2),
+                StartTime = reader.IsDBNull(3) ? null : reader.GetFieldValue<DateTimeOffset>(3),
+                EndTime = reader.IsDBNull(4) ? null : reader.GetFieldValue<DateTimeOffset>(4),
+                StartingCash = reader.IsDBNull(5) ? 0m : reader.GetDecimal(5),
+                ActualCashTotal = reader.IsDBNull(6) ? 0m : reader.GetDecimal(6),
+                Notes = reader.IsDBNull(7) ? null : reader.GetString(7),
+                TotalRevenue = reader.IsDBNull(8) ? 0m : reader.GetDecimal(8),
+                CustomerCount = reader.IsDBNull(9) ? 0 : Convert.ToInt32(reader.GetInt64(9)),
+                ExpectedCash = reader.IsDBNull(10) ? 0m : reader.GetDecimal(10)
+            });
+        }
+
+        return items;
+    }
+
     public async Task<Shift> CloseShiftAsync(int shiftId, decimal actualCashTotal, string? notes)
     {
         const string sql = @"

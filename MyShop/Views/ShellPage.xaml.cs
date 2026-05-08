@@ -104,11 +104,13 @@ public sealed partial class ShellPage : Page
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavSuppliers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavStaffManagement.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
 
         // Sales are not allowed to access Reports/Category/Suppliers
         NavReports.IsEnabled = isOwner;
         NavCategory.IsEnabled = isOwner;
         NavSuppliers.IsEnabled = isOwner;
+        NavStaffManagement.IsEnabled = isOwner;
     }
 
     /// <summary>
@@ -180,6 +182,14 @@ public sealed partial class ShellPage : Page
         MaintainSidebarAfterNavigation();
     }
 
+    private void NavStaffManagement_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_currentUserService.IsOwner) return;
+        _frame.Navigate(typeof(StaffManagementPage));
+        UpdateActiveNav("StaffManagement");
+        MaintainSidebarAfterNavigation();
+    }
+
     private void NavSuppliers_Click(object sender, RoutedEventArgs e)
     {
         if (!_currentUserService.IsOwner) return;
@@ -219,12 +229,14 @@ public sealed partial class ShellPage : Page
             nameof(DashboardPage) => "Dashboard",
             nameof(PosPage) => "POS",
             nameof(ShiftManagementPage) => "ShiftManagement",
+            nameof(ShiftReportLogsPage) => "ShiftManagement",
             nameof(ReportPage) => "Reports",
             nameof(SportItemPage) => "ProductCatalog",
             nameof(ProductCatalogPage) => "ProductCatalog",
             nameof(CustomerOrderPage) => "OrdersManagement",
             nameof(OrdersManagementPage) => "OrdersManagement",
             nameof(CustomerPage) => "Customers",
+            nameof(StaffManagementPage) => "StaffManagement",
             nameof(SuppliersPage) => "Suppliers",
             nameof(CategoryPage) => "Category",
             nameof(SettingsPage) => "Settings",
@@ -248,6 +260,7 @@ public sealed partial class ShellPage : Page
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
         ResetNavStyle(NavCustomers);
+        ResetNavStyle(NavStaffManagement);
         ResetNavStyle(NavSuppliers);
         ResetNavStyle(NavCategory);
         ResetNavStyle(NavSettings);
@@ -261,6 +274,7 @@ public sealed partial class ShellPage : Page
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
             "Customers" => NavCustomers,
+            "StaffManagement" => NavStaffManagement,
             "Suppliers" => NavSuppliers,
             "Category" => NavCategory,
             "Settings" => NavSettings,
@@ -276,7 +290,7 @@ public sealed partial class ShellPage : Page
 
         // Sales cannot navigate to forbidden pages
         if (_currentUserService.IsSale &&
-            (tag == "Reports" || tag == "Category"))
+            (tag == "Reports" || tag == "Category" || tag == "StaffManagement"))
             return false;
 
         var pageType = tag switch
@@ -288,6 +302,7 @@ public sealed partial class ShellPage : Page
             "ProductCatalog" => typeof(SportItemPage),
             "OrdersManagement" => typeof(CustomerOrderPage),
             "Customers" => typeof(CustomerPage),
+            "StaffManagement" => typeof(StaffManagementPage),
             "Suppliers" => typeof(SuppliersPage),
             "Category" => typeof(CategoryPage),
             "Settings" => typeof(SettingsPage),

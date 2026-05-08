@@ -81,6 +81,8 @@ public static class MauiProgram
         Services.AddTransient<SuppliersViewModel>();
         Services.AddTransient<SettingsViewModel>();
         Services.AddTransient<ShiftViewModel>();
+        Services.AddTransient<StaffManagementViewModel>();
+        Services.AddTransient<ShiftReportLogsViewModel>();
 
         // ── 6. Build ───────────────────────────────────────────────
         _provider = Services.BuildServiceProvider();

@@ -15,6 +15,12 @@ public class ShiftService
     public Task<decimal> GetExpectedCashAsync(int shiftId)
         => _repository.GetExpectedCashAsync(shiftId);
 
+    public Task<ShiftMetrics> GetMetricsAsync(int shiftId)
+        => _repository.GetMetricsAsync(shiftId);
+
+    public Task<List<ShiftReportLogEntry>> GetClosedReportLogsAsync(int? userId = null)
+        => _repository.GetClosedReportLogsAsync(userId);
+
     public async Task<Shift> OpenShiftAsync(int userId, decimal startingCash)
     {
         if (startingCash < 0)

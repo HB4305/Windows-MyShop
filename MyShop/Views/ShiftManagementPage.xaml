@@ -27,11 +27,13 @@
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
       <Grid Grid.Row="0" ColumnSpacing="16">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Spacing="2">
@@ -44,6 +46,18 @@
                      Foreground="{ThemeResource TextFillColorSecondary}"/>
         </StackPanel>
         <Button Grid.Column="1"
+                Click="ViewReportLogs_Click"
+                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                Padding="14,10"
+                ToolTipService.ToolTip="View submitted shift reports">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon Glyph="&#xE9D2;" FontSize="14"/>
+            <TextBlock Text="Report Logs"/>
+          </StackPanel>
+        </Button>
+        <Button Grid.Column="2"
                 Command="{Binding LoadActiveShiftCommand}"
                 Background="{ThemeResource ControlFillColorDefaultBrush}"
                 BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -69,7 +83,63 @@
         </StackPanel>
       </Border>
 
-      <Grid Grid.Row="2" ColumnSpacing="18" RowSpacing="18">
+      <Grid Grid.Row="2" ColumnSpacing="12" RowSpacing="12">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Style="{StaticResource PanelBorder}" Padding="16">
+          <StackPanel Spacing="10">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <FontIcon Glyph="&#xEAFD;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
+              <TextBlock Text="Shift Revenue" Foreground="{ThemeResource TextFillColorSecondary}"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ShiftRevenue, Converter={StaticResource CurrencyFormatter}}"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+            <TextBlock Text="Paid sales recorded in the active shift."
+                       FontSize="12"
+                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" Style="{StaticResource PanelBorder}" Padding="16">
+          <StackPanel Spacing="10">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <FontIcon Glyph="&#xE716;" Foreground="{StaticResource SuccessBrush}" FontSize="16"/>
+              <TextBlock Text="Customers Served" Foreground="{ThemeResource TextFillColorSecondary}"/>
+            </StackPanel>
+            <TextBlock Text="{Binding ShiftCustomerCount}"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+            <TextBlock Text="Each completed order counts as one customer served."
+                       FontSize="12"
+                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+          </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Style="{StaticResource PanelBorder}" Padding="16">
+          <StackPanel Spacing="10">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <FontIcon Glyph="&#xE9D9;" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
+              <TextBlock Text="Average Spend" Foreground="{ThemeResource TextFillColorSecondary}"/>
+            </StackPanel>
+            <TextBlock Text="{Binding AverageSpendPerCustomer, Converter={StaticResource CurrencyFormatter}}"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+            <TextBlock Text="Average revenue per served customer in this shift."
+                       FontSize="12"
+                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <Grid Grid.Row="3" ColumnSpacing="18" RowSpacing="18">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="360"/>
           <ColumnDefinition Width="*"/>
