@@ -66,6 +66,24 @@ public class CustomerOrder : INotifyPropertyChanged
         set => SetProperty(ref _totalAmount, value);
     }
 
+    private string? _paymentMethod = "Cash";
+    [RegularExpression("^(Cash|BankTransfer|COD)$", ErrorMessage = "Payment method must be 'Cash', 'BankTransfer', or 'COD'")]
+    public string? PaymentMethod
+    {
+        get => _paymentMethod;
+        set => SetProperty(ref _paymentMethod, value);
+    }
+
+    private decimal? _receivedAmount = 0M;
+    [Range(0, 9999999999.99, ErrorMessage = "Received amount must be positive")]
+    public decimal? ReceivedAmount
+    {
+        get => _receivedAmount;
+        set => SetProperty(ref _receivedAmount, value);
+    }
+
+    public int? ShiftId { get; set; }
+
     private string? _notes = string.Empty;
     public string? Notes
     {

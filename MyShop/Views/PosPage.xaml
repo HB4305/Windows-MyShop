@@ -227,6 +227,7 @@
                     </Border>
                     <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
                       <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" TextTrimming="CharacterEllipsis"/>
+                      <TextBlock Text="{Binding VariantDisplay}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}" TextTrimming="CharacterEllipsis"/>
                       <TextBlock Text="{Binding UnitPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
                       <StackPanel Orientation="Horizontal" Spacing="6">
                         <Button Tag="{Binding}" Click="DecreaseCartItem_Click" Width="28" Height="28" Padding="0" Content="-" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
@@ -265,6 +266,37 @@
                 <TextBlock Text="Total" FontSize="20" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
                 <TextBlock Text="{Binding Total, Converter={StaticResource CurrencyFormatter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Right"/>
               </Grid>
+              <TextBlock Text="Payment Method" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+              <ComboBox ItemsSource="{Binding PaymentMethodOptions}"
+                        SelectedItem="{Binding SelectedPaymentMethod, Mode=TwoWay}"
+                        MinHeight="40"/>
+              <StackPanel Visibility="{Binding IsCashPayment, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="8">
+                <Grid ColumnSpacing="8">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <StackPanel Spacing="4">
+                    <TextBlock Text="Cash Received" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+                    <TextBox Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             PlaceholderText="0.00"
+                             MinHeight="40"/>
+                  </StackPanel>
+                  <StackPanel Grid.Column="1" Spacing="4">
+                    <TextBlock Text="Change" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12,8">
+                      <TextBlock Text="{Binding ChangeAmount, Converter={StaticResource CurrencyFormatter}}"
+                                 FontSize="18"
+                                 FontWeight="Bold"
+                                 Foreground="#16A34A"/>
+                    </Border>
+                  </StackPanel>
+                </Grid>
+              </StackPanel>
               <Button Command="{Binding CheckoutCommand}"
                       Background="{StaticResource PurpleBrush}"
                       Foreground="White"
@@ -274,7 +306,7 @@
                       HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                   <FontIcon Glyph="&#xE8C7;" Foreground="White"/>
-                  <TextBlock Text="Checkout" FontSize="16" FontWeight="Bold"/>
+                  <TextBlock Text="Complete Sale (F12)" FontSize="16" FontWeight="Bold"/>
                 </StackPanel>
               </Button>
             </StackPanel>

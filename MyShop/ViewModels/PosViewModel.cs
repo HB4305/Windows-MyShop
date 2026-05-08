@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Globalization;
 using MyShop.Models;
 using MyShop.Services;
 
@@ -7,14 +8,16 @@ namespace MyShop.ViewModels;
 
 public partial class PosViewModel : ObservableObject
 {
-    private const decimal TaxRate = 0.085m;
+    private const decimal TaxRate = 0.08m;
     private const string WalkInCustomerName = "Walk-in Customer";
     private const string WalkInCustomerPhone = "0000000000";
+    private const string DefaultPaymentMethod = "Cash";
 
     private readonly SportItemService _sportItemService;
     private readonly CategoryService _categoryService;
     private readonly CustomerService _customerService;
     private readonly CustomerOrderService _orderService;
+    private readonly ShiftService _shiftService;
     private readonly CurrentUserService _currentUserService;
     private readonly SettingsManager _settingsManager;
     private readonly Dictionary<string, int> _categoryIdsByName = new(StringComparer.OrdinalIgnoreCase);
@@ -26,6 +29,7 @@ public partial class PosViewModel : ObservableObject
         CategoryService categoryService,
         CustomerService customerService,
         CustomerOrderService orderService,
+        ShiftService shiftService,
         CurrentUserService currentUserService,
         SettingsManager settingsManager)
     {
@@ -33,6 +37,7 @@ public partial class PosViewModel : ObservableObject
         _categoryService = categoryService;
         _customerService = customerService;
         _orderService = orderService;
+        _shiftService = shiftService;
         _currentUserService = currentUserService;
         _settingsManager = settingsManager;
 
@@ -61,6 +66,9 @@ public partial class PosViewModel : ObservableObject
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private bool _isCheckingOut;
+    [ObservableProperty] private string _selectedPaymentMethod = DefaultPaymentMethod;
+    [ObservableProperty] private string _receivedAmountText = string.Empty;
+    [ObservableProperty] private decimal _receivedAmount;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(TotalPages))]
@@ -87,8 +95,12 @@ public partial class PosViewModel : ObservableObject
     public decimal Tax => Math.Round(Subtotal * TaxRate, 2);
     public decimal Discount => 0m;
     public decimal Total => Subtotal + Tax - Discount;
+    public decimal ChangeAmount => Math.Max(0m, Math.Round(ReceivedAmount - Total, 2));
+    public bool IsCashPayment => string.Equals(SelectedPaymentMethod, "Cash", StringComparison.OrdinalIgnoreCase);
+    public bool IsReceivedAmountEnough => !IsCashPayment || ReceivedAmount >= Total;
     public int CartCount => CartItems.Sum(item => item.Quantity);
     public bool HasCartItems => CartItems.Count > 0;
+    public IReadOnlyList<string> PaymentMethodOptions { get; } = ["Cash", "BankTransfer", "COD"];
     public Func<string, string, bool, Task>? ShowCheckoutResultDialogAsync { get; set; }
 
     private async Task InitializeAsync()
@@ -164,14 +176,17 @@ public partial class PosViewModel : ObservableObject
             return;
         }
 
-        var stock = product.Item.EffectiveStockQuantity;
-        if (stock <= 0)
+        var variant = ResolveSellableVariant(product.Item);
+        if (variant is null)
         {
-            StatusMessage = $"{product.Item.Name} is out of stock.";
+            StatusMessage = $"{product.Item.Name} has no in-stock variant available.";
             return;
         }
 
-        var existing = CartItems.FirstOrDefault(item => item.ItemId == product.Item.Id);
+        var existing = CartItems.FirstOrDefault(item =>
+            item.ItemId == product.Item.Id &&
+            item.VariantId == variant.Id);
+
         if (existing is not null)
         {
             if (existing.Quantity >= existing.AvailableStock)
@@ -185,7 +200,14 @@ public partial class PosViewModel : ObservableObject
             return;
         }
 
-        CartItems.Add(new PosCartItem { Product = product });
+        CartItems.Add(new PosCartItem
+        {
+            Product = product,
+            VariantId = variant.Id,
+            VariantSize = variant.Size,
+            VariantColor = variant.Color,
+            VariantStock = variant.StockQuantity
+        });
         StatusMessage = string.Empty;
     }
 
@@ -237,6 +259,9 @@ public partial class PosViewModel : ObservableObject
         CustomerName = WalkInCustomerName;
         CustomerPhone = WalkInCustomerPhone;
         CustomerAddress = string.Empty;
+        SelectedPaymentMethod = DefaultPaymentMethod;
+        ReceivedAmountText = string.Empty;
+        ReceivedAmount = 0m;
         StatusMessage = string.Empty;
     }
 
@@ -259,10 +284,34 @@ public partial class PosViewModel : ObservableObject
             return;
         }
 
+        if (IsCashPayment && !IsReceivedAmountEnough)
+        {
+            var message = "Received cash is not enough to complete this sale.";
+            StatusMessage = message;
+            await ShowCheckoutResultAsync("Checkout Failed", message, isSuccess: false);
+            return;
+        }
+
         try
         {
             IsCheckingOut = true;
+            StatusMessage = string.Empty;
+
+            var activeShift = await _shiftService.GetActiveShiftAsync(_currentUserService.UserId.Value);
+            if (activeShift is null)
+            {
+                var message = "Please open a shift before checkout.";
+                StatusMessage = message;
+                await ShowCheckoutResultAsync("Checkout Failed", message, isSuccess: false);
+                return;
+            }
+
             var customer = await ResolveCheckoutCustomerAsync();
+            var paymentMethod = NormalizePaymentMethod(SelectedPaymentMethod);
+            var effectiveReceivedAmount = IsCashPayment
+                ? ReceivedAmount
+                : Total;
+
             var order = new CustomerOrder
             {
                 CustomerId = customer.Id,
@@ -272,28 +321,44 @@ public partial class PosViewModel : ObservableObject
                 OrderType = "AtStore",
                 Status = "Completed",
                 PaymentStatus = "Paid",
+                PaymentMethod = paymentMethod,
+                ReceivedAmount = effectiveReceivedAmount,
+                ShiftId = activeShift.Id,
                 Notes = "Created from POS"
             };
 
-            var details = CartItems.Select(item => new OrderDetail
+            var details = new List<OrderDetail>(CartItems.Count);
+            foreach (var item in CartItems)
             {
-                ItemId = item.ItemId,
-                ItemName = item.Name,
-                Quantity = item.Quantity,
-                UnitPrice = item.UnitPrice
-            }).ToList();
+                if (!item.VariantId.HasValue)
+                {
+                    throw new InvalidOperationException($"Item '{item.Name}' does not have a sellable variant.");
+                }
 
-            var created = await _orderService.CreateOrderAsync(
+                details.Add(new OrderDetail
+                {
+                    ItemId = item.ItemId,
+                    ItemName = item.Name,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    VariantId = item.VariantId.Value,
+                    Size = item.VariantSize,
+                    Color = item.VariantColor
+                });
+            }
+
+            var created = await _orderService.CreatePosCheckoutOrderAsync(
                 order,
                 details,
                 _currentUserService.UserId.Value,
                 _currentUserService.UserEmail ?? "POS");
 
-            await _orderService.UpdateStatusAsync(created.Id, "Completed");
-            await _orderService.UpdatePaymentStatusAsync(created.Id, "Paid");
+            var change = ChangeAmount;
+            var successMessage = IsCashPayment
+                ? $"Order #{created.Id} checked out successfully. Change: {change:C}."
+                : $"Order #{created.Id} checked out successfully.";
 
-            var successMessage = $"Order #{created.Id} checked out successfully.";
-            CartItems.Clear();
+            NewOrder();
             await LoadProductsAsync();
             StatusMessage = successMessage;
             await ShowCheckoutResultAsync("Checkout Complete", successMessage, isSuccess: true);
@@ -385,6 +450,20 @@ public partial class PosViewModel : ObservableObject
     partial void OnCustomerPhoneChanged(string value) => ClearSelectedCustomerIfFormChanged();
 
     partial void OnCustomerAddressChanged(string value) => ClearSelectedCustomerIfFormChanged();
+
+    partial void OnSelectedPaymentMethodChanged(string value)
+    {
+        OnPropertyChanged(nameof(IsCashPayment));
+        OnPropertyChanged(nameof(IsReceivedAmountEnough));
+        OnPropertyChanged(nameof(ChangeAmount));
+    }
+
+    partial void OnReceivedAmountTextChanged(string value)
+    {
+        ReceivedAmount = ParseDecimalOrZero(value);
+        OnPropertyChanged(nameof(IsReceivedAmountEnough));
+        OnPropertyChanged(nameof(ChangeAmount));
+    }
 
     public async Task UpdateCategoryAsync(string? value)
     {
@@ -495,6 +574,8 @@ public partial class PosViewModel : ObservableObject
         OnPropertyChanged(nameof(Tax));
         OnPropertyChanged(nameof(Discount));
         OnPropertyChanged(nameof(Total));
+        OnPropertyChanged(nameof(ChangeAmount));
+        OnPropertyChanged(nameof(IsReceivedAmountEnough));
         OnPropertyChanged(nameof(CartCount));
         OnPropertyChanged(nameof(HasCartItems));
     }
@@ -577,6 +658,38 @@ public partial class PosViewModel : ObservableObject
     private static bool HasDefaultCustomerDetails(string phone, string? address)
         => string.Equals(phone, WalkInCustomerPhone, StringComparison.Ordinal)
             && string.IsNullOrWhiteSpace(address);
+
+    private static SportItemVariant? ResolveSellableVariant(SportItem item)
+        => item.Variants
+            .Where(variant => variant.StockQuantity > 0)
+            .OrderBy(variant => variant.Id)
+            .FirstOrDefault();
+
+    private string NormalizePaymentMethod(string? value)
+        => PaymentMethodOptions.FirstOrDefault(option =>
+            string.Equals(option, value, StringComparison.OrdinalIgnoreCase))
+            ?? DefaultPaymentMethod;
+
+    private static decimal ParseDecimalOrZero(string? value)
+    {
+        var trimmed = Normalize(value);
+        if (trimmed is null)
+        {
+            return 0m;
+        }
+
+        if (decimal.TryParse(trimmed, NumberStyles.Number, CultureInfo.CurrentCulture, out var currentCultureValue))
+        {
+            return currentCultureValue;
+        }
+
+        if (decimal.TryParse(trimmed, NumberStyles.Number, CultureInfo.InvariantCulture, out var invariantValue))
+        {
+            return invariantValue;
+        }
+
+        return 0m;
+    }
 
     private static string? Normalize(string? value)
     {

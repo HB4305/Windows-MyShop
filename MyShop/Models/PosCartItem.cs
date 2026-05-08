@@ -8,13 +8,33 @@ public sealed class PosCartItem : INotifyPropertyChanged
     private int _quantity = 1;
 
     public required SportItemListRow Product { get; init; }
+    public long? VariantId { get; init; }
+    public string? VariantSize { get; init; }
+    public string? VariantColor { get; init; }
+    public int? VariantStock { get; init; }
 
     public int ItemId => Product.Item.Id;
     public string Name => Product.Item.Name;
     public string CategoryName => Product.CategoryName;
     public string? ImageUrl => Product.Item.ImageUrl;
     public decimal UnitPrice => Product.Item.SellingPrice ?? 0m;
-    public int AvailableStock => Math.Max(0, Product.Item.EffectiveStockQuantity);
+    public int AvailableStock => VariantStock.HasValue
+        ? Math.Max(0, VariantStock.Value)
+        : Math.Max(0, Product.Item.EffectiveStockQuantity);
+    public string VariantDisplay
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(VariantSize) && string.IsNullOrWhiteSpace(VariantColor))
+            {
+                return "Default";
+            }
+
+            var size = string.IsNullOrWhiteSpace(VariantSize) ? "-" : VariantSize;
+            var color = string.IsNullOrWhiteSpace(VariantColor) ? "-" : VariantColor;
+            return $"Size {size} / {color}";
+        }
+    }
 
     public int Quantity
     {

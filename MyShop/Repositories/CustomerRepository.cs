@@ -178,7 +178,8 @@ public class CustomerRepository
         const string sql = @"
             SELECT id, created_at, customer_name, customer_phone, 
                    shipping_address, order_type, status, payment_status, 
-                   total_amount, notes, seller_id, seller_name
+                   total_amount, notes, seller_id, seller_name,
+                   payment_method, received_amount, shift_id
             FROM customerorders
             WHERE customer_id = @customerId
             ORDER BY created_at DESC";
@@ -205,7 +206,10 @@ public class CustomerRepository
                 TotalAmount = reader.IsDBNull(8) ? 0m : reader.GetDecimal(8),
                 Notes = reader.IsDBNull(9) ? null : reader.GetString(9),
                 SellerId = reader.IsDBNull(10) ? null : reader.GetInt32(10),
-                SellerName = reader.IsDBNull(11) ? null : reader.GetString(11)
+                SellerName = reader.IsDBNull(11) ? null : reader.GetString(11),
+                PaymentMethod = reader.IsDBNull(12) ? null : reader.GetString(12),
+                ReceivedAmount = reader.IsDBNull(13) ? 0m : reader.GetDecimal(13),
+                ShiftId = reader.IsDBNull(14) ? null : reader.GetInt32(14)
             });
         }
         return orders;
