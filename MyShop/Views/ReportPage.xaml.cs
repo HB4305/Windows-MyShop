@@ -72,7 +72,7 @@ public sealed partial class ReportPage : Page
   {
     if (ViewModel is not null)
     {
-      await ViewModel.UpdateCategoryAsync(sender.SelectedCategory?.ToString());
+      await ViewModel.UpdateCategoryAsync(sender.SelectedCategoryText);
     }
 
     CloseOpenDropDowns();

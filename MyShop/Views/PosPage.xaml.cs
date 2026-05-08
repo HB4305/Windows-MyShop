@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using MyShop.Controls;
 using MyShop.Models;
 using MyShop.ViewModels;
@@ -101,7 +102,8 @@ public sealed partial class PosPage : Page
     {
         if (ViewModel is not null)
         {
-            await ViewModel.UpdateCategoryAsync(sender.SelectedCategory?.ToString());
+            var selectedCategory = args.AddedItems.FirstOrDefault()?.ToString() ?? sender.SelectedCategoryText;
+            await ViewModel.UpdateCategoryAsync(selectedCategory);
         }
     }
 
@@ -137,8 +139,37 @@ public sealed partial class PosPage : Page
 
     private void Page_Tapped(object sender, TappedRoutedEventArgs e)
     {
-        ProductFilterBar.CloseFlyouts();
-        CustomerSearchBox.IsSuggestionListOpen = false;
+        if (e.OriginalSource is not DependencyObject originalSource)
+        {
+            ProductFilterBar.CloseFlyouts();
+            CustomerSearchBox.IsSuggestionListOpen = false;
+            return;
+        }
+
+        if (!IsDescendantOf(originalSource, ProductFilterBar))
+        {
+            ProductFilterBar.CloseFlyouts();
+        }
+
+        if (!IsDescendantOf(originalSource, CustomerSearchBox))
+        {
+            CustomerSearchBox.IsSuggestionListOpen = false;
+        }
+    }
+
+    private static bool IsDescendantOf(DependencyObject? source, DependencyObject ancestor)
+    {
+        while (source is not null)
+        {
+            if (ReferenceEquals(source, ancestor))
+            {
+                return true;
+            }
+
+            source = VisualTreeHelper.GetParent(source);
+        }
+
+        return false;
     }
 
     private void RootLayout_Loaded(object sender, RoutedEventArgs e)

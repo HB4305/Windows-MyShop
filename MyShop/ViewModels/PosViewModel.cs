@@ -122,7 +122,7 @@ public partial class PosViewModel : ObservableObject
                 CurrentPage,
                 PageSize,
                 Normalize(SearchText),
-                ResolveSelectedCategoryId());
+                ResolveSelectedCategoryName());
 
             Products = new ObservableCollection<SportItemListRow>(result.Items);
             TotalItems = result.TotalCount;
@@ -467,7 +467,7 @@ public partial class PosViewModel : ObservableObject
 
     public async Task UpdateCategoryAsync(string? value)
     {
-        SelectedCategory = string.IsNullOrWhiteSpace(value) ? "All Gear" : value;
+        SelectedCategory = NormalizeCategory(value);
         SearchText = string.Empty;
         await LoadProductOptionsAsync();
         await SearchAsync();
@@ -499,7 +499,7 @@ public partial class PosViewModel : ObservableObject
     {
         try
         {
-            _availableProductOptions = await _sportItemService.GetProductNamesAsync(ResolveSelectedCategoryId());
+            _availableProductOptions = await _sportItemService.GetProductNamesByCategoryNameAsync(ResolveSelectedCategoryName());
             FilterProductOptions(SearchText);
         }
         catch
@@ -513,6 +513,14 @@ public partial class PosViewModel : ObservableObject
         => SelectedCategory != "All Gear" && _categoryIdsByName.TryGetValue(SelectedCategory, out var categoryId)
             ? categoryId
             : null;
+
+    private string? ResolveSelectedCategoryName()
+        => string.Equals(SelectedCategory, "All Gear", StringComparison.OrdinalIgnoreCase)
+            ? null
+            : Normalize(SelectedCategory);
+
+    private static string NormalizeCategory(string? value)
+        => Normalize(value) ?? "All Gear";
 
     private void FilterProductOptions(string? value)
     {

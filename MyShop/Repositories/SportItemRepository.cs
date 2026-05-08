@@ -125,23 +125,25 @@ public class SportItemRepository
         int page,
         int pageSize,
         string? keyword,
-        int? categoryId)
+        string? categoryName)
     {
         var results = new List<SportItemListRow>();
         var totalCount = 0;
         var offset = (Math.Max(1, page) - 1) * Math.Max(1, pageSize);
 
         var conditions = new List<string>();
-        if (categoryId.HasValue)
+        categoryName = Normalize(categoryName);
+        if (!string.IsNullOrWhiteSpace(categoryName))
         {
-            conditions.Add("s.category_id = @categoryId");
+            conditions.Add("c.name = @categoryName");
         }
 
+        keyword = Normalize(keyword);
         if (!string.IsNullOrWhiteSpace(keyword))
         {
             conditions.Add(@"
-                to_tsvector('simple', coalesce(s.name, '') || ' ' || coalesce(c.name, ''))
-                @@ plainto_tsquery('simple', @keyword)");
+                (s.name ILIKE @keyword
+                 OR coalesce(c.name, '') ILIKE @keyword)");
         }
 
         var where = conditions.Count > 0 ? "WHERE " + string.Join(" AND ", conditions) : "";
@@ -161,14 +163,14 @@ public class SportItemRepository
         await conn.OpenAsync();
         await using (var cmd = new NpgsqlCommand(dataSql, conn))
         {
-            if (categoryId.HasValue)
+            if (!string.IsNullOrWhiteSpace(categoryName))
             {
-                cmd.Parameters.AddWithValue("categoryId", categoryId.Value);
+                cmd.Parameters.AddWithValue("categoryName", categoryName);
             }
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                cmd.Parameters.AddWithValue("keyword", keyword.Trim());
+                cmd.Parameters.AddWithValue("keyword", $"%{keyword}%");
             }
 
             cmd.Parameters.AddWithValue("offset", offset);
@@ -232,6 +234,38 @@ public class SportItemRepository
         await using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
             names.Add(reader.GetString(0));
+        return names;
+    }
+
+    public async Task<List<string>> GetProductNamesByCategoryNameAsync(string? categoryName)
+    {
+        categoryName = Normalize(categoryName);
+        var sql = string.IsNullOrWhiteSpace(categoryName)
+            ? "SELECT DISTINCT name FROM sportitems WHERE name IS NOT NULL AND name != '' ORDER BY name"
+            : @"
+                SELECT DISTINCT s.name
+                FROM sportitems s
+                LEFT JOIN categories c ON c.id = s.category_id
+                WHERE s.name IS NOT NULL
+                  AND s.name != ''
+                  AND c.name = @categoryName
+                ORDER BY s.name";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        if (!string.IsNullOrWhiteSpace(categoryName))
+        {
+            cmd.Parameters.AddWithValue("categoryName", categoryName);
+        }
+
+        var names = new List<string>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            names.Add(reader.GetString(0));
+        }
+
         return names;
     }
 
@@ -643,5 +677,11 @@ public class SportItemRepository
             cmd.Parameters.AddWithValue("minPrice", minPrice.Value);
         if (maxPrice.HasValue)
             cmd.Parameters.AddWithValue("maxPrice", maxPrice.Value);
+    }
+
+    private static string? Normalize(string? value)
+    {
+        var trimmed = value?.Trim();
+        return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
     }
 }

@@ -36,11 +36,14 @@ public class SportItemService
         int page,
         int pageSize,
         string? keyword,
-        int? categoryId)
-        => _repository.SearchForPosAsync(page, pageSize, keyword, categoryId);
+        string? categoryName)
+        => _repository.SearchForPosAsync(page, pageSize, keyword, categoryName);
 
     public Task<List<string>> GetProductNamesAsync(int? categoryId = null)
         => _repository.GetProductNamesAsync(categoryId);
+
+    public Task<List<string>> GetProductNamesByCategoryNameAsync(string? categoryName)
+        => _repository.GetProductNamesByCategoryNameAsync(categoryName);
 
     public Task<int> AddAsync(SportItem item)
         => _repository.AddAsync(item);

@@ -50,7 +50,7 @@ public class OrderRepository
         var (start, end) = DateTimeUtils.GetDayRange(date);
         const string sql = @"
             SELECT COALESCE(SUM(total_amount), 0) FROM customerorders
-            WHERE status = 'Delivered'
+            WHERE status IN ('Completed', 'Delivered')
               AND created_at >= @start AND created_at < @end";
 
         await using var conn = _connFactory.CreateConnection();
@@ -128,7 +128,7 @@ public class OrderRepository
         const string sql = @"
             SELECT DATE(created_at) as date, COUNT(*)::int as total_orders, coalesce(SUM(total_amount), 0) as gross_revenue
             FROM customerorders
-            WHERE status = 'Delivered' 
+            WHERE status IN ('Completed', 'Delivered') 
               AND created_at >= @start AND created_at < @end
             GROUP BY DATE(created_at)
             ORDER BY DATE(created_at) ASC";

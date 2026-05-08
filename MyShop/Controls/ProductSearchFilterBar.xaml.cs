@@ -82,6 +82,9 @@ public sealed partial class ProductSearchFilterBar : UserControl
     public event TypedEventHandler<ProductSearchFilterBar, SelectionChangedEventArgs>? CategorySelectionChanged;
     public event RoutedEventHandler? SearchClicked;
 
+    public string? SelectedCategoryText => CategoryComboBox.SelectedItem?.ToString();
+    public string CurrentSearchText => SearchAutoSuggestBox.Text ?? string.Empty;
+
     public void CloseFlyouts()
     {
         CategoryComboBox.IsDropDownOpen = false;
@@ -95,7 +98,15 @@ public sealed partial class ProductSearchFilterBar : UserControl
         => SearchSuggestionChosen?.Invoke(this, args);
 
     private void SearchAutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        => SearchQuerySubmitted?.Invoke(this, args);
+    {
+        SearchQuerySubmitted?.Invoke(this, args);
+        if (SearchCommand?.CanExecute(null) == true)
+        {
+            SearchCommand.Execute(null);
+        }
+
+        SearchClicked?.Invoke(this, new RoutedEventArgs());
+    }
 
     private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         => CategorySelectionChanged?.Invoke(this, e);

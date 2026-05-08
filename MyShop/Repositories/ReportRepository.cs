@@ -124,8 +124,8 @@ public class ReportRepository
         string? productName)
     {
         const string sql = @"
-            SELECT * FROM get_product_sales_by_day(
-                @p_start_date, @p_end_date, @p_category_name, @p_product_name)";
+            SELECT * FROM get_filtered_product_sales_by_day(
+                @p_start_date, @p_end_date, @p_category_name, @p_keyword)";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
@@ -133,7 +133,7 @@ public class ReportRepository
         cmd.Parameters.AddWithValue("p_start_date", startDate);
         cmd.Parameters.AddWithValue("p_end_date", endDate);
         cmd.Parameters.AddWithValue("p_category_name", (object?)categoryName ?? DBNull.Value);
-        cmd.Parameters.AddWithValue("p_product_name", (object?)productName ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("p_keyword", (object?)productName ?? DBNull.Value);
 
         var results = new List<SoldQuantityData>();
         await using var reader = await cmd.ExecuteReaderAsync();
@@ -151,8 +151,8 @@ public class ReportRepository
     private async Task<List<RevenueData>> GetRevenueByDayAsync(DateTime startDate, DateTime endDate)
     {
         const string sql = @"
-            SELECT * FROM get_product_sales_by_day(
-                @p_start_date, @p_end_date, @p_category_name, @p_product_name)";
+            SELECT * FROM get_filtered_product_sales_by_day(
+                @p_start_date, @p_end_date, @p_category_name, @p_keyword)";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
@@ -160,7 +160,7 @@ public class ReportRepository
         cmd.Parameters.AddWithValue("p_start_date", startDate);
         cmd.Parameters.AddWithValue("p_end_date", endDate);
         cmd.Parameters.AddWithValue("p_category_name", DBNull.Value);
-        cmd.Parameters.AddWithValue("p_product_name", DBNull.Value);
+        cmd.Parameters.AddWithValue("p_keyword", DBNull.Value);
 
         var results = new List<RevenueData>();
         await using var reader = await cmd.ExecuteReaderAsync();
