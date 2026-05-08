@@ -1,7 +1,9 @@
-<Page x:Class="MyShop.Views.DashboardPage"
+﻿<Page x:Class="MyShop.Views.DashboardPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:MyShop.Controls"
       xmlns:conv="using:MyShop.Converters"
+      xmlns:dashModels="using:MyShop.Models.DashboardModels"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
   <Page.Resources>
@@ -37,7 +39,7 @@
       <Setter Property="BorderThickness"
           Value="1"/>
       <Setter Property="CornerRadius"
-          Value="{ThemeResource ControlCornerRadius}"/>
+          Value="20"/>
       <Setter Property="Padding"
           Value="20"/>
     </Style>
@@ -45,6 +47,8 @@
     <!-- KPI Value style -->
     <Style x:Key="KpiValueStyle"
         TargetType="TextBlock">
+      <Setter Property="FontFamily"
+          Value="{StaticResource AppSignatureFontFamily}"/>
       <Setter Property="FontSize"
           Value="32"/>
       <Setter Property="FontWeight"
@@ -56,6 +60,8 @@
     <!-- KPI Label style -->
     <Style x:Key="KpiLabelStyle"
         TargetType="TextBlock">
+      <Setter Property="FontFamily"
+          Value="{StaticResource AppSignatureFontFamily}"/>
       <Setter Property="FontSize"
           Value="12"/>
       <Setter Property="Foreground"
@@ -134,31 +140,28 @@
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0">
-          <TextBlock Text="Executive Dashboard"
-                     FontSize="24"
-                     FontWeight="Bold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"/>
-          <TextBlock Text="Real-time performance metrics for ProSport Hub."
-                     FontSize="13"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
-                     Margin="0,2,0,0"/>
-        </StackPanel>
+        <controls:AppPageHeader Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Title="Executive Dashboard"
+                                Subtitle="Real-time performance metrics for ProSport Hub."/>
 
         <!-- Controls -->
         <StackPanel x:Name="HeaderActionsPanel"
           Grid.Column="1"
             Orientation="Horizontal"
+            VerticalAlignment="Center"
             Spacing="10">
 
           <!-- Date picker button -->
           <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1"
-                  CornerRadius="{ThemeResource ControlCornerRadius}"
+                  CornerRadius="20"
+                  MinHeight="44"
                   Padding="12,8">
             <StackPanel Orientation="Horizontal"
-                Spacing="6">
+                Spacing="6"
+                VerticalAlignment="Center">
               <TextBlock FontFamily="Segoe MDL2 Assets"
                   Text="&#xE787;"
                   FontSize="13"
@@ -167,17 +170,16 @@
               <TextBlock Text="July 2026"
                   FontSize="13"
                   Foreground="{ThemeResource TextFillColorPrimary}"
-                  VerticalAlignment="Center"/>
+                  VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Border>
 
           <!-- Create Order button -->
-          <Button Background="{StaticResource PurpleBrush}"
-                  CornerRadius="{ThemeResource ControlCornerRadius}"
+          <Button Style="{StaticResource AccentButtonStyle}"
+                  CornerRadius="20"
                   Padding="18,10"
-                  BorderThickness="0"
                   MinHeight="44"
-                  Command="{Binding CreateOrderCommand}">
+                  Click="CreateOrderButton_Click">
             <StackPanel Orientation="Horizontal"
                 Spacing="6">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -189,7 +191,7 @@
                   FontSize="14"
                   FontWeight="SemiBold"
                   Foreground="White"
-                  VerticalAlignment="Center"/>
+                  VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -218,10 +220,12 @@
             <TextBlock Text="TOTAL PRODUCTS"
                 Style="{StaticResource KpiLabelStyle}"
                 FontWeight="SemiBold"
-                CharacterSpacing="40"/>
+                CharacterSpacing="40"
+                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Text="{Binding TotalProductsDisplay}"
                        Style="{StaticResource KpiValueStyle}"
-                       Margin="0,4,0,0"/>
+                       Margin="0,4,0,0"
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           </StackPanel>
         </Border>
 
@@ -233,10 +237,12 @@
             <TextBlock Text="TODAY'S ORDERS"
                 Style="{StaticResource KpiLabelStyle}"
                 FontWeight="SemiBold"
-                CharacterSpacing="40"/>
+                CharacterSpacing="40"
+                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Text="{Binding TotalTodayOrdersDisplay}"
                        Style="{StaticResource KpiValueStyle}"
-                       Margin="0,4,0,0"/>
+                       Margin="0,4,0,0"
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           </StackPanel>
         </Border>
 
@@ -248,10 +254,12 @@
             <TextBlock Text="TODAY'S REVENUE"
                 Style="{StaticResource KpiLabelStyle}"
                 FontWeight="SemiBold"
-                CharacterSpacing="40"/>
+                CharacterSpacing="40"
+                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Text="{Binding TodayRevenueDisplay}"
                        Style="{StaticResource KpiValueStyle}"
-                       Margin="0,4,0,0"/>
+                       Margin="0,4,0,0"
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           </StackPanel>
         </Border>
       </Grid>
@@ -268,11 +276,11 @@
               <TextBlock Text="Monthly Revenue Analysis"
                          FontSize="15"
                          FontWeight="SemiBold"
-                         Foreground="{ThemeResource TextFillColorPrimary}"/>
+                         Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Text="Daily breakdown of revenue for the current month"
                          FontSize="12"
                          Foreground="{ThemeResource TextFillColorTertiary}"
-                         Margin="0,2,0,0"/>
+                         Margin="0,2,0,0" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
             <!-- Legend -->
             <StackPanel Grid.Column="1"
@@ -281,19 +289,19 @@
                 VerticalAlignment="Center">
               <Border Width="8"
                   Height="8"
-                  CornerRadius="4"
+                  CornerRadius="20"
                   Background="{StaticResource PurpleBrush}"/>
               <TextBlock Text="Revenue ($)"
                   FontSize="12"
                   Foreground="{ThemeResource TextFillColorSecondary}"
-                  VerticalAlignment="Center"/>
+                  VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Grid>
 
           <!-- Chart Area -->
           <Border Margin="0,16,0,0"
                   Background="{ThemeResource ControlFillColorDefaultBrush}"
-                  CornerRadius="{ThemeResource ControlCornerRadius}"
+                  CornerRadius="20"
                   Height="240"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -314,27 +322,27 @@
                 Text="DAY 1"
                 FontSize="11"
                 Foreground="{ThemeResource TextFillColorTertiary}"
-                HorizontalAlignment="Left"/>
+                HorizontalAlignment="Left" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Grid.Column="1"
                 Text="DAY 7"
                 FontSize="11"
                 Foreground="{ThemeResource TextFillColorTertiary}"
-                HorizontalAlignment="Center"/>
+                HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Grid.Column="2"
                 Text="DAY 14"
                 FontSize="11"
                 Foreground="{ThemeResource TextFillColorTertiary}"
-                HorizontalAlignment="Center"/>
+                HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Grid.Column="3"
                 Text="DAY 21"
                 FontSize="11"
                 Foreground="{ThemeResource TextFillColorTertiary}"
-                HorizontalAlignment="Center"/>
+                HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Grid.Column="4"
                 Text="DAY 30"
                 FontSize="11"
                 Foreground="{ThemeResource TextFillColorTertiary}"
-                HorizontalAlignment="Right"/>
+                HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           </Grid>
         </StackPanel>
       </Border>
@@ -370,20 +378,20 @@
                            FontSize="15"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimary}"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </StackPanel>
 
               <!-- Loading state -->
               <TextBlock Text="Loading..."
                          Foreground="{ThemeResource TextFillColorTertiary}"
                          FontSize="13"
-                         Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                         Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
               <!-- Best sellers list -->
               <ItemsControl ItemsSource="{Binding TopSellerItems}"
                   Margin="0,0,0,0">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate>
+                  <DataTemplate x:DataType="dashModels:DashboardTopSellerProduct">
                     <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
                             BorderThickness="0,0,0,1"
                             Padding="0,0,0,12"
@@ -398,20 +406,20 @@
                           <TextBlock Text="{Binding Name}"
                                      FontSize="13"
                                      FontWeight="SemiBold"
-                                     Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                     Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                           <TextBlock FontSize="11"
                               Foreground="{ThemeResource TextFillColorTertiary}"
                               Margin="0,2,0,0"
-                                     Text="{Binding SubInfo}"/>
+                                     Text="{Binding SubInfo}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                           <!-- Revenue badge -->
                           <Border Background="{ThemeResource ControlFillColorSecondaryBrush}"
-                                  CornerRadius="4"
+                                  CornerRadius="20"
                                   Padding="6,2"
                                   Margin="0,4,0,0"
                                   HorizontalAlignment="Left">
                             <TextBlock FontSize="11"
                                 Foreground="{StaticResource GreenBrush}"
-                                       Text="{Binding RevenueBadgeText}"/>
+                                       Text="{Binding RevenueBadgeText}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                           </Border>
                         </StackPanel>
 
@@ -422,11 +430,11 @@
                                      FontSize="16"
                                      FontWeight="Bold"
                                      Foreground="{ThemeResource TextFillColorPrimary}"
-                                     HorizontalAlignment="Right"/>
+                                     HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                           <TextBlock Text="sold"
                                      FontSize="10"
                                      Foreground="{ThemeResource TextFillColorTertiary}"
-                                     HorizontalAlignment="Right"/>
+                                     HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         </StackPanel>
                       </Grid>
                     </Border>
@@ -456,14 +464,14 @@
                              FontSize="15"
                              FontWeight="SemiBold"
                              Foreground="{ThemeResource TextFillColorPrimary}"
-                             VerticalAlignment="Center"/>
+                             VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
                 <TextBlock Grid.Column="1"
                            Text="Restock All"
                            FontSize="12"
                            Foreground="{StaticResource PurpleBrush}"
                            FontWeight="SemiBold"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </Grid>
 
               <!-- Table header -->
@@ -478,26 +486,26 @@
                     FontSize="10"
                     Foreground="{ThemeResource TextFillColorTertiary}"
                     FontWeight="SemiBold"
-                    CharacterSpacing="40"/>
+                    CharacterSpacing="40" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Grid.Column="1"
                     Text="STOCK"
                     FontSize="10"
                     Foreground="{ThemeResource TextFillColorTertiary}"
                     FontWeight="SemiBold"
                     HorizontalAlignment="Center"
-                    CharacterSpacing="40"/>
+                    CharacterSpacing="40" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Grid.Column="2"
                     Text="ACTION"
                     FontSize="10"
                     Foreground="{ThemeResource TextFillColorTertiary}"
                     FontWeight="SemiBold"
                     HorizontalAlignment="Right"
-                    CharacterSpacing="40"/>
+                    CharacterSpacing="40" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </Grid>
 
               <ItemsControl ItemsSource="{Binding LowStockItems}">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate>
+                  <DataTemplate x:DataType="dashModels:DashboardLowStockProduct">
                     <Grid Margin="0,0,0,10">
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -510,12 +518,12 @@
                                  FontSize="12"
                                  Foreground="{ThemeResource TextFillColorPrimary}"
                                  TextTrimming="CharacterEllipsis"
-                                 VerticalAlignment="Center"/>
+                                 VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                       <!-- Stock badge -->
                       <Border Grid.Column="1"
                               Background="#FEF2F2"
-                              CornerRadius="4"
+                              CornerRadius="20"
                               Padding="6,3"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center">
@@ -530,13 +538,13 @@
                       <!-- Order button -->
                       <Border Grid.Column="2"
                               Background="{StaticResource PurpleLightBrush}"
-                              CornerRadius="4"
+                              CornerRadius="20"
                               Padding="8,3"
                               HorizontalAlignment="Right">
                         <TextBlock Text="Order"
                                    FontSize="11"
                                    Foreground="{StaticResource PurpleBrush}"
-                                   FontWeight="SemiBold"/>
+                                   FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                       </Border>
                     </Grid>
                   </DataTemplate>
@@ -572,19 +580,19 @@
                              FontSize="15"
                              FontWeight="SemiBold"
                              Foreground="{ThemeResource TextFillColorPrimary}"
-                             VerticalAlignment="Center"/>
+                             VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
                 <TextBlock Grid.Column="1"
                            Text="View All Orders"
                            FontSize="12"
                            Foreground="{StaticResource PurpleBrush}"
                            FontWeight="SemiBold"
-                           VerticalAlignment="Center"/>
+                           VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </Grid>
 
               <ItemsControl ItemsSource="{Binding RecentOrders}">
                 <ItemsControl.ItemTemplate>
-                  <DataTemplate>
+                  <DataTemplate x:DataType="dashModels:DashboardRecentOrder">
                     <Border BorderBrush="#F3F4F6"
                             BorderThickness="0,0,0,1"
                             Padding="0,0,0,14"
@@ -600,13 +608,13 @@
                                      Text="{Binding CustomerName}"
                                      FontSize="13"
                                      FontWeight="SemiBold"
-                                     Foreground="#1F2937"/>
+                                     Foreground="#1F2937" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                           <TextBlock Grid.Column="1"
                                      Text="{Binding TotalPriceDisplay}"
                                      FontSize="13"
                                      FontWeight="Bold"
                                      Foreground="#1F2937"
-                                     HorizontalAlignment="Right"/>
+                                     HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         </Grid>
 
                         <!-- Order meta -->
@@ -619,21 +627,21 @@
                         </TextBlock>
 
                         <!-- Status badge -->
-                        <Border CornerRadius="4"
+                        <Border CornerRadius="20"
                                 Padding="8,3"
                                 HorizontalAlignment="Left"
                                 Background="{Binding StatusBadgeBg, Converter={StaticResource HexToBrushConverter}}">
                           <TextBlock Text="{Binding Status}"
                                      FontSize="10"
                                      FontWeight="SemiBold"
-                                     Foreground="{Binding StatusBadgeFg, Converter={StaticResource HexToBrushConverter}}"/>
+                                     Foreground="{Binding StatusBadgeFg, Converter={StaticResource HexToBrushConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         </Border>
 
                         <!-- Item line -->
                         <TextBlock Text="{Binding FirstItemLine}"
                                    FontSize="11"
                                    Foreground="{ThemeResource TextFillColorSecondary}"
-                                   TextTrimming="CharacterEllipsis"/>
+                                   TextTrimming="CharacterEllipsis" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                       </StackPanel>
                     </Border>
                   </DataTemplate>
@@ -644,22 +652,22 @@
 
           <!-- Inventory Sync Panel -->
           <Border Background="{StaticResource PurpleBrush}"
-                  CornerRadius="12"
+                  CornerRadius="20"
                   Padding="24,20">
             <StackPanel Spacing="8">
               <TextBlock Text="Inventory Sync?"
                          FontSize="16"
                          FontWeight="Bold"
-                         Foreground="White"/>
+                         Foreground="White" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Text="Ensure your local stock matches the online storefront across all channels."
                          FontSize="12"
                          Foreground="White"
                   Opacity="0.8"
                          TextWrapping="Wrap"
-                         LineHeight="18"/>
+                         LineHeight="18" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <!-- Sync button -->
               <Border Background="White"
-                      CornerRadius="8"
+                      CornerRadius="20"
                       Padding="14,10"
                       Margin="0,4,0,0"
                       HorizontalAlignment="Left">
@@ -674,7 +682,7 @@
                              FontSize="13"
                              FontWeight="SemiBold"
                              Foreground="{StaticResource PurpleBrush}"
-                             VerticalAlignment="Center"/>
+                             VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
               </Border>
             </StackPanel>

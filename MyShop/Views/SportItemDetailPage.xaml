@@ -52,7 +52,7 @@
             <Setter Property="BorderThickness"
                     Value="1"/>
             <Setter Property="CornerRadius"
-                    Value="{ThemeResource ControlCornerRadius}"/>
+                    Value="20"/>
             <Setter Property="Padding"
                     Value="16,10"/>
             <Setter Property="MinHeight"
@@ -78,7 +78,7 @@
             <Setter Property="BorderThickness"
                     Value="0"/>
             <Setter Property="CornerRadius"
-                    Value="{ThemeResource ControlCornerRadius}"/>
+                    Value="20"/>
             <Setter Property="Padding"
                     Value="16,10"/>
             <Setter Property="MinHeight"
@@ -122,7 +122,7 @@
             <Setter Property="BorderThickness"
                     Value="1"/>
             <Setter Property="CornerRadius"
-                    Value="{ThemeResource ControlCornerRadius}"/>
+                    Value="20"/>
             <Setter Property="Background"
                     Value="{ThemeResource ControlFillColorDefaultBrush}"/>
         </Style>
@@ -148,16 +148,16 @@
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimary}"
-                           Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                           Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="Create product"
                            FontSize="22"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimary}"
-                           Visibility="{Binding IsEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                           Visibility="{Binding IsEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="Enter details and images, then save to persist."
                            FontSize="13"
                            Foreground="{ThemeResource TextFillColorSecondary}"
-                           TextWrapping="Wrap"/>
+                           TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
 
             <StackPanel Grid.Column="1"
@@ -179,7 +179,7 @@
                                     Foreground="White"
                                     VerticalAlignment="Center"/>
                         <TextBlock Text="Save changes"
-                                   VerticalAlignment="Center"/>
+                                   VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -201,16 +201,16 @@
                             Padding="16">
                         <StackPanel Spacing="12">
                             <Grid Height="280"
-                                  CornerRadius="12">
+                                  CornerRadius="20">
                                 <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                         BorderThickness="1"
-                                        CornerRadius="12"
+                                        CornerRadius="20"
                                         Visibility="{Binding PreviewImageUrl, Converter={StaticResource InverseStringToVisibilityConverter}}">
                                     <TextBlock Text="No image"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               Foreground="{ThemeResource TextFillColorTertiary}"/>
+                                               Foreground="{ThemeResource TextFillColorTertiary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                 </Border>
                                 <Image Source="{Binding PreviewImageUrl, Converter={StaticResource StringToImageConverter}}"
                                        Stretch="UniformToFill"
@@ -224,8 +224,9 @@
                                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                         BorderThickness="1"
-                                        CornerRadius="8"
-                                        Opacity="0.95">
+                                        CornerRadius="20"
+                                        Opacity="0.95"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                                     <SymbolIcon Symbol="Zoom"/>
                                 </Button>
                             </Grid>
@@ -266,10 +267,10 @@
                                             <DataTemplate>
                                                 <Grid Width="72"
                                                       Height="72"
-                                                      CornerRadius="8">
+                                                      CornerRadius="20">
                                                     <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                             BorderThickness="1"
-                                                            CornerRadius="8">
+                                                            CornerRadius="20">
                                                         <Image Source="{Binding Converter={StaticResource StringToImageConverter}}"
                                                                Stretch="UniformToFill"/>
                                                     </Border>
@@ -282,7 +283,8 @@
                                                             Height="22"
                                                             Padding="0"
                                                             Background="{StaticResource DangerBrush}"
-                                                            CornerRadius="4">
+                                                            CornerRadius="20"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                                                         <SymbolIcon Symbol="Cancel"
                                                                     Foreground="White"/>
                                                     </Button>
@@ -321,7 +323,8 @@
                                             Background="Transparent"
                                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                             BorderThickness="2"
-                                            CornerRadius="8">
+                                            CornerRadius="20"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                                         <StackPanel Spacing="2"
                                                     VerticalAlignment="Center">
                                             <FontIcon Glyph="&#xE710;"
@@ -329,7 +332,7 @@
                                                       Foreground="{StaticResource SportPurpleBrush}"/>
                                             <TextBlock Text="Add"
                                                        FontSize="11"
-                                                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+                                                       Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -340,7 +343,7 @@
                     <Border Background="{StaticResource SportPurpleSoftBrush}"
                             BorderBrush="{StaticResource SportPurpleLightBrush}"
                             BorderThickness="1"
-                            CornerRadius="14"
+                            CornerRadius="20"
                             Padding="18">
                         <StackPanel Spacing="12">
                             <StackPanel Orientation="Horizontal"
@@ -349,27 +352,28 @@
                                           Foreground="{StaticResource SportPurpleBrush}"/>
                                 <TextBlock Text="AI Content Assistant"
                                            FontWeight="SemiBold"
-                                           Foreground="{StaticResource SportPurpleBrush}"/>
+                                           Foreground="{StaticResource SportPurpleBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             </StackPanel>
                             <TextBlock Text="Generate professional product descriptions using AI based on your images and specs."
                                        FontSize="12"
                                        Foreground="{ThemeResource TextFillColorSecondary}"
-                                       TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             <Button HorizontalAlignment="Stretch"
                                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                     BorderBrush="{StaticResource SportPurpleBrush}"
                                     BorderThickness="1"
                                     Foreground="{StaticResource SportPurpleBrush}"
-                                    CornerRadius="10"
+                                    CornerRadius="20"
                                     Padding="12,8"
-                                    Command="{Binding AutoFillDetailsCommand}">
+                                    Command="{Binding AutoFillDetailsCommand}"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal"
                                                 Spacing="8"
                                                 HorizontalAlignment="Center"
                                                 Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                                         <FontIcon Glyph="&#xEF58;"/>
-                                        <TextBlock Text="AI Auto-fill Details"/>
+                                        <TextBlock Text="AI Auto-fill Details" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                     </StackPanel>
                                     <ProgressRing IsActive="True"
                                                   Width="20"
@@ -423,12 +427,12 @@
                                             Padding="12,0"
                                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                             BorderThickness="1"
-                                            CornerRadius="8,0,0,8"
+                                            CornerRadius="20,0,0,20"
                                             Background="{ThemeResource ControlFillColorDefaultBrush}">
                                         <TextBlock Text="$"
                                                    VerticalAlignment="Center"
                                                    FontWeight="SemiBold"
-                                                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                                   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                     </Border>
                                     <controls:DecimalTextBox Grid.Column="1"
                                                              Text="{Binding SellingPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -475,7 +479,7 @@
                                            FontWeight="SemiBold"
                                            FontSize="15"
                                            Foreground="{ThemeResource TextFillColorPrimary}"
-                                           VerticalAlignment="Center"/>
+                                           VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                 <Button HorizontalAlignment="Right"
                                         Content="+ Add variant"
                                         Style="{StaticResource DetailOutlineButtonStyle}"
@@ -485,7 +489,7 @@
                             </Grid>
                             <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                     BorderThickness="1"
-                                    CornerRadius="10"
+                                    CornerRadius="20"
                                     Background="{ThemeResource ControlFillColorDefaultBrush}">
                                 <StackPanel Padding="12,10"
                                             Spacing="10">
@@ -595,16 +599,17 @@
                                         Padding="8,4"
                                         Background="Transparent"
                                         BorderThickness="0"
-                                        ToolTipService.ToolTip="Regenerate with AI">
+                                        ToolTipService.ToolTip="Regenerate with AI"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                                     <StackPanel Orientation="Horizontal" Spacing="6">
                                         <FontIcon Glyph="&#xEF58;" FontSize="14" Foreground="{StaticResource SportPurpleBrush}"/>
-                                        <TextBlock Text="AI Magic" FontSize="11" Foreground="{StaticResource SportPurpleBrush}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="AI Magic" FontSize="11" Foreground="{StaticResource SportPurpleBrush}" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                     </StackPanel>
                                 </Button>
                             </Grid>
-                            <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-                                    BorderThickness="1" 
-                                    CornerRadius="8"
+                            <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="20"
                                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
                                 <TextBox Text="{Binding ProductDescriptionUi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True"
@@ -628,7 +633,7 @@
             <TextBlock Text="{Binding ErrorMessage}"
                        Foreground="{StaticResource DangerBrush}"
                        TextWrapping="Wrap"
-                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -10,8 +10,8 @@
     <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
     <conv:BoolToForegroundConverter x:Key="BoolToForegroundConverter"/>
 
-    <!-- Font: Inter (Google Font) - fallback to Segoe UI if Inter is not loaded -->
-    <FontFamily x:Key="InterFont">Segoe UI, Segoe UI Variable Display</FontFamily>
+    <!-- Reuse app default MoMo font -->
+    <FontFamily x:Key="InterFont">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
 
     <!-- Theme-aware accent brushes -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="#8B52FF"/>
@@ -116,7 +116,8 @@
                 Background="Transparent"
                 BorderThickness="0"
                 Padding="8,4"
-                ToolTipService.ToolTip="Back to Database Config">
+                ToolTipService.ToolTip="Back to Database Config"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
           <StackPanel Orientation="Horizontal" Spacing="6">
             <TextBlock FontFamily="Segoe MDL2 Assets"
                        Text="&#xE72B;"
@@ -135,9 +136,11 @@
       <StackPanel Grid.Row="1" Margin="0,0,0,32">
         <TextBlock Text="Partner Login"
                    Style="{StaticResource TitleLargeTextBlockStyle}"
+                   FontFamily="{StaticResource InterFont}"
                    Foreground="{ThemeResource TextFillColorPrimary}"/>
         <TextBlock Text="Welcome back to the ProSport ecosystem."
                    Style="{StaticResource BodyTextBlockStyle}"
+                   FontFamily="{StaticResource InterFont}"
                    Foreground="{ThemeResource TextFillColorSecondary}"
                    TextWrapping="Wrap"
                    Margin="0,8,0,0"/>
@@ -150,6 +153,7 @@
           <!-- Email field -->
           <TextBlock Text="Organization Email"
                      Style="{StaticResource BodyStrongTextBlockStyle}"
+                     FontFamily="{StaticResource InterFont}"
                      Foreground="{ThemeResource TextFillColorSecondary}"
                      Margin="0,0,0,8"/>
           <TextBox x:Name="EmailInput"
@@ -161,7 +165,7 @@
                    Background="{ThemeResource ControlFillColorDefaultBrush}"
                    Foreground="{ThemeResource TextFillColorPrimary}"
                    BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                   CornerRadius="{ThemeResource ControlCornerRadius}"
+                   CornerRadius="20"
                    Padding="12,10,12,10"
                    Height="48"
                    VerticalContentAlignment="Center"/>
@@ -169,6 +173,7 @@
           <!-- Password field -->
           <TextBlock Text="Security Key"
                      Style="{StaticResource BodyStrongTextBlockStyle}"
+                     FontFamily="{StaticResource InterFont}"
                      Foreground="{ThemeResource TextFillColorSecondary}"
                      Margin="0,16,0,8"/>
           <Grid>
@@ -178,7 +183,7 @@
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          Foreground="{ThemeResource TextFillColorPrimary}"
                          BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                         CornerRadius="{ThemeResource ControlCornerRadius}"
+                         CornerRadius="20"
                          Padding="12,10,40,10"
                          Height="48"
                          VerticalContentAlignment="Center"/>
@@ -188,7 +193,8 @@
                     Width="32" Height="32"
                     Background="Transparent"
                     BorderThickness="0"
-                    Click="TogglePassword_Click">
+                    Click="TogglePassword_Click"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
               <Viewbox Width="17" Height="12">
                 <Path Data="M1 6C1 6 4 1 8.5 1C13 1 16 6 16 6C16 6 13 11 8.5 11C4 11 1 6 1 6ZM8.5 3C6.01 3 4 5.01 4 7.5C4 9.99 6.01 12 8.5 12C10.99 12 13 9.99 13 7.5C13 5.01 10.99 3 8.5 3ZM8.5 4.5C9.88 4.5 11 5.62 11 7C11 8.38 9.88 9.5 8.5 9.5C7.12 9.5 6 8.38 6 7C6 5.62 7.12 4.5 8.5 4.5ZM1 6V12H16V6"
                       Stroke="{ThemeResource TextFillColorSecondary}" StrokeThickness="1"
@@ -219,10 +225,11 @@
                   HorizontalAlignment="Stretch"
                   Height="48"
                   Margin="0,20,0,0"
-                  CornerRadius="{ThemeResource ControlCornerRadius}"
+                  CornerRadius="20"
                   Background="{StaticResource PrimaryBrush}"
                   BorderThickness="0"
-                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                  IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <TextBlock Text="Sign In to Hub"
                        FontFamily="{StaticResource InterFont}"
                        FontSize="14" FontWeight="SemiBold"

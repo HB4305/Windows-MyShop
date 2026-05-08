@@ -121,6 +121,7 @@ public class CreateOrderDialogViewModel : INotifyPropertyChanged
 public sealed partial class CreateOrderDialog : ContentDialog
 {
     public CreateOrderDialogViewModel ViewModel { get; }
+    public bool IsSubmitted { get; private set; }
 
     public CreateOrderDialog()
     {
@@ -169,17 +170,32 @@ public sealed partial class CreateOrderDialog : ContentDialog
         }
     }
 
-    private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    private bool ValidateAndShowError()
     {
         var validation = ViewModel.Validate();
         if (!validation.IsValid)
         {
-            args.Cancel = true;
             ErrorTextBlock.Text = validation.ErrorMessage;
             ErrorTextBlock.Visibility = Visibility.Visible;
-            return;
+            return false;
         }
         ErrorTextBlock.Visibility = Visibility.Collapsed;
+        return true;
+    }
+
+    private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!ValidateAndShowError())
+            return;
+
+        IsSubmitted = true;
+        Hide();
+    }
+
+    private void CancelButton_Click(object sender, RoutedEventArgs e)
+    {
+        IsSubmitted = false;
+        Hide();
     }
 
     private void OrderTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)

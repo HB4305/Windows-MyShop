@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Name="DialogRoot"
     Title=""
-    MinWidth="440">
+    MinWidth="440"
+    Style="{StaticResource DefaultContentDialogStyle}">
 
     <ContentDialog.Resources>
         <!-- Use Global Resources defined in App.xaml -->
@@ -33,7 +34,7 @@
             <!-- Icon -->
             <Border Grid.Column="0"
                     Background="{ThemeResource ControlFillColorSecondaryBrush}"
-                    CornerRadius="10"
+                    CornerRadius="20"
                     Width="44" Height="44"
                     Margin="0,0,14,0">
                 <FontIcon FontFamily="Segoe MDL2 Assets"
@@ -47,10 +48,10 @@
                 <TextBlock Text="Export Invoice"
                            FontSize="18"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock x:Name="OrderIdText"
                            FontSize="12"
-                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </Grid>
 
@@ -62,7 +63,7 @@
         <TextBlock Text="Select export format"
                    FontSize="13"
                    FontWeight="SemiBold"
-                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
         <!-- ── Format cards ── -->
         <StackPanel Spacing="8">
@@ -72,14 +73,14 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="8" Width="40" Height="40" Margin="0,0,12,0">
+                    <Border Grid.Column="0" Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="20" Width="40" Height="40" Margin="0,0,12,0">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8A5;" FontSize="16" Foreground="{StaticResource AppAccentBrush}"/>
                     </Border>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
-                        <TextBlock Text="PDF Document" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-                        <TextBlock Text="Universal — opens in any browser or reader" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="PDF Document" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="Universal — opens in any browser or reader" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
-                    <Border x:Name="PdfCheckMark" Grid.Column="2" Width="20" Height="20" CornerRadius="10" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="2" VerticalAlignment="Center">
+                    <Border x:Name="PdfCheckMark" Grid.Column="2" Width="20" Height="20" CornerRadius="20" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="2" VerticalAlignment="Center">
                         <Ellipse x:Name="PdfDot" Width="8" Height="8" Fill="{StaticResource AppAccentBrush}" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </Grid>
@@ -91,19 +92,19 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="8" Width="40" Height="40" Margin="0,0,12,0">
+                    <Border Grid.Column="0" Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="20" Width="40" Height="40" Margin="0,0,12,0">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE714;" FontSize="16" Foreground="{StaticResource AppAccentBrush}"/>
                     </Border>
                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
                         <StackPanel Orientation="Horizontal" Spacing="6">
-                            <TextBlock Text="XPS Document" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-                            <Border Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}" CornerRadius="4" Padding="6,2">
-                                <TextBlock Text="Windows" FontSize="9" FontWeight="SemiBold" Foreground="{ThemeResource SystemFillColorSuccessBrush}"/>
+                            <TextBlock Text="XPS Document" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                            <Border Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}" CornerRadius="20" Padding="6,2">
+                                <TextBlock Text="Windows" FontSize="9" FontWeight="SemiBold" Foreground="{ThemeResource SystemFillColorSuccessBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             </Border>
                         </StackPanel>
-                        <TextBlock Text="Native Windows format, best print quality" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="Native Windows format, best print quality" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
-                    <Border x:Name="XpsCheckMark" Grid.Column="2" Width="20" Height="20" CornerRadius="10" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="2" VerticalAlignment="Center">
+                    <Border x:Name="XpsCheckMark" Grid.Column="2" Width="20" Height="20" CornerRadius="20" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="2" VerticalAlignment="Center">
                         <Ellipse x:Name="XpsDot" Width="8" Height="8" Fill="{StaticResource AppAccentBrush}" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </Grid>
@@ -122,24 +123,26 @@
                     HorizontalAlignment="Stretch"
                     Foreground="White"
                     Padding="0,10"
-                    CornerRadius="8"
-                    Click="ExportButton_Click">
+                    CornerRadius="20"
+                    Click="ExportButton_Click"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                 <Button.Resources>
                     <!-- Reference Global Accent Colors -->
                     <StaticResource x:Key="ButtonBackground" ResourceKey="AppAccentBrush" />
                     <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#7C4DFF" />
                     <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#6B39FF" />
                 </Button.Resources>
-                <TextBlock Text="Export" FontWeight="SemiBold"/>
+                <TextBlock Text="Export" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 
             <Button Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     Background="{ThemeResource ControlFillColorDefaultBrush}"
                     Padding="0,10"
-                    CornerRadius="8"
-                    Click="CancelButton_Click">
-                <TextBlock Text="Cancel" FontWeight="SemiBold"/>
+                    CornerRadius="20"
+                    Click="CancelButton_Click"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
+                <TextBlock Text="Cancel" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
         </Grid>
 

@@ -5,14 +5,25 @@
                Title="Create New Order"
                MinWidth="900"
                MaxWidth="1200"
-               PrimaryButtonText="Create Order"
-               CloseButtonText="Cancel"
-               DefaultButton="Primary"
-               PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+               CornerRadius="20"
+               Style="{StaticResource DefaultContentDialogStyle}">
 
   <ContentDialog.Resources>
     <x:Double x:Key="ContentDialogMaxWidth">1200</x:Double>
-    
+    <SolidColorBrush x:Key="ContentDialogSmokeFill" Color="Transparent"/>
+    <Style x:Key="CreateOrderDialogCloseButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="MinHeight" Value="40"/>
+      <Setter Property="Padding" Value="16,8"/>
+      <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+    </Style>
+    <Style x:Key="CreateOrderDialogPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource AccentButtonStyle}">
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="MinHeight" Value="40"/>
+      <Setter Property="Padding" Value="16,8"/>
+      <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+    </Style>
+
     <Style x:Key="HeaderStyle" TargetType="TextBlock">
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="Margin" Value="0,16,0,8"/>
@@ -26,16 +37,16 @@
     <StackPanel Spacing="16" Padding="24,16,24,16" HorizontalAlignment="Stretch">
       <Grid Width="850" Height="1"/>
       <!-- Error Message -->
-      <TextBlock x:Name="ErrorTextBlock" 
-                 Foreground="{ThemeResource SystemFillColorCriticalBrush}" 
-                 Visibility="Collapsed" 
-                 TextWrapping="Wrap"/>
+      <TextBlock x:Name="ErrorTextBlock"
+                 Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                 Visibility="Collapsed"
+                 TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
       <!-- Order Type -->
       <TextBlock Text="ORDER TYPE" Style="{StaticResource HeaderStyle}"/>
-      <ComboBox x:Name="OrderTypeCombo" 
+      <ComboBox x:Name="OrderTypeCombo"
                 HorizontalAlignment="Stretch"
-                CornerRadius="8"
+                CornerRadius="20"
                 SelectedIndex="0"
                 FontSize="16"
                 SelectionChanged="OrderTypeCombo_SelectionChanged">
@@ -45,25 +56,25 @@
 
       <!-- Customer Info -->
       <TextBlock Text="CUSTOMER INFORMATION" Style="{StaticResource HeaderStyle}" Margin="0,0,0,8"/>
-      
-      <TextBox x:Name="CustomerNameBox" 
-               PlaceholderText="Customer Name (e.g. John Doe) *" 
+
+      <TextBox x:Name="CustomerNameBox"
+               PlaceholderText="Customer Name (e.g. John Doe) *"
                Text="{x:Bind ViewModel.Order.CustomerName, Mode=TwoWay}"
                FontSize="16"
-               CornerRadius="8"/>
-      
-      <TextBox x:Name="CustomerPhoneBox" 
-               PlaceholderText="Customer Phone (e.g. 1234567890)" 
+               CornerRadius="20"/>
+
+      <TextBox x:Name="CustomerPhoneBox"
+               PlaceholderText="Customer Phone (e.g. 1234567890)"
                Text="{x:Bind ViewModel.Order.CustomerPhone, Mode=TwoWay}"
                InputScope="TelephoneNumber"
                FontSize="16"
-               CornerRadius="8"
+               CornerRadius="20"
                Margin="0,0,0,8"/>
 
-      <TextBox x:Name="CustomerAddressBox" 
-               PlaceholderText="Shipping Address *" 
+      <TextBox x:Name="CustomerAddressBox"
+               PlaceholderText="Shipping Address *"
                Text="{x:Bind ViewModel.Order.ShippingAddress, Mode=TwoWay}"
-               CornerRadius="8"
+               CornerRadius="20"
                Visibility="Collapsed"/>
 
       <!-- Order Items -->
@@ -78,12 +89,12 @@
                       DisplayMemberPath="Name"
                       TextMemberPath="Name"
                       FontSize="16"
-                      CornerRadius="8"/>
+                      CornerRadius="20"/>
 
       <!-- Selected Items List -->
-      <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-              BorderThickness="1" 
-              CornerRadius="8" 
+      <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+              BorderThickness="1"
+              CornerRadius="20"
               MinHeight="100"
               Padding="0"
               Background="{ThemeResource ControlFillColorDefaultBrush}">
@@ -98,15 +109,15 @@
                   <RowDefinition Height="Auto"/>
                   <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                
+
                 <!-- Top Section: Name, Price, Stock Status -->
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8" VerticalAlignment="Center">
-                  <TextBlock Text="{x:Bind ItemName}" FontWeight="SemiBold" FontSize="15" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="400" VerticalAlignment="Center"/>
-                  
-                  <TextBlock Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}}" FontSize="14" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
-                  
-                  <Border Background="#1A8B52FF" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
-                    <TextBlock Text="{x:Bind StockStatusDisplay, Mode=OneWay}" FontSize="12" Foreground="{StaticResource PurpleBrush}" FontWeight="SemiBold"/>
+                  <TextBlock Text="{x:Bind ItemName}" FontWeight="SemiBold" FontSize="15" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="400" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+
+                  <TextBlock Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}}" FontSize="14" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+
+                  <Border Background="#1A8B52FF" CornerRadius="20" Padding="6,2" VerticalAlignment="Center">
+                    <TextBlock Text="{x:Bind StockStatusDisplay, Mode=OneWay}" FontSize="12" Foreground="{StaticResource PurpleBrush}" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </Border>
                 </StackPanel>
 
@@ -121,35 +132,35 @@
                   </Grid.ColumnDefinitions>
 
                   <StackPanel Grid.Column="0" Spacing="2" Margin="0,0,12,0">
-                    <TextBlock Text="Size" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
-                    <ComboBox ItemsSource="{x:Bind AvailableSizes, Mode=OneWay}" 
-                              SelectedItem="{x:Bind SelectedSize, Mode=TwoWay}" 
-                              HorizontalAlignment="Stretch" 
-                              CornerRadius="8"/>
+                    <TextBlock Text="Size" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <ComboBox ItemsSource="{x:Bind AvailableSizes, Mode=OneWay}"
+                              SelectedItem="{x:Bind SelectedSize, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch"
+                              CornerRadius="20"/>
                   </StackPanel>
 
                   <StackPanel Grid.Column="1" Spacing="2" Margin="0,0,12,0">
-                    <TextBlock Text="Color" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
-                    <ComboBox ItemsSource="{x:Bind AvailableColors, Mode=OneWay}" 
-                              SelectedItem="{x:Bind SelectedColor, Mode=TwoWay}" 
-                              HorizontalAlignment="Stretch" 
-                              CornerRadius="8"/>
+                    <TextBlock Text="Color" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <ComboBox ItemsSource="{x:Bind AvailableColors, Mode=OneWay}"
+                              SelectedItem="{x:Bind SelectedColor, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch"
+                              CornerRadius="20"/>
                   </StackPanel>
 
                   <StackPanel Grid.Column="2" Spacing="2" Margin="0,0,12,0">
-                    <TextBlock Text="Qty" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
-                    <NumberBox Value="{x:Bind Quantity, Mode=TwoWay}" 
-                               Minimum="1" 
+                    <TextBlock Text="Qty" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <NumberBox Value="{x:Bind Quantity, Mode=TwoWay}"
+                               Minimum="1"
                                Maximum="{x:Bind MaxQuantity, Mode=OneWay}"
                                IsEnabled="{x:Bind IsQuantityEnabled, Mode=OneWay}"
                                SpinButtonPlacementMode="Compact"
                                ValueChanged="Quantity_ValueChanged"
-                               CornerRadius="8"
+                               CornerRadius="20"
                                HorizontalAlignment="Stretch"/>
                   </StackPanel>
 
                   <StackPanel Grid.Column="3" Spacing="4" VerticalAlignment="Bottom" Margin="0,0,16,6">
-                    <TextBlock Text="{x:Bind TotalPriceDisplay, Mode=OneWay}" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Text="{x:Bind TotalPriceDisplay, Mode=OneWay}" FontWeight="Bold" FontSize="16" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
 
                   <Button Grid.Column="4" Background="Transparent"
@@ -157,7 +168,8 @@
                           VerticalAlignment="Bottom"
                           Margin="0,0,0,0"
                           Click="RemoveItem_Click"
-                          Tag="{x:Bind}">
+                          Tag="{x:Bind}"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                     <FontIcon Glyph="&#xE74D;" FontSize="16" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
                   </Button>
                 </Grid>
@@ -171,7 +183,7 @@
       <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1"
-              CornerRadius="8"
+              CornerRadius="20"
               Padding="16"
               Margin="0,8,0,0">
         <Grid>
@@ -179,10 +191,28 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <TextBlock Grid.Column="0" Text="Total Amount:" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center"/>
-          <TextBlock Grid.Column="1" x:Name="TotalAmountTextBlock" Text="{x:Bind ViewModel.TotalAmountDisplay, Mode=OneWay}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource PurpleBrush}"/>
+          <TextBlock Grid.Column="0" Text="Total Amount:" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Grid.Column="1" x:Name="TotalAmountTextBlock" Text="{x:Bind ViewModel.TotalAmountDisplay, Mode=OneWay}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource PurpleBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </Grid>
       </Border>
+
+      <Grid Margin="0,8,0,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Column="1"
+                Content="Cancel"
+                Style="{StaticResource CreateOrderDialogCloseButtonStyle}"
+                Margin="0,0,12,0"
+                Click="CancelButton_Click"/>
+        <Button Grid.Column="2"
+                Content="Create Order"
+                Style="{StaticResource CreateOrderDialogPrimaryButtonStyle}"
+                Click="CreateOrderButton_Click"/>
+      </Grid>
 
     </StackPanel>
   </ScrollViewer>

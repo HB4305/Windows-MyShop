@@ -13,7 +13,7 @@
         <TextBlock x:Name="ErrorText" 
                    Foreground="Red" 
                    TextWrapping="Wrap" 
-                   Visibility="Collapsed"/>
+                   Visibility="Collapsed" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
         <!-- Name -->
         <TextBox x:Name="NameTextBox" 

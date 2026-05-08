@@ -1,12 +1,12 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MyShop.Models.ReportModels;
 
 public class RevenueData
 {
-  [JsonProperty("date")]
+  [JsonPropertyName("date")]
   public DateTime Date { get; set; }
 
-  [JsonProperty("gross_revenue")]
+  [JsonPropertyName("gross_revenue")]
   public decimal GrossRevenue { get; set; }
 }

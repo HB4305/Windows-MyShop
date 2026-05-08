@@ -24,7 +24,7 @@
 
         <StackPanel Grid.Row="0" Spacing="16">
             <Grid Width="950" Height="1"/> <!-- Spacer to force dialog width -->
-            <TextBlock x:Name="ErrorText" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed"/>
+            <TextBlock x:Name="ErrorText" Foreground="Red" TextWrapping="Wrap" Visibility="Collapsed" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             
             <Grid ColumnSpacing="16">
                 <Grid.ColumnDefinitions>
@@ -53,7 +53,7 @@
         </StackPanel>
 
         <!-- Selected Products List -->
-        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" MinHeight="200">
+        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" MinHeight="200">
             <ListView x:Name="ItemsListView" SelectionMode="None">
                 <ListView.Header>
                     <Grid Padding="16,12" Background="{ThemeResource LayerFillColorDefaultBrush}">
@@ -66,12 +66,12 @@
                             <ColumnDefinition Width="1.5*"/>
                             <ColumnDefinition Width="Auto" MinWidth="40"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Product" FontWeight="SemiBold"/>
-                        <TextBlock Grid.Column="1" Text="Size" FontWeight="SemiBold"/>
-                        <TextBlock Grid.Column="2" Text="Color" FontWeight="SemiBold"/>
-                        <TextBlock Grid.Column="3" Text="Quantity" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="4" Text="Import Price" FontWeight="SemiBold" HorizontalAlignment="Right"/>
-                        <TextBlock Grid.Column="5" Text="Total" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                        <TextBlock Text="Product" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="1" Text="Size" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="2" Text="Color" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="3" Text="Quantity" FontWeight="SemiBold" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="4" Text="Import Price" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="5" Text="Total" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Grid>
                 </ListView.Header>
                 <ListView.ItemTemplate>
@@ -88,7 +88,7 @@
                             </Grid.ColumnDefinitions>
                             
                             <StackPanel>
-                                <TextBlock Text="{Binding ItemName}" FontWeight="SemiBold" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding ItemName}" FontWeight="SemiBold" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             </StackPanel>
 
                             <ComboBox Grid.Column="1" 
@@ -128,13 +128,14 @@
                                        Text="{Binding TotalPriceDisplay}" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Right" 
-                                       FontWeight="SemiBold"/>
+                                       FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                             <Button Grid.Column="6" 
                                     Click="RemoveItem_Click" 
                                     Background="Transparent" 
                                     Foreground="Red" 
-                                    ToolTipService.ToolTip="Remove">
+                                    ToolTipService.ToolTip="Remove"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                                 <FontIcon Glyph="&#xE74D;" FontSize="14"/>
                             </Button>
                         </Grid>
@@ -144,10 +145,10 @@
         </Border>
 
         <!-- Summary -->
-        <Border Grid.Row="2" Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16" CornerRadius="8">
+        <Border Grid.Row="2" Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16" CornerRadius="20">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="16">
-                <TextBlock Text="Total Cost:" VerticalAlignment="Center" FontSize="16"/>
-                <TextBlock x:Name="TotalCostText" Text="0" FontWeight="Bold" FontSize="20" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                <TextBlock Text="Total Cost:" VerticalAlignment="Center" FontSize="16" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock x:Name="TotalCostText" Text="0" FontWeight="Bold" FontSize="20" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </Border>
     </Grid>

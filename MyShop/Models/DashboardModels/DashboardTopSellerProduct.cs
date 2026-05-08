@@ -1,32 +1,32 @@
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 public class DashboardTopSellerProduct
 {
-    [JsonProperty("item_id")]
+    [JsonPropertyName("item_id")]
     public int ItemId { get; set; }
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
-    [JsonProperty("category_name")]
+    [JsonPropertyName("category_name")]
     public string? CategoryName { get; set; }
 
-    [JsonProperty("selling_price")]
+    [JsonPropertyName("selling_price")]
     public decimal? SellingPrice { get; set; }
 
-    [JsonProperty("image_urls")]
+    [JsonPropertyName("image_urls")]
     public string[] ImageUrls { get; set; } = [];
 
     public string? ImageUrl => ImageUrls.FirstOrDefault();
 
-    [JsonProperty("quantity_sold")]
+    [JsonPropertyName("quantity_sold")]
     public int QuantitySold { get; set; }
 
-    [JsonProperty("curr_period_revenue")]
+    [JsonPropertyName("curr_period_revenue")]
     public decimal CurrPeriodRevenue { get; set; }
 
-    [JsonProperty("prev_period_revenue")]
+    [JsonPropertyName("prev_period_revenue")]
     public decimal PrevPeriodRevenue { get; set; }
 
     // ── Computed display properties ─────────────────────────────────

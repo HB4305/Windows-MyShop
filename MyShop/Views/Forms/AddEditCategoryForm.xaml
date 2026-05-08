@@ -35,10 +35,10 @@
 				<TextBlock x:Name="FormTitle"
 						   FontSize="18"
 						   FontWeight="Bold"
-						   Foreground="#1F2937"/>
+						   Foreground="#1F2937" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 				<TextBlock x:Name="FormSubtitle"
 						   FontSize="12"
-						   Foreground="#9CA3AF"/>
+						   Foreground="#9CA3AF" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 			</StackPanel>
 		</StackPanel>
 
@@ -54,16 +54,16 @@
 					<TextBlock Text="Category name"
 							   FontSize="13"
 							   FontWeight="SemiBold"
-							   Foreground="#1F2937"/>
+							   Foreground="#1F2937" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					<TextBlock Text="*"
 							   FontSize="13"
-							   Foreground="#DC2626"/>
+							   Foreground="#DC2626" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 				</StackPanel>
 				<TextBox x:Name="CategoryNameTextBox"
 						 PlaceholderText="e.g. Running Shoes, Basketball..."
 						 TextChanged="CategoryNameTextBox_TextChanged"
 						 MaxLength="100"
-						 CornerRadius="8"
+						 CornerRadius="20"
 						 Padding="12,10"
 						 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 				<!-- Validation message -->
@@ -77,7 +77,7 @@
 								   VerticalAlignment="Center"/>
 						<TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}"
 								   FontSize="11"
-								   Foreground="#DC2626"/>
+								   Foreground="#DC2626" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					</StackPanel>
 				</Border>
 			</StackPanel>
@@ -88,13 +88,13 @@
 					<TextBlock Text="Description"
 							   FontSize="13"
 							   FontWeight="SemiBold"
-							   Foreground="#1F2937"/>
+							   Foreground="#1F2937" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					<Border Background="#F3F4F6"
-							CornerRadius="4"
+							CornerRadius="20"
 							Padding="6,1">
 						<TextBlock Text="Optional"
 								   FontSize="10"
-								   Foreground="#9CA3AF"/>
+								   Foreground="#9CA3AF" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					</Border>
 				</StackPanel>
 				<TextBox PlaceholderText="Brief description of this category..."
@@ -102,7 +102,7 @@
 						 AcceptsReturn="True"
 						 MinHeight="90"
 						 MaxLength="300"
-						 CornerRadius="8"
+						 CornerRadius="20"
 						 Padding="12,10"
 						 Text="{x:Bind CategoryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</StackPanel>
@@ -126,8 +126,9 @@
 					Background="White"
 					BorderBrush="#E5E7EB"
 					BorderThickness="1"
-					CornerRadius="8"
-					Padding="14,10">
+					CornerRadius="20"
+					Padding="14,10"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
 				<Button.Resources>
 					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F9FAFB"/>
 					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#D1D5DB"/>
@@ -137,7 +138,7 @@
 						   FontSize="13"
 						   FontWeight="SemiBold"
 						   Foreground="#374151"
-						   HorizontalAlignment="Center"/>
+						   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 			</Button>
 
 			<!-- Save / Confirm button (purple accent, same as Add Category) -->
@@ -148,8 +149,9 @@
 					Background="#7C3AED"
 					BorderBrush="#7C3AED"
 					BorderThickness="0"
-					CornerRadius="8"
-					Padding="14,10">
+					CornerRadius="20"
+					Padding="14,10"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
 				<Button.Resources>
 					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#E67C3AED"/>
 					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#E67C3AED"/>
@@ -160,7 +162,7 @@
 					<TextBlock x:Name="SaveBtnText"
 							   FontSize="13"
 							   FontWeight="SemiBold"
-							   Foreground="White"/>
+							   Foreground="White" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 				</StackPanel>
 			</Button>
 		</Grid>

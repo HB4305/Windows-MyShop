@@ -1,30 +1,30 @@
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MyShop.Models.ReportModels;
 
 public class TopPerformingProduct
 {
-  [JsonProperty("id")]
+  [JsonPropertyName("id")]
   public int Id { get; set; } = 0;
 
-  [JsonProperty("product_name")]
+  [JsonPropertyName("product_name")]
   public string ProductName { get; set; } = string.Empty;
 
-  [JsonProperty("category_name")]
+  [JsonPropertyName("category_name")]
   public string CategoryName { get; set; } = string.Empty;
 
-  [JsonProperty("image_urls")]
+  [JsonPropertyName("image_urls")]
   public string[] ImageUrls { get; set; } = [];
 
   public string ImageUrl => ImageUrls.FirstOrDefault() ?? string.Empty;
 
-  [JsonProperty("total_quantity_sold")]
+  [JsonPropertyName("total_quantity_sold")]
   public int TotalQuantitySold { get; set; }
 
-  [JsonProperty("gross_revenue")]
+  [JsonPropertyName("gross_revenue")]
   public decimal GrossRevenue { get; set; }
 
-  [JsonProperty("profit")]
+  [JsonPropertyName("profit")]
   public decimal Profit { get; set; }
 }

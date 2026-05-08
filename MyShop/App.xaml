@@ -15,6 +15,58 @@
       <Color x:Key="AppAccentColor">#8B52FF</Color>
       <SolidColorBrush x:Key="AppAccentBrush" Color="{StaticResource AppAccentColor}" />
       <SolidColorBrush x:Key="AppAccentBrushLow" Color="{StaticResource AppAccentColor}" Opacity="0.12" />
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+          <Color x:Key="SystemAccentColor">#8B52FF</Color>
+          <Color x:Key="SystemAccentColorDark1">#7A44E8</Color>
+          <Color x:Key="SystemAccentColorDark2">#6738CC</Color>
+          <Color x:Key="SystemAccentColorDark3">#552EAD</Color>
+          <Color x:Key="SystemAccentColorLight1">#9B69FF</Color>
+          <Color x:Key="SystemAccentColorLight2">#AD83FF</Color>
+          <Color x:Key="SystemAccentColorLight3">#C09DFF</Color>
+          <CornerRadius x:Key="ControlCornerRadius">20</CornerRadius>
+          <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+          <Color x:Key="SystemAccentColor">#8B52FF</Color>
+          <Color x:Key="SystemAccentColorDark1">#7A44E8</Color>
+          <Color x:Key="SystemAccentColorDark2">#6738CC</Color>
+          <Color x:Key="SystemAccentColorDark3">#552EAD</Color>
+          <Color x:Key="SystemAccentColorLight1">#9B69FF</Color>
+          <Color x:Key="SystemAccentColorLight2">#AD83FF</Color>
+          <Color x:Key="SystemAccentColorLight3">#C09DFF</Color>
+          <CornerRadius x:Key="ControlCornerRadius">20</CornerRadius>
+          <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <Color x:Key="SystemAccentColor">#8B52FF</Color>
+          <Color x:Key="SystemAccentColorDark1">#7A44E8</Color>
+          <Color x:Key="SystemAccentColorDark2">#6738CC</Color>
+          <Color x:Key="SystemAccentColorDark3">#552EAD</Color>
+          <Color x:Key="SystemAccentColorLight1">#9B69FF</Color>
+          <Color x:Key="SystemAccentColorLight2">#AD83FF</Color>
+          <Color x:Key="SystemAccentColorLight3">#C09DFF</Color>
+          <CornerRadius x:Key="ControlCornerRadius">20</CornerRadius>
+          <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- ── Global Typography & Shape ── -->
+      <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+      <FontFamily x:Key="AppSignatureFontFamily">ms-appx:///Assets/Momo_Signature/MomoSignature-Regular.ttf#MomoSignature-Regular</FontFamily>
+
+      <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+      </Style>
 
       <!-- ── Value Converters ── -->
       <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>

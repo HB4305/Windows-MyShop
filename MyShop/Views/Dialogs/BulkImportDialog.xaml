@@ -30,7 +30,7 @@
                            FontSize="15" 
                            TextWrapping="Wrap" 
                            Width="360"
-                           Foreground="{ThemeResource TextFillColorPrimary}"/>
+                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </StackPanel>
 
@@ -39,6 +39,6 @@
                    TextWrapping="Wrap" 
                    FontSize="13"
                    Foreground="Red" 
-                   Visibility="Collapsed"/>
+                   Visibility="Collapsed" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
     </Grid>
 </ContentDialog>

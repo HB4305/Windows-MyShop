@@ -32,4 +32,8 @@
     <PackageReference Include="QuestPDF" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets/Fonts/**/*.ttf" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets/Momo_Signature/**/*.ttf" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

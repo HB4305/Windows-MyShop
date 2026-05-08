@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MyShop.Models;
 
@@ -21,7 +21,7 @@ public class SportItem
 
     public int? LowStockThreshold { get; set; }
 
-    [JsonProperty("image_urls")]
+    [JsonPropertyName("image_urls")]
     public List<string> ImageUrls { get; set; } = new();
 
     [JsonIgnore]

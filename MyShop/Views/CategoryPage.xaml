@@ -2,6 +2,7 @@
       x:Name="PageRoot"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:MyShop.Controls"
       xmlns:m="using:MyShop.Models"
       xmlns:conv="using:MyShop.Converters"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -53,16 +54,9 @@
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0">
-          <TextBlock Text="Categories"
-                     FontSize="22"
-                     FontWeight="Bold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"/>
-          <TextBlock Text="Organize your product catalog with categories."
-                     FontSize="13"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
-                     Margin="0,2,0,0"/>
-        </StackPanel>
+        <controls:AppPageHeader Grid.Column="0"
+                                Title="Categories"
+                                Subtitle="Organize your product catalog with categories."/>
 
         <!-- Controls -->
         <StackPanel Grid.Column="1"

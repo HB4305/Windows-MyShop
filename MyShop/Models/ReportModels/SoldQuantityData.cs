@@ -1,12 +1,12 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MyShop.Models.ReportModels;
 
 public class SoldQuantityData
 {
-  [JsonProperty("date")]
+  [JsonPropertyName("date")]
   public DateTime Date { get; set; }
 
-  [JsonProperty("quantity_sold")]
+  [JsonPropertyName("quantity_sold")]
   public long QuantitySold { get; set; }
 }

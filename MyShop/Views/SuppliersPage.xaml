@@ -1,7 +1,9 @@
 <Page x:Class="MyShop.Views.SuppliersPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:MyShop.Controls"
       xmlns:conv="using:MyShop.Converters"
+      xmlns:m="using:MyShop.Models"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
   <Page.Resources>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
@@ -18,17 +20,17 @@
     </Grid.RowDefinitions>
 
     <!-- Header -->
-    <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,24">
-      <TextBlock Text="Suppliers Management" FontSize="28" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
-      <TextBlock Text="Manage your suppliers and track supply order history." Foreground="{ThemeResource TextFillColorSecondary}"/>
-    </StackPanel>
+    <controls:AppPageHeader Grid.Row="0"
+                            Margin="0,0,0,24"
+                            Title="Suppliers Management"
+                            Subtitle="Manage your suppliers and track supply order history."/>
 
     <!-- Tabs -->
     <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="16" Margin="0,0,0,16">
       <Button x:Name="TabSuppliers" Content="Suppliers" Click="TabSuppliers_Click" 
-              Style="{StaticResource AccentButtonStyle}" Padding="16,8" CornerRadius="8"/>
+              Style="{StaticResource AccentButtonStyle}" Padding="16,8" CornerRadius="20"/>
       <Button x:Name="TabSupplyOrders" Content="Supply History" Click="TabSupplyOrders_Click" 
-              Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" Padding="16,8" CornerRadius="8"/>
+              Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" Padding="16,8" CornerRadius="20"/>
     </StackPanel>
 
     <!-- Content: Suppliers -->
@@ -49,12 +51,12 @@
           <TextBox PlaceholderText="Search by name, phone..." Width="250" Text="{Binding SearchSupplierKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
           <Button Content="Search" Command="{Binding SearchSuppliersCommand}"/>
         </StackPanel>
-        <Button Grid.Column="1" Content="Add Supplier" Click="AddSupplier_Click" Background="{StaticResource Accent}" Foreground="White" CornerRadius="8">
+        <Button Grid.Column="1" Content="Add Supplier" Click="AddSupplier_Click" Background="{StaticResource Accent}" Foreground="White" CornerRadius="20">
           <Button.ContentTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" Spacing="8">
                 <FontIcon Glyph="&#xE710;" FontSize="14"/>
-                <TextBlock Text="Add Supplier" VerticalAlignment="Center"/>
+                <TextBlock Text="Add Supplier" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </StackPanel>
             </DataTemplate>
           </Button.ContentTemplate>
@@ -62,7 +64,7 @@
       </Grid>
 
       <!-- DataGrid -->
-      <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+      <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
         <ListView ItemsSource="{Binding Suppliers}" SelectionMode="None">
           <ListView.Header>
             <Grid Padding="16,12" Background="{ThemeResource LayerFillColorDefaultBrush}">
@@ -72,14 +74,14 @@
                 <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="Auto" MinWidth="100"/>
               </Grid.ColumnDefinitions>
-              <TextBlock Text="Supplier Name" FontWeight="SemiBold"/>
-              <TextBlock Grid.Column="1" Text="Contact Phone" FontWeight="SemiBold"/>
-              <TextBlock Grid.Column="2" Text="Type" FontWeight="SemiBold"/>
-              <TextBlock Grid.Column="3" Text="Actions" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+              <TextBlock Text="Supplier Name" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Grid.Column="1" Text="Contact Phone" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Grid.Column="2" Text="Type" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Grid.Column="3" Text="Actions" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Grid>
           </ListView.Header>
           <ListView.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="m:Supplier">
               <Grid Padding="16,12">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="2*"/>
@@ -87,9 +89,9 @@
                   <ColumnDefinition Width="1.5*"/>
                   <ColumnDefinition Width="Auto" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBlock Grid.Column="1" Text="{Binding ContactPhone}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="{Binding SupplierType}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Grid.Column="1" Text="{Binding ContactPhone}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Grid.Column="2" Text="{Binding SupplierType}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
                   <Button Click="EditSupplier_Click" Background="Transparent" ToolTipService.ToolTip="Edit">
                     <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{StaticResource Accent}"/>
@@ -127,12 +129,12 @@
 
       <!-- Toolbar -->
       <Grid Grid.Row="0" Margin="0,0,0,16">
-        <Button HorizontalAlignment="Right" Content="Create Supply Order" Click="CreateSupplyOrder_Click" Background="{StaticResource Accent}" Foreground="White" CornerRadius="8">
+        <Button HorizontalAlignment="Right" Content="Create Supply Order" Click="CreateSupplyOrder_Click" Background="{StaticResource Accent}" Foreground="White" CornerRadius="20">
           <Button.ContentTemplate>
             <DataTemplate>
               <StackPanel Orientation="Horizontal" Spacing="8">
                 <FontIcon Glyph="&#xE710;" FontSize="14"/>
-                <TextBlock Text="Create Supply Order" VerticalAlignment="Center"/>
+                <TextBlock Text="Create Supply Order" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </StackPanel>
             </DataTemplate>
           </Button.ContentTemplate>
@@ -140,7 +142,7 @@
       </Grid>
 
       <!-- DataGrid -->
-      <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+      <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
         <ListView ItemsSource="{Binding SupplyOrders}" SelectionMode="None">
           <ListView.Header>
             <Grid Padding="16,12" Background="{ThemeResource LayerFillColorDefaultBrush}">
@@ -150,14 +152,14 @@
                 <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="1.5*"/>
               </Grid.ColumnDefinitions>
-              <TextBlock Text="Order ID" FontWeight="SemiBold"/>
-              <TextBlock Grid.Column="1" Text="Supplier" FontWeight="SemiBold"/>
-              <TextBlock Grid.Column="2" Text="Import Date" FontWeight="SemiBold"/>
-              <TextBlock Grid.Column="3" Text="Total Cost" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+              <TextBlock Text="Order ID" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Grid.Column="1" Text="Supplier" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Grid.Column="2" Text="Import Date" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Grid.Column="3" Text="Total Cost" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Grid>
           </ListView.Header>
           <ListView.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="m:SupplyOrder">
               <Grid Padding="16,12">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="1*"/>
@@ -165,10 +167,10 @@
                   <ColumnDefinition Width="1.5*"/>
                   <ColumnDefinition Width="1.5*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding IdDisplay}" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBlock Grid.Column="1" Text="{Binding SupplierName}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="{Binding ImportDateDisplay}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="3" Text="{Binding TotalCost, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding IdDisplay}" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Grid.Column="1" Text="{Binding SupplierName}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Grid.Column="2" Text="{Binding ImportDateDisplay}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Grid.Column="3" Text="{Binding TotalCost, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </Grid>
             </DataTemplate>
           </ListView.ItemTemplate>

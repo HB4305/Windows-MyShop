@@ -8,7 +8,9 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 using MyShop.Models;
+using MyShop.Services;
 using MyShop.ViewModels;
+using MyShop.Views.Dialogs;
 using WpfFontWeights = Microsoft.UI.Text.FontWeights;
 using ChartPath = Microsoft.UI.Xaml.Shapes.Path;
 
@@ -16,10 +18,15 @@ namespace MyShop.Views;
 
 public sealed partial class DashboardPage : Page
 {
+    private readonly CustomerOrderService _customerOrderService;
+    private readonly CurrentUserService _currentUserService;
+
     public DashboardPage()
     {
         this.InitializeComponent();
         DataContext = App.Services.GetRequiredService<DashboardViewModel>();
+        _customerOrderService = App.Services.GetRequiredService<CustomerOrderService>();
+        _currentUserService = App.Services.GetRequiredService<CurrentUserService>();
         Loaded += DashboardPage_Loaded;
     }
 
@@ -125,5 +132,34 @@ public sealed partial class DashboardPage : Page
             Margin = new Thickness(maxPt.X + 4, maxPt.Y - 16, 0, 0)
         };
         canvas.Children.Add(label);
+    }
+
+    private async void CreateOrderButton_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var dialog = new CreateOrderDialog
+            {
+                XamlRoot = this.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            if (!dialog.IsSubmitted)
+                return;
+
+            var order = dialog.ViewModel.Order;
+            var details = dialog.ViewModel.OrderDetails.ToList();
+            var sellerId = _currentUserService.UserId ?? 0;
+            var sellerName = _currentUserService.UserEmail ?? string.Empty;
+            await _customerOrderService.CreateOrderAsync(order, details, sellerId, sellerName);
+
+            if (DataContext is DashboardViewModel vm)
+                await vm.LoadDashboardAsync();
+        }
+        catch (Exception ex)
+        {
+            if (DataContext is DashboardViewModel vm)
+                vm.ErrorMessage = $"Failed to create order: {ex.Message}";
+        }
     }
 }

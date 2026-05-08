@@ -1,6 +1,7 @@
 <Page x:Class="MyShop.Views.CustomerOrderPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:MyShop.Controls"
       xmlns:local="using:MyShop.Views"
       xmlns:m="using:MyShop.Models"
       xmlns:vm="using:MyShop.ViewModels"
@@ -131,6 +132,7 @@
 
     <!-- ══ Text Styles ══ -->
     <Style x:Key="SectionTitle" TargetType="TextBlock">
+      <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize" Value="12"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondary}"/>
@@ -148,6 +150,7 @@
     </Style>
 
     <Style x:Key="PageTitle" TargetType="TextBlock">
+      <Setter Property="FontFamily" Value="ms-appx:///Assets/Momo_Signature/MomoSignature-Regular.ttf#Momo Signature"/>
       <Setter Property="FontSize" Value="20"/>
       <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
@@ -318,7 +321,6 @@
                        FontWeight="SemiBold"
                        Foreground="{x:Bind Status, Mode=OneWay, Converter={StaticResource OrderStatusToForegroundConverter}}"/>
           </Border>
- 
           <!-- Payment Status -->
           <Border Grid.Column="7"
                   Style="{StaticResource StatusBadgeBase}"
@@ -500,11 +502,10 @@
       </Grid.RowDefinitions>
 
       <!-- Page Title -->
-      <StackPanel Grid.Row="0" Margin="24,20,24,16">
-        <TextBlock Text="Orders Management" Style="{StaticResource PageTitle}"/>
-        <TextBlock Text="Manage and track all your customer orders."
-                   FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}" Margin="0,2,0,0"/>
-      </StackPanel>
+      <controls:AppPageHeader Grid.Row="0"
+                              Margin="24,20,24,16"
+                              Title="Orders Management"
+                              Subtitle="Manage and track all your customer orders."/>
 
       <!-- Stats Cards Row -->
       <Border Grid.Row="1" Margin="24,0,24,16">
@@ -526,52 +527,68 @@
           </Grid.RowDefinitions>
 
           <!-- Total -->
-          <Border x:Name="StatsTotalCard" Grid.Column="0" CornerRadius="10" Padding="16,12"
+          <Border x:Name="StatsTotalCard" Grid.Column="0" CornerRadius="20" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Total Orders" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
-              <TextBlock FontSize="22" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}">
+              <TextBlock FontSize="22"
+                         FontWeight="Bold"
+                         FontFamily="{StaticResource AppDefaultFontFamily}"
+                         Foreground="{ThemeResource TextFillColorPrimary}">
                 <Run Text="{Binding TotalOrders, Mode=OneWay}"/>
-                <Run Text=" orders" FontSize="12" FontWeight="Normal" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                <Run Text=" orders"
+                     FontSize="12"
+                     FontWeight="Normal"
+                     FontFamily="{StaticResource AppDefaultFontFamily}"
+                     Foreground="{ThemeResource TextFillColorSecondary}"/>
               </TextBlock>
             </StackPanel>
           </Border>
 
           <!-- Pending -->
-            <Border x:Name="StatsPendingCard" Grid.Column="2" CornerRadius="10" Padding="16,12"
+            <Border x:Name="StatsPendingCard" Grid.Column="2" CornerRadius="20" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Pending" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
               <TextBlock Text="{Binding PendingCount}"
-                         FontSize="22" FontWeight="Bold" Foreground="{StaticResource AmberBrush}"/>
+                         FontSize="22"
+                         FontWeight="Bold"
+                         FontFamily="{StaticResource AppDefaultFontFamily}"
+                         Foreground="{StaticResource AmberBrush}"/>
             </StackPanel>
           </Border>
 
           <!-- Processing -->
-            <Border x:Name="StatsProcessingCard" Grid.Column="4" CornerRadius="10" Padding="16,12"
+            <Border x:Name="StatsProcessingCard" Grid.Column="4" CornerRadius="20" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Processing" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
               <TextBlock Text="{Binding ProcessingCount}"
-                         FontSize="22" FontWeight="Bold" Foreground="{StaticResource BlueBrush}"/>
+                         FontSize="22"
+                         FontWeight="Bold"
+                         FontFamily="{StaticResource AppDefaultFontFamily}"
+                         Foreground="{StaticResource BlueBrush}"/>
             </StackPanel>
           </Border>
 
           <!-- Revenue -->
-            <Border x:Name="StatsRevenueCard" Grid.Column="6" CornerRadius="10" Padding="16,12"
+            <Border x:Name="StatsRevenueCard" Grid.Column="6" CornerRadius="20" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Total Revenue" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
               <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyConverter}}"
-                         FontSize="18" FontWeight="Bold" Foreground="{StaticResource GreenBrush}"
+                         FontSize="18"
+                         FontWeight="Bold"
+                         FontFamily="{StaticResource AppDefaultFontFamily}"
+                         Foreground="{StaticResource GreenBrush}"
                          TextTrimming="CharacterEllipsis"/>
             </StackPanel>
           </Border>
@@ -694,7 +711,7 @@
         <Grid>
           <!-- Loading overlay -->
           <Border Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}"
-                  CornerRadius="12"
+                  CornerRadius="20"
                   Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
@@ -708,7 +725,7 @@
           </Border>
 
           <!-- Table with header -->
-          <Border CornerRadius="12"
+          <Border CornerRadius="20"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1"
@@ -973,7 +990,7 @@
                   <TextBlock Grid.Column="0" Text="ITEMS" Style="{StaticResource SectionTitle}"/>
                   <Border Grid.Column="1"
                           Background="{ThemeResource ControlFillColorSecondaryBrush}"
-                          CornerRadius="10"
+                          CornerRadius="20"
                           Padding="8,4">
                     <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}">
                       <Run Text="{Binding CurrentDetails.Count, Mode=OneWay}"/>

@@ -7,7 +7,8 @@
 	mc:Ignorable="d"
 	x:Name="DialogRoot"
 	DefaultButton="Close"
-	MinWidth="420">
+	MinWidth="420"
+    Style="{StaticResource DefaultContentDialogStyle}">
 
 	<ContentDialog.Resources>
 		<CornerRadius x:Key="OverlayCornerRadius">12</CornerRadius>
@@ -31,14 +32,14 @@
 			<TextBlock Text="{x:Bind DialogTitle, Mode=OneWay}"
 					   FontSize="20"
 					   FontWeight="Bold"
-					   Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+					   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 		</StackPanel>
 
 		<TextBlock Text="{x:Bind DialogContent, Mode=OneWay}"
 				   FontSize="14"
 				   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
 				   TextWrapping="Wrap"
-				   LineHeight="20"/>
+				   LineHeight="20" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
 		<!-- Separator line -->
 		<Border Background="{ThemeResource ControlStrokeColorDefaultBrush}" 
@@ -52,8 +53,9 @@
 					HorizontalAlignment="Stretch"
 					Background="{StaticResource AppAccentBrush}"
 					BorderThickness="0"
-					CornerRadius="8"
-					Padding="14,10">
+					CornerRadius="20"
+					Padding="14,10"
+                  Style="{StaticResource AccentButtonStyle}">
 				<Button.Resources>
 					<!-- Standard hover states -->
 					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#7C4DFF"/>
@@ -63,7 +65,7 @@
 						   FontSize="14"
 						   FontWeight="SemiBold"
 						   Foreground="White"
-						   HorizontalAlignment="Center"/>
+						   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 			</Button>
 		</Grid>
 	</StackPanel>
