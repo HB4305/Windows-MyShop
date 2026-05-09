@@ -54,6 +54,7 @@ public partial class ReportViewModel : ObservableObject
   }
 
   [ObservableProperty] private bool _isLoading;
+  [ObservableProperty] private bool _isProductSalesLoading;
   [ObservableProperty] private string _errorMessage = string.Empty;
   [ObservableProperty] private ReportOverview _overview;
   [ObservableProperty] private ProductSalesFilter _productSalesFilter;
@@ -169,7 +170,7 @@ public partial class ReportViewModel : ObservableObject
     FilterProductOptions(ProductSearchText);
   }
 
-  public void ApplyFilters() => _ = LoadReportAsync();
+  public void ApplyFilters() => _ = LoadProductSalesChartAsync();
 
   public async Task UpdateCategoryAsync(string? value)
   {
@@ -179,6 +180,31 @@ public partial class ReportViewModel : ObservableObject
     ProductSalesFilter.ProductName = null;
 
     await LoadProductOptionsAsync();
+    await LoadProductSalesChartAsync();
+  }
+
+  private async Task LoadProductSalesChartAsync()
+  {
+    try
+    {
+      IsProductSalesLoading = true;
+      ErrorMessage = string.Empty;
+      SoldQuantityDatas = await _reportService.GetProductSalesAsync(ProductSalesFilter, PeriodSelection);
+      RefreshSoldQuantityChart();
+    }
+    catch (Exception ex)
+    {
+      ErrorMessage = $"Failed to load product sales chart: {ex.Message}";
+      SoldQuantityDatas = [];
+      SoldQuantitySeries = [];
+      SoldQuantityXAxes = [];
+      SoldQuantityYAxes = [];
+    }
+    finally
+    {
+      IsProductSalesLoading = false;
+      OnPropertyChanged(nameof(HasProductSales));
+    }
   }
 
   private async Task LoadCategoriesAsync()

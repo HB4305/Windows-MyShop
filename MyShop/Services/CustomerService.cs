@@ -12,8 +12,14 @@ public class CustomerService
     public Task<(List<Customer> Items, int TotalCount)> GetCustomersAsync(int page, int pageSize, string keyword)
         => _repository.GetItemsAsync(page, pageSize, keyword);
 
+    public Task<(List<Customer> Items, int TotalCount)> SearchCustomersByNameAsync(int page, int pageSize, string keyword)
+        => _repository.GetItemsByNameAsync(page, pageSize, keyword);
+
     public Task<Customer?> GetCustomerByIdAsync(int id)
         => _repository.GetByIdAsync(id);
+
+    public Task<Customer?> GetCustomerByNameAsync(string name)
+        => _repository.GetByNameAsync(name);
 
     public Task<Customer?> GetCustomerByPhoneAsync(string phone)
         => _repository.GetByPhoneAsync(phone);

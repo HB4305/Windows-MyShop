@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
       xmlns:conv="using:MyShop.Converters"
+      xmlns:controls="using:MyShop.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       Tapped="Page_Tapped">
   <Page.Resources>
@@ -126,42 +127,18 @@
               <TextBlock Text="Daily sold quantity across the selected period." Foreground="{ThemeResource TextFillColorSecondary}"/>
             </StackPanel>
 
-            <Grid ColumnSpacing="12">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="Auto"/>
-              </Grid.ColumnDefinitions>
-
-              <ComboBox x:Name="CategoryComboBox"
-                        Grid.Column="0"
-                        ItemsSource="{Binding CategoryOptions}"
-                        SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-                        SelectionChanged="CategoryComboBox_SelectionChanged"
-                        PlaceholderText="Category"/>
-
-              <AutoSuggestBox x:Name="ProductSearchAutoSuggestBox"
-                              Grid.Column="1"
-                              PlaceholderText="Search product name..."
-                              Text="{Binding ProductSearchText, Mode=TwoWay}"
-                              ItemsSource="{Binding ProductOptions}"
-                              TextChanged="ProductSearchAutoSuggestBox_TextChanged"
-                              SuggestionChosen="ProductSearchAutoSuggestBox_SuggestionChosen"
-                              QuerySubmitted="ProductSearchAutoSuggestBox_QuerySubmitted"
-                              BorderThickness="0"
-                              Padding="12,10"
-                              VerticalContentAlignment="Center"/>
-
-              <Button Grid.Column="2"
-                      Click="SearchButton_Click"
-                      Background="{StaticResource Accent}"
-                      Foreground="White"
-                      BorderThickness="0"
-                      Padding="14,10"
-                      CornerRadius="{ThemeResource ControlCornerRadius}">
-                <FontIcon Glyph="&#xE721;"/>
-              </Button>
-            </Grid>
+            <controls:ProductSearchFilterBar x:Name="ProductFilterBar"
+                                             CategoryItemsSource="{Binding CategoryOptions}"
+                                             SelectedCategory="{Binding SelectedCategory, Mode=TwoWay}"
+                                             SearchText="{Binding ProductSearchText, Mode=TwoWay}"
+                                             SearchItemsSource="{Binding ProductOptions}"
+                                             SearchPlaceholderText="Search product name..."
+                                             CategoryPlaceholderText="Category"
+                                             SearchTextChanged="ProductFilterBar_SearchTextChanged"
+                                             SearchSuggestionChosen="ProductFilterBar_SearchSuggestionChosen"
+                                             SearchQuerySubmitted="ProductFilterBar_SearchQuerySubmitted"
+                                             CategorySelectionChanged="ProductFilterBar_CategorySelectionChanged"
+                                             SearchClicked="ProductFilterBar_SearchClicked"/>
 
             <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="18" Padding="12">
               <lvc:CartesianChart Height="280"

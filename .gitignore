@@ -487,3 +487,6 @@ $RECYCLE.BIN/
 solution-config.props
 # Publish Profiles
 !**/Properties/PublishProfiles/*.pubxml
+prompts.md
+.build-check/
+*.dll

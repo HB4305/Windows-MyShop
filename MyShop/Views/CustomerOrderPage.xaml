@@ -235,12 +235,15 @@
         <Grid VerticalAlignment="Center">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="190"/>
             <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="170"/>
             <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="110"/>
-            <ColumnDefinition Width="90"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="130"/>
           </Grid.ColumnDefinitions>
 
           <!-- Order ID -->
@@ -249,9 +252,11 @@
                      FontSize="12"
                      FontWeight="SemiBold"
                      Foreground="{StaticResource PurpleBrush}"
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
 
-          <!-- Customer Name -->
+          <!-- Customer -->
           <TextBlock Grid.Column="1"
                      Text="{x:Bind CustomerName, Mode=OneWay}"
                      FontSize="13"
@@ -259,54 +264,92 @@
                      Foreground="{ThemeResource TextFillColorPrimary}"
                      TextTrimming="CharacterEllipsis"
                      VerticalAlignment="Center"
-                     Padding="0,0,8,0"/>
+                     Padding="0,0,8,0"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
 
-          <!-- Customer Phone -->
+          <!-- Phone -->
           <TextBlock Grid.Column="2"
                      Text="{x:Bind CustomerPhone, Mode=OneWay}"
                      FontSize="12"
                      Foreground="{ThemeResource TextFillColorTertiary}"
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     TextTrimming="CharacterEllipsis"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
+
+          <!-- Staff -->
+          <TextBlock Grid.Column="3"
+                     Text="{x:Bind SellerName, Mode=OneWay}"
+                     FontSize="12"
+                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     VerticalAlignment="Center"
+                     TextTrimming="CharacterEllipsis"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
 
           <!-- Date -->
-          <TextBlock Grid.Column="3"
+          <TextBlock Grid.Column="4"
                      Text="{x:Bind CreatedAt, Mode=OneWay, Converter={StaticResource DateTimeOffsetConverter}}"
                      FontSize="12"
                      Foreground="{ThemeResource TextFillColorTertiary}"
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
+
+          <!-- Order Type -->
+          <TextBlock Grid.Column="5"
+                     Text="{x:Bind OrderType, Mode=OneWay}"
+                     FontSize="12"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     VerticalAlignment="Center"
+                     TextTrimming="CharacterEllipsis"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
 
           <!-- Status -->
-          <Border Grid.Column="4"
+          <Border Grid.Column="6"
                   Style="{StaticResource StatusBadgeBase}"
                   Background="{x:Bind Status, Mode=OneWay, Converter={StaticResource OrderStatusToBrushConverter}}"
                   VerticalAlignment="Center"
-                  HorizontalAlignment="Left">
+                  HorizontalAlignment="Center">
             <TextBlock Text="{x:Bind Status, Mode=OneWay}"
                        FontSize="11"
                        FontWeight="SemiBold"
                        Foreground="{x:Bind Status, Mode=OneWay, Converter={StaticResource OrderStatusToForegroundConverter}}"/>
           </Border>
  
-          <!-- Payment -->
-          <Border Grid.Column="5"
+          <!-- Payment Status -->
+          <Border Grid.Column="7"
                   Style="{StaticResource StatusBadgeBase}"
                   Background="{x:Bind PaymentStatus, Mode=OneWay, Converter={StaticResource PaymentStatusToBrushConverter}}"
                   VerticalAlignment="Center"
-                  HorizontalAlignment="Left">
+                  HorizontalAlignment="Center">
             <TextBlock Text="{x:Bind PaymentStatus, Mode=OneWay}"
                        FontSize="11"
                        FontWeight="SemiBold"
                        Foreground="{x:Bind PaymentStatus, Mode=OneWay, Converter={StaticResource PaymentStatusToForegroundConverter}}"/>
           </Border>
 
+          <!-- Payment Method -->
+          <TextBlock Grid.Column="8"
+                     Text="{x:Bind PaymentMethod, Mode=OneWay}"
+                     FontSize="12"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     VerticalAlignment="Center"
+                     TextTrimming="CharacterEllipsis"
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
+
           <!-- Total -->
-          <TextBlock Grid.Column="6"
+          <TextBlock Grid.Column="9"
                      Text="{x:Bind TotalAmount, Mode=OneWay, Converter={StaticResource CurrencyConverter}}"
                      FontSize="14"
                      FontWeight="Bold"
                      Foreground="{ThemeResource TextFillColorPrimary}"
                      VerticalAlignment="Center"
-                     TextAlignment="Right"/>
+                     HorizontalAlignment="Center"
+                     TextAlignment="Center"/>
         </Grid>
       </Border>
       <DataTemplate.Triggers>
@@ -675,7 +718,7 @@
                           HorizontalScrollMode="Enabled"
                           VerticalScrollBarVisibility="Disabled"
                           VerticalScrollMode="Disabled">
-              <Grid MinWidth="920">
+              <Grid MinWidth="1400">
                 <Grid.RowDefinitions>
                   <RowDefinition Height="Auto"/>
                   <RowDefinition Height="*"/>
@@ -689,20 +732,26 @@
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="80"/>
-                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="190"/>
                       <ColumnDefinition Width="130"/>
+                      <ColumnDefinition Width="170"/>
                       <ColumnDefinition Width="140"/>
+                      <ColumnDefinition Width="120"/>
                       <ColumnDefinition Width="110"/>
-                      <ColumnDefinition Width="90"/>
-                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="120"/>
+                      <ColumnDefinition Width="130"/>
+                      <ColumnDefinition Width="130"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="ID"     Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="Customer Name" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="2" Text="Phone"  Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="3" Text="Date"   Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="4" Text="Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="5" Text="Payment" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="6" Text="Total" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" TextAlignment="Right"/>
+                    <TextBlock Grid.Column="0" Text="ID" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="Customer" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="Phone" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="Staff" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="4" Text="Date" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Text="Order Type" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="6" Text="Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Text="Payment Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Text="Payment Method" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="9" Text="Total" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                   </Grid>
                 </Border>
 
@@ -992,6 +1041,56 @@
                                  FontSize="11" FontWeight="SemiBold"
                                  Foreground="{StaticResource GreenDarkBrush}"/>
                     </Border>
+                  </StackPanel>
+                </Grid>
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <StackPanel Grid.Column="0" Spacing="2">
+                    <TextBlock Text="Payment Method" Style="{StaticResource MutedText}"/>
+                    <TextBlock Text="{Binding SelectedOrder.PaymentMethod}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Margin="0,2,0,0"/>
+                  </StackPanel>
+
+                  <StackPanel Grid.Column="1" Spacing="2">
+                    <TextBlock Text="Received Amount" Style="{StaticResource MutedText}"/>
+                    <TextBlock Text="{Binding SelectedOrder.ReceivedAmount, Converter={StaticResource CurrencyConverter}}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Margin="0,2,0,0"/>
+                  </StackPanel>
+                </Grid>
+
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <StackPanel Grid.Column="0" Spacing="2">
+                    <TextBlock Text="Shift ID" Style="{StaticResource MutedText}"/>
+                    <TextBlock Text="{Binding SelectedOrder.ShiftId}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Margin="0,2,0,0"/>
+                  </StackPanel>
+
+                  <StackPanel Grid.Column="1" Spacing="2">
+                    <TextBlock Text="Staff" Style="{StaticResource MutedText}"/>
+                    <TextBlock Text="{Binding SelectedOrder.SellerName}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Margin="0,2,0,0"/>
                   </StackPanel>
                 </Grid>
 

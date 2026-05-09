@@ -12,7 +12,13 @@ public class CustomerRepository
 
     private const string SelectColumns = "id, name, phone, address, created_at";
 
-    public async Task<(List<Customer> Items, int TotalCount)> GetItemsAsync(int page, int pageSize, string keyword)
+    public Task<(List<Customer> Items, int TotalCount)> GetItemsAsync(int page, int pageSize, string keyword)
+        => GetItemsAsync(page, pageSize, keyword, searchPhone: true);
+
+    public Task<(List<Customer> Items, int TotalCount)> GetItemsByNameAsync(int page, int pageSize, string keyword)
+        => GetItemsAsync(page, pageSize, keyword, searchPhone: false);
+
+    private async Task<(List<Customer> Items, int TotalCount)> GetItemsAsync(int page, int pageSize, string keyword, bool searchPhone)
     {
         var items = new List<Customer>();
         int totalCount = 0;
@@ -20,7 +26,9 @@ public class CustomerRepository
 
         var where = string.IsNullOrWhiteSpace(keyword) 
             ? "" 
-            : "WHERE name ILIKE @keyword OR phone ILIKE @keyword";
+            : searchPhone
+                ? "WHERE name ILIKE @keyword OR phone ILIKE @keyword"
+                : "WHERE name ILIKE @keyword";
 
         // Query with analytical data (TotalSpent, OrderCount)
         var sql = $@"
@@ -60,6 +68,28 @@ public class CustomerRepository
         }
 
         return (items, totalCount);
+    }
+
+    public async Task<Customer?> GetByNameAsync(string name)
+    {
+        const string sql = $@"
+            SELECT {SelectColumns} 
+            FROM customers 
+            WHERE lower(name) = lower(@name)
+            ORDER BY id
+            LIMIT 1";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("name", name);
+
+        await using var reader = await cmd.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
+        {
+            return MapFromReader(reader);
+        }
+        return null;
     }
 
     public async Task<Customer?> GetByIdAsync(int id)
@@ -148,7 +178,8 @@ public class CustomerRepository
         const string sql = @"
             SELECT id, created_at, customer_name, customer_phone, 
                    shipping_address, order_type, status, payment_status, 
-                   total_amount, notes, seller_id, seller_name
+                   total_amount, notes, seller_id, seller_name,
+                   payment_method, received_amount, shift_id
             FROM customerorders
             WHERE customer_id = @customerId
             ORDER BY created_at DESC";
@@ -175,7 +206,10 @@ public class CustomerRepository
                 TotalAmount = reader.IsDBNull(8) ? 0m : reader.GetDecimal(8),
                 Notes = reader.IsDBNull(9) ? null : reader.GetString(9),
                 SellerId = reader.IsDBNull(10) ? null : reader.GetInt32(10),
-                SellerName = reader.IsDBNull(11) ? null : reader.GetString(11)
+                SellerName = reader.IsDBNull(11) ? null : reader.GetString(11),
+                PaymentMethod = reader.IsDBNull(12) ? null : reader.GetString(12),
+                ReceivedAmount = reader.IsDBNull(13) ? 0m : reader.GetDecimal(13),
+                ShiftId = reader.IsDBNull(14) ? null : reader.GetInt32(14)
             });
         }
         return orders;

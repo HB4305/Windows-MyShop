@@ -121,6 +121,86 @@ public class SportItemRepository
         return (results, totalCount);
     }
 
+    public async Task<PagedResult<SportItemListRow>> SearchForPosAsync(
+        int page,
+        int pageSize,
+        string? keyword,
+        string? categoryName)
+    {
+        var results = new List<SportItemListRow>();
+        var totalCount = 0;
+        var offset = (Math.Max(1, page) - 1) * Math.Max(1, pageSize);
+
+        var conditions = new List<string>();
+        categoryName = Normalize(categoryName);
+        if (!string.IsNullOrWhiteSpace(categoryName))
+        {
+            conditions.Add("c.name = @categoryName");
+        }
+
+        keyword = Normalize(keyword);
+        if (!string.IsNullOrWhiteSpace(keyword))
+        {
+            conditions.Add(@"
+                (s.name ILIKE @keyword
+                 OR coalesce(c.name, '') ILIKE @keyword)");
+        }
+
+        var where = conditions.Count > 0 ? "WHERE " + string.Join(" AND ", conditions) : "";
+
+        var dataSql = $@"
+            SELECT COUNT(*) OVER() as full_count,
+                   s.id, s.category_id, s.name, s.cost_price, s.selling_price,
+                   s.stock_quantity, s.low_stock_threshold, s.image_urls, s.description,
+                   c.name as category_name
+            FROM sportitems s
+            LEFT JOIN categories c ON s.category_id = c.id
+            {where}
+            ORDER BY s.name ASC
+            OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using (var cmd = new NpgsqlCommand(dataSql, conn))
+        {
+            if (!string.IsNullOrWhiteSpace(categoryName))
+            {
+                cmd.Parameters.AddWithValue("categoryName", categoryName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                cmd.Parameters.AddWithValue("keyword", $"%{keyword}%");
+            }
+
+            cmd.Parameters.AddWithValue("offset", offset);
+            cmd.Parameters.AddWithValue("pageSize", Math.Max(1, pageSize));
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                totalCount = reader.GetInt32(0);
+                var item = ReadSportItemFromJoined(reader);
+                results.Add(new SportItemListRow
+                {
+                    Item = item,
+                    CategoryName = reader.IsDBNull(10) ? "-" : reader.GetString(10)
+                });
+            }
+        }
+
+        if (results.Count > 0)
+        {
+            await LoadVariantsForItemsAsync(conn, results.Select(r => r.Item).ToList());
+        }
+
+        return new PagedResult<SportItemListRow>
+        {
+            Items = results,
+            TotalCount = totalCount
+        };
+    }
+
     private static SportItem ReadSportItemFromJoined(NpgsqlDataReader reader)
     {
         // Offset by 1 because index 0 is full_count
@@ -154,6 +234,38 @@ public class SportItemRepository
         await using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
             names.Add(reader.GetString(0));
+        return names;
+    }
+
+    public async Task<List<string>> GetProductNamesByCategoryNameAsync(string? categoryName)
+    {
+        categoryName = Normalize(categoryName);
+        var sql = string.IsNullOrWhiteSpace(categoryName)
+            ? "SELECT DISTINCT name FROM sportitems WHERE name IS NOT NULL AND name != '' ORDER BY name"
+            : @"
+                SELECT DISTINCT s.name
+                FROM sportitems s
+                LEFT JOIN categories c ON c.id = s.category_id
+                WHERE s.name IS NOT NULL
+                  AND s.name != ''
+                  AND c.name = @categoryName
+                ORDER BY s.name";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        if (!string.IsNullOrWhiteSpace(categoryName))
+        {
+            cmd.Parameters.AddWithValue("categoryName", categoryName);
+        }
+
+        var names = new List<string>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            names.Add(reader.GetString(0));
+        }
+
         return names;
     }
 
@@ -272,32 +384,118 @@ public class SportItemRepository
 
     public async Task DeductVariantStockAsync(long variantId, int quantity)
     {
+        if (quantity <= 0)
+        {
+            return;
+        }
+
         const string sql = @"
             UPDATE sportitem_variants 
             SET stock_quantity = stock_quantity - @quantity 
-            WHERE id = @variantId";
+            WHERE id = @variantId
+              AND stock_quantity >= @quantity";
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
         await using var cmd = new NpgsqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("quantity", quantity);
         cmd.Parameters.AddWithValue("variantId", variantId);
-        await cmd.ExecuteNonQueryAsync();
+        var affected = await cmd.ExecuteNonQueryAsync();
+        if (affected == 0)
+        {
+            throw new InvalidOperationException("Not enough stock for the selected variant.");
+        }
     }
 
     public async Task DeductStockAsync(int itemId, int quantity)
     {
-        const string sql = @"
-            UPDATE sportitems 
-            SET stock_quantity = stock_quantity - @quantity 
-            WHERE id = @itemId";
+        if (quantity <= 0)
+        {
+            return;
+        }
 
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
-        await using var cmd = new NpgsqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("quantity", quantity);
-        cmd.Parameters.AddWithValue("itemId", itemId);
-        await cmd.ExecuteNonQueryAsync();
+        await using var tx = await conn.BeginTransactionAsync();
+
+        try
+        {
+            var variants = new List<(long Id, int Stock)>();
+            const string variantsSql = @"
+                SELECT id, stock_quantity
+                FROM sportitem_variants
+                WHERE sportitem_id = @itemId
+                  AND stock_quantity > 0
+                ORDER BY id
+                FOR UPDATE";
+
+            await using (var cmd = new NpgsqlCommand(variantsSql, conn, tx))
+            {
+                cmd.Parameters.AddWithValue("itemId", itemId);
+                await using var reader = await cmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    variants.Add((reader.GetInt64(0), reader.GetInt32(1)));
+                }
+            }
+
+            if (variants.Count > 0)
+            {
+                var available = variants.Sum(variant => variant.Stock);
+                if (available < quantity)
+                {
+                    throw new InvalidOperationException($"Not enough stock. Available: {available}.");
+                }
+
+                var remaining = quantity;
+                const string updateVariantSql = @"
+                    UPDATE sportitem_variants
+                    SET stock_quantity = stock_quantity - @quantity
+                    WHERE id = @variantId";
+
+                foreach (var variant in variants)
+                {
+                    if (remaining <= 0)
+                    {
+                        break;
+                    }
+
+                    var deduct = Math.Min(variant.Stock, remaining);
+                    await using var updateCmd = new NpgsqlCommand(updateVariantSql, conn, tx);
+                    updateCmd.Parameters.AddWithValue("quantity", deduct);
+                    updateCmd.Parameters.AddWithValue("variantId", variant.Id);
+                    await updateCmd.ExecuteNonQueryAsync();
+                    remaining -= deduct;
+                }
+
+                await tx.CommitAsync();
+                return;
+            }
+
+            const string updateItemSql = @"
+                UPDATE sportitems
+                SET stock_quantity = stock_quantity - @quantity
+                WHERE id = @itemId
+                  AND stock_quantity >= @quantity";
+
+            await using (var cmd = new NpgsqlCommand(updateItemSql, conn, tx))
+            {
+                cmd.Parameters.AddWithValue("quantity", quantity);
+                cmd.Parameters.AddWithValue("itemId", itemId);
+                var affected = await cmd.ExecuteNonQueryAsync();
+                if (affected == 0)
+                {
+                    throw new InvalidOperationException("Not enough stock for this item.");
+                }
+            }
+
+            await tx.CommitAsync();
+        }
+        catch
+        {
+            await tx.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task AddVariantStockAsync(long variantId, int quantity)
@@ -479,5 +677,11 @@ public class SportItemRepository
             cmd.Parameters.AddWithValue("minPrice", minPrice.Value);
         if (maxPrice.HasValue)
             cmd.Parameters.AddWithValue("maxPrice", maxPrice.Value);
+    }
+
+    private static string? Normalize(string? value)
+    {
+        var trimmed = value?.Trim();
+        return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
     }
 }

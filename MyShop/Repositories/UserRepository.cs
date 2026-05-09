@@ -20,7 +20,7 @@ public class UserRepository
     public async Task<UserRecord?> GetByEmailAsync(string email)
     {
         const string sql = @"
-            SELECT id, email, password, COALESCE(role, 'sale')
+            SELECT id, email, password, COALESCE(role, 'sale'), created_at
             FROM users
             WHERE email = @email
             LIMIT 1";
@@ -39,7 +39,8 @@ public class UserRepository
                 Id = reader.GetInt32(0),
                 Email = reader.GetString(1),
                 Password = reader.IsDBNull(2) ? "" : reader.GetString(2),
-                Role = reader.GetString(3)
+                Role = reader.GetString(3),
+                CreatedAt = reader.IsDBNull(4) ? null : reader.GetFieldValue<DateTimeOffset>(4)
             };
         }
 
@@ -58,7 +59,7 @@ public class UserRepository
         const string sql = @"
             INSERT INTO users (email, password, role)
             VALUES (@email, @password, @role)
-            RETURNING id, email, role";
+            RETURNING id, email, role, created_at";
 
         try
         {
@@ -78,7 +79,8 @@ public class UserRepository
                     Id = reader.GetInt32(0),
                     Email = reader.GetString(1),
                     Password = hashedPassword,
-                    Role = reader.GetString(2)
+                    Role = reader.GetString(2),
+                    CreatedAt = reader.IsDBNull(3) ? null : reader.GetFieldValue<DateTimeOffset>(3)
                 };
             }
             return null;
@@ -108,6 +110,115 @@ public class UserRepository
     /// </summary>
     public async Task<UserRecord?> CreateOwnerAsync(string email, string password)
         => await CreateAsync(email, password, "owner");
+
+    public async Task<List<UserRecord>> GetAllAsync()
+    {
+        const string sql = @"
+            SELECT id, email, COALESCE(role, 'sale'), created_at
+            FROM users
+            ORDER BY created_at DESC, id DESC";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+
+        var users = new List<UserRecord>();
+        await using var reader = await cmd.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            users.Add(new UserRecord
+            {
+                Id = reader.GetInt32(0),
+                Email = reader.GetString(1),
+                Role = reader.GetString(2),
+                CreatedAt = reader.IsDBNull(3) ? null : reader.GetFieldValue<DateTimeOffset>(3)
+            });
+        }
+
+        return users;
+    }
+
+    public async Task<UserRecord?> UpdateAsync(int id, string email, string role, string? password = null)
+    {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+        var normalizedRole = role?.Trim().ToLowerInvariant() ?? "sale";
+        var updatePassword = !string.IsNullOrWhiteSpace(password);
+
+        var sql = updatePassword
+            ? @"
+                UPDATE users
+                SET email = @email,
+                    role = @role,
+                    password = @password
+                WHERE id = @id
+                RETURNING id, email, role, created_at"
+            : @"
+                UPDATE users
+                SET email = @email,
+                    role = @role
+                WHERE id = @id
+                RETURNING id, email, role, created_at";
+
+        try
+        {
+            await using var conn = _connFactory.CreateConnection();
+            await conn.OpenAsync();
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("email", normalizedEmail);
+            cmd.Parameters.AddWithValue("role", normalizedRole);
+            if (updatePassword)
+            {
+                cmd.Parameters.AddWithValue("password", CredentialManager.ComputeHash(password!));
+            }
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            if (!await reader.ReadAsync())
+            {
+                return null;
+            }
+
+            return new UserRecord
+            {
+                Id = reader.GetInt32(0),
+                Email = reader.GetString(1),
+                Role = reader.GetString(2),
+                CreatedAt = reader.IsDBNull(3) ? null : reader.GetFieldValue<DateTimeOffset>(3)
+            };
+        }
+        catch (NpgsqlException)
+        {
+            return null;
+        }
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        const string sql = "DELETE FROM users WHERE id = @id";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("id", id);
+        await cmd.ExecuteNonQueryAsync();
+    }
+
+    public async Task<int> CountByRoleAsync(string role)
+    {
+        const string sql = @"
+            SELECT COUNT(*)
+            FROM users
+            WHERE COALESCE(role, 'sale') = @role";
+
+        await using var conn = _connFactory.CreateConnection();
+        await conn.OpenAsync();
+        await using var cmd = new NpgsqlCommand(sql, conn);
+        cmd.Parameters.AddWithValue("role", role.Trim().ToLowerInvariant());
+
+        var scalar = await cmd.ExecuteScalarAsync();
+        return Convert.ToInt32(scalar);
+    }
 }
 
 /// <summary>
@@ -120,4 +231,7 @@ public record UserRecord
     /// <summary>SHA256 hash of the password (Base64).</summary>
     public string Password { get; init; } = string.Empty;
     public string? Role { get; init; }
+    public DateTimeOffset? CreatedAt { get; init; }
+    public string RoleDisplay => (Role ?? "sale").ToUpperInvariant();
+    public string CreatedAtDisplay => CreatedAt?.ToLocalTime().ToString("dd MMM yyyy HH:mm") ?? "-";
 }

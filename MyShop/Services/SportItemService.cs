@@ -32,8 +32,18 @@ public class SportItemService
         int page, int pageSize, string keyword, decimal? minPrice, decimal? maxPrice, string sortField, bool sortAscending)
         => _repository.GetItemsAsync(page, pageSize, keyword, minPrice, maxPrice, sortField, sortAscending);
 
+    public Task<PagedResult<SportItemListRow>> SearchForPosAsync(
+        int page,
+        int pageSize,
+        string? keyword,
+        string? categoryName)
+        => _repository.SearchForPosAsync(page, pageSize, keyword, categoryName);
+
     public Task<List<string>> GetProductNamesAsync(int? categoryId = null)
         => _repository.GetProductNamesAsync(categoryId);
+
+    public Task<List<string>> GetProductNamesByCategoryNameAsync(string? categoryName)
+        => _repository.GetProductNamesByCategoryNameAsync(categoryName);
 
     public Task<int> AddAsync(SportItem item)
         => _repository.AddAsync(item);

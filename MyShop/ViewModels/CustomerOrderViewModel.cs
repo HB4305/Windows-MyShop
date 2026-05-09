@@ -60,6 +60,7 @@ public partial class CustomerOrderViewModel : ObservableObject
         "All",
         "Pending",
         "Processing",
+        "Completed",
         "Delivered",
         "Cancelled",
         "Shipped"
@@ -134,7 +135,7 @@ public partial class CustomerOrderViewModel : ObservableObject
         TotalOrders = Orders.Count;
         PendingCount = Orders.Count(o => o.Status == "Pending");
         ProcessingCount = Orders.Count(o => o.Status == "Processing");
-        CompletedCount = Orders.Count(o => o.Status == "Delivered");
+        CompletedCount = Orders.Count(o => IsCompletedStatus(o.Status));
         CancelledCount = Orders.Count(o => o.Status == "Cancelled");
         TotalRevenue = Orders
             .Where(o => o.PaymentStatus == "Paid")
@@ -210,14 +211,19 @@ public partial class CustomerOrderViewModel : ObservableObject
         {
             var tabStatus = ActiveTab switch
             {
-                "Delivered" => "Delivered",
+                "Completed" => null,
                 _ => ActiveTab
             };
-            source = source.Where(o => o.Status == tabStatus);
+            source = tabStatus is null
+                ? source.Where(o => IsCompletedStatus(o.Status))
+                : source.Where(o => o.Status == tabStatus);
         }
 
         return source;
     }
+
+    private static bool IsCompletedStatus(string? status)
+        => status is "Completed" or "Delivered";
 
     // ── Select Order → Detail Panel ────────────────────────────────
     public async Task SelectOrderAsync(CustomerOrder order)

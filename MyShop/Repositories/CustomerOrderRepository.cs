@@ -15,9 +15,10 @@ public class CustomerOrderRepository
     // ═══════════════════════════════════════════════════════════════════════
 
     private const string SelectColumns =
-        @"id, created_at, customer_name, customer_phone,
+        @"id, created_at, COALESCE(customer_id, 0), customer_name, customer_phone,
           shipping_address, order_type, status, payment_status,
-          total_amount, notes, COALESCE(seller_id, 0), COALESCE(seller_name, '')";
+          total_amount, notes, COALESCE(seller_id, 0), COALESCE(seller_name, ''),
+          payment_method, received_amount, shift_id";
 
     /// <summary>
     /// Gets all orders (owner only).
@@ -84,19 +85,29 @@ public class CustomerOrderRepository
     /// </summary>
     public async Task<CustomerOrder> CreateAsync(CustomerOrder order, int sellerId, string sellerName)
     {
-        const string sql = @"
-            INSERT INTO customerorders
-                (customer_name, customer_phone, shipping_address,
-                 order_type, status, payment_status, total_amount, notes,
-                 seller_id, seller_name)
-            VALUES (@customerName, @customerPhone, @shippingAddress,
-                    @orderType, @status, @paymentStatus, @totalAmount, @notes,
-                    @sellerId, @sellerName)
-            RETURNING id, created_at";
-
         await using var conn = _connFactory.CreateConnection();
         await conn.OpenAsync();
-        await using var cmd = new NpgsqlCommand(sql, conn);
+        return await CreateAsync(order, sellerId, sellerName, conn, tx: null);
+    }
+
+    public async Task<CustomerOrder> CreateAsync(
+        CustomerOrder order,
+        int sellerId,
+        string sellerName,
+        NpgsqlConnection conn,
+        NpgsqlTransaction? tx)
+    {
+        const string sql = @"
+            INSERT INTO customerorders
+                (customer_id, customer_name, customer_phone, shipping_address,
+                 order_type, status, payment_status, total_amount, notes,
+                 seller_id, seller_name, payment_method, received_amount, shift_id)
+            VALUES (@customerId, @customerName, @customerPhone, @shippingAddress,
+                    @orderType, @status, @paymentStatus, @totalAmount, @notes,
+                    @sellerId, @sellerName, @paymentMethod, @receivedAmount, @shiftId)
+            RETURNING id, created_at";
+
+        await using var cmd = new NpgsqlCommand(sql, conn, tx);
         AddOrderParams(cmd, order);
         cmd.Parameters.AddWithValue("sellerId", sellerId);
         cmd.Parameters.AddWithValue("sellerName", sellerName ?? "");
@@ -116,12 +127,16 @@ public class CustomerOrderRepository
             UPDATE customerorders SET
                 customer_name = @customerName,
                 customer_phone = @customerPhone,
+                customer_id = @customerId,
                 shipping_address = @shippingAddress,
                 order_type = @orderType,
                 status = @status,
                 payment_status = @paymentStatus,
                 total_amount = @totalAmount,
-                notes = @notes
+                notes = @notes,
+                payment_method = @paymentMethod,
+                received_amount = @receivedAmount,
+                shift_id = @shiftId
             WHERE id = @id";
 
         await using var conn = _connFactory.CreateConnection();
@@ -171,6 +186,7 @@ public class CustomerOrderRepository
 
     private static void AddOrderParams(NpgsqlCommand cmd, CustomerOrder o)
     {
+        cmd.Parameters.AddWithValue("customerId", (object?)o.CustomerId ?? DBNull.Value);
         cmd.Parameters.AddWithValue("customerName", o.CustomerName);
         cmd.Parameters.AddWithValue("customerPhone", o.CustomerPhone);
         cmd.Parameters.AddWithValue("shippingAddress", (object?)o.ShippingAddress ?? DBNull.Value);
@@ -179,6 +195,9 @@ public class CustomerOrderRepository
         cmd.Parameters.AddWithValue("paymentStatus", o.PaymentStatus ?? "Unpaid");
         cmd.Parameters.AddWithValue("totalAmount", (object?)o.TotalAmount ?? 0m);
         cmd.Parameters.AddWithValue("notes", (object?)o.Notes ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("paymentMethod", (object?)o.PaymentMethod ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("receivedAmount", (object?)o.ReceivedAmount ?? 0m);
+        cmd.Parameters.AddWithValue("shiftId", (object?)o.ShiftId ?? DBNull.Value);
     }
 
     private static CustomerOrder ReadCustomerOrder(NpgsqlDataReader r)
@@ -187,16 +206,20 @@ public class CustomerOrderRepository
         {
             Id = r.GetInt32(0),
             CreatedAt = r.IsDBNull(1) ? null : r.GetFieldValue<DateTimeOffset>(1),
-            CustomerName = r.IsDBNull(2) ? "" : r.GetString(2),
-            CustomerPhone = r.IsDBNull(3) ? "" : r.GetString(3),
-            ShippingAddress = r.IsDBNull(4) ? null : r.GetString(4),
-            OrderType = r.IsDBNull(5) ? null : r.GetString(5),
-            Status = r.IsDBNull(6) ? null : r.GetString(6),
-            PaymentStatus = r.IsDBNull(7) ? null : r.GetString(7),
-            TotalAmount = r.IsDBNull(8) ? 0m : r.GetDecimal(8),
-            Notes = r.IsDBNull(9) ? null : r.GetString(9),
-            SellerId = r.IsDBNull(10) ? null : r.GetInt32(10),
-            SellerName = r.IsDBNull(11) ? null : r.GetString(11)
+            CustomerId = r.IsDBNull(2) || r.GetInt32(2) == 0 ? null : r.GetInt32(2),
+            CustomerName = r.IsDBNull(3) ? "" : r.GetString(3),
+            CustomerPhone = r.IsDBNull(4) ? "" : r.GetString(4),
+            ShippingAddress = r.IsDBNull(5) ? null : r.GetString(5),
+            OrderType = r.IsDBNull(6) ? null : r.GetString(6),
+            Status = r.IsDBNull(7) ? null : r.GetString(7),
+            PaymentStatus = r.IsDBNull(8) ? null : r.GetString(8),
+            TotalAmount = r.IsDBNull(9) ? 0m : r.GetDecimal(9),
+            Notes = r.IsDBNull(10) ? null : r.GetString(10),
+            SellerId = r.IsDBNull(11) ? null : r.GetInt32(11),
+            SellerName = r.IsDBNull(12) ? null : r.GetString(12),
+            PaymentMethod = r.IsDBNull(13) ? null : r.GetString(13),
+            ReceivedAmount = r.IsDBNull(14) ? 0m : r.GetDecimal(14),
+            ShiftId = r.IsDBNull(15) ? null : r.GetInt32(15)
         };
     }
 }

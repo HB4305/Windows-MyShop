@@ -104,11 +104,13 @@ public sealed partial class ShellPage : Page
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavSuppliers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavStaffManagement.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
 
         // Sales are not allowed to access Reports/Category/Suppliers
         NavReports.IsEnabled = isOwner;
         NavCategory.IsEnabled = isOwner;
         NavSuppliers.IsEnabled = isOwner;
+        NavStaffManagement.IsEnabled = isOwner;
     }
 
     /// <summary>
@@ -134,6 +136,20 @@ public sealed partial class ShellPage : Page
     {
         _frame.Navigate(typeof(DashboardPage));
         UpdateActiveNav("Dashboard");
+        MaintainSidebarAfterNavigation();
+    }
+
+    private void NavPos_Click(object sender, RoutedEventArgs e)
+    {
+        _frame.Navigate(typeof(PosPage));
+        UpdateActiveNav("POS");
+        MaintainSidebarAfterNavigation();
+    }
+
+    private void NavShiftManagement_Click(object sender, RoutedEventArgs e)
+    {
+        _frame.Navigate(typeof(ShiftManagementPage));
+        UpdateActiveNav("ShiftManagement");
         MaintainSidebarAfterNavigation();
     }
 
@@ -163,6 +179,14 @@ public sealed partial class ShellPage : Page
     {
         _frame.Navigate(typeof(CustomerPage));
         UpdateActiveNav("Customers");
+        MaintainSidebarAfterNavigation();
+    }
+
+    private void NavStaffManagement_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_currentUserService.IsOwner) return;
+        _frame.Navigate(typeof(StaffManagementPage));
+        UpdateActiveNav("StaffManagement");
         MaintainSidebarAfterNavigation();
     }
 
@@ -203,12 +227,16 @@ public sealed partial class ShellPage : Page
         var tag = e.SourcePageType.Name switch
         {
             nameof(DashboardPage) => "Dashboard",
+            nameof(PosPage) => "POS",
+            nameof(ShiftManagementPage) => "ShiftManagement",
+            nameof(ShiftReportLogsPage) => "ShiftManagement",
             nameof(ReportPage) => "Reports",
             nameof(SportItemPage) => "ProductCatalog",
             nameof(ProductCatalogPage) => "ProductCatalog",
             nameof(CustomerOrderPage) => "OrdersManagement",
             nameof(OrdersManagementPage) => "OrdersManagement",
             nameof(CustomerPage) => "Customers",
+            nameof(StaffManagementPage) => "StaffManagement",
             nameof(SuppliersPage) => "Suppliers",
             nameof(CategoryPage) => "Category",
             nameof(SettingsPage) => "Settings",
@@ -226,10 +254,13 @@ public sealed partial class ShellPage : Page
     private void UpdateActiveNav(string activeTag)
     {
         ResetNavStyle(NavDashboard);
+        ResetNavStyle(NavPos);
+        ResetNavStyle(NavShiftManagement);
         ResetNavStyle(NavReports);
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
         ResetNavStyle(NavCustomers);
+        ResetNavStyle(NavStaffManagement);
         ResetNavStyle(NavSuppliers);
         ResetNavStyle(NavCategory);
         ResetNavStyle(NavSettings);
@@ -237,10 +268,13 @@ public sealed partial class ShellPage : Page
         var activeBtn = activeTag switch
         {
             "Dashboard" => NavDashboard,
+            "POS" => NavPos,
+            "ShiftManagement" => NavShiftManagement,
             "Reports" => NavReports,
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
             "Customers" => NavCustomers,
+            "StaffManagement" => NavStaffManagement,
             "Suppliers" => NavSuppliers,
             "Category" => NavCategory,
             "Settings" => NavSettings,
@@ -256,16 +290,19 @@ public sealed partial class ShellPage : Page
 
         // Sales cannot navigate to forbidden pages
         if (_currentUserService.IsSale &&
-            (tag == "Reports" || tag == "Category"))
+            (tag == "Reports" || tag == "Category" || tag == "StaffManagement"))
             return false;
 
         var pageType = tag switch
         {
             "Dashboard" => typeof(DashboardPage),
+            "POS" => typeof(PosPage),
+            "ShiftManagement" => typeof(ShiftManagementPage),
             "Reports" => typeof(ReportPage),
             "ProductCatalog" => typeof(SportItemPage),
             "OrdersManagement" => typeof(CustomerOrderPage),
             "Customers" => typeof(CustomerPage),
+            "StaffManagement" => typeof(StaffManagementPage),
             "Suppliers" => typeof(SuppliersPage),
             "Category" => typeof(CategoryPage),
             "Settings" => typeof(SettingsPage),
