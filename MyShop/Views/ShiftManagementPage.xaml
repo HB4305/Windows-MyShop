@@ -37,7 +37,7 @@
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Spacing="2">
-          <TextBlock Text="Shift Management"
+          <TextBlock Text="Shift Report"
                      FontSize="28"
                      FontWeight="Bold"
                      Foreground="{ThemeResource TextFillColorPrimary}"/>
@@ -45,7 +45,8 @@
                      FontSize="13"
                      Foreground="{ThemeResource TextFillColorSecondary}"/>
         </StackPanel>
-        <Button Grid.Column="1"
+        <Button x:Name="ViewReportLogsButton"
+                Grid.Column="1"
                 Click="ViewReportLogs_Click"
                 Background="{ThemeResource ControlFillColorDefaultBrush}"
                 BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"

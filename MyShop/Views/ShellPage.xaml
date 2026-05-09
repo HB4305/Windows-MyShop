@@ -129,10 +129,10 @@
             </StackPanel>
           </Button>
 
-          <!-- Shift Management -->
+          <!-- Shift Report / Logs -->
           <Button x:Name="NavShiftManagement"
                   Click="NavShiftManagement_Click"
-                  Tag="ShiftManagement"
+                  Tag="ShiftReport"
                   Background="Transparent"
                   BorderThickness="0"
                   Padding="10,8"
@@ -146,7 +146,8 @@
                          Foreground="{ThemeResource TextFillColorSecondary}"
                          VerticalAlignment="Center"
                          Width="20"/>
-              <TextBlock Text="Shift Management"
+              <TextBlock x:Name="ShiftNavigationText"
+                         Text="Shift Report"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
                          VerticalAlignment="Center"/>
@@ -473,7 +474,8 @@
             </Button>
 
             <!-- Settings gear -->
-            <Button Tag="Settings"
+            <Button x:Name="HeaderSettingsButton"
+                    Tag="Settings"
                     Click="NavSettings_Click"
                   Width="40"
                   Height="40"

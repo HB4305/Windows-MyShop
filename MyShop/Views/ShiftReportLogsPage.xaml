@@ -37,11 +37,11 @@
       </Grid.ColumnDefinitions>
 
       <StackPanel Spacing="2">
-        <TextBlock Text="Shift Report Logs"
+        <TextBlock Text="Shift Log"
                    FontSize="28"
                    FontWeight="Bold"
                    Foreground="{ThemeResource TextFillColorPrimary}"/>
-        <TextBlock Text="Review submitted shift reports, discrepancies, and cashier notes."
+        <TextBlock Text="Review submitted shift reports, discrepancies, and cashier notes from staff."
                    FontSize="13"
                    Foreground="{ThemeResource TextFillColorSecondary}"/>
       </StackPanel>
