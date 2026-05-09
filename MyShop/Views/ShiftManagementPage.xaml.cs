@@ -24,6 +24,8 @@ public sealed partial class ShiftManagementPage : Page
 
     private async void ShiftManagementPage_Loaded(object sender, RoutedEventArgs e)
     {
+        ViewReportLogsButton.Visibility = Visibility.Collapsed;
+
         if (ViewModel is not null)
         {
             await ViewModel.LoadActiveShiftCommand.ExecuteAsync(null);
