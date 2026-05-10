@@ -115,6 +115,7 @@ public partial class PosViewModel : ObservableObject
     {
         try
         {
+            PageSize = Math.Max(1, _settingsManager.GetItemsPerPage());
             IsLoading = true;
             StatusMessage = string.Empty;
 

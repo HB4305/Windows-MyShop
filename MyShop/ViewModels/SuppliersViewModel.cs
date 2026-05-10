@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyShop.Models;
 using MyShop.Repositories;
+using MyShop.Services;
 
 namespace MyShop.ViewModels;
 
@@ -10,11 +11,16 @@ public partial class SuppliersViewModel : ObservableObject
 {
     private readonly SupplierRepository _supplierRepo;
     private readonly SupplyRepository _supplyRepo;
+    private readonly SettingsManager _settingsManager;
 
-    public SuppliersViewModel(SupplierRepository supplierRepo, SupplyRepository supplyRepo)
+    public SuppliersViewModel(SupplierRepository supplierRepo, SupplyRepository supplyRepo, SettingsManager settingsManager)
     {
         _supplierRepo = supplierRepo;
         _supplyRepo = supplyRepo;
+        _settingsManager = settingsManager;
+
+        _supplierPageSize = _settingsManager.GetItemsPerPage();
+        _orderPageSize = _settingsManager.GetItemsPerPage();
     }
 
     [ObservableProperty]
@@ -51,6 +57,7 @@ public partial class SuppliersViewModel : ObservableObject
     [RelayCommand]
     public async Task LoadSuppliersAsync()
     {
+        SupplierPageSize = Math.Max(1, _settingsManager.GetItemsPerPage());
         try
         {
             IsLoadingSuppliers = true;
@@ -145,6 +152,7 @@ public partial class SuppliersViewModel : ObservableObject
     [RelayCommand]
     public async Task LoadSupplyOrdersAsync()
     {
+        OrderPageSize = Math.Max(1, _settingsManager.GetItemsPerPage());
         try
         {
             IsLoadingOrders = true;

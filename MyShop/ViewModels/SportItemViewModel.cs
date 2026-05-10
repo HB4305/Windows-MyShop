@@ -166,6 +166,7 @@ public partial class SportItemViewModel : ObservableObject
     [RelayCommand]
     public async Task LoadItemsAsync()
     {
+        PageSize = Math.Max(1, _settingsManager.GetItemsPerPage());
         try
         {
             IsLoading = true;
