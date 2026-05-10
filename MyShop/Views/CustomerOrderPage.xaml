@@ -417,6 +417,29 @@
         </Grid>
       </Border>
     </DataTemplate>
+    <!-- Pagination Button Styles -->
+    <Style x:Key="PageBtn" TargetType="Button">
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="MinWidth" Value="32"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+    </Style>
+
+    <Style x:Key="PageBtnActive" TargetType="Button">
+      <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="MinWidth" Value="32"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
 
   </Page.Resources>
 
@@ -829,21 +852,14 @@
           </Grid.ColumnDefinitions>
 
           <!-- Showing X-Y of Z -->
-          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBlock Text="Showing " FontSize="12"
-                       Foreground="{ThemeResource TextFillColorTertiary}"/>
-            <TextBlock FontSize="12" FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimary}">
-              <Run Text="{Binding CurrentPage, Mode=OneWay}"/>
-            </TextBlock>
-            <TextBlock Text=" - " FontSize="12"
-                       Foreground="{ThemeResource TextFillColorTertiary}"/>
-            <TextBlock FontSize="12" FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimary}">
-              <Run Text="{Binding TotalOrders, Mode=OneWay}"/>
-            </TextBlock>
-            <TextBlock Text=" of orders" FontSize="12"
-                       Foreground="{ThemeResource TextFillColorTertiary}"/>
+          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="4">
+            <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="{Binding StartIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="{Binding EndIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="{Binding FilteredCount}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           </StackPanel>
 
           <!-- Pagination Buttons -->
