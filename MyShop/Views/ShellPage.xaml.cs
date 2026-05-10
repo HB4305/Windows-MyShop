@@ -34,8 +34,7 @@ public sealed partial class ShellPage : Page
 
         if (!TryNavigateToTag(lastActivity))
         {
-            _frame.Navigate(typeof(DashboardPage));
-            UpdateActiveNav("Dashboard");
+            NavigateToDefaultPage();
         }
     }
 
@@ -93,24 +92,40 @@ public sealed partial class ShellPage : Page
 
     /// <summary>
     /// Shows/hides menu items based on the current user's role.
-    /// - Owner: sees all menus
-    /// - Sale: hides Reports, Category
+    /// - Owner: manages the shop and reviews shift logs
+    /// - Sale: works from POS and submits shift reports
     /// </summary>
     private void ApplyRolePermissions()
     {
         var isOwner = _currentUserService.IsOwner;
 
-        // Hide Reports, Category and Suppliers for sales roles
+        NavDashboard.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavSuppliers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavPos.Visibility = isOwner ? Visibility.Collapsed : Visibility.Visible;
+        NavShiftManagement.Visibility = Visibility.Visible;
+        NavProductCatalog.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavOrders.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavCustomers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavStaffManagement.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavSuppliers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavSettings.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        HeaderSettingsButton.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
 
-        // Sales are not allowed to access Reports/Category/Suppliers
+        NavDashboard.IsEnabled = isOwner;
         NavReports.IsEnabled = isOwner;
-        NavCategory.IsEnabled = isOwner;
-        NavSuppliers.IsEnabled = isOwner;
+        NavPos.IsEnabled = !isOwner;
+        NavProductCatalog.IsEnabled = isOwner;
+        NavOrders.IsEnabled = isOwner;
+        NavCustomers.IsEnabled = isOwner;
         NavStaffManagement.IsEnabled = isOwner;
+        NavSuppliers.IsEnabled = isOwner;
+        NavCategory.IsEnabled = isOwner;
+        NavSettings.IsEnabled = isOwner;
+        HeaderSettingsButton.IsEnabled = isOwner;
+
+        ShiftNavigationText.Text = isOwner ? "Shift Log" : "Shift Report";
+        NavShiftManagement.Tag = isOwner ? "ShiftLogs" : "ShiftReport";
     }
 
     /// <summary>
@@ -148,8 +163,17 @@ public sealed partial class ShellPage : Page
 
     private void NavShiftManagement_Click(object sender, RoutedEventArgs e)
     {
-        _frame.Navigate(typeof(ShiftManagementPage));
-        UpdateActiveNav("ShiftManagement");
+        if (_currentUserService.IsOwner)
+        {
+            _frame.Navigate(typeof(ShiftReportLogsPage));
+            UpdateActiveNav("ShiftLogs");
+        }
+        else
+        {
+            _frame.Navigate(typeof(ShiftManagementPage));
+            UpdateActiveNav("ShiftReport");
+        }
+
         MaintainSidebarAfterNavigation();
     }
 
@@ -208,6 +232,7 @@ public sealed partial class ShellPage : Page
 
     private void NavSettings_Click(object sender, RoutedEventArgs e)
     {
+        if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(SettingsPage));
         UpdateActiveNav("Settings");
         MaintainSidebarAfterNavigation();
@@ -228,8 +253,8 @@ public sealed partial class ShellPage : Page
         {
             nameof(DashboardPage) => "Dashboard",
             nameof(PosPage) => "POS",
-            nameof(ShiftManagementPage) => "ShiftManagement",
-            nameof(ShiftReportLogsPage) => "ShiftManagement",
+            nameof(ShiftManagementPage) => "ShiftReport",
+            nameof(ShiftReportLogsPage) => "ShiftLogs",
             nameof(ReportPage) => "Reports",
             nameof(SportItemPage) => "ProductCatalog",
             nameof(ProductCatalogPage) => "ProductCatalog",
@@ -269,7 +294,8 @@ public sealed partial class ShellPage : Page
         {
             "Dashboard" => NavDashboard,
             "POS" => NavPos,
-            "ShiftManagement" => NavShiftManagement,
+            "ShiftReport" => NavShiftManagement,
+            "ShiftLogs" => NavShiftManagement,
             "Reports" => NavReports,
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
@@ -288,16 +314,19 @@ public sealed partial class ShellPage : Page
         if (string.IsNullOrWhiteSpace(tag))
             return false;
 
-        // Sales cannot navigate to forbidden pages
-        if (_currentUserService.IsSale &&
-            (tag == "Reports" || tag == "Category" || tag == "StaffManagement"))
+        tag = NormalizeActivityTag(tag);
+
+        if (!CanNavigateToTag(tag))
+        {
             return false;
+        }
 
         var pageType = tag switch
         {
             "Dashboard" => typeof(DashboardPage),
             "POS" => typeof(PosPage),
-            "ShiftManagement" => typeof(ShiftManagementPage),
+            "ShiftReport" => typeof(ShiftManagementPage),
+            "ShiftLogs" => typeof(ShiftReportLogsPage),
             "Reports" => typeof(ReportPage),
             "ProductCatalog" => typeof(SportItemPage),
             "OrdersManagement" => typeof(CustomerOrderPage),
@@ -315,6 +344,53 @@ public sealed partial class ShellPage : Page
         _frame.Navigate(pageType);
         UpdateActiveNav(tag);
         return true;
+    }
+
+    private void NavigateToDefaultPage()
+    {
+        if (_currentUserService.IsSale)
+        {
+            _frame.Navigate(typeof(PosPage));
+            UpdateActiveNav("POS");
+            return;
+        }
+
+        _frame.Navigate(typeof(DashboardPage));
+        UpdateActiveNav("Dashboard");
+    }
+
+    private bool CanNavigateToTag(string tag)
+    {
+        if (_currentUserService.IsSale)
+        {
+            return tag is "POS" or "ShiftReport";
+        }
+
+        if (_currentUserService.IsOwner)
+        {
+            return tag is "Dashboard"
+                or "ShiftLogs"
+                or "Reports"
+                or "ProductCatalog"
+                or "OrdersManagement"
+                or "Customers"
+                or "StaffManagement"
+                or "Suppliers"
+                or "Category"
+                or "Settings";
+        }
+
+        return false;
+    }
+
+    private string NormalizeActivityTag(string tag)
+    {
+        if (tag == "ShiftManagement")
+        {
+            return _currentUserService.IsOwner ? "ShiftLogs" : "ShiftReport";
+        }
+
+        return tag;
     }
 
     private void ResetNavStyle(Button btn)

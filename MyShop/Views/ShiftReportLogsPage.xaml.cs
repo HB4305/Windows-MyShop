@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using MyShop.Services;
 using MyShop.ViewModels;
 
 namespace MyShop.Views;
@@ -24,6 +25,7 @@ public sealed partial class ShiftReportLogsPage : Page
 
     private void BackToShiftManagement_Click(object sender, RoutedEventArgs e)
     {
-        Frame.Navigate(typeof(ShiftManagementPage));
+        var currentUser = App.Services.GetRequiredService<CurrentUserService>();
+        Frame.Navigate(currentUser.IsOwner ? typeof(DashboardPage) : typeof(ShiftManagementPage));
     }
 }
