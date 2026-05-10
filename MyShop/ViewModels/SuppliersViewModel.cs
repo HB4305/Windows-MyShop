@@ -35,6 +35,12 @@ public partial class SuppliersViewModel : ObservableObject
     [ObservableProperty]
     private string _searchSupplierKeyword = string.Empty;
 
+    partial void OnSearchSupplierKeywordChanged(string value)
+    {
+        SupplierCurrentPage = 1;
+        _ = LoadSuppliersAsync();
+    }
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SupplierTotalPages))]
     [NotifyPropertyChangedFor(nameof(SupplierDisplayFrom))]

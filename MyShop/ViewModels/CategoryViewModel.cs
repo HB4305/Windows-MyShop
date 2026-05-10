@@ -65,6 +65,12 @@ public partial class CategoryViewModel : ObservableObject
     [ObservableProperty]
     private string _searchKeyword = string.Empty;
 
+    partial void OnSearchKeywordChanged(string value)
+    {
+        CurrentPage = 1;
+        _ = LoadCategoriesAsync();
+    }
+
     public bool ShowEmptyState => !IsLoading && Categories.Count == 0;
 
     [RelayCommand]

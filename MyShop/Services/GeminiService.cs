@@ -47,12 +47,15 @@ public class GeminiService : IAiService
 
         if (imageBytes != null && imageBytes.Length > 0)
         {
+            // Optimize for Gemini: 1024px is plenty for analysis and keeps payload small
+            var optimizedBytes = Utils.ImageHelper.CompressAndResize(imageBytes, maxDimension: 1024, quality: 75);
+            
             requestBody.Contents[0].Parts.Add(new GeminiPart
             {
                 InlineData = new GeminiInlineData
                 {
                     MimeType = mimeType,
-                    Data = Convert.ToBase64String(imageBytes)
+                    Data = Convert.ToBase64String(optimizedBytes)
                 }
             });
         }

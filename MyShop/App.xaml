@@ -17,10 +17,37 @@
       <SolidColorBrush x:Key="AppAccentBrushLow" Color="{StaticResource AppAccentColor}" Opacity="0.12" />
       
       <!-- Standardized Brushes for pages -->
+      <SolidColorBrush x:Key="AppPurpleBrush" Color="#8B52FF"/>
       <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
       <SolidColorBrush x:Key="PurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
       <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
       <SolidColorBrush x:Key="TextBoxBorderBrush" Color="#D1D5DB"/>
+
+      <!-- ── Pagination Button Styles ── -->
+      <Style x:Key="PageBtn" TargetType="Button">
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+      </Style>
+
+      <Style x:Key="PageBtnActive" TargetType="Button">
+        <Setter Property="Background" Value="#8B52FF"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+      </Style>
       
       <Style x:Key="PagerIconButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
