@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Name="DialogRoot"
     Title=""
-    MinWidth="440"
+    Width="440"
     Style="{StaticResource DefaultContentDialogStyle}">
 
     <ContentDialog.Resources>
@@ -129,8 +129,8 @@
                 <Button.Resources>
                     <!-- Reference Global Accent Colors -->
                     <StaticResource x:Key="ButtonBackground" ResourceKey="AppAccentBrush" />
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#7C4DFF" />
-                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#6B39FF" />
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SystemAccentColorLight1}" />
+                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{ThemeResource SystemAccentColorDark1}" />
                 </Button.Resources>
                 <TextBlock Text="Export" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>

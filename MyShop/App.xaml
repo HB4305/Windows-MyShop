@@ -109,6 +109,32 @@
 
       <Style x:Key="DefaultContentDialogStyle" TargetType="ContentDialog">
         <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
+        <Setter Property="Background" Value="{ThemeResource ContentDialogBackground}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ContentDialogBorderBrush}"/>
+      </Style>
+
+      <!-- ── Pagination Button Styles (Synced with Orders Management) ── -->
+      <Style x:Key="PageBtn" TargetType="Button">
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      </Style>
+
+      <Style x:Key="PageBtnActive" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="0"/>
       </Style>
 
       <!-- ── Value Converters ── -->

@@ -101,11 +101,11 @@ public sealed partial class ShellPage : Page
 
         NavDashboard.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavPos.Visibility = isOwner ? Visibility.Collapsed : Visibility.Visible;
+        NavPos.Visibility = Visibility.Visible;
         NavShiftManagement.Visibility = Visibility.Visible;
-        NavProductCatalog.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavProductCatalog.Visibility = Visibility.Visible;
         NavOrders.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavCustomers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavCustomers.Visibility = Visibility.Visible;
         NavStaffManagement.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavSuppliers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
@@ -114,10 +114,10 @@ public sealed partial class ShellPage : Page
 
         NavDashboard.IsEnabled = isOwner;
         NavReports.IsEnabled = isOwner;
-        NavPos.IsEnabled = !isOwner;
-        NavProductCatalog.IsEnabled = isOwner;
+        NavPos.IsEnabled = true;
+        NavProductCatalog.IsEnabled = true;
         NavOrders.IsEnabled = isOwner;
-        NavCustomers.IsEnabled = isOwner;
+        NavCustomers.IsEnabled = true;
         NavStaffManagement.IsEnabled = isOwner;
         NavSuppliers.IsEnabled = isOwner;
         NavCategory.IsEnabled = isOwner;
@@ -243,35 +243,88 @@ public sealed partial class ShellPage : Page
         // TODO: Show notifications panel
     }
 
-    private void Logout_Click(object sender, RoutedEventArgs e)
-        => ShellPageEvents.RaiseLogout();
+    private async void Logout_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new MyShop.Views.Dialogs.ConfirmationDialog(
+            "Sign Out?",
+            "Do you want to sign out from MyShop?",
+            confirmText: "Sign Out",
+            glyph: "\uE7E8")
+        {
+            XamlRoot = this.XamlRoot
+        };
+
+        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+        {
+            ShellPageEvents.RaiseLogout();
+        }
+    }
 
     private void ContentFrame_Navigated(object sender, Microsoft.UI.Xaml.Navigation.NavigationEventArgs e)
     {
         if (e.SourcePageType == null) return;
-        var tag = e.SourcePageType.Name switch
+        
+        string? tag = null;
+        string title = "Welcome back";
+
+        switch (e.SourcePageType.Name)
         {
-            nameof(DashboardPage) => "Dashboard",
-            nameof(PosPage) => "POS",
-            nameof(ShiftManagementPage) => "ShiftReport",
-            nameof(ShiftReportLogsPage) => "ShiftLogs",
-            nameof(ReportPage) => "Reports",
-            nameof(SportItemPage) => "ProductCatalog",
-            nameof(ProductCatalogPage) => "ProductCatalog",
-            nameof(CustomerOrderPage) => "OrdersManagement",
-            nameof(OrdersManagementPage) => "OrdersManagement",
-            nameof(CustomerPage) => "Customers",
-            nameof(StaffManagementPage) => "StaffManagement",
-            nameof(SuppliersPage) => "Suppliers",
-            nameof(CategoryPage) => "Category",
-            nameof(SettingsPage) => "Settings",
-            _ => null
-        };
+            case nameof(DashboardPage):
+                tag = "Dashboard";
+                title = "Dashboard Overview";
+                break;
+            case nameof(PosPage):
+                tag = "POS";
+                title = "Point of Sale";
+                break;
+            case nameof(ShiftManagementPage):
+                tag = "ShiftReport";
+                title = "Submit Shift Report";
+                break;
+            case nameof(ShiftReportLogsPage):
+                tag = "ShiftLogs";
+                title = "Shift History & Logs";
+                break;
+            case nameof(ReportPage):
+                tag = "Reports";
+                title = "Business Analytics & Reports";
+                break;
+            case nameof(SportItemPage):
+            case nameof(ProductCatalogPage):
+                tag = "ProductCatalog";
+                title = "Product Catalog";
+                break;
+            case nameof(CustomerOrderPage):
+            case nameof(OrdersManagementPage):
+                tag = "OrdersManagement";
+                title = "Orders Management";
+                break;
+            case nameof(CustomerPage):
+                tag = "Customers";
+                title = "Customer Directory";
+                break;
+            case nameof(StaffManagementPage):
+                tag = "StaffManagement";
+                title = "Staff Management";
+                break;
+            case nameof(SuppliersPage):
+                tag = "Suppliers";
+                title = "Supplier Management";
+                break;
+            case nameof(CategoryPage):
+                tag = "Category";
+                title = "Category Management";
+                break;
+            case nameof(SettingsPage):
+                tag = "Settings";
+                title = "Application Settings";
+                break;
+        }
+
         if (tag != null)
         {
             UpdateActiveNav(tag);
-            // Always save the current page as last activity — the settings toggle
-            // only controls whether it is RESTORED on next startup, not whether it is saved.
+            HeaderTitleText.Text = title;
             _settingsManager.SetLastActivity(tag);
         }
     }
@@ -363,12 +416,13 @@ public sealed partial class ShellPage : Page
     {
         if (_currentUserService.IsSale)
         {
-            return tag is "POS" or "ShiftReport";
+            return tag is "POS" or "ShiftReport" or "ProductCatalog" or "Customers";
         }
 
         if (_currentUserService.IsOwner)
         {
             return tag is "Dashboard"
+                or "POS"
                 or "ShiftLogs"
                 or "Reports"
                 or "ProductCatalog"
@@ -395,28 +449,34 @@ public sealed partial class ShellPage : Page
 
     private void ResetNavStyle(Button btn)
     {
-        btn.Background = new SolidColorBrush(new Windows.UI.Color() { A = 0, R = 0, G = 0, B = 0 });
+        btn.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
         if (btn.Content is not StackPanel stack) return;
+        
+        var secondaryBrush = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"];
+        
         foreach (var child in stack.Children)
         {
             if (child is TextBlock tb)
             {
-                tb.Foreground = new SolidColorBrush(Color.FromArgb(255, 107, 114, 128));
-                tb.FontWeight = WpfFontWeights.Normal;
+                tb.Foreground = secondaryBrush;
+                tb.FontWeight = Microsoft.UI.Text.FontWeights.Normal;
             }
         }
     }
 
     private void SetActiveNavStyle(Button btn)
     {
-        btn.Background = new SolidColorBrush(Color.FromArgb(255, 243, 240, 255));
+        btn.Background = (Brush)Application.Current.Resources["PurpleLightBrush"];
         if (btn.Content is not StackPanel stack) return;
+        
+        var activeBrush = (Brush)Application.Current.Resources["PurpleBrush"];
+        
         foreach (var child in stack.Children)
         {
             if (child is TextBlock tb)
             {
-                tb.Foreground = new SolidColorBrush(Color.FromArgb(255, 124, 58, 237));
-                tb.FontWeight = WpfFontWeights.SemiBold;
+                tb.Foreground = activeBrush;
+                tb.FontWeight = Microsoft.UI.Text.FontWeights.SemiBold;
             }
         }
     }

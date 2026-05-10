@@ -4,51 +4,49 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:conv="using:MyShop.Converters"
 	mc:Ignorable="d"
 	x:Name="DialogRoot"
 	DefaultButton="Close"
-	MinWidth="420"
+	Width="440"
     Style="{StaticResource DefaultContentDialogStyle}">
 
 	<ContentDialog.Resources>
-		<!-- Override ContentDialog background & shape -->
-		<SolidColorBrush x:Key="ContentDialogBackground" Color="White"/>
+		<conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
 		<CornerRadius x:Key="OverlayCornerRadius">12</CornerRadius>
 	</ContentDialog.Resources>
 
-	<StackPanel Spacing="20" Margin="4,0,4,0">
+	<StackPanel Spacing="20" Margin="4,0,4,0" Width="420">
 
 		<!-- Custom header with warning icon -->
 		<StackPanel Spacing="16">
 			<!-- Warning icon circle -->
-			<Border Background="#FEF2F2"
+			<Border Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
 					CornerRadius="20"
 					Width="48" Height="48"
 					HorizontalAlignment="Left">
 				<TextBlock FontFamily="Segoe MDL2 Assets"
-						   Text="&#xE7BA;"
+						   Text="{x:Bind IconGlyph, Mode=OneWay}"
 						   FontSize="20"
-						   Foreground="#DC2626"
+						   Foreground="{ThemeResource SystemFillColorCriticalBrush}"
 						   HorizontalAlignment="Center"
 						   VerticalAlignment="Center"/>
 			</Border>
 
-			<!-- Title -->
 			<TextBlock Text="{x:Bind DialogTitle, Mode=OneWay}"
 					   FontSize="18"
 					   FontWeight="Bold"
-					   Foreground="#1F2937" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+					   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 		</StackPanel>
 
-		<!-- Content message -->
 		<TextBlock Text="{x:Bind DialogContent, Mode=OneWay}"
 				   FontSize="13"
-				   Foreground="#6B7280"
+				   Foreground="{ThemeResource TextFillColorSecondary}"
 				   TextWrapping="Wrap"
 				   LineHeight="20" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
 		<!-- Divider -->
-		<Border Background="#F3F4F6" Height="1" Margin="-4,0,-4,0"/>
+		<Border Background="{ThemeResource ControlStrokeColorDefaultBrush}" Height="1" Margin="-4,0,-4,0"/>
 
 		<!-- Action buttons -->
 		<Grid ColumnSpacing="10">
@@ -62,21 +60,16 @@
 					x:Name="CancelBtn"
 					Click="CancelBtn_Click"
 					HorizontalAlignment="Stretch"
-					Background="White"
-					BorderBrush="#E5E7EB"
+					Background="{ThemeResource ControlFillColorDefaultBrush}"
+					BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
 					BorderThickness="1"
 					CornerRadius="20"
 					Padding="14,10"
                   Style="{StaticResource ColorPreservingButtonStyle}">
-				<Button.Resources>
-					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#F9FAFB"/>
-					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#D1D5DB"/>
-					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#374151"/>
-				</Button.Resources>
 				<TextBlock Text="Cancel"
 						   FontSize="13"
 						   FontWeight="SemiBold"
-						   Foreground="#374151"
+						   Foreground="{ThemeResource TextFillColorPrimary}"
 						   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 			</Button>
 
@@ -85,20 +78,20 @@
 					x:Name="ConfirmBtn"
 					Click="ConfirmBtn_Click"
 					HorizontalAlignment="Stretch"
-					Background="#DC2626"
-					BorderBrush="#DC2626"
+					Background="{ThemeResource SystemFillColorCriticalBrush}"
+					BorderBrush="{ThemeResource SystemFillColorCriticalBrush}"
 					BorderThickness="0"
 					CornerRadius="20"
 					Padding="14,10"
-                  Style="{StaticResource ColorPreservingButtonStyle}">
+                   Style="{StaticResource ColorPreservingButtonStyle}">
 				<Button.Resources>
 					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#E6DC2626"/>
 					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#E6DC2626"/>
 					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
 				</Button.Resources>
 				<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
-					<TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" FontSize="12" Foreground="White" VerticalAlignment="Center"/>
-					<TextBlock Text="Confirm"
+					<TextBlock FontFamily="Segoe MDL2 Assets" Text="{x:Bind IconGlyph, Mode=OneWay}" FontSize="12" Foreground="White" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Bind ConfirmButtonText, Mode=OneWay}"
 							   FontSize="13"
 							   FontWeight="SemiBold"
 							   Foreground="White" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>

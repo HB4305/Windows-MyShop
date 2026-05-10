@@ -1,13 +1,11 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MyShop.Models;
 using MyShop.Services;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MyShop.Views.Dialogs;
 
@@ -35,86 +33,54 @@ public class CreateOrderDialogViewModel : INotifyPropertyChanged
 
     public string TotalAmountDisplay => TotalAmount.ToString("C");
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
     public CreateOrderDialogViewModel()
     {
         _itemService = App.Services.GetRequiredService<SportItemService>();
         OrderDetails.CollectionChanged += (s, e) => RecalculateTotal();
     }
 
-    public async Task<List<SportItem>> SearchProductsAsync(string query)
+    public async Task<IEnumerable<SportItem>> SearchProductsAsync(string keyword)
     {
-        if (string.IsNullOrWhiteSpace(query)) return new List<SportItem>();
-        var result = await _itemService.GetItemsAsync(1, 20, query, null, null, "Name", true); 
-        return result.Items.Select(r => r.Item).ToList();
+        if (string.IsNullOrWhiteSpace(keyword)) return Enumerable.Empty<SportItem>();
+        var (items, _) = await _itemService.GetItemsAsync(1, 10, keyword, null, null, "name", true);
+        return items.Select(r => r.Item);
     }
 
-    public void AddProduct(SportItem item)
+    public void AddProductToOrder(SportItem product)
     {
-        var firstVariant = item.Variants.FirstOrDefault();
         var detail = new OrderDetail
         {
-            ItemId = item.Id,
-            ItemName = item.Name,
-            UnitPrice = item.SellingPrice ?? 0m,
+            ItemId = product.Id,
+            ItemName = product.Name,
+            UnitPrice = product.SellingPrice ?? 0,
             Quantity = 1,
-            AvailableVariants = item.Variants,
-            LowStockThreshold = item.LowStockThreshold ?? 5
+            AvailableVariants = product.Variants
         };
+
+        var firstVariant = product.Variants.FirstOrDefault();
+        if (firstVariant != null)
+        {
+            detail.SelectedSize = firstVariant.Size ?? "N/A";
+            detail.SelectedColor = firstVariant.Color ?? "N/A";
+        }
+
         OrderDetails.Add(detail);
         RecalculateTotal();
     }
 
-    public void RemoveProduct(int itemId)
+    public void RemoveProductFromOrder(OrderDetail detail)
     {
-        var existing = OrderDetails.FirstOrDefault(d => d.ItemId == itemId);
-        if (existing != null)
-        {
-            OrderDetails.Remove(existing);
-            RecalculateTotal();
-        }
+        OrderDetails.Remove(detail);
+        RecalculateTotal();
     }
 
     public void RecalculateTotal()
     {
-        TotalAmount = OrderDetails.Sum(d => d.Quantity * d.UnitPrice);
-    }
-
-    public (bool IsValid, string ErrorMessage) Validate()
-    {
-        if (string.IsNullOrWhiteSpace(Order.CustomerName))
-            return (false, "Please enter Customer Name.");
-            
-        if (OrderDetails.Count == 0)
-            return (false, "Please add at least one item.");
-            
-        if (Order.OrderType == "Delivery" && string.IsNullOrWhiteSpace(Order.ShippingAddress))
-            return (false, "Shipping Address is required for Delivery orders.");
-
-        foreach (var detail in OrderDetails)
-        {
-            if (detail.SelectedVariant == null)
-            {
-                if (!string.IsNullOrEmpty(detail.SelectedSize) && !string.IsNullOrEmpty(detail.SelectedColor))
-                {
-                    return (false, $"The variant for {detail.ItemName} does not exist.");
-                }
-                return (false, $"Please select a valid variant for {detail.ItemName}.");
-            }
-
-            if (detail.SelectedVariant.StockQuantity <= 0)
-                return (false, $"{detail.ItemName} is out of stock.");
-
-            if (detail.Quantity > detail.SelectedVariant.StockQuantity)
-                return (false, $"Not enough stock for {detail.ItemName}. Max available: {detail.SelectedVariant.StockQuantity}.");
-        }
-
-        return (true, string.Empty);
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        TotalAmount = OrderDetails.Sum(d => (decimal)d.Quantity * d.UnitPrice);
     }
 }
 
@@ -122,12 +88,44 @@ public sealed partial class CreateOrderDialog : ContentDialog
 {
     public CreateOrderDialogViewModel ViewModel { get; }
     public bool IsSubmitted { get; private set; }
+    private ContentDialogResult _result = ContentDialogResult.None;
 
     public CreateOrderDialog()
     {
         ViewModel = new CreateOrderDialogViewModel();
         this.InitializeComponent();
-        // Initial state set by XAML SelectedIndex="0" will trigger SelectionChanged
+        this.DataContext = ViewModel;
+
+        Loaded += CreateOrderDialog_Loaded;
+    }
+
+    public new async Task<ContentDialogResult> ShowAsync()
+    {
+        await base.ShowAsync();
+        return _result;
+    }
+
+    private void CreateOrderDialog_Loaded(object sender, RoutedEventArgs e)
+    {
+        UpdateAddressVisibility();
+    }
+
+    private void OrderTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ViewModel == null) return;
+
+        if (OrderTypeCombo.SelectedItem is ComboBoxItem item)
+        {
+            var typeStr = item.Content.ToString() ?? "AtStore";
+            ViewModel.Order.OrderType = typeStr;
+            UpdateAddressVisibility();
+        }
+    }
+
+    private void UpdateAddressVisibility()
+    {
+        if (CustomerAddressBox == null) return;
+        CustomerAddressBox.Visibility = (ViewModel.Order.OrderType == "Delivery") ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private async void ProductSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
@@ -141,74 +139,63 @@ public sealed partial class CreateOrderDialog : ContentDialog
 
     private void ProductSearchBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
     {
-        if (args.SelectedItem is SportItem selectedItem)
+        if (args.SelectedItem is SportItem product)
         {
-            ViewModel.AddProduct(selectedItem);
+            ViewModel.AddProductToOrder(product);
             sender.Text = string.Empty;
-            sender.ItemsSource = null;
         }
     }
 
     private void Quantity_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
     {
-        if (sender.DataContext is OrderDetail detail)
-        {
-            if (!double.IsNaN(args.NewValue))
-            {
-                detail.Quantity = (int)args.NewValue;
-            }
-            ViewModel.RecalculateTotal();
-        }
+        ViewModel.RecalculateTotal();
     }
 
     private void RemoveItem_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button btn && btn.Tag is OrderDetail detail)
         {
-            ViewModel.OrderDetails.Remove(detail);
-            ViewModel.RecalculateTotal();
+            ViewModel.RemoveProductFromOrder(detail);
         }
-    }
-
-    private bool ValidateAndShowError()
-    {
-        var validation = ViewModel.Validate();
-        if (!validation.IsValid)
-        {
-            ErrorTextBlock.Text = validation.ErrorMessage;
-            ErrorTextBlock.Visibility = Visibility.Visible;
-            return false;
-        }
-        ErrorTextBlock.Visibility = Visibility.Collapsed;
-        return true;
-    }
-
-    private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (!ValidateAndShowError())
-            return;
-
-        IsSubmitted = true;
-        Hide();
     }
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)
     {
         IsSubmitted = false;
+        _result = ContentDialogResult.None;
         Hide();
     }
 
-    private void OrderTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
     {
-        if (ViewModel == null) return;
-        if (sender is ComboBox combo && combo.SelectedItem is ComboBoxItem item)
+        ErrorBorder.Visibility = Visibility.Collapsed;
+
+        if (string.IsNullOrWhiteSpace(ViewModel.Order.CustomerName))
         {
-            string type = item.Content.ToString() ?? "AtStore";
-            ViewModel.Order.OrderType = type;
-            if (CustomerAddressBox != null)
-            {
-                CustomerAddressBox.Visibility = (type == "Delivery") ? Visibility.Visible : Visibility.Collapsed;
-            }
+            ShowError("Customer Name is required.");
+            return;
         }
+
+        if (ViewModel.Order.OrderType == "Delivery" && string.IsNullOrWhiteSpace(ViewModel.Order.ShippingAddress))
+        {
+            ShowError("Shipping Address is required for Delivery orders.");
+            return;
+        }
+
+        if (ViewModel.OrderDetails.Count == 0)
+        {
+            ShowError("Please add at least one product to the order.");
+            return;
+        }
+
+        IsSubmitted = true;
+        _result = ContentDialogResult.Primary;
+        Hide();
+    }
+
+    private void ShowError(string message)
+    {
+        ErrorTextBlock.Text = message;
+        ErrorBorder.Visibility = Visibility.Visible;
     }
 }

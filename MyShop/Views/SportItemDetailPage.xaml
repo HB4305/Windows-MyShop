@@ -164,14 +164,16 @@
                         Orientation="Horizontal"
                         Spacing="10"
                         VerticalAlignment="Center">
-                <Button Content="Delete"
+                <Button x:Name="DeleteButton"
+                        Content="Delete"
                         Style="{StaticResource DetailDeleteOutlineButtonStyle}"
                         Command="{Binding DeleteCommand}"
                         Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <Button Content="Discard"
                         Style="{StaticResource DetailOutlineButtonStyle}"
                         Click="OnDiscardClick"/>
-                <Button Command="{Binding SaveCommand}"
+                <Button x:Name="SaveButton"
+                        Command="{Binding SaveCommand}"
                         Style="{StaticResource DetailPurplePrimaryButtonStyle}">
                     <StackPanel Orientation="Horizontal"
                                 Spacing="8">
@@ -188,11 +190,11 @@
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
-            <Grid ColumnSpacing="24">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="360"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Grid x:Name="MainFormGrid" ColumnSpacing="24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="360"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
                 <!-- Left: gallery + AI card -->
                 <StackPanel Grid.Column="0"
