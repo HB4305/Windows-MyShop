@@ -9,6 +9,30 @@
     <Page.Resources>
         <SolidColorBrush x:Key="AppPurpleBrush" Color="#8B52FF"/>
         <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+
+        <!-- Pagination Button Styles -->
+        <Style x:Key="PageBtn" TargetType="Button">
+          <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+          <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+          <Setter Property="FontSize" Value="13"/>
+          <Setter Property="MinWidth" Value="32"/>
+          <Setter Property="Height" Value="32"/>
+          <Setter Property="Padding" Value="8,4"/>
+          <Setter Property="CornerRadius" Value="6"/>
+          <Setter Property="BorderThickness" Value="1"/>
+          <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        </Style>
+
+        <Style x:Key="PageBtnActive" TargetType="Button">
+          <Setter Property="Background" Value="{StaticResource AppPurpleBrush}"/>
+          <Setter Property="Foreground" Value="White"/>
+          <Setter Property="FontSize" Value="13"/>
+          <Setter Property="MinWidth" Value="32"/>
+          <Setter Property="Height" Value="32"/>
+          <Setter Property="Padding" Value="8,4"/>
+          <Setter Property="CornerRadius" Value="6"/>
+          <Setter Property="BorderThickness" Value="0"/>
+        </Style>
     </Page.Resources>
 
     <Grid Margin="24,20">
@@ -17,6 +41,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -69,14 +94,16 @@
                 </Grid>
             </Border>
 
-            <Button Grid.Column="1"
+            <Button x:Name="AddCustomerButton"
+                    Grid.Column="1"
                     Background="{StaticResource AppPurpleBrush}"
                     Foreground="White"
                     CornerRadius="20"
                     Padding="16,10"
                     MinHeight="48"
                     Click="OnAddCustomerClick"
-                  Style="{StaticResource ColorPreservingButtonStyle}">
+                  Style="{StaticResource ColorPreservingButtonStyle}"
+                  Visibility="{Binding IsOwner, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
                     <TextBlock Text="New Customer" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
@@ -98,7 +125,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Table Header -->
@@ -127,7 +153,9 @@
                         <TextBlock Grid.Column="4" Text="ORDERS" FontSize="11" FontWeight="SemiBold"
                                    Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock Grid.Column="5" Text="ACTIONS" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                   Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                   Visibility="{Binding IsOwner, Converter={StaticResource BoolToVisibilityConverter}}"
+                                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Grid>
                 </Border>
 
@@ -177,7 +205,8 @@
                                         <TextBlock Grid.Column="4" Text="{x:Bind OrderCount}" VerticalAlignment="Center"
                                                    Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" HorizontalAlignment="Left" Margin="10,0,0,0" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
-                                        <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                        <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center"
+                                                    Visibility="{Binding DataContext.IsOwner, ElementName=SearchBox, Converter={StaticResource BoolToVisibilityConverter}}">
                                             <Button Background="Transparent" BorderThickness="0" Padding="4"
                                                     Click="OnEditCustomerClick" ToolTipService.ToolTip="Edit"
                   Style="{StaticResource ColorPreservingButtonStyle}">
@@ -202,51 +231,32 @@
                         <TextBlock Text="Loading customers..." Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
                 </Grid>
+            </Grid>
+        </Border>
 
-                <!-- Table Footer (Pagination) -->
-                <Border Grid.Row="2"
-                        Background="{ThemeResource ControlFillColorDefaultBrush}"
-                        CornerRadius="20"
-                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                        BorderThickness="0,1,0,0"
-                        Padding="16,14">
-                    <Grid>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-                            <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                            <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                            <TextBlock Text="–" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                            <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                            <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                            <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                            <TextBlock Text="customers" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        </StackPanel>
+        <!-- Table Footer (Pagination outside) -->
+        <Border Grid.Row="4" Padding="0,14">
+            <Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
+                    <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="customers" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
-                            <Button Style="{StaticResource PagerIconButtonStyle}"
-                                    Command="{Binding PreviousPageCommand}">
-                                <FontIcon Glyph="&#xE76B;" FontSize="14"/>
-                            </Button>
-                            <Border Background="{StaticResource AppPurpleBrush}" CornerRadius="20" Padding="12,8" MinWidth="40" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding CurrentPage}"
-                                           Foreground="White"
-                                           FontWeight="SemiBold"
-                                           HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                            </Border>
-                            <TextBlock VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorTertiary}" FontSize="13" Margin="4,0">
-                                <Run Text="/ "/><Run Text="{Binding TotalPages}"/>
-                            </TextBlock>
-                            <Button Style="{StaticResource PagerIconButtonStyle}"
-                                    Command="{Binding NextPageCommand}">
-                                <FontIcon Glyph="&#xE76C;" FontSize="14"/>
-                            </Button>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            HorizontalAlignment="Right"
+                            x:Name="PaginationPanel"/>
             </Grid>
         </Border>
 
         <!-- Error Message -->
-        <TextBlock Grid.Row="4"
+        <TextBlock Grid.Row="5"
                    Margin="0,12,0,0"
                    Text="{Binding ErrorMessage}"
                    Foreground="#DC2626"
@@ -255,7 +265,7 @@
                    Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         <!-- Global Loading Overlay (for dialog opening) -->
         <Grid x:Name="GlobalLoadingOverlay"
-              Grid.Row="0" Grid.RowSpan="5"
+              Grid.Row="0" Grid.RowSpan="7"
               Background="#66000000"
               Visibility="Collapsed"
               Canvas.ZIndex="100">
