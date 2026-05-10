@@ -343,5 +343,19 @@ await _client.From<T>().Where(x => x.Id == id).Delete();          // Xóa theo I
 #    SUPABASE_ANON_KEY=eyJ...
 
 # 2. Chạy app
-dotnet run --project MyShop/MyShop.csproj
+dotnet run --project MyShop/MyShop.csproj -f net10.0-desktop
 ```
+
+## Publish (Release)
+
+Yêu cầu: cài .NET 10 SDK (https://dotnet.microsoft.com/download/dotnet/10.0)
+
+```bash
+dotnet publish MyShop/MyShop.csproj -f net10.0-desktop -r win-x64 -c Release -p:SelfContained=false
+```
+
+Output: `MyShop/bin/Release/net10.0-desktop/win-x64/publish/`
+
+`MyShop.dll` trong thư mục publish đã được obfuscate tự động.
+
+**Lưu ý:** máy chạy Release cần cài .NET 10 Runtime (https://dotnet.microsoft.com/download/dotnet/10.0)
