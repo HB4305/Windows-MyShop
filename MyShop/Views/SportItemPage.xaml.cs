@@ -50,8 +50,8 @@ public sealed partial class SportItemPage : Page
 
     private void BuildPagination()
     {
-        if (PaginationPanel == null) return;
-        PaginationPanel.Children.Clear();
+        if (ProductPaginationPanel == null) return;
+        ProductPaginationPanel.Children.Clear();
 
         var total = ViewModel.TotalPages;
         var current = ViewModel.CurrentPage;
@@ -85,7 +85,7 @@ public sealed partial class SportItemPage : Page
                 BuildPagination();
             };
 
-            PaginationPanel.Children.Add(btn);
+            ProductPaginationPanel.Children.Add(btn);
         }
 
         // Prev button
@@ -98,7 +98,7 @@ public sealed partial class SportItemPage : Page
             Style = (Style)Resources["PageBtn"],
         };
         prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.CurrentPage--; _ = ViewModel.LoadItemsAsync(); BuildPagination(); } };
-        PaginationPanel.Children.Add(prevBtn);
+        ProductPaginationPanel.Children.Add(prevBtn);
 
         // Page numbers logic (smart ellipsis)
         if (total <= 7)
@@ -109,7 +109,7 @@ public sealed partial class SportItemPage : Page
         else
         {
             AddPageBtn(1, current == 1);
-            if (current > 3) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
+            if (current > 3) ProductPaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
 
             int start = Math.Max(2, current - 1);
             int end = Math.Min(total - 1, current + 1);
@@ -117,7 +117,7 @@ public sealed partial class SportItemPage : Page
             for (int i = start; i <= end; i++)
                 AddPageBtn(i, i == current);
 
-            if (current < total - 2) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
+            if (current < total - 2) ProductPaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
             AddPageBtn(total, current == total);
         }
 
@@ -131,7 +131,7 @@ public sealed partial class SportItemPage : Page
             Style = (Style)Resources["PageBtn"],
         };
         nextBtn.Click += (s, e) => { if (current < total) { ViewModel.CurrentPage++; _ = ViewModel.LoadItemsAsync(); BuildPagination(); } };
-        PaginationPanel.Children.Add(nextBtn);
+        ProductPaginationPanel.Children.Add(nextBtn);
     }
 
     /// <summary>

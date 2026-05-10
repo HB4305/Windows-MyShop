@@ -81,8 +81,8 @@ public sealed partial class CustomerPage : Page
 
     private void BuildPagination()
     {
-        if (PaginationPanel == null) return;
-        PaginationPanel.Children.Clear();
+        if (CustomerPaginationPanel == null) return;
+        CustomerPaginationPanel.Children.Clear();
 
         var total = ViewModel.TotalPages;
         var current = ViewModel.CurrentPage;
@@ -116,7 +116,7 @@ public sealed partial class CustomerPage : Page
                 BuildPagination();
             };
 
-            PaginationPanel.Children.Add(btn);
+            CustomerPaginationPanel.Children.Add(btn);
         }
 
         // Prev button
@@ -129,7 +129,7 @@ public sealed partial class CustomerPage : Page
             Style = (Style)Resources["PageBtn"],
         };
         prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.CurrentPage--; _ = ViewModel.LoadCustomersAsync(); BuildPagination(); } };
-        PaginationPanel.Children.Add(prevBtn);
+        CustomerPaginationPanel.Children.Add(prevBtn);
 
         // Page numbers logic (smart ellipsis)
         if (total <= 7)
@@ -140,7 +140,7 @@ public sealed partial class CustomerPage : Page
         else
         {
             AddPageBtn(1, current == 1);
-            if (current > 3) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"] });
+            if (current > 3) CustomerPaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"] });
 
             int start = Math.Max(2, current - 1);
             int end = Math.Min(total - 1, current + 1);
@@ -148,7 +148,7 @@ public sealed partial class CustomerPage : Page
             for (int i = start; i <= end; i++)
                 AddPageBtn(i, i == current);
 
-            if (current < total - 2) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"] });
+            if (current < total - 2) CustomerPaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"] });
             AddPageBtn(total, current == total);
         }
 
@@ -162,6 +162,6 @@ public sealed partial class CustomerPage : Page
             Style = (Style)Resources["PageBtn"],
         };
         nextBtn.Click += (s, e) => { if (current < total) { ViewModel.CurrentPage++; _ = ViewModel.LoadCustomersAsync(); BuildPagination(); } };
-        PaginationPanel.Children.Add(nextBtn);
+        CustomerPaginationPanel.Children.Add(nextBtn);
     }
 }

@@ -12,7 +12,7 @@ namespace MyShop.Views;
 
 public sealed partial class PosPage : Page
 {
-    private const double StackedBreakpoint = 1120;
+    private const double StackedBreakpoint = 1100;
 
     public PosPage()
     {

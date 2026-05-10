@@ -42,8 +42,8 @@ public sealed partial class ShiftReportLogsPage : Page
 
     private void BuildPagination()
     {
-        if (PaginationPanel == null) return;
-        PaginationPanel.Children.Clear();
+        if (ShiftLogsPaginationPanel == null) return;
+        ShiftLogsPaginationPanel.Children.Clear();
 
         var total = ViewModel.TotalPages;
         var current = ViewModel.CurrentPage;
@@ -76,7 +76,7 @@ public sealed partial class ShiftReportLogsPage : Page
                 BuildPagination();
             };
 
-            PaginationPanel.Children.Add(btn);
+            ShiftLogsPaginationPanel.Children.Add(btn);
         }
 
         // Prev button
@@ -89,7 +89,7 @@ public sealed partial class ShiftReportLogsPage : Page
             Style = (Style)Resources["PageBtn"],
         };
         prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.GoToPage(current - 1); BuildPagination(); } };
-        PaginationPanel.Children.Add(prevBtn);
+        ShiftLogsPaginationPanel.Children.Add(prevBtn);
 
         // Page numbers logic (smart ellipsis)
         if (total <= 7)
@@ -100,7 +100,7 @@ public sealed partial class ShiftReportLogsPage : Page
         else
         {
             AddPageBtn(1, current == 1);
-            if (current > 3) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
+            if (current > 3) ShiftLogsPaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
 
             int start = Math.Max(2, current - 1);
             int end = Math.Min(total - 1, current + 1);
@@ -108,7 +108,7 @@ public sealed partial class ShiftReportLogsPage : Page
             for (int i = start; i <= end; i++)
                 AddPageBtn(i, i == current);
 
-            if (current < total - 2) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
+            if (current < total - 2) ShiftLogsPaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Brush)Resources["TextFillColorSecondaryBrush"] });
             AddPageBtn(total, current == total);
         }
 
@@ -122,7 +122,7 @@ public sealed partial class ShiftReportLogsPage : Page
             Style = (Style)Resources["PageBtn"],
         };
         nextBtn.Click += (s, e) => { if (current < total) { ViewModel.GoToPage(current + 1); BuildPagination(); } };
-        PaginationPanel.Children.Add(nextBtn);
+        ShiftLogsPaginationPanel.Children.Add(nextBtn);
     }
 }
 
