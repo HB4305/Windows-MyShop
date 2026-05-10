@@ -102,19 +102,17 @@
               Padding="12,8">
         <Grid ColumnSpacing="10">
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <FontIcon Glyph="&#xE721;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
           <TextBox x:Name="SearchBox"
-                   Grid.Column="1"
+                   Grid.Column="0"
                    PlaceholderText="Search sports gear or brand..."
                    Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    KeyDown="OnSearchKeyDown"
                    BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
                    FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+          <Button Grid.Column="1" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
                   Command="{Binding SearchCommand}" Background="Transparent" BorderThickness="0" Padding="8"
                   Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
         </Grid>
@@ -286,10 +284,17 @@
         </Grid>
     </Border>
 
-    <!-- Table Footer: Pagination (Outside Card) -->
-    <Border Grid.Row="5" Padding="0,14">
+    <!-- Table Footer: Pagination (Docked to bottom) -->
+    <Border Grid.Row="5" 
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
+            BorderThickness="0,1,0,0"
+            Margin="-24,0,-24,-20" Padding="24,14">
       <Grid>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
           <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" 
@@ -306,7 +311,7 @@
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </StackPanel>
 
-        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right" x:Name="PaginationPanel"/>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right" x:Name="ProductPaginationPanel"/>
       </Grid>
     </Border>
 

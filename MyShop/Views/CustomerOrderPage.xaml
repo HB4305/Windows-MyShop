@@ -702,27 +702,28 @@
             </StackPanel>
           </ScrollViewer>
 
-          <!-- Search Box -->
           <Border Grid.Column="1"
-                  Style="{StaticResource SearchBoxBorder}"
-                  MinWidth="220"
+                  MinHeight="48"
+                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  CornerRadius="24"
+                  Padding="16,4"
+                  MinWidth="280"
                   Margin="16,0,0,0">
-            <Grid>
+            <Grid ColumnSpacing="10">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
-              <TextBlock Grid.Column="0"
-                         FontFamily="Segoe MDL2 Assets"
-                         Text="&#xE721;"
-                         FontSize="13"
-                         Foreground="{ThemeResource TextFillColorTertiary}"
-                         VerticalAlignment="Center"
-                         Margin="10,0,8,0"/>
-              <TextBox Grid.Column="1"
+              <TextBox Grid.Column="0"
                        Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                       PlaceholderText="Search..."
-                       Style="{StaticResource SearchBoxText}"/>
+                       PlaceholderText="Search orders..."
+                       BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <Button Grid.Column="1" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                      Background="Transparent" BorderThickness="0" Padding="8"
+                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
             </Grid>
           </Border>
 

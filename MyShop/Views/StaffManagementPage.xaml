@@ -49,7 +49,41 @@
   </Page.Resources>
 
   <Grid Padding="24,20">
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="NarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="StatsGrid.ColumnDefinitions[0].Width" Value="*"/>
+            <Setter Target="StatsGrid.ColumnDefinitions[1].Width" Value="0"/>
+            <Setter Target="StatsGrid.ColumnDefinitions[2].Width" Value="0"/>
+            <Setter Target="Card1.(Grid.Row)" Value="0"/>
+            <Setter Target="Card1.(Grid.Column)" Value="0"/>
+            <Setter Target="Card2.(Grid.Row)" Value="1"/>
+            <Setter Target="Card2.(Grid.Column)" Value="0"/>
+            <Setter Target="Card2.Margin" Value="0,12,0,0"/>
+            <Setter Target="Card3.(Grid.Row)" Value="2"/>
+            <Setter Target="Card3.(Grid.Column)" Value="0"/>
+            <Setter Target="Card3.Margin" Value="0,12,0,0"/>
+            <Setter Target="ToolbarGrid.ColumnDefinitions[1].Width" Value="0"/>
+            <Setter Target="AddButton.(Grid.Row)" Value="1"/>
+            <Setter Target="AddButton.(Grid.Column)" Value="0"/>
+            <Setter Target="AddButton.Margin" Value="0,12,0,0"/>
+            <Setter Target="AddButton.HorizontalAlignment" Value="Stretch"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="WideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1100"/>
+          </VisualState.StateTriggers>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
@@ -76,14 +110,19 @@
     </Border>
 
     <!-- Stats Cards synchronized styling -->
-    <Grid Grid.Row="2" ColumnSpacing="14" Margin="0,0,0,20">
+    <Grid x:Name="StatsGrid" Grid.Row="2" ColumnSpacing="14" Margin="0,0,0,20">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="*"/>
+        <ColumnDefinition x:Name="KpiSpacer1" Width="*"/>
+        <ColumnDefinition x:Name="KpiSpacer2" Width="*"/>
       </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
 
-      <Border Style="{StaticResource PanelBorder}" Padding="16">
+      <Border x:Name="Card1" Style="{StaticResource PanelBorder}" Padding="16">
         <StackPanel Spacing="8">
           <StackPanel Orientation="Horizontal" Spacing="8">
             <FontIcon Glyph="&#xE716;" Foreground="{StaticResource AppPurpleBrush}" FontSize="16"/>
@@ -93,7 +132,7 @@
         </StackPanel>
       </Border>
 
-      <Border Grid.Column="1" Style="{StaticResource PanelBorder}" Padding="16">
+      <Border x:Name="Card2" Grid.Column="1" Style="{StaticResource PanelBorder}" Padding="16">
         <StackPanel Spacing="8">
           <StackPanel Orientation="Horizontal" Spacing="8">
             <FontIcon Glyph="&#xE8D2;" Foreground="{StaticResource SuccessBrush}" FontSize="16"/>
@@ -103,7 +142,7 @@
         </StackPanel>
       </Border>
 
-      <Border Grid.Column="2" Style="{StaticResource PanelBorder}" Padding="16">
+      <Border x:Name="Card3" Grid.Column="2" Style="{StaticResource PanelBorder}" Padding="16">
         <StackPanel Spacing="8">
           <StackPanel Orientation="Horizontal" Spacing="8">
             <FontIcon Glyph="&#xE77B;" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
@@ -114,45 +153,49 @@
       </Border>
     </Grid>
 
+    <!-- Toolbar synchronized -->
+    <Grid x:Name="ToolbarGrid" Grid.Row="3" ColumnSpacing="14" Margin="0,0,0,20">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0" MinHeight="48" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12,8">
+        <Grid ColumnSpacing="10">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBox Grid.Column="0" PlaceholderText="Search by email or role..."
+                   Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                   BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
+                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <ProgressRing Width="20" Height="20" IsActive="{Binding IsLoading}" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,4,0"/>
+          <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                  Background="Transparent" BorderThickness="0" Padding="8"
+                  Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
+        </Grid>
+      </Border>
+
+      <Button x:Name="AddButton" Grid.Column="1" Click="AddStaff_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
+              CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
+          <TextBlock Text="Add Staff" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </StackPanel>
+      </Button>
+    </Grid>
+
     <!-- List Content synchronized with CustomerPage -->
-    <Grid Grid.Row="3">
+    <Grid Grid.Row="4">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
-      <!-- Toolbar synchronized -->
-      <Grid Grid.Row="0" ColumnSpacing="14" Margin="0,0,0,20">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-
-        <Border Grid.Column="0" MinHeight="48" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12,8">
-          <Grid ColumnSpacing="10">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto"/>
-              <ColumnDefinition Width="*"/>
-              <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <FontIcon Glyph="&#xE721;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
-            <TextBox PlaceholderText="Search by email or role..."
-                     Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"/>
-            <ProgressRing Width="20" Height="20" IsActive="{Binding IsLoading}" VerticalAlignment="Center" Grid.Column="2" Margin="0,0,8,0"/>
-          </Grid>
-        </Border>
-
-        <Button Grid.Column="1" Click="AddStaff_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
-                CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
-            <TextBlock Text="Add Staff" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          </StackPanel>
-        </Button>
-      </Grid>
 
       <!-- Table synchronized -->
       <Border Grid.Row="1" Style="{StaticResource PanelBorder}">
@@ -218,10 +261,17 @@
         </Grid>
       </Border>
 
-      <!-- Table Footer (Pagination outside) -->
-      <Border Grid.Row="2" Padding="0,14">
+      <!-- Table Footer (Docked to bottom) -->
+      <Border Grid.Row="2" 
+              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
+              BorderThickness="0,1,0,0"
+              Margin="-24,0,-24,-20" Padding="24,12">
         <Grid>
-          <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
             <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
@@ -235,7 +285,7 @@
                       Orientation="Horizontal"
                       Spacing="4"
                       HorizontalAlignment="Right"
-                      x:Name="PaginationPanel"/>
+                      x:Name="StaffPaginationPanel"/>
         </Grid>
       </Border>
     </Grid>

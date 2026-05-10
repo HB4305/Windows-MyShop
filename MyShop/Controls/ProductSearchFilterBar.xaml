@@ -4,44 +4,62 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Grid ColumnSpacing="12">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="220"/>
+      <ColumnDefinition Width="200"/>
       <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
 
+    <!-- Category ComboBox -->
     <ComboBox x:Name="CategoryComboBox"
               Grid.Column="0"
               ItemsSource="{Binding CategoryItemsSource, ElementName=Root}"
               SelectedItem="{Binding SelectedCategory, ElementName=Root, Mode=TwoWay}"
               SelectionChanged="CategoryComboBox_SelectionChanged"
               PlaceholderText="{Binding CategoryPlaceholderText, ElementName=Root}"
-              MinHeight="44"/>
+              MinHeight="48"
+              CornerRadius="20"
+              HorizontalAlignment="Stretch"
+              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
-    <AutoSuggestBox x:Name="SearchAutoSuggestBox"
-                    Grid.Column="1"
-                    PlaceholderText="{Binding SearchPlaceholderText, ElementName=Root}"
-                    Text="{Binding SearchText, ElementName=Root, Mode=TwoWay}"
-                    ItemsSource="{Binding SearchItemsSource, ElementName=Root}"
-                    TextChanged="SearchAutoSuggestBox_TextChanged"
-                    SuggestionChosen="SearchAutoSuggestBox_SuggestionChosen"
-                    QuerySubmitted="SearchAutoSuggestBox_QuerySubmitted"
-                    BorderThickness="0"
-                    Padding="12,10"
-                    MinHeight="44"
-                    VerticalContentAlignment="Center"/>
+    <!-- Unified Search Bar -->
+    <Border Grid.Column="1"
+            MinHeight="48"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="24"
+            Padding="16,4">
+      <Grid ColumnSpacing="10">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <AutoSuggestBox x:Name="SearchAutoSuggestBox"
+                        Grid.Column="0"
+                        PlaceholderText="{Binding SearchPlaceholderText, ElementName=Root}"
+                        Text="{Binding SearchText, ElementName=Root, Mode=TwoWay}"
+                        ItemsSource="{Binding SearchItemsSource, ElementName=Root}"
+                        TextChanged="SearchAutoSuggestBox_TextChanged"
+                        SuggestionChosen="SearchAutoSuggestBox_SuggestionChosen"
+                        QuerySubmitted="SearchAutoSuggestBox_QuerySubmitted"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        VerticalAlignment="Center"
+                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
-    <Button Grid.Column="2"
-            Command="{Binding SearchCommand, ElementName=Root}"
-            Click="SearchButton_Click"
-            Background="{StaticResource AppAccentBrush}"
-            Foreground="White"
-            BorderThickness="0"
-            Padding="16,10"
-            MinWidth="48"
-            MinHeight="44"
-            CornerRadius="{ThemeResource ControlCornerRadius}"
-            ToolTipService.ToolTip="Search">
-      <FontIcon Glyph="&#xE721;" FontSize="15"/>
-    </Button>
+        <Button Grid.Column="1"
+                Command="{Binding SearchCommand, ElementName=Root}"
+                Click="SearchButton_Click"
+                Content="&#xE721;" 
+                FontFamily="Segoe MDL2 Assets"
+                FontSize="16"
+                Background="Transparent" 
+                BorderThickness="0" 
+                Padding="8"
+                Foreground="{StaticResource AppPurpleBrush}" 
+                Style="{StaticResource ColorPreservingButtonStyle}"
+                ToolTipService.ToolTip="Search"/>
+      </Grid>
+    </Border>
   </Grid>
 </UserControl>
