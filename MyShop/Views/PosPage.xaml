@@ -103,8 +103,8 @@
                       </Border>
                     </Grid>
                   </Border>
-                  <TextBlock Text="{Binding Item.Name}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" TextWrapping="Wrap" MaxLines="2"/>
-                  <TextBlock Text="{Binding CategoryName}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}" TextTrimming="CharacterEllipsis"/>
+                  <TextBlock Text="{Binding Item.Name}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextWrapping="Wrap" MaxLines="2"/>
+                  <TextBlock Text="{Binding CategoryName}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
                   <TextBlock Text="{Binding Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}"/>
                 </StackPanel>
               </DataTemplate>
@@ -114,7 +114,7 @@
           <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
                       Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
             <ProgressRing IsActive="True" Width="36" Height="36" Foreground="{StaticResource PurpleBrush}"/>
-            <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondary}"/>
+            <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
           </StackPanel>
         </Grid>
 
@@ -133,18 +133,18 @@
         </Grid.ColumnDefinitions>
         
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="4">
-          <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" 
+          <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" 
+          <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" 
+          <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="products" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="products" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </StackPanel>
 
@@ -164,7 +164,7 @@
           <Grid>
             <StackPanel Orientation="Horizontal" Spacing="10">
               <FontIcon Glyph="&#xE77B;" Foreground="{StaticResource PurpleBrush}" FontSize="18"/>
-              <TextBlock Text="Customer" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+              <TextBlock Text="Customer" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             </StackPanel>
           </Grid>
           <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -201,8 +201,8 @@
                         <FontIcon Glyph="&#xE77B;" FontSize="13" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                       </Border>
                       <StackPanel Grid.Column="1" Spacing="1">
-                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                        <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                        <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       </StackPanel>
                     </Grid>
                   </DataTemplate>
@@ -237,7 +237,7 @@
             <Grid>
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <FontIcon Glyph="&#xE719;" Foreground="{StaticResource PurpleBrush}" FontSize="18"/>
-                <TextBlock Text="Order Summary" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                <TextBlock Text="Order Summary" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
               </StackPanel>
               <Border Background="{StaticResource PurpleLightBrush}" CornerRadius="16" Padding="10,4" HorizontalAlignment="Right">
                 <TextBlock Foreground="{StaticResource PurpleBrush}" FontWeight="SemiBold" FontSize="12">
@@ -271,9 +271,9 @@
                       <Image Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
                     </Border>
                     <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
-                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" TextTrimming="CharacterEllipsis"/>
-                      <TextBlock Text="{Binding VariantDisplay}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}" TextTrimming="CharacterEllipsis"/>
-                      <TextBlock Text="{Binding UnitPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+                      <TextBlock Text="{Binding VariantDisplay}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                      <TextBlock Text="{Binding UnitPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       <StackPanel Orientation="Horizontal" Spacing="6">
                         <Button Tag="{Binding}" Click="DecreaseCartItem_Click" Width="28" Height="28" Padding="0" Content="-" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
                         <TextBlock Text="{Binding QuantityDisplay}" FontWeight="SemiBold" VerticalAlignment="Center" MinWidth="18" TextAlignment="Center"/>
@@ -282,7 +282,7 @@
                     </StackPanel>
                     <StackPanel Grid.Column="2" Spacing="8" HorizontalAlignment="Right">
                       <Button Tag="{Binding}" Click="RemoveCartItem_Click" Width="28" Height="28" Padding="0" Background="Transparent" BorderThickness="0" ToolTipService.ToolTip="Remove">
-                        <FontIcon Glyph="&#xE711;" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                        <FontIcon Glyph="&#xE711;" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       </Button>
                       <TextBlock Text="{Binding LineTotal, Converter={StaticResource CurrencyFormatter}}" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Right"/>
                     </StackPanel>
@@ -295,23 +295,23 @@
           <Border Grid.Row="2" Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Padding="18">
             <StackPanel Spacing="12">
               <Grid>
-                <TextBlock Text="Subtotal" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                <TextBlock Text="Subtotal" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{Binding Subtotal, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" FontWeight="SemiBold"/>
               </Grid>
               <Grid>
-                <TextBlock Text="Tax (8.5%)" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                <TextBlock Text="Tax (8.5%)" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{Binding Tax, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" FontWeight="SemiBold"/>
               </Grid>
               <Grid>
-                <TextBlock Text="Member Discount" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                <TextBlock Text="Member Discount" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{Binding Discount, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" Foreground="#16A34A" FontWeight="SemiBold"/>
               </Grid>
               <Rectangle Height="1" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
               <Grid>
-                <TextBlock Text="Total" FontSize="20" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                <TextBlock Text="Total" FontSize="20" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                 <TextBlock Text="{Binding Total, Converter={StaticResource CurrencyFormatter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Right"/>
               </Grid>
-              <TextBlock Text="Payment Method" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+              <TextBlock Text="Payment Method" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
               <ComboBox ItemsSource="{Binding PaymentMethodOptions}"
                         SelectedItem="{Binding SelectedPaymentMethod, Mode=TwoWay}"
                         MinHeight="40"/>
@@ -322,13 +322,13 @@
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
                   <StackPanel Spacing="4">
-                    <TextBlock Text="Cash Received" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+                    <TextBlock Text="Cash Received" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
                     <TextBox Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              PlaceholderText="0.00"
                              MinHeight="40"/>
                   </StackPanel>
                   <StackPanel Grid.Column="1" Spacing="4">
-                    <TextBlock Text="Change" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+                    <TextBlock Text="Change" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
                     <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                             BorderThickness="1"

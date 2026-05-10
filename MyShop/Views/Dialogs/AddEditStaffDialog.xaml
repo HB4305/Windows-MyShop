@@ -31,10 +31,10 @@
                 <TextBlock x:Name="FormTitle"
                            FontSize="22"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock x:Name="FormSubtitle"
                            FontSize="14"
-                           Foreground="{ThemeResource TextFillColorSecondary}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                            TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </StackPanel>
@@ -46,7 +46,7 @@
                 <TextBlock Text="Email"
                            FontSize="14"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox Text="{x:Bind Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           PlaceholderText="staff@myshop.com"
                           CornerRadius="20"
@@ -63,7 +63,7 @@
                 <TextBlock Text="Role"
                            FontSize="14"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <Border CornerRadius="20"
                         Padding="12,10"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -72,7 +72,7 @@
                     <TextBlock Text="SALE"
                                FontSize="14"
                                FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </Border>
             </StackPanel>
 
@@ -80,7 +80,7 @@
                 <TextBlock Text="Password"
                            FontSize="14"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <PasswordBox x:Name="PasswordInput"
                               PlaceholderText="At least 6 characters"
                               PasswordChanged="PasswordInput_PasswordChanged"
@@ -90,7 +90,7 @@
                               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
                 <TextBlock x:Name="PasswordHintText"
                            FontSize="12"
-                           Foreground="{ThemeResource TextFillColorSecondary}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                            TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="{x:Bind PasswordValidationMessage, Mode=OneWay}"
                             FontSize="12"
@@ -120,7 +120,7 @@
                 <TextBlock Text="Cancel"
                            FontSize="14"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                            HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 

@@ -36,10 +36,10 @@
 				<TextBlock x:Name="FormTitle"
 						   FontSize="18"
 						   FontWeight="Bold"
-						   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+						   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 				<TextBlock x:Name="FormSubtitle"
 						   FontSize="12"
-						   Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+						   Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 			</StackPanel>
 		</StackPanel>
 
@@ -55,7 +55,7 @@
 					<TextBlock Text="Category name"
 							   FontSize="13"
 							   FontWeight="SemiBold"
-							   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+							   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					<TextBlock Text="*"
 							   FontSize="13"
 							   Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
@@ -67,7 +67,7 @@
 						 CornerRadius="20"
 						 Padding="12,10"
 						 Background="{ThemeResource ControlFillColorDefaultBrush}"
-						 Foreground="{ThemeResource TextFillColorPrimary}"
+						 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
 						 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 				<!-- Validation message -->
 				<Border Visibility="{x:Bind NameValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
@@ -91,13 +91,13 @@
 					<TextBlock Text="Description"
 							   FontSize="13"
 							   FontWeight="SemiBold"
-							   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+							   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					<Border Background="{ThemeResource ControlFillColorSecondaryBrush}"
 							CornerRadius="20"
 							Padding="6,1">
 						<TextBlock Text="Optional"
 								   FontSize="10"
-								   Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+								   Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					</Border>
 				</StackPanel>
 				<TextBox PlaceholderText="Brief description of this category..."
@@ -108,7 +108,7 @@
 						 CornerRadius="20"
 						 Padding="12,10"
 						 Background="{ThemeResource ControlFillColorDefaultBrush}"
-						 Foreground="{ThemeResource TextFillColorPrimary}"
+						 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
 						 Text="{x:Bind CategoryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			</StackPanel>
 		</StackPanel>
@@ -137,12 +137,12 @@
 				<Button.Resources>
 					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SubtleFillColorSecondary}"/>
 					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{ThemeResource ControlStrokeColorDefault}"/>
-					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{ThemeResource TextFillColorPrimary}"/>
+					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{ThemeResource TextFillColorPrimaryBrush}"/>
 				</Button.Resources>
 				<TextBlock Text="Cancel"
 						   FontSize="13"
 						   FontWeight="SemiBold"
-						   Foreground="{ThemeResource TextFillColorPrimary}"
+						   Foreground="{ThemeResource TextFillColorPrimaryBrush}"
 						   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 			</Button>
 

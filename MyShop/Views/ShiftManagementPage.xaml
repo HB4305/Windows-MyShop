@@ -84,7 +84,7 @@
         <StackPanel Orientation="Horizontal" Spacing="10">
           <FontIcon Glyph="&#xE946;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
           <TextBlock Text="{Binding StatusMessage}"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      TextWrapping="Wrap"/>
         </StackPanel>
       </Border>
@@ -100,15 +100,15 @@
           <StackPanel Spacing="10">
             <StackPanel Orientation="Horizontal" Spacing="8">
               <FontIcon Glyph="&#xEAFD;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
-              <TextBlock Text="Shift Revenue" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              <TextBlock Text="Shift Revenue" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
             <TextBlock Text="{Binding ShiftRevenue, Converter={StaticResource CurrencyFormatter}}"
                        FontSize="24"
                        FontWeight="Bold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             <TextBlock Text="Paid sales recorded in the active shift."
                        FontSize="12"
-                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
           </StackPanel>
         </Border>
 
@@ -116,15 +116,15 @@
           <StackPanel Spacing="10">
             <StackPanel Orientation="Horizontal" Spacing="8">
               <FontIcon Glyph="&#xE716;" Foreground="{StaticResource SuccessBrush}" FontSize="16"/>
-              <TextBlock Text="Customers Served" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              <TextBlock Text="Customers Served" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
             <TextBlock Text="{Binding ShiftCustomerCount}"
                        FontSize="24"
                        FontWeight="Bold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             <TextBlock Text="Each completed order counts as one customer served."
                        FontSize="12"
-                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
           </StackPanel>
         </Border>
 
@@ -132,15 +132,15 @@
           <StackPanel Spacing="10">
             <StackPanel Orientation="Horizontal" Spacing="8">
               <FontIcon Glyph="&#xE9D9;" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
-              <TextBlock Text="Average Spend" Foreground="{ThemeResource TextFillColorSecondary}"/>
+              <TextBlock Text="Average Spend" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
             <TextBlock Text="{Binding AverageSpendPerCustomer, Converter={StaticResource CurrencyFormatter}}"
                        FontSize="24"
                        FontWeight="Bold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             <TextBlock Text="Average revenue per served customer in this shift."
                        FontSize="12"
-                       Foreground="{ThemeResource TextFillColorSecondary}"/>
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
           </StackPanel>
         </Border>
       </Grid>
@@ -164,11 +164,11 @@
                 <TextBlock Text="Current Shift"
                            FontSize="18"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
               </StackPanel>
               <TextBlock Text="Open a shift before using POS checkout."
                          FontSize="12"
-                         Foreground="{ThemeResource TextFillColorSecondary}"/>
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
 
             <Border Background="{StaticResource PurpleLightBrush}"
@@ -178,7 +178,7 @@
               <StackPanel Spacing="8">
                 <Grid>
                   <TextBlock Text="Status"
-                             Foreground="{ThemeResource TextFillColorSecondary}"/>
+                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   <Border HorizontalAlignment="Right"
                           Background="{StaticResource SuccessBrush}"
                           CornerRadius="12"
@@ -190,17 +190,17 @@
                   </Border>
                 </Grid>
                 <Grid>
-                  <TextBlock Text="Shift ID" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  <TextBlock Text="Shift ID" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   <TextBlock Text="{Binding ActiveShift.Id}" HorizontalAlignment="Right" FontWeight="SemiBold"/>
                 </Grid>
                 <Grid>
-                  <TextBlock Text="Starting Cash" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  <TextBlock Text="Starting Cash" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   <TextBlock Text="{Binding ActiveShift.StartingCash, Converter={StaticResource CurrencyFormatter}}"
                              HorizontalAlignment="Right"
                              FontWeight="SemiBold"/>
                 </Grid>
                 <Grid>
-                  <TextBlock Text="Started At" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                  <TextBlock Text="Started At" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   <TextBlock Text="{Binding ActiveShift.StartTime}"
                              HorizontalAlignment="Right"
                              FontWeight="SemiBold"/>
@@ -218,7 +218,7 @@
                 <StackPanel Spacing="4">
                   <TextBlock Text="Starting Cash"
                              FontWeight="SemiBold"
-                             Foreground="{ThemeResource TextFillColorPrimary}"/>
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                   <TextBox Text="{Binding StartingCashText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                            PlaceholderText="0.00"
                            MinHeight="42"/>
@@ -249,11 +249,11 @@
                 <TextBlock Text="Cash Reconciliation"
                            FontSize="18"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
               </StackPanel>
               <TextBlock Text="Expected cash is calculated from cash POS orders in the active shift."
                          FontSize="12"
-                         Foreground="{ThemeResource TextFillColorSecondary}"/>
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
 
             <Grid ColumnSpacing="12">
@@ -267,12 +267,12 @@
                 <StackPanel Spacing="8">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon Glyph="&#xE8C7;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
-                    <TextBlock Text="Expected Cash" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                    <TextBlock Text="Expected Cash" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </StackPanel>
                   <TextBlock Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}"
                              FontSize="26"
                              FontWeight="Bold"
-                             Foreground="{ThemeResource TextFillColorPrimary}"/>
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                 </StackPanel>
               </Border>
 
@@ -280,7 +280,7 @@
                 <StackPanel Spacing="8">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon Glyph="&#xE8D2;" Foreground="{StaticResource SuccessBrush}" FontSize="16"/>
-                    <TextBlock Text="Actual Cash" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                    <TextBlock Text="Actual Cash" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </StackPanel>
                   <TextBox Text="{Binding ActualCashTotalText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                            PlaceholderText="0.00"
@@ -292,7 +292,7 @@
                 <StackPanel Spacing="8">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon Glyph="&#xE7BA;" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
-                    <TextBlock Text="Discrepancy" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                    <TextBlock Text="Discrepancy" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </StackPanel>
                   <TextBlock Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}"
                              FontSize="26"
@@ -305,7 +305,7 @@
             <StackPanel Spacing="6">
               <TextBlock Text="Notes"
                          FontWeight="SemiBold"
-                         Foreground="{ThemeResource TextFillColorPrimary}"/>
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
               <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        PlaceholderText="Add cash differences or shift notes..."
                        AcceptsReturn="True"

@@ -13,7 +13,7 @@
         <!-- Pagination Button Styles -->
         <Style x:Key="PageBtn" TargetType="Button">
           <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-          <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+          <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
           <Setter Property="FontSize" Value="13"/>
           <Setter Property="MinWidth" Value="32"/>
           <Setter Property="Height" Value="32"/>
@@ -97,7 +97,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <FontIcon Grid.Column="0" Glyph="&#xE721;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
+                    <FontIcon Grid.Column="0" Glyph="&#xE721;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
                     <TextBox x:Name="SearchBox"
                              Grid.Column="1"
                              PlaceholderText="Search customer name or phone..."
@@ -169,17 +169,17 @@
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="NAME" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock Grid.Column="1" Text="PHONE" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock Grid.Column="2" Text="ADDRESS" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock Grid.Column="3" Text="TOTAL SPENT" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock Grid.Column="4" Text="ORDERS" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock Grid.Column="5" Text="ACTIONS" FontSize="11" FontWeight="SemiBold"
-                                   Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" 
                                    Visibility="{Binding IsOwner, Converter={StaticResource BoolToVisibilityConverter}}"
                                    FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Grid>
@@ -215,28 +215,28 @@
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Grid.Column="0" Text="{x:Bind Name}" FontWeight="SemiBold"
-                                                   Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center"
+                                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center"
                                                    TextTrimming="CharacterEllipsis" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                                         <TextBlock Grid.Column="1" Text="{x:Bind Phone}" VerticalAlignment="Center"
-                                                   Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                                         <TextBlock Grid.Column="2" Text="{x:Bind Address}" VerticalAlignment="Center"
-                                                   Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"
+                                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"
                                                    TextTrimming="CharacterEllipsis" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                                         <TextBlock Grid.Column="3" Text="{x:Bind TotalSpent, Converter={StaticResource CurrencyFormatter}}"
                                                    VerticalAlignment="Center" Foreground="{StaticResource AppPurpleBrush}" FontWeight="SemiBold" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                                         <TextBlock Grid.Column="4" Text="{x:Bind OrderCount}" VerticalAlignment="Center"
-                                                   Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" HorizontalAlignment="Left" Margin="10,0,0,0" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" HorizontalAlignment="Left" Margin="10,0,0,0" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                                         <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center"
                                                     Visibility="{Binding DataContext.IsOwner, ElementName=SearchBox, Converter={StaticResource BoolToVisibilityConverter}}">
                                             <Button Background="Transparent" BorderThickness="0" Padding="4"
                                                     Click="OnEditCustomerClick" ToolTipService.ToolTip="Edit"
                   Style="{StaticResource ColorPreservingButtonStyle}">
-                                                <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                                                <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                             </Button>
                                             <Button Background="Transparent" BorderThickness="0" Padding="4"
                                                     Click="OnDeleteCustomerClick" ToolTipService.ToolTip="Delete"
@@ -254,7 +254,7 @@
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
                                 Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
                         <ProgressBar IsIndeterminate="True" Width="120" Foreground="{StaticResource AppPurpleBrush}"/>
-                        <TextBlock Text="Loading customers..." Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="Loading customers..." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
                 </Grid>
             </Grid>
@@ -271,13 +271,13 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-                    <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="customers" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="customers" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1"
@@ -308,7 +308,7 @@
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1">
                 <StackPanel Spacing="12">
                     <ProgressBar IsIndeterminate="True" Width="120" Foreground="{StaticResource AppPurpleBrush}"/>
-                    <TextBlock Text="Opening..." FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="Opening..." FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
             </Border>
         </Grid>

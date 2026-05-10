@@ -7,11 +7,11 @@
                FontFamily="{Binding TitleFontFamily, ElementName=Root}"
                FontSize="{Binding TitleFontSize, ElementName=Root}"
                FontWeight="Bold"
-               Foreground="{ThemeResource TextFillColorPrimary}"/>
+               Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
     <TextBlock Text="{Binding Subtitle, ElementName=Root}"
                FontFamily="{Binding SubtitleFontFamily, ElementName=Root}"
                FontSize="{Binding SubtitleFontSize, ElementName=Root}"
-               Foreground="{ThemeResource TextFillColorSecondary}"
+               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                Visibility="{Binding SubtitleVisibility, ElementName=Root}"/>
   </StackPanel>
 </UserControl>

@@ -31,10 +31,10 @@
                 <TextBlock Text="Create Supply Order"
                            FontSize="22"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="Select a supplier and add products to restock your inventory."
                            FontSize="14"
-                           Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </StackPanel>
 
@@ -61,7 +61,7 @@
 
                     <!-- Supplier Selection -->
                     <StackPanel Spacing="8">
-                        <TextBlock Text="Supplier *" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="Supplier *" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <ComboBox x:Name="SupplierComboBox" 
                                   PlaceholderText="Select supplier"
                                   DisplayMemberPath="Name"
@@ -71,7 +71,7 @@
 
                     <!-- Product Search -->
                     <StackPanel Grid.Column="1" Spacing="8">
-                        <TextBlock Text="Add Product" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="Add Product" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <AutoSuggestBox x:Name="ProductSearchBox"
                                         PlaceholderText="Search by name..."
                                         QueryIcon="Find"
@@ -196,7 +196,7 @@
                             Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                             BorderThickness="1" CornerRadius="20" Padding="24,10"
                             Style="{StaticResource ColorPreservingButtonStyle}">
-                        <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Button>
 
                     <Button Grid.Column="2" x:Name="CreateBtn" Click="CreateBtn_Click" MinWidth="160"

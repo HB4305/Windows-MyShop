@@ -26,6 +26,7 @@
     <Grid x:Name="RootGrid">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
+        <!-- Mobile/Narrow: Hero hidden, Form centered -->
         <VisualState x:Name="NarrowState">
           <VisualState.StateTriggers>
             <AdaptiveTrigger MinWindowWidth="0"/>
@@ -34,18 +35,37 @@
             <Setter Target="LeftPanel.Visibility" Value="Collapsed"/>
             <Setter Target="LeftColumn.Width" Value="0"/>
             <Setter Target="RightColumn.Width" Value="*"/>
-            <Setter Target="RightPanel.Margin" Value="20,24,20,24"/>
+            <Setter Target="RightPanel.Margin" Value="24"/>
+            <Setter Target="RightPanel.HorizontalAlignment" Value="Center"/>
+            <Setter Target="RightPanel.MaxWidth" Value="500"/>
           </VisualState.Setters>
         </VisualState>
+        
+        <!-- Tablet/Medium: Both panels visible, narrower margins -->
+        <VisualState x:Name="MediumState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="900"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="LeftPanel.Visibility" Value="Visible"/>
+            <Setter Target="LeftColumn.Width" Value="*"/>
+            <Setter Target="RightColumn.Width" Value="500"/>
+            <Setter Target="RightPanel.Margin" Value="40"/>
+            <Setter Target="RightPanel.HorizontalAlignment" Value="Stretch"/>
+          </VisualState.Setters>
+        </VisualState>
+
+        <!-- Desktop/Wide: Standard dual panel -->
         <VisualState x:Name="WideState">
           <VisualState.StateTriggers>
-            <AdaptiveTrigger MinWindowWidth="1100"/>
+            <AdaptiveTrigger MinWindowWidth="1200"/>
           </VisualState.StateTriggers>
           <VisualState.Setters>
             <Setter Target="LeftPanel.Visibility" Value="Visible"/>
             <Setter Target="LeftColumn.Width" Value="*"/>
             <Setter Target="RightColumn.Width" Value="600"/>
-            <Setter Target="RightPanel.Margin" Value="48,48,48,48"/>
+            <Setter Target="RightPanel.Margin" Value="64"/>
+            <Setter Target="RightPanel.HorizontalAlignment" Value="Stretch"/>
           </VisualState.Setters>
         </VisualState>
       </VisualStateGroup>
@@ -91,7 +111,7 @@
                 Padding="12">
           <Viewbox Width="24" Height="24">
             <Path Data="M12 2L2 7L12 12L22 7L12 2Z M2 17L12 22L22 17 M2 12L12 17L22 12"
-                  Stroke="{ThemeResource TextFillColorPrimary}" StrokeThickness="2"
+                  Stroke="{ThemeResource TextFillColorPrimaryBrush}" StrokeThickness="2"
                   StrokeLineJoin="Round" Fill="Transparent"/>
           </Viewbox>
         </Border>
@@ -100,11 +120,11 @@
         <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
           <TextBlock Text="ProSport Hub"
                      Style="{StaticResource TitleTextBlockStyle}"
-                     Foreground="{ThemeResource TextFillColorPrimary}"/>
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
           <TextBlock Text="INVENTORY MANAGEMENT"
                      FontFamily="{StaticResource InterFont}"
                      FontSize="12" FontWeight="400"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      CharacterSpacing="600"
                      Margin="0,2,0,0"/>
         </StackPanel>
@@ -122,11 +142,11 @@
             <TextBlock FontFamily="Segoe MDL2 Assets"
                        Text="&#xE72B;"
                        FontSize="14"
-                       Foreground="{ThemeResource TextFillColorSecondary}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        VerticalAlignment="Center"/>
             <TextBlock Text="Config"
                        Style="{StaticResource BodyTextBlockStyle}"
-                       Foreground="{ThemeResource TextFillColorSecondary}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        VerticalAlignment="Center"/>
           </StackPanel>
         </Button>
@@ -137,11 +157,11 @@
         <TextBlock Text="Partner Login"
                    Style="{StaticResource TitleLargeTextBlockStyle}"
                    FontFamily="{StaticResource InterFont}"
-                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
         <TextBlock Text="Welcome back to the ProSport ecosystem."
                    Style="{StaticResource BodyTextBlockStyle}"
                    FontFamily="{StaticResource InterFont}"
-                   Foreground="{ThemeResource TextFillColorSecondary}"
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                    TextWrapping="Wrap"
                    Margin="0,8,0,0"/>
       </StackPanel>
@@ -154,7 +174,7 @@
           <TextBlock Text="Organization Email"
                      Style="{StaticResource BodyStrongTextBlockStyle}"
                      FontFamily="{StaticResource InterFont}"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      Margin="0,0,0,8"/>
           <TextBox x:Name="EmailInput"
                    Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -163,7 +183,7 @@
                    FontSize="14"
                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                    Background="{ThemeResource ControlFillColorDefaultBrush}"
-                   Foreground="{ThemeResource TextFillColorPrimary}"
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                    BorderBrush="{ThemeResource TextBoxBorderBrush}"
                    CornerRadius="20"
                    Padding="12,10,12,10"
@@ -174,14 +194,14 @@
           <TextBlock Text="Security Key"
                      Style="{StaticResource BodyStrongTextBlockStyle}"
                      FontFamily="{StaticResource InterFont}"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      Margin="0,16,0,8"/>
           <Grid>
             <PasswordBox x:Name="PasswordBox"
                          IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                          PasswordRevealMode="Hidden"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         Foreground="{ThemeResource TextFillColorPrimary}"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                          BorderBrush="{ThemeResource TextBoxBorderBrush}"
                          CornerRadius="20"
                          Padding="12,10,40,10"
@@ -197,7 +217,7 @@
                   Style="{StaticResource ColorPreservingButtonStyle}">
               <Viewbox Width="17" Height="12">
                 <Path Data="M1 6C1 6 4 1 8.5 1C13 1 16 6 16 6C16 6 13 11 8.5 11C4 11 1 6 1 6ZM8.5 3C6.01 3 4 5.01 4 7.5C4 9.99 6.01 12 8.5 12C10.99 12 13 9.99 13 7.5C13 5.01 10.99 3 8.5 3ZM8.5 4.5C9.88 4.5 11 5.62 11 7C11 8.38 9.88 9.5 8.5 9.5C7.12 9.5 6 8.38 6 7C6 5.62 7.12 4.5 8.5 4.5ZM1 6V12H16V6"
-                      Stroke="{ThemeResource TextFillColorSecondary}" StrokeThickness="1"
+                      Stroke="{ThemeResource TextFillColorSecondaryBrush}" StrokeThickness="1"
                       Fill="Transparent" StrokeLineJoin="Round"/>
               </Viewbox>
             </Button>
@@ -233,7 +253,7 @@
             <TextBlock Text="Sign In to Hub"
                        FontFamily="{StaticResource InterFont}"
                        FontSize="14" FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
           </Button>
         </StackPanel>
       </ScrollViewer>
@@ -242,7 +262,7 @@
       <TextBlock Grid.Row="4"
                  Text="{Binding AppVersion}"
                  Style="{StaticResource CaptionTextBlockStyle}"
-                 Foreground="{ThemeResource TextFillColorTertiary}"
+                 Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Bottom"
                  Margin="0,0,0,0"/>

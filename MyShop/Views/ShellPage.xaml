@@ -29,14 +29,14 @@
                 Background="{StaticResource PurpleBrush}"
                 HorizontalAlignment="Left"
                 Margin="0,0,0,10">
-          <TextBlock Text="ES"
+          <TextBlock Text="PS"
                      Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      FontWeight="Bold"
                      FontSize="14"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </Border>
-        <TextBlock Text="Elite Sports"
+        <TextBlock Text="ProSport"
                    FontSize="18"
                    FontWeight="Bold"
                    Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>

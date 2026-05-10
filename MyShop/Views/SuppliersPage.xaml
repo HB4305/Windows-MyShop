@@ -14,7 +14,7 @@
     <!-- Pagination Button Styles -->
     <Style x:Key="PageBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="MinWidth" Value="32"/>
       <Setter Property="Height" Value="32"/>
@@ -90,7 +90,7 @@
               Padding="20,10" CornerRadius="20"
               Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1"
               Style="{StaticResource ColorPreservingButtonStyle}">
-          <TextBlock Text="Supply History" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="Supply History" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
       </Button>
     </StackPanel>
 
@@ -120,7 +120,7 @@
         </Grid>
       </Border>
 
-      <Button x:Name="AddSupplierBtn" Grid.Column="1" Command="{Binding AddSupplierCommand}" 
+      <Button x:Name="AddSupplierButton" Grid.Column="1" Command="{Binding AddSupplierCommand}" 
               Background="{StaticResource AppPurpleBrush}" Foreground="White" 
               CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
         <StackPanel Orientation="Horizontal" Spacing="8">
@@ -155,10 +155,10 @@
                     <ColumnDefinition Width="1.5*"/>
                     <ColumnDefinition Width="100"/>
                   </Grid.ColumnDefinitions>
-                  <TextBlock Text="SUPPLIER NAME" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="1" Text="CONTACT PHONE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="2" Text="TYPE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="3" Text="ACTIONS" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Text="SUPPLIER NAME" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Grid.Column="1" Text="CONTACT PHONE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Grid.Column="2" Text="TYPE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Grid.Column="3" Text="ACTIONS" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </Grid>
               </Border>
   
@@ -181,12 +181,12 @@
                           <ColumnDefinition Width="1.5*"/>
                           <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="1" Text="{x:Bind ContactPhone}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="2" Text="{x:Bind SupplierType}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="1" Text="{x:Bind ContactPhone}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="2" Text="{x:Bind SupplierType}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                           <Button Click="EditSupplier_Click" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
-                            <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                            <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                           </Button>
                           <Button Command="{Binding DataContext.DeleteSupplierCommand, ElementName=SuppliersGrid}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
                             <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="#DC2626"/>
@@ -211,13 +211,13 @@
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding SupplierDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding SupplierDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding SupplierTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="suppliers" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="{Binding SupplierDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="{Binding SupplierDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="{Binding SupplierTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="suppliers" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
   
             <StackPanel Grid.Column="1"
@@ -237,8 +237,12 @@
         </Grid.RowDefinitions>
   
         <!-- Toolbar -->
-        <Grid Grid.Row="0" Margin="0,0,0,20">
-          <Button HorizontalAlignment="Right" Click="CreateSupplyOrder_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
+        <Grid x:Name="OrdersToolbarGrid" Grid.Row="0" Margin="0,0,0,20">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <Button x:Name="AddOrderButton" Grid.Column="1" Click="CreateSupplyOrder_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
                   CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal" Spacing="8">
               <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
@@ -266,10 +270,10 @@
                     <ColumnDefinition Width="1.5*"/>
                     <ColumnDefinition Width="1.5*"/>
                   </Grid.ColumnDefinitions>
-                  <TextBlock Text="ORDER ID" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="1" Text="SUPPLIER" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="2" Text="IMPORT DATE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="3" Text="TOTAL COST" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Text="ORDER ID" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Grid.Column="1" Text="SUPPLIER" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Grid.Column="2" Text="IMPORT DATE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Grid.Column="3" Text="TOTAL COST" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </Grid>
               </Border>
   
@@ -292,9 +296,9 @@
                           <ColumnDefinition Width="1.5*"/>
                           <ColumnDefinition Width="1.5*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{x:Bind IdDisplay}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="1" Text="{x:Bind SupplierName}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="2" Text="{x:Bind ImportDateDisplay}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="{x:Bind IdDisplay}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="1" Text="{x:Bind SupplierName}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="2" Text="{x:Bind ImportDateDisplay}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock Grid.Column="3" Text="{x:Bind TotalCost, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource AppPurpleBrush}" FontWeight="SemiBold" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                       </Grid>
                     </Border>
@@ -308,13 +312,13 @@
         <Border Grid.Row="2" Padding="0,14">
           <Grid>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding OrderDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding OrderDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding OrderTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="{Binding OrderDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="{Binding OrderDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="{Binding OrderTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
   
             <StackPanel Grid.Column="1"

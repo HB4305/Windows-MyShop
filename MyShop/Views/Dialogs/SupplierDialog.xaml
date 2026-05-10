@@ -31,10 +31,10 @@
                            Text="Edit Supplier"
                            FontSize="22"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="Update the contact and business details of this supplier."
                            FontSize="14"
-                           Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </StackPanel>
 
@@ -55,7 +55,7 @@
 
             <!-- Name -->
             <StackPanel Spacing="8">
-                <TextBlock Text="Supplier Name *" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="Supplier Name *" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox x:Name="NameTextBox" 
                          PlaceholderText="e.g. ABC Sports Co., Ltd."
                          CornerRadius="20" Padding="12,10"
@@ -65,7 +65,7 @@
 
             <!-- Phone -->
             <StackPanel Spacing="8">
-                <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox x:Name="PhoneTextBox" 
                          PlaceholderText="e.g. 0912345678"
                          CornerRadius="20" Padding="12,10"
@@ -75,7 +75,7 @@
 
             <!-- Type -->
             <StackPanel Spacing="8">
-                <TextBlock Text="Type (Optional)" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="Type (Optional)" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox x:Name="TypeTextBox" 
                          PlaceholderText="e.g. Wholesale, Retail"
                          CornerRadius="20" Padding="12,10"
@@ -97,7 +97,7 @@
                     Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1" CornerRadius="20" Padding="14,10"
                     Style="{StaticResource ColorPreservingButtonStyle}">
-                <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 
             <Button Grid.Column="1" x:Name="SaveBtn" Click="SaveBtn_Click" HorizontalAlignment="Stretch"

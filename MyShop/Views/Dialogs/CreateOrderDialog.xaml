@@ -15,7 +15,7 @@
     <Style x:Key="HeaderStyle" TargetType="TextBlock">
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="Margin" Value="0,16,0,8"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
       <Setter Property="FontSize" Value="16"/>
     </Style>
   </ContentDialog.Resources>
@@ -39,10 +39,10 @@
         <TextBlock Text="Create New Order"
                    FontSize="22"
                    FontWeight="Bold"
-                   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         <TextBlock Text="Fill in customer details and select products for this order."
                    FontSize="14"
-                   Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
       </StackPanel>
     </StackPanel>
 
@@ -151,7 +151,7 @@
                       <!-- Top Section -->
                       <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,0,8" VerticalAlignment="Center">
                         <TextBlock Text="{x:Bind ItemName}" FontWeight="SemiBold" FontSize="14" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" MaxWidth="300" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}}" FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="{x:Bind UnitPrice, Converter={StaticResource CurrencyConverter}}" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <Border Background="{ThemeResource AppAccentBrushLow}" CornerRadius="20" Padding="8,2" VerticalAlignment="Center">
                           <TextBlock Text="{x:Bind StockStatusDisplay, Mode=OneWay}" FontSize="11" Foreground="{ThemeResource AppAccentBrush}" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         </Border>

@@ -10,9 +10,9 @@
                               TitleFontSize="24"/>
       <Border Padding="24" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1">
         <StackPanel HorizontalAlignment="Center" Spacing="8">
-          <TextBlock Text="&#xE7BF;" FontFamily="Segoe MDL2 Assets" FontSize="48" Foreground="{ThemeResource TextFillColorTertiary}" HorizontalAlignment="Center"/>
-          <TextBlock Text="Product Catalog" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondary}" HorizontalAlignment="Center"/>
-          <TextBlock Text="This page is under construction." FontSize="13" Foreground="{ThemeResource TextFillColorTertiary}" HorizontalAlignment="Center"/>
+          <TextBlock Text="&#xE7BF;" FontFamily="Segoe MDL2 Assets" FontSize="48" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+          <TextBlock Text="Product Catalog" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center"/>
+          <TextBlock Text="This page is under construction." FontSize="13" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
         </StackPanel>
       </Border>
     </StackPanel>

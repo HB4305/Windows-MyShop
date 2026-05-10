@@ -54,7 +54,7 @@
       <Setter Property="FontWeight"
           Value="Bold"/>
       <Setter Property="Foreground"
-          Value="{ThemeResource TextFillColorPrimary}"/>
+          Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
     <!-- KPI Label style -->
@@ -65,7 +65,7 @@
       <Setter Property="FontSize"
           Value="12"/>
       <Setter Property="Foreground"
-          Value="{ThemeResource TextFillColorSecondary}"/>
+          Value="{ThemeResource TextFillColorSecondaryBrush}"/>
       <Setter Property="Margin"
           Value="0,0,0,4"/>
     </Style>
@@ -166,11 +166,11 @@
                 <TextBlock FontFamily="Segoe MDL2 Assets"
                     Text="&#xE787;"
                     FontSize="13"
-                    Foreground="{ThemeResource TextFillColorSecondary}"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     VerticalAlignment="Center"/>
                 <TextBlock Text="July 2026"
                     FontSize="13"
-                    Foreground="{ThemeResource TextFillColorPrimary}"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </StackPanel>
             </Border>
@@ -279,10 +279,10 @@
                 <TextBlock Text="Monthly Revenue Analysis"
                            FontSize="15"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="Daily breakdown of revenue for the current month"
                            FontSize="12"
-                           Foreground="{ThemeResource TextFillColorTertiary}"
+                           Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                            Margin="0,2,0,0" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </StackPanel>
               <!-- Legend -->
@@ -296,7 +296,7 @@
                     Background="{StaticResource PurpleBrush}"/>
                 <TextBlock Text="Revenue ($)"
                     FontSize="12"
-                    Foreground="{ThemeResource TextFillColorSecondary}"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                     VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </StackPanel>
             </Grid>
@@ -324,27 +324,27 @@
               <TextBlock Grid.Column="0"
                   Text="DAY 1"
                   FontSize="11"
-                  Foreground="{ThemeResource TextFillColorTertiary}"
+                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                   HorizontalAlignment="Left" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Grid.Column="1"
                   Text="DAY 7"
                   FontSize="11"
-                  Foreground="{ThemeResource TextFillColorTertiary}"
+                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Grid.Column="2"
                   Text="DAY 14"
                   FontSize="11"
-                  Foreground="{ThemeResource TextFillColorTertiary}"
+                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Grid.Column="3"
                   Text="DAY 21"
                   FontSize="11"
-                  Foreground="{ThemeResource TextFillColorTertiary}"
+                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Grid.Column="4"
                   Text="DAY 30"
                   FontSize="11"
-                  Foreground="{ThemeResource TextFillColorTertiary}"
+                  Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                   HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Grid>
           </StackPanel>
@@ -380,13 +380,13 @@
                   <TextBlock Text="Top 5 Best Sellers"
                              FontSize="15"
                              FontWeight="SemiBold"
-                             Foreground="{ThemeResource TextFillColorPrimary}"
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                              VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
   
                 <!-- Loading state -->
                 <TextBlock Text="Loading..."
-                           Foreground="{ThemeResource TextFillColorTertiary}"
+                           Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                            FontSize="13"
                            Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
   
@@ -409,9 +409,9 @@
                             <TextBlock Text="{Binding Name}"
                                        FontSize="13"
                                        FontWeight="SemiBold"
-                                       Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                       Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             <TextBlock FontSize="11"
-                                Foreground="{ThemeResource TextFillColorTertiary}"
+                                Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                 Margin="0,2,0,0"
                                        Text="{Binding SubInfo}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             <!-- Revenue badge -->
@@ -432,11 +432,11 @@
                             <TextBlock Text="{Binding QuantitySoldDisplay}"
                                        FontSize="16"
                                        FontWeight="Bold"
-                                       Foreground="{ThemeResource TextFillColorPrimary}"
+                                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                        HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             <TextBlock Text="sold"
                                        FontSize="10"
-                                       Foreground="{ThemeResource TextFillColorTertiary}"
+                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                        HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                           </StackPanel>
                         </Grid>
@@ -466,7 +466,7 @@
                     <TextBlock Text="Low Stock Alerts"
                                FontSize="15"
                                FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
                   <TextBlock Grid.Column="1"
@@ -487,20 +487,20 @@
                   <TextBlock Grid.Column="0"
                       Text="PRODUCT"
                       FontSize="10"
-                      Foreground="{ThemeResource TextFillColorTertiary}"
+                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                       FontWeight="SemiBold"
                       CharacterSpacing="40" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   <TextBlock Grid.Column="1"
                       Text="STOCK"
                       FontSize="10"
-                      Foreground="{ThemeResource TextFillColorTertiary}"
+                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                       FontWeight="SemiBold"
                       HorizontalAlignment="Center"
                       CharacterSpacing="40" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   <TextBlock Grid.Column="2"
                       Text="ACTION"
                       FontSize="10"
-                      Foreground="{ThemeResource TextFillColorTertiary}"
+                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                       FontWeight="SemiBold"
                       HorizontalAlignment="Right"
                       CharacterSpacing="40" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
@@ -519,7 +519,7 @@
                         <TextBlock Grid.Column="0"
                                    Text="{Binding Name}"
                                    FontSize="12"
-                                   Foreground="{ThemeResource TextFillColorPrimary}"
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                    TextTrimming="CharacterEllipsis"
                                    VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
   
@@ -582,7 +582,7 @@
                     <TextBlock Text="Recent Orders"
                                FontSize="15"
                                FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
                   <TextBlock Grid.Column="1"
@@ -622,7 +622,7 @@
   
                           <!-- Order meta -->
                           <TextBlock FontSize="11"
-                              Foreground="{ThemeResource TextFillColorTertiary}">
+                              Foreground="{ThemeResource TextFillColorTertiaryBrush}">
                             <Run Text="Order #"/>
                             <Run Text="{Binding IdDisplay}"/>
                             <Run Text=" • "/>
@@ -643,7 +643,7 @@
                           <!-- Item line -->
                           <TextBlock Text="{Binding FirstItemLine}"
                                      FontSize="11"
-                                     Foreground="{ThemeResource TextFillColorSecondary}"
+                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                      TextTrimming="CharacterEllipsis" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         </StackPanel>
                       </Border>

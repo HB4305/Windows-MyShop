@@ -46,7 +46,7 @@
             <Setter Property="Background"
                     Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
             <Setter Property="Foreground"
-                    Value="{ThemeResource TextFillColorPrimary}"/>
+                    Value="{ThemeResource TextFillColorPrimaryBrush}"/>
             <Setter Property="BorderBrush"
                     Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
             <Setter Property="BorderThickness"
@@ -96,7 +96,7 @@
             <Setter Property="FontWeight"
                     Value="SemiBold"/>
             <Setter Property="Foreground"
-                    Value="{ThemeResource TextFillColorSecondary}"/>
+                    Value="{ThemeResource TextFillColorSecondaryBrush}"/>
             <Setter Property="Margin"
                     Value="0,0,0,6"/>
         </Style>
@@ -147,16 +147,16 @@
                 <TextBlock Text="Edit product"
                            FontSize="22"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                            Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="Create product"
                            FontSize="22"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                            Visibility="{Binding IsEditMode, Converter={StaticResource InverseBoolToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock Text="Enter details and images, then save to persist."
                            FontSize="13"
-                           Foreground="{ThemeResource TextFillColorSecondary}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                            TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
 
@@ -212,7 +212,7 @@
                                     <TextBlock Text="No image"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
-                                               Foreground="{ThemeResource TextFillColorTertiary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                               Foreground="{ThemeResource TextFillColorTertiaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                 </Border>
                                 <Image Source="{Binding PreviewImageUrl, Converter={StaticResource StringToImageConverter}}"
                                        Stretch="UniformToFill"
@@ -334,7 +334,7 @@
                                                       Foreground="{StaticResource SportPurpleBrush}"/>
                                             <TextBlock Text="Add"
                                                        FontSize="11"
-                                                       Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -358,7 +358,7 @@
                             </StackPanel>
                             <TextBlock Text="Generate professional product descriptions using AI based on your images and specs."
                                        FontSize="12"
-                                       Foreground="{ThemeResource TextFillColorSecondary}"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                        TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             <Button HorizontalAlignment="Stretch"
                                     Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -387,7 +387,7 @@
                             <TextBlock Text="Tip: Upload an image first for better results!"
                                        FontSize="11"
                                        FontStyle="Italic"
-                                       Foreground="{ThemeResource TextFillColorTertiary}"/>
+                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -405,7 +405,7 @@
                                      PlaceholderText="e.g. Apex Carbon Pro Tennis Racket"
                                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                      Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                     Foreground="{ThemeResource TextFillColorPrimary}"
+                                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                      BorderThickness="1"
                                      Padding="12,10"/>
                         </StackPanel>
@@ -434,7 +434,7 @@
                                         <TextBlock Text="$"
                                                    VerticalAlignment="Center"
                                                    FontWeight="SemiBold"
-                                                   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                     </Border>
                                     <controls:DecimalTextBox Grid.Column="1"
                                                              Text="{Binding SellingPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -442,7 +442,7 @@
                                                              BorderThickness="1"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                             Foreground="{ThemeResource TextFillColorPrimary}"
+                                                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                              Padding="10,8"/>
                                 </Grid>
                             </StackPanel>
@@ -455,7 +455,7 @@
                                                          PlaceholderText="0.00"
                                                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                          Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                         Foreground="{ThemeResource TextFillColorPrimary}"
+                                                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                          Padding="10,8"/>
                             </StackPanel>
                         </Grid>
@@ -469,7 +469,7 @@
                                       HorizontalAlignment="Stretch"
                                       BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                       Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                      Foreground="{ThemeResource TextFillColorPrimary}"
+                                      Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                       BorderThickness="1"
                                       Padding="10,8"/>
                         </StackPanel>
@@ -480,7 +480,7 @@
                                 <TextBlock Text="Variants matrix"
                                            FontWeight="SemiBold"
                                            FontSize="15"
-                                           Foreground="{ThemeResource TextFillColorPrimary}"
+                                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                            VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                 <Button HorizontalAlignment="Right"
                                         Content="+ Add variant"
@@ -539,7 +539,7 @@
                                                              PlaceholderText="Size (e.g. 9, XL)"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                             Foreground="{ThemeResource TextFillColorPrimary}"
+                                                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                              BorderThickness="1"
                                                              Padding="10,8"/>
                                                     <TextBox Grid.Column="1"
@@ -547,7 +547,7 @@
                                                              PlaceholderText="Color"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                             Foreground="{ThemeResource TextFillColorPrimary}"
+                                                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                              BorderThickness="1"
                                                              Padding="10,8"/>
                                                     <controls:NumericTextBox Grid.Column="2"
@@ -556,7 +556,7 @@
                                                                              PlaceholderText="Stock"
                                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                                             Foreground="{ThemeResource TextFillColorPrimary}"
+                                                                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                                              BorderThickness="1"
                                                                              Padding="10,8"/>
                                                     <TextBox Grid.Column="3"
@@ -564,7 +564,7 @@
                                                              PlaceholderText="SKU"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                             Foreground="{ThemeResource TextFillColorPrimary}"
+                                                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                              BorderThickness="1"
                                                              Padding="10,8"/>
                                                     <Button Grid.Column="4"
@@ -588,7 +588,7 @@
                                                      PlaceholderText="0"
                                                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                      Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                     Foreground="{ThemeResource TextFillColorPrimary}"
+                                                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                      BorderThickness="1"
                                                      Padding="10,8"/>
                         </StackPanel>

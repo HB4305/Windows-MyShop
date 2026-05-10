@@ -52,7 +52,7 @@
 
     <Style x:Key="SecondaryBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="Padding" Value="16,8"/>
@@ -263,7 +263,7 @@
             <TextBlock Text="{x:Bind CustomerName}"
                        FontSize="13"
                        FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                        VerticalAlignment="Center"
                        TextTrimming="CharacterEllipsis"
                        MaxWidth="180"/>
@@ -273,7 +273,7 @@
           <TextBlock Grid.Column="2"
                      Text="{x:Bind CreatedAt, Converter={StaticResource OrderDateConverter}}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      VerticalAlignment="Center"/>
 
           <!-- Status -->
@@ -319,10 +319,10 @@
           <TextBlock Text="{x:Bind ItemName}"
                      FontSize="13"
                      FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      TextTrimming="CharacterEllipsis"/>
           <TextBlock FontSize="11"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      Margin="0,2,0,0">
             <Run Text="Qty: "/><Run Text="{x:Bind Quantity, Mode=OneWay}"/>
           </TextBlock>
@@ -333,7 +333,7 @@
                    Text="{x:Bind Converter={StaticResource LineTotalConverter}}"
                    FontSize="14"
                    FontWeight="Bold"
-                   Foreground="{ThemeResource TextFillColorPrimary}"
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                    VerticalAlignment="Center"/>
       </Grid>
     </DataTemplate>
@@ -350,13 +350,40 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="NarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="1"/>
+            <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="0"/>
+            <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Left"/>
+            <Setter Target="HeaderActionsPanel.Margin" Value="0,12,0,0"/>
+            <Setter Target="HeaderActionsPanel.Orientation" Value="Vertical"/>
+            <Setter Target="HeaderPanelBorder.Padding" Value="24,16"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="WideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1100"/>
+          </VisualState.StateTriggers>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
     <!-- ── Top Header Bar ── -->
-    <Border Grid.Row="0"
+    <Border x:Name="HeaderPanelBorder" Grid.Row="0"
             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
             BorderThickness="0,0,0,1"
             Padding="24,16">
       <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="Auto"/>
@@ -369,7 +396,7 @@
                                 Subtitle="Managing professional sports equipment and apparel"/>
 
         <!-- Right: date range + new sale -->
-        <StackPanel Grid.Column="1"
+        <StackPanel x:Name="HeaderActionsPanel" Grid.Column="1"
                     Orientation="Horizontal"
                     Spacing="8"
                     VerticalAlignment="Center">
@@ -381,16 +408,16 @@
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE787;"
                          FontSize="13"
-                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                          VerticalAlignment="Center"/>
               <TextBlock Text="Oct 1, 2023 – Oct 31, 2023"
                          FontSize="12"
-                         Foreground="{ThemeResource TextFillColorPrimary}"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                          VerticalAlignment="Center"/>
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE70D;"
                          FontSize="10"
-                         Foreground="{ThemeResource TextFillColorTertiary}"
+                         Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                          VerticalAlignment="Center"
                          Margin="4,0,0,0"/>
             </StackPanel>
@@ -564,11 +591,11 @@
                   </Border>
                   <TextBlock Text="No orders found"
                              FontSize="15" FontWeight="SemiBold"
-                             Foreground="{ThemeResource TextFillColorSecondary}"
+                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                              HorizontalAlignment="Center"/>
                   <TextBlock Text="No orders in this category yet."
                              FontSize="13"
-                             Foreground="{ThemeResource TextFillColorTertiary}"
+                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                              HorizontalAlignment="Center"/>
                 </StackPanel>
 
@@ -590,7 +617,7 @@
             <TextBlock Grid.Column="0"
                        FontSize="12"
                        FontFamily="{StaticResource AppSignatureFontFamily}"
-                       Foreground="{ThemeResource TextFillColorSecondary}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        VerticalAlignment="Center">
               <Run Text="Showing"/>
               <Run Text=" "/>
@@ -654,7 +681,7 @@
                 <TextBlock FontFamily="Segoe MDL2 Assets"
                            Text="&#xE72B;"
                            FontSize="16"
-                           Foreground="{ThemeResource TextFillColorSecondary}"/>
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
               </Button>
 
               <!-- Order ID -->
@@ -662,10 +689,10 @@
                 <TextBlock Text="Order Details"
                            FontSize="15"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                 <TextBlock Text="{Binding SelectedOrder.Id, Converter={StaticResource OrderAthIdConverter}}"
                            FontSize="12"
-                           Foreground="{StaticResource TextFillColorTertiary}"
+                           Foreground="{StaticResource TextFillColorTertiaryBrush}"
                            Margin="0,2,0,0"/>
               </StackPanel>
 
@@ -720,16 +747,16 @@
                       <TextBlock Text="{Binding SelectedOrder.CustomerName}"
                                  FontSize="14"
                                  FontWeight="SemiBold"
-                                 Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                 Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                       <StackPanel Orientation="Horizontal" Spacing="4">
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    Text="&#xE715;"
                                    FontSize="11"
-                                   Foreground="{ThemeResource TextFillColorTertiary}"
+                                   Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                    VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding SelectedOrder.CustomerPhone}"
                                    FontSize="12"
-                                   Foreground="{ThemeResource TextFillColorSecondary}"/>
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       </StackPanel>
                     </StackPanel>
 
@@ -738,7 +765,7 @@
                       <TextBlock FontFamily="Segoe MDL2 Assets"
                                  Text="&#xE8BD;"
                                  FontSize="14"
-                                 Foreground="{ThemeResource TextFillColorSecondary}"/>
+                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                     </Button>
                   </Grid>
                 </StackPanel>
@@ -771,7 +798,7 @@
 
                   <TextBlock Text="No items in this order."
                              FontSize="13"
-                             Foreground="{ThemeResource TextFillColorTertiary}"
+                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                              HorizontalAlignment="Center"
                              Margin="0,4,0,0"
                              Visibility="{Binding SelectedOrderDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
@@ -785,16 +812,16 @@
                     <Grid>
                       <TextBlock Text="Subtotal"
                                  FontSize="13"
-                                 Foreground="{ThemeResource TextFillColorSecondary}"/>
+                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       <TextBlock Text="{Binding SelectedOrder.TotalAmount, Converter={StaticResource CurrencyConverter}}"
                                  FontSize="13"
-                                 Foreground="{ThemeResource TextFillColorPrimary}"
+                                 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                  HorizontalAlignment="Right"/>
                     </Grid>
                     <Grid>
                       <TextBlock Text="Express Delivery"
                                  FontSize="13"
-                                 Foreground="{ThemeResource TextFillColorSecondary}"/>
+                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       <TextBlock Text="Free"
                                  FontSize="13"
                                  Foreground="#10B981"
@@ -807,7 +834,7 @@
                       <TextBlock Text="Total"
                                  FontSize="15"
                                  FontWeight="Bold"
-                                 Foreground="{ThemeResource TextFillColorPrimary}"/>
+                                 Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                       <TextBlock Text="{Binding SelectedOrder.TotalAmount, Converter={StaticResource CurrencyConverter}}"
                                  FontSize="18"
                                  FontWeight="Bold"
@@ -870,11 +897,11 @@
           </Border>
           <TextBlock Text="Select an order"
                      FontSize="18" FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      HorizontalAlignment="Center"/>
           <TextBlock Text="Click an order from the list to view its details."
                      FontSize="13"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      HorizontalAlignment="Center"
                      TextWrapping="Wrap"
                      MaxWidth="220"

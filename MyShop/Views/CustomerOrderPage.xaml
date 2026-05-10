@@ -98,7 +98,7 @@
 
     <Style x:Key="SecondaryBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="Padding" Value="14,8"/>
@@ -127,7 +127,7 @@
       <Setter Property="Padding" Value="0,8,10,8"/>
       <Setter Property="Background" Value="Transparent"/>
       <Setter Property="BorderThickness" Value="0"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
     <!-- ══ Text Styles ══ -->
@@ -135,31 +135,31 @@
       <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize" Value="12"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
     </Style>
 
     <Style x:Key="MutedText" TargetType="TextBlock">
       <Setter Property="FontSize" Value="12"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}"/>
     </Style>
 
     <Style x:Key="DetailValue" TargetType="TextBlock">
       <Setter Property="FontSize" Value="14"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
     <Style x:Key="PageTitle" TargetType="TextBlock">
       <Setter Property="FontFamily" Value="ms-appx:///Assets/Momo_Signature/MomoSignature-Regular.ttf#Momo Signature"/>
       <Setter Property="FontSize" Value="20"/>
       <Setter Property="FontWeight" Value="Bold"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
     <Style x:Key="TableHeaderText" TargetType="TextBlock">
       <Setter Property="FontSize" Value="12"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}"/>
     </Style>
 
     <!-- ══ Table Row Style ══ -->
@@ -182,7 +182,7 @@
     <!-- ══ Tab Button Style ══ -->
     <Style x:Key="TabBtn" TargetType="Button">
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="Padding" Value="14,8"/>
@@ -211,7 +211,7 @@
     <!-- ══ Pagination Button ══ -->
     <Style x:Key="PageBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="MinWidth" Value="32"/>
       <Setter Property="Height" Value="32"/>
@@ -264,7 +264,7 @@
                      Text="{x:Bind CustomerName, Mode=OneWay}"
                      FontSize="13"
                      FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      TextTrimming="CharacterEllipsis"
                      VerticalAlignment="Center"
                      Padding="0,0,8,0"
@@ -275,7 +275,7 @@
           <TextBlock Grid.Column="2"
                      Text="{x:Bind CustomerPhone, Mode=OneWay}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorTertiary}"
+                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                      VerticalAlignment="Center"
                      TextTrimming="CharacterEllipsis"
                      HorizontalAlignment="Center"
@@ -285,7 +285,7 @@
           <TextBlock Grid.Column="3"
                      Text="{x:Bind SellerName, Mode=OneWay}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      VerticalAlignment="Center"
                      TextTrimming="CharacterEllipsis"
                      HorizontalAlignment="Center"
@@ -295,7 +295,7 @@
           <TextBlock Grid.Column="4"
                      Text="{x:Bind CreatedAt, Mode=OneWay, Converter={StaticResource DateTimeOffsetConverter}}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorTertiary}"
+                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center"
                      TextAlignment="Center"/>
@@ -304,7 +304,7 @@
           <TextBlock Grid.Column="5"
                      Text="{x:Bind OrderType, Mode=OneWay}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      VerticalAlignment="Center"
                      TextTrimming="CharacterEllipsis"
                      HorizontalAlignment="Center"
@@ -337,7 +337,7 @@
           <TextBlock Grid.Column="8"
                      Text="{x:Bind PaymentMethod, Mode=OneWay}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      VerticalAlignment="Center"
                      TextTrimming="CharacterEllipsis"
                      HorizontalAlignment="Center"
@@ -348,7 +348,7 @@
                      Text="{x:Bind TotalAmount, Mode=OneWay, Converter={StaticResource CurrencyConverter}}"
                      FontSize="14"
                      FontWeight="Bold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center"
                      TextAlignment="Center"/>
@@ -382,7 +382,7 @@
             <TextBlock FontFamily="Segoe MDL2 Assets"
                        Text="&#xE7BF;"
                        FontSize="14"
-                       Foreground="{ThemeResource TextFillColorTertiary}"
+                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
           </Border>
@@ -391,18 +391,18 @@
             <TextBlock Text="{x:Bind ItemName}"
                        FontSize="13"
                        FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                        TextTrimming="CharacterEllipsis"/>
             <TextBlock Text="{x:Bind QuantityPriceDisplay}"
                        FontSize="11"
-                       Foreground="{ThemeResource TextFillColorSecondary}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        Margin="0,2,0,0"/>
           </StackPanel>
 
           <TextBlock Grid.Column="2"
                      Text="{x:Bind UnitPriceDisplay}"
                      FontSize="12"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      VerticalAlignment="Center"
                      Margin="12,0"/>
 
@@ -410,7 +410,7 @@
                      Text="{x:Bind TotalPriceDisplay}"
                      FontSize="13"
                      FontWeight="Bold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      VerticalAlignment="Center"
                      MinWidth="72"
                      TextAlignment="Right"/>
@@ -420,7 +420,7 @@
     <!-- Pagination Button Styles -->
     <Style x:Key="PageBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="MinWidth" Value="32"/>
       <Setter Property="Height" Value="32"/>
@@ -559,13 +559,13 @@
               <TextBlock FontSize="22"
                          FontWeight="Bold"
                          FontFamily="{StaticResource AppDefaultFontFamily}"
-                         Foreground="{ThemeResource TextFillColorPrimary}">
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}">
                 <Run Text="{Binding TotalOrders, Mode=OneWay}"/>
                 <Run Text=" orders"
                      FontSize="12"
                      FontWeight="Normal"
                      FontFamily="{StaticResource AppDefaultFontFamily}"
-                     Foreground="{ThemeResource TextFillColorSecondary}"/>
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
               </TextBlock>
             </StackPanel>
           </Border>
@@ -653,7 +653,7 @@
                   <Border Style="{StaticResource TabCountBadge}">
                     <TextBlock Text="{Binding PendingCount}"
                                FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </Border>
                 </StackPanel>
               </Button>
@@ -667,7 +667,7 @@
                   <Border Style="{StaticResource TabCountBadge}">
                     <TextBlock Text="{Binding ProcessingCount}"
                                FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </Border>
                 </StackPanel>
               </Button>
@@ -681,7 +681,7 @@
                   <Border Style="{StaticResource TabCountBadge}">
                     <TextBlock Text="{Binding CompletedCount}"
                                FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </Border>
                 </StackPanel>
               </Button>
@@ -695,7 +695,7 @@
                   <Border Style="{StaticResource TabCountBadge}">
                     <TextBlock Text="{Binding CancelledCount}"
                                FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondary}"/>
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </Border>
                 </StackPanel>
               </Button>
@@ -743,7 +743,7 @@
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
               <ProgressBar IsIndeterminate="True" Width="120"/>
               <TextBlock Text="Loading orders..."
-                         FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}"
+                         FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                          HorizontalAlignment="Center"/>
             </StackPanel>
           </Border>
@@ -828,11 +828,11 @@
                   </Border>
                   <TextBlock Text="No orders found"
                              FontSize="15" FontWeight="SemiBold"
-                             Foreground="{ThemeResource TextFillColorSecondary}"
+                             Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                              HorizontalAlignment="Center"/>
                   <TextBlock Text="No orders in this category yet."
                              FontSize="13"
-                             Foreground="{ThemeResource TextFillColorTertiary}"
+                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                              HorizontalAlignment="Center"/>
                 </StackPanel>
 
@@ -854,13 +854,13 @@
 
           <!-- Showing X-Y of Z -->
           <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="4">
-            <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="{Binding StartIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="{Binding EndIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="{Binding FilteredCount}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="{Binding StartIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="{Binding EndIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="{Binding FilteredCount}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           </StackPanel>
 
           <!-- Pagination Buttons -->
@@ -910,16 +910,16 @@
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE72B;"
                          FontSize="16"
-                         Foreground="{ThemeResource TextFillColorSecondary}"/>
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </Button>
 
             <StackPanel Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
-              <TextBlock FontSize="16" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}">
+              <TextBlock FontSize="16" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}">
                 <Run Text="Order #"/>
                 <Run Text="{Binding SelectedOrder.Id, Mode=OneWay}"/>
               </TextBlock>
               <TextBlock Text="{Binding SelectedOrder.CreatedAt, Converter={StaticResource DateTimeOffsetConverter}}"
-                         FontSize="12" Foreground="{ThemeResource TextFillColorTertiary}" Margin="0,2,0,0"/>
+                         FontSize="12" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,2,0,0"/>
             </StackPanel>
 
             <Border Grid.Column="2"
@@ -969,16 +969,16 @@
                   <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
                     <TextBlock Text="{Binding SelectedOrder.CustomerName}"
                                FontSize="15" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"/>
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                     <StackPanel Orientation="Horizontal" Spacing="6">
                       <TextBlock FontFamily="Segoe MDL2 Assets"
                                  Text="&#xE717;"
                                  FontSize="11"
-                                 Foreground="{ThemeResource TextFillColorTertiary}"
+                                 Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                  VerticalAlignment="Center"/>
                       <TextBlock Text="{Binding SelectedOrder.CustomerPhone}"
                                  FontSize="13"
-                                 Foreground="{ThemeResource TextFillColorSecondary}"/>
+                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                     </StackPanel>
                   </StackPanel>
                 </Grid>
@@ -990,7 +990,7 @@
                   <TextBlock Text="Shipping Address" Style="{StaticResource MutedText}"/>
                   <TextBlock Text="{Binding SelectedOrder.ShippingAddress}"
                              FontSize="13"
-                             Foreground="{ThemeResource TextFillColorPrimary}"
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                              TextWrapping="Wrap"/>
                 </StackPanel>
               </StackPanel>
@@ -1009,7 +1009,7 @@
                           Background="{ThemeResource ControlFillColorSecondaryBrush}"
                           CornerRadius="20"
                           Padding="8,4">
-                    <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}">
+                    <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
                       <Run Text="{Binding CurrentDetails.Count, Mode=OneWay}"/>
                       <Run Text=" items"/>
                     </TextBlock>
@@ -1020,7 +1020,7 @@
                               ItemTemplate="{StaticResource OrderDetailItemTemplate}"/>
 
                 <TextBlock Text="No items in this order."
-                           FontSize="13" Foreground="{ThemeResource TextFillColorTertiary}"
+                           FontSize="13" Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                            HorizontalAlignment="Center" Margin="0,4,0,0"
                            Visibility="{Binding CurrentDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
 
@@ -1035,7 +1035,7 @@
                   <TextBlock Grid.Column="0"
                              Text="Order Total"
                              FontSize="14" FontWeight="SemiBold"
-                             Foreground="{ThemeResource TextFillColorPrimary}"
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                              VerticalAlignment="Center"/>
                   <TextBlock Grid.Column="1"
                              Text="{Binding SelectedOrder.TotalAmount, Converter={StaticResource CurrencyConverter}}"
@@ -1061,7 +1061,7 @@
                     <TextBlock Text="Order Type" Style="{StaticResource MutedText}"/>
                     <TextBlock Text="{Binding SelectedOrder.OrderType}"
                                FontSize="14" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                Margin="0,2,0,0"/>
                   </StackPanel>
 
@@ -1089,7 +1089,7 @@
                     <TextBlock Text="{Binding SelectedOrder.PaymentMethod}"
                                FontSize="14"
                                FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                Margin="0,2,0,0"/>
                   </StackPanel>
 
@@ -1098,7 +1098,7 @@
                     <TextBlock Text="{Binding SelectedOrder.ReceivedAmount, Converter={StaticResource CurrencyConverter}}"
                                FontSize="14"
                                FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                Margin="0,2,0,0"/>
                   </StackPanel>
                 </Grid>
@@ -1114,7 +1114,7 @@
                     <TextBlock Text="{Binding SelectedOrder.ShiftId}"
                                FontSize="14"
                                FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                Margin="0,2,0,0"/>
                   </StackPanel>
 
@@ -1123,7 +1123,7 @@
                     <TextBlock Text="{Binding SelectedOrder.SellerName}"
                                FontSize="14"
                                FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorPrimary}"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                Margin="0,2,0,0"/>
                   </StackPanel>
                 </Grid>
@@ -1132,7 +1132,7 @@
                   <TextBlock Text="Notes" Style="{StaticResource MutedText}"/>
                   <TextBlock Text="{Binding SelectedOrder.Notes}"
                              FontSize="13"
-                             Foreground="{ThemeResource TextFillColorPrimary}"
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                              TextWrapping="Wrap"/>
                 </StackPanel>
               </StackPanel>
@@ -1243,11 +1243,11 @@
         </Border>
         <TextBlock Text="Select an order"
                    FontSize="18" FontWeight="SemiBold"
-                   Foreground="{ThemeResource TextFillColorPrimary}"
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                    HorizontalAlignment="Center"/>
         <TextBlock Text="Click an order from the list to view its details."
                    FontSize="13"
-                   Foreground="{ThemeResource TextFillColorSecondary}"
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                    HorizontalAlignment="Center"
                    TextWrapping="Wrap"
                    MaxWidth="220"

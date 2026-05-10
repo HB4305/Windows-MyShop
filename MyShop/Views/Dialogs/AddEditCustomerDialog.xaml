@@ -36,10 +36,10 @@
                 <TextBlock x:Name="FormTitle"
                            FontSize="22"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock x:Name="FormSubtitle"
                            FontSize="14"
-                           Foreground="{ThemeResource TextFillColorSecondary}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                            Text="Manage customer contact information." FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </StackPanel>
@@ -51,7 +51,7 @@
             <!-- Name -->
             <StackPanel Spacing="8">
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="Full Name" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="Full Name" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
                 <TextBox x:Name="NameTextBox"
@@ -73,7 +73,7 @@
             <!-- Phone -->
             <StackPanel Spacing="8">
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
                 <TextBox x:Name="PhoneTextBox"
@@ -95,9 +95,9 @@
             <!-- Address -->
             <StackPanel Spacing="8">
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBlock Text="Address" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="Address" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="20" Padding="8,2">
-                        <TextBlock Text="Optional" FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="Optional" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Border>
                 </StackPanel>
                 <TextBox PlaceholderText="Enter shipping address..."
@@ -125,7 +125,7 @@
                     Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1" CornerRadius="20" Padding="14,12"
                   Style="{StaticResource ColorPreservingButtonStyle}">
-                <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 
             <Button Grid.Column="1" Click="SaveBtn_Click" HorizontalAlignment="Stretch"

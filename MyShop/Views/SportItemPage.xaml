@@ -25,7 +25,7 @@
 
     <Style x:Key="BulkImportButtonStyle" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="CornerRadius" Value="20"/>
@@ -47,7 +47,7 @@
     <!-- Pagination Button Styles -->
     <Style x:Key="PageBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="MinWidth" Value="32"/>
       <Setter Property="Height" Value="32"/>
@@ -70,7 +70,28 @@
   </Page.Resources>
 
   <Grid Margin="24,20">
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="NarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="ActionButtonsPanel.Visibility" Value="Collapsed"/>
+            <Setter Target="ActionButtonsStack.Visibility" Value="Visible"/>
+            <Setter Target="SearchColSpan.ColumnSpan" Value="3"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="WideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1000"/>
+          </VisualState.StateTriggers>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
@@ -93,7 +114,7 @@
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
 
-      <Border Grid.Column="0"
+      <Border x:Name="SearchColSpan" Grid.Column="0"
               MinHeight="48"
               Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -118,34 +139,61 @@
         </Grid>
       </Border>
 
-      <Button x:Name="ImportButton"
-              Grid.Column="1"
-              Style="{StaticResource BulkImportButtonStyle}"
-              Click="OnBulkImportClick">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <FontIcon Glyph="&#xE898;" FontSize="15"/>
-          <TextBlock Text="Bulk Import" VerticalAlignment="Center" FontWeight="SemiBold" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        </StackPanel>
-      </Button>
+      <!-- Action Buttons (Visible in Wide) -->
+      <StackPanel x:Name="ActionButtonsPanel" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="14">
+        <Button x:Name="ImportButton"
+                Style="{StaticResource BulkImportButtonStyle}"
+                Click="OnBulkImportClick">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon Glyph="&#xE898;" FontSize="15"/>
+            <TextBlock Text="Bulk Import" VerticalAlignment="Center" FontWeight="SemiBold" 
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </StackPanel>
+        </Button>
 
-      <Button x:Name="AddButton"
-              Grid.Column="2"
-              Background="{StaticResource AppPurpleBrush}" Foreground="White" 
-              CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}"
-              Click="OnAddItemClick">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
-          <TextBlock Text="New Equipment" VerticalAlignment="Center" FontWeight="SemiBold" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        </StackPanel>
-      </Button>
+        <Button x:Name="AddButton"
+                Background="{StaticResource AppPurpleBrush}" Foreground="White" 
+                CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}"
+                Click="OnAddItemClick">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
+            <TextBlock Text="New Equipment" VerticalAlignment="Center" FontWeight="SemiBold" 
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </StackPanel>
+        </Button>
+      </StackPanel>
     </Grid>
 
-    <Rectangle Grid.Row="2" Height="1" Margin="0,0,0,20" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+    <!-- Action Buttons (Visible in Narrow) -->
+    <StackPanel x:Name="ActionButtonsStack" Grid.Row="2" Visibility="Collapsed" Spacing="12" Margin="0,0,0,20">
+       <Button x:Name="ImportButtonNarrow"
+                Style="{StaticResource BulkImportButtonStyle}"
+                HorizontalAlignment="Stretch"
+                Click="OnBulkImportClick">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon Glyph="&#xE898;" FontSize="15"/>
+            <TextBlock Text="Bulk Import" VerticalAlignment="Center" FontWeight="SemiBold" 
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </StackPanel>
+        </Button>
+
+        <Button x:Name="AddButtonNarrow"
+                Background="{StaticResource AppPurpleBrush}" Foreground="White" 
+                CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}"
+                HorizontalAlignment="Stretch"
+                Click="OnAddItemClick">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
+            <TextBlock Text="New Equipment" VerticalAlignment="Center" FontWeight="SemiBold" 
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </StackPanel>
+        </Button>
+    </StackPanel>
+
+    <Rectangle Grid.Row="3" Height="1" Margin="0,0,0,20" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
 
     <!-- Filters -->
-    <Grid Grid.Row="3" ColumnSpacing="16" Margin="0,0,0,14">
+    <Grid Grid.Row="4" ColumnSpacing="16" Margin="0,0,0,14">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="*"/>
@@ -179,7 +227,7 @@
     </Grid>
 
     <!-- Table -->
-    <Border Grid.Row="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+    <Border Grid.Row="5" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
       <Grid>
         <Grid.RowDefinitions>
@@ -200,15 +248,15 @@
               <ColumnDefinition Width="118"/>
               <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="PRODUCT" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" 
+            <TextBlock Grid.Column="0" Text="PRODUCT" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" 
                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Grid.Column="1" Text="CATEGORY" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" 
+            <TextBlock Grid.Column="1" Text="CATEGORY" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" 
                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Grid.Column="2" Text="PRICE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" 
+            <TextBlock Grid.Column="2" Text="PRICE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" 
                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Grid.Column="3" Text="STOCK LEVEL" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" 
+            <TextBlock Grid.Column="3" Text="STOCK LEVEL" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" 
                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Grid.Column="4" Text="STATUS" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" 
+            <TextBlock Grid.Column="4" Text="STATUS" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" 
                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           </Grid>
         </Border>
@@ -244,7 +292,7 @@
                                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
 
-                  <TextBlock Grid.Column="1" Text="{x:Bind CategoryName}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+                  <TextBlock Grid.Column="1" Text="{x:Bind CategoryName}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
                   <TextBlock Grid.Column="2" Text="{x:Bind Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" FontWeight="SemiBold" 
@@ -253,7 +301,7 @@
                   <StackPanel Grid.Column="3" VerticalAlignment="Center" Spacing="4">
                     <ProgressBar Value="{x:Bind Item, Converter={StaticResource SportItemStockPercentConverter}}" 
                                  Foreground="{x:Bind Item, Converter={StaticResource SportItemStockBarForegroundConverter}}" Height="6"/>
-                    <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}" 
+                    <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" 
                                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
                       <Run Text="{x:Bind Item.EffectiveStockQuantity}" FontWeight="SemiBold"/><Run Text=" in stock"/>
                     </TextBlock>
@@ -266,7 +314,7 @@
                                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </Border>
 
-                  <FontIcon Grid.Column="5" Glyph="&#xE10C;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondary}" VerticalAlignment="Center"/>
+                  <FontIcon Grid.Column="5" Glyph="&#xE10C;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
                 </Grid>
               </Border>
             </DataTemplate>
@@ -277,7 +325,7 @@
         <StackPanel Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
                     Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
           <ProgressBar IsIndeterminate="True" Width="120" Foreground="{StaticResource AppPurpleBrush}"/>
-          <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </StackPanel>
 
@@ -285,7 +333,7 @@
     </Border>
 
     <!-- Table Footer: Pagination (Docked to bottom) -->
-    <Border Grid.Row="5" 
+    <Border Grid.Row="6" 
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
             BorderThickness="0,1,0,0"
             Margin="-24,0,-24,-20" Padding="24,14">
@@ -295,19 +343,19 @@
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-          <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" 
+          <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" 
+          <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13" 
+          <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <TextBlock Text="products" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13" 
+          <TextBlock Text="products" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </StackPanel>
 
@@ -315,7 +363,7 @@
       </Grid>
     </Border>
 
-    <TextBlock Grid.Row="6" Margin="0,12,0,0" Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" 
+    <TextBlock Grid.Row="7" Margin="0,12,0,0" Text="{Binding ErrorMessage}" Foreground="{StaticResource ErrorBrush}" 
                TextWrapping="Wrap" HorizontalAlignment="Center" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" 
                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
   </Grid>
