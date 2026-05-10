@@ -4,7 +4,6 @@
       xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
       xmlns:controls="using:MyShop.Controls"
       xmlns:conv="using:MyShop.Converters"
-      xmlns:controls="using:MyShop.Controls"
       xmlns:models="using:MyShop.Models.ReportModels"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       Tapped="Page_Tapped">
