@@ -31,7 +31,38 @@
     <PackageReference Include="Npgsql" />
     <PackageReference Include="QuestPDF" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Obfuscar" PrivateAssets="All" />
   </ItemGroup>
+
+  <Target Name="ObfuscateDesktop" AfterTargets="Build" Condition="'$(TargetFramework)' == 'net10.0-desktop'">
+    <PropertyGroup>
+      <ObfuscarPath>$(NuGetPackageRoot)obfuscar\2.2.38\tools\Obfuscar.Console.exe</ObfuscarPath>
+    </PropertyGroup>
+    <Exec Command="&quot;$(ObfuscarPath)&quot; $(MSBuildProjectDirectory)\obfuscar.xml" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
+  <Target Name="ObfuscatePublish" AfterTargets="Publish" Condition="'$(TargetFramework)' == 'net10.0-desktop'">
+    <PropertyGroup>
+      <ObfuscarPath>$(NuGetPackageRoot)obfuscar\2.2.38\tools\Obfuscar.Console.exe</ObfuscarPath>
+      <ObfuscarPublishXml>$(MSBuildProjectDirectory)\obfuscar.publish.xml</ObfuscarPublishXml>
+    </PropertyGroup>
+    <WriteLinesToFile File="$(ObfuscarPublishXml)" Overwrite="true" Lines="&lt;?xml version='1.0'?&gt;
+&lt;Obfuscator&gt;
+  &lt;Var name=&quot;InPath&quot; value=&quot;$(PublishDir)&quot; /&gt;
+  &lt;Var name=&quot;OutPath&quot; value=&quot;$(PublishDir)Obfuscated\&quot; /&gt;
+  &lt;Var name=&quot;KeepPublicApi&quot; value=&quot;false&quot; /&gt;
+  &lt;Var name=&quot;HidePrivateApi&quot; value=&quot;true&quot; /&gt;
+  &lt;Var name=&quot;RenameFields&quot; value=&quot;true&quot; /&gt;
+  &lt;Var name=&quot;RenameProperties&quot; value=&quot;true&quot; /&gt;
+  &lt;Var name=&quot;RenameEvents&quot; value=&quot;true&quot; /&gt;
+  &lt;Module file=&quot;$(PublishDir)MyShop.dll&quot; /&gt;
+&lt;/Obfuscator&gt;" />
+    <Exec Command="&quot;$(ObfuscarPath)&quot; $(ObfuscarPublishXml)" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Copy SourceFiles="$(PublishDir)Obfuscated\MyShop.dll" DestinationFiles="$(PublishDir)MyShop.dll" OverwriteReadOnlyFiles="true" />
+    <RemoveDir Directories="$(PublishDir)Obfuscated" />
+    <Delete Files="$(ObfuscarPublishXml)" />
+  </Target>
   <ItemGroup>
     <Content Include="Assets/Fonts/**/*.ttf" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Assets/Momo_Signature/**/*.ttf" CopyToOutputDirectory="PreserveNewest" />
