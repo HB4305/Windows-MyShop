@@ -63,4 +63,8 @@
     <RemoveDir Directories="$(PublishDir)Obfuscated" />
     <Delete Files="$(ObfuscarPublishXml)" />
   </Target>
+  <ItemGroup>
+    <Content Include="Assets/Fonts/**/*.ttf" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets/Momo_Signature/**/*.ttf" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI;
 
 namespace MyShop.Converters;
 
@@ -88,12 +89,9 @@ public class InverseStringToVisibilityConverter : IValueConverter
 /// false → red   (#EF4444)
 public class BoolToForegroundConverter : IValueConverter
 {
-    private static readonly SolidColorBrush GreenBrush = new(
-        Microsoft.UI.ColorHelper.FromArgb(255, 34, 197, 94));   // #22C55E
-    private static readonly SolidColorBrush RedBrush = new(
-        Microsoft.UI.ColorHelper.FromArgb(255, 239, 68, 68));    // #EF4444
-    private static readonly SolidColorBrush BlackBrush = new(
-        Microsoft.UI.ColorHelper.FromArgb(255, 0, 0, 0));
+    private static readonly Brush GreenBrush = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 34, 197, 94));   // #22C55E
+    private static readonly Brush RedBrush = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 239, 68, 68));    // #EF4444
+    private static readonly Brush BlackBrush = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 0, 0, 0));
 
     public object? Convert(object? value, Type targetType, object? parameter, string language)
     {
@@ -113,7 +111,7 @@ public class HexToBrushConverter : IValueConverter
     public object Convert(object? value, Type targetType, object? parameter, string language)
     {
         var hex = value as string;
-        if (string.IsNullOrWhiteSpace(hex)) return new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(0, 0, 0, 0));
+        if (string.IsNullOrWhiteSpace(hex)) return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(0, 0, 0, 0));
 
         hex = hex.TrimStart('#');
         if (hex.Length == 6)
@@ -121,11 +119,9 @@ public class HexToBrushConverter : IValueConverter
             byte r = System.Convert.ToByte(hex.Substring(0, 2), 16);
             byte g = System.Convert.ToByte(hex.Substring(2, 2), 16);
             byte b = System.Convert.ToByte(hex.Substring(4, 2), 16);
-            return new Microsoft.UI.Xaml.Media.SolidColorBrush(
-                Windows.UI.Color.FromArgb(255, r, g, b));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, r, g, b));
         }
-        return new Microsoft.UI.Xaml.Media.SolidColorBrush(
-            Windows.UI.Color.FromArgb(0, 0, 0, 0));
+        return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(0, 0, 0, 0));
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
@@ -145,7 +141,7 @@ public class FirstImageConverter : IValueConverter
                 try
                 {
                     var bitmap = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
-                    bitmap.DecodePixelWidth = 88; // 44px * 2 for high DPI
+                    bitmap.DecodePixelWidth = 200; // Efficient thumbnail decoding
                     bitmap.UriSource = new System.Uri(url);
                     return bitmap;
                 }
@@ -168,7 +164,10 @@ public class StringToImageConverter : IValueConverter
         {
             try
             {
-                return new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new System.Uri(url));
+                var bitmap = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+                bitmap.DecodePixelWidth = 800; // Limit large preview decoding
+                bitmap.UriSource = new System.Uri(url);
+                return bitmap;
             }
             catch { }
         }
@@ -207,8 +206,8 @@ public class OrderStatusToBrushConverter : IValueConverter
         if (!StatusStyles.TryGetValue(status, out var style))
             style = ("#F3F4F6", "#6B7280"); // gray default
 
-        var bg = ParseHex(style.bg);
-        return new SolidColorBrush(bg);
+        var color = ParseHex(style.bg);
+        return new SolidColorBrush(color);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
@@ -217,7 +216,7 @@ public class OrderStatusToBrushConverter : IValueConverter
     private static Windows.UI.Color ParseHex(string hex)
     {
         hex = hex.TrimStart('#');
-        return Windows.UI.Color.FromArgb(255,
+        return Microsoft.UI.ColorHelper.FromArgb(255,
             System.Convert.ToByte(hex.Substring(0, 2), 16),
             System.Convert.ToByte(hex.Substring(2, 2), 16),
             System.Convert.ToByte(hex.Substring(4, 2), 16));
@@ -263,8 +262,8 @@ public class PaymentStatusToBrushConverter : IValueConverter
         if (!PayStyles.TryGetValue(status, out var style))
             style = ("#F3F4F6", "#6B7280");
 
-        var bg = ParseHex(style.bg);
-        return new SolidColorBrush(bg);
+        var color = ParseHex(style.bg);
+        return new SolidColorBrush(color);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
@@ -273,7 +272,7 @@ public class PaymentStatusToBrushConverter : IValueConverter
     private static Windows.UI.Color ParseHex(string hex)
     {
         hex = hex.TrimStart('#');
-        return Windows.UI.Color.FromArgb(255,
+        return Microsoft.UI.ColorHelper.FromArgb(255,
             System.Convert.ToByte(hex.Substring(0, 2), 16),
             System.Convert.ToByte(hex.Substring(2, 2), 16),
             System.Convert.ToByte(hex.Substring(4, 2), 16));

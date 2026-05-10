@@ -2,7 +2,8 @@
     x:Class="MyShop.Views.Dialogs.BulkImportDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Bulk Import Products"
+    x:Name="DialogRoot"
+    Width="480"
     PrimaryButtonText="Import"
     CloseButtonText="Cancel"
     PrimaryButtonClick="OnImportClick"
@@ -30,7 +31,7 @@
                            FontSize="15" 
                            TextWrapping="Wrap" 
                            Width="360"
-                           Foreground="{ThemeResource TextFillColorPrimary}"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </StackPanel>
 
@@ -39,6 +40,6 @@
                    TextWrapping="Wrap" 
                    FontSize="13"
                    Foreground="Red" 
-                   Visibility="Collapsed"/>
+                   Visibility="Collapsed" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
     </Grid>
 </ContentDialog>

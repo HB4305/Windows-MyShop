@@ -48,7 +48,18 @@ public sealed partial class OrdersManagementPage : Page
     {
         _vm.ActiveTab = tab;
         OrderListView.SelectedItem = null;
+        UpdateTabStyles();
         BuildPagination();
+    }
+
+    private void UpdateTabStyles()
+    {
+        var activeTab = _vm.ActiveTab;
+        TabAll.Style = (Style)Resources[activeTab == "All" ? "TabBtnActive" : "TabBtn"];
+        TabPending.Style = (Style)Resources[activeTab == "Pending" ? "TabBtnActive" : "TabBtn"];
+        TabProcessing.Style = (Style)Resources[activeTab == "Processing" ? "TabBtnActive" : "TabBtn"];
+        TabShipped.Style = (Style)Resources[activeTab == "Shipped" ? "TabBtnActive" : "TabBtn"];
+        TabReturned.Style = (Style)Resources[activeTab == "Cancelled" ? "TabBtnActive" : "TabBtn"];
     }
 
     // -- Action buttons ----------------------------------------------
@@ -122,11 +133,11 @@ public sealed partial class OrdersManagementPage : Page
 
             if (isActive)
             {
-                btn.Style = (Style)Application.Current.Resources["PageBtnActive"];
+                btn.Style = (Style)Resources["PageBtnActive"];
             }
             else
             {
-                btn.Style = (Style)Application.Current.Resources["PageBtn"];
+                btn.Style = (Style)Resources["PageBtn"];
             }
 
             btn.Click += (s, e) =>
@@ -145,7 +156,7 @@ public sealed partial class OrdersManagementPage : Page
             MinWidth = 52,
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
-            Style = (Style)Application.Current.Resources["PageBtn"],
+            Style = (Style)Resources["PageBtn"],
         };
         prevBtn.Click += (s, e) =>
         {
@@ -171,7 +182,7 @@ public sealed partial class OrdersManagementPage : Page
                 Text = "...",
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(4, 0, 4, 0),
-                Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondary"],
+                Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"],
             });
 
             for (int i = Math.Max(2, current - 1); i <= Math.Min(total - 1, current + 1); i++)
@@ -182,7 +193,7 @@ public sealed partial class OrdersManagementPage : Page
                 Text = "...",
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(4, 0, 4, 0),
-                Foreground = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["TextFillColorSecondary"],
+                Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"],
             });
 
             AddPageBtn(total, current == total);
@@ -195,7 +206,7 @@ public sealed partial class OrdersManagementPage : Page
             MinWidth = 52,
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
-            Style = (Style)Application.Current.Resources["PageBtn"],
+            Style = (Style)Resources["PageBtn"],
         };
         nextBtn.Click += (s, e) =>
         {

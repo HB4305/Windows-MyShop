@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:conv="using:MyShop.Converters"
     x:Name="DialogRoot"
-    MinWidth="500"
+    Width="500"
     CornerRadius="12">
 
     <ContentDialog.Resources>
@@ -30,10 +30,10 @@
                 <TextBlock Text="Negative Cash Discrepancy"
                            FontSize="22"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                 <TextBlock Text="{x:Bind DiscrepancyMessage, Mode=OneWay}"
                            FontSize="14"
-                           Foreground="{ThemeResource TextFillColorSecondary}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                            TextWrapping="Wrap"/>
             </StackPanel>
         </StackPanel>
@@ -44,7 +44,7 @@
             <TextBlock Text="Reason for shortage"
                        FontSize="14"
                        FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimary}"/>
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             <TextBox x:Name="ReasonTextBox"
                      Text="{x:Bind Reason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      PlaceholderText="Explain why actual cash is lower than expected cash..."
@@ -79,7 +79,7 @@
                 <TextBlock Text="Cancel"
                            FontSize="14"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                            HorizontalAlignment="Center"/>
             </Button>
 

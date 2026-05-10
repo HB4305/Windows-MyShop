@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using MyShop.Models;
+using MyShop.Services;
 using MyShop.ViewModels;
 using MyShop.Views.Dialogs;
 
@@ -42,6 +44,15 @@ public sealed partial class SportItemDetailPage : Page
         base.OnNavigatedTo(e);
         var item = e.Parameter as SportItem;
         await ViewModel.InitializeAsync(item);
+
+        var currentUser = App.Services.GetRequiredService<CurrentUserService>();
+        if (currentUser.IsSale)
+        {
+            SaveButton.Visibility = Visibility.Collapsed;
+            DeleteButton.Visibility = Visibility.Collapsed;
+            MainFormGrid.IsHitTestVisible = false;
+            MainFormGrid.Opacity = 0.85;
+        }
     }
 
     private void OnDiscardClick(object sender, RoutedEventArgs e)

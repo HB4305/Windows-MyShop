@@ -9,9 +9,6 @@
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
-    <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
-    <SolidColorBrush x:Key="PurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
-    <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
 
     <Style x:Key="PanelBorder" TargetType="Border">
       <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
@@ -38,20 +35,22 @@
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <StackPanel Spacing="2">
-        <TextBlock Text="SwiftPOS Sports" FontSize="28" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
-        <TextBlock Text="New order register" FontSize="13" Foreground="{ThemeResource TextFillColorSecondary}"/>
-      </StackPanel>
+      <controls:AppPageHeader Title="SwiftPOS Sports" 
+                              Subtitle="New order register" 
+                              TitleFontFamily="{StaticResource AppSignatureFontFamily}"
+                              Margin="0,0,0,8"/>
+      
       <Button Grid.Column="1"
               Command="{Binding NewOrderCommand}"
-              Background="{StaticResource PurpleLightBrush}"
-              Foreground="{StaticResource PurpleBrush}"
-              BorderThickness="0"
-              Padding="14,10"
-              CornerRadius="{ThemeResource ControlCornerRadius}">
+              Background="{StaticResource AppPurpleBrush}"
+              Foreground="White"
+              CornerRadius="24"
+              Padding="20,10"
+              MinHeight="48"
+              Style="{StaticResource ColorPreservingButtonStyle}">
         <StackPanel Orientation="Horizontal" Spacing="8">
-          <FontIcon Glyph="&#xE710;" FontSize="15"/>
-          <TextBlock Text="New Order"/>
+          <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
+          <TextBlock Text="New Order" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans" FontWeight="SemiBold"/>
         </StackPanel>
       </Button>
     </Grid>
@@ -61,7 +60,6 @@
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
-          <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <controls:ProductSearchFilterBar x:Name="ProductFilterBar"
@@ -105,8 +103,8 @@
                       </Border>
                     </Grid>
                   </Border>
-                  <TextBlock Text="{Binding Item.Name}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" TextWrapping="Wrap" MaxLines="2"/>
-                  <TextBlock Text="{Binding CategoryName}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}" TextTrimming="CharacterEllipsis"/>
+                  <TextBlock Text="{Binding Item.Name}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextWrapping="Wrap" MaxLines="2"/>
+                  <TextBlock Text="{Binding CategoryName}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
                   <TextBlock Text="{Binding Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}"/>
                 </StackPanel>
               </DataTemplate>
@@ -116,69 +114,114 @@
           <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
                       Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
             <ProgressRing IsActive="True" Width="36" Height="36" Foreground="{StaticResource PurpleBrush}"/>
-            <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondary}"/>
+            <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
           </StackPanel>
         </Grid>
 
-        <Border Grid.Row="2" Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1,1,0,0" Padding="14">
-          <controls:PaginationBar CurrentPage="{Binding CurrentPage}"
-                                  TotalPages="{Binding TotalPages}"
-                                  DisplayFrom="{Binding DisplayFrom}"
-                                  DisplayTo="{Binding DisplayTo}"
-                                  TotalItems="{Binding TotalItems}"
-                                  ItemLabel="products"
-                                  PreviousCommand="{Binding PreviousPageCommand}"
-                                  NextCommand="{Binding NextPageCommand}"/>
-        </Border>
       </Grid>
     </Border>
 
-    <Grid x:Name="CheckoutPanel" Grid.Row="1" Grid.Column="1" RowSpacing="16">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
+    <!-- Table Footer: Pagination (Docked to bottom) -->
+    <Border Grid.Row="2" Grid.Column="0" 
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
+            BorderThickness="0,1,0,0"
+            Margin="-24,0,-20,-20" Padding="24,12">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="4">
+          <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="products" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right" x:Name="PaginationPanel"/>
+      </Grid>
+    </Border>
+
+    <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+      <Grid x:Name="CheckoutPanel" RowSpacing="16" Margin="0,0,12,0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
       <Border Style="{StaticResource PanelBorder}" Padding="18">
         <StackPanel Spacing="12">
           <Grid>
             <StackPanel Orientation="Horizontal" Spacing="10">
               <FontIcon Glyph="&#xE77B;" Foreground="{StaticResource PurpleBrush}" FontSize="18"/>
-              <TextBlock Text="Customer" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+              <TextBlock Text="Customer" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             </StackPanel>
           </Grid>
-          <AutoSuggestBox x:Name="CustomerSearchBox"
-                          PlaceholderText="Search customer by name..."
-                          Text="{Binding CustomerSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          ItemsSource="{Binding CustomerSuggestions}"
-                          TextChanged="CustomerSearchBox_TextChanged"
-                          SuggestionChosen="CustomerSearchBox_SuggestionChosen"
-                          QuerySubmitted="CustomerSearchBox_QuerySubmitted"
-                          MinHeight="42">
-            <AutoSuggestBox.ItemTemplate>
-              <DataTemplate>
-                <Grid ColumnSpacing="10" MinWidth="260">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="36"/>
-                    <ColumnDefinition Width="*"/>
-                  </Grid.ColumnDefinitions>
-                  <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource PurpleLightBrush}">
-                    <FontIcon Glyph="&#xE77B;" FontSize="13" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                  </Border>
-                  <StackPanel Grid.Column="1" Spacing="1">
-                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
-                  </StackPanel>
-                </Grid>
-              </DataTemplate>
-            </AutoSuggestBox.ItemTemplate>
-          </AutoSuggestBox>
+          <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  CornerRadius="24"
+                  Padding="12,4"
+                  MinHeight="48">
+            <Grid ColumnSpacing="10">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <AutoSuggestBox x:Name="CustomerSearchBox"
+                              Grid.Column="0"
+                              PlaceholderText="Search customer by name..."
+                              Text="{Binding CustomerSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding CustomerSuggestions}"
+                              TextChanged="CustomerSearchBox_TextChanged"
+                              SuggestionChosen="CustomerSearchBox_SuggestionChosen"
+                              QuerySubmitted="CustomerSearchBox_QuerySubmitted"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              VerticalAlignment="Center"
+                              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                <AutoSuggestBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid ColumnSpacing="10" MinWidth="260">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="36"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource PurpleLightBrush}">
+                        <FontIcon Glyph="&#xE77B;" FontSize="13" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                      </Border>
+                      <StackPanel Grid.Column="1" Spacing="1">
+                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                        <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                      </StackPanel>
+                    </Grid>
+                  </DataTemplate>
+                </AutoSuggestBox.ItemTemplate>
+              </AutoSuggestBox>
+              <Button Grid.Column="1" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                      Background="Transparent" BorderThickness="0" Padding="8"
+                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
+                      VerticalAlignment="Center"/>
+            </Grid>
+          </Border>
           <TextBox PlaceholderText="Phone"
                    Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   MinHeight="42"/>
+                   MinHeight="42"
+                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           <TextBox PlaceholderText="Address"
                    Text="{Binding CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   MinHeight="42"/>
+                   MinHeight="42"
+                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </StackPanel>
       </Border>
 
@@ -186,7 +229,7 @@
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
 
@@ -194,7 +237,7 @@
             <Grid>
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <FontIcon Glyph="&#xE719;" Foreground="{StaticResource PurpleBrush}" FontSize="18"/>
-                <TextBlock Text="Order Summary" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                <TextBlock Text="Order Summary" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
               </StackPanel>
               <Border Background="{StaticResource PurpleLightBrush}" CornerRadius="16" Padding="10,4" HorizontalAlignment="Right">
                 <TextBlock Foreground="{StaticResource PurpleBrush}" FontWeight="SemiBold" FontSize="12">
@@ -205,7 +248,9 @@
             </Grid>
           </Border>
 
-          <ListView Grid.Row="1" ItemsSource="{Binding CartItems}" SelectionMode="None" Padding="14">
+          <ListView Grid.Row="1" ItemsSource="{Binding CartItems}" SelectionMode="None" Padding="14"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollMode="Disabled">
             <ListView.ItemContainerStyle>
               <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -226,9 +271,9 @@
                       <Image Source="{Binding ImageUrl}" Stretch="UniformToFill"/>
                     </Border>
                     <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
-                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" TextTrimming="CharacterEllipsis"/>
-                      <TextBlock Text="{Binding VariantDisplay}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}" TextTrimming="CharacterEllipsis"/>
-                      <TextBlock Text="{Binding UnitPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+                      <TextBlock Text="{Binding VariantDisplay}" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                      <TextBlock Text="{Binding UnitPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       <StackPanel Orientation="Horizontal" Spacing="6">
                         <Button Tag="{Binding}" Click="DecreaseCartItem_Click" Width="28" Height="28" Padding="0" Content="-" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
                         <TextBlock Text="{Binding QuantityDisplay}" FontWeight="SemiBold" VerticalAlignment="Center" MinWidth="18" TextAlignment="Center"/>
@@ -237,7 +282,7 @@
                     </StackPanel>
                     <StackPanel Grid.Column="2" Spacing="8" HorizontalAlignment="Right">
                       <Button Tag="{Binding}" Click="RemoveCartItem_Click" Width="28" Height="28" Padding="0" Background="Transparent" BorderThickness="0" ToolTipService.ToolTip="Remove">
-                        <FontIcon Glyph="&#xE711;" FontSize="12" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                        <FontIcon Glyph="&#xE711;" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                       </Button>
                       <TextBlock Text="{Binding LineTotal, Converter={StaticResource CurrencyFormatter}}" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Right"/>
                     </StackPanel>
@@ -250,23 +295,23 @@
           <Border Grid.Row="2" Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Padding="18">
             <StackPanel Spacing="12">
               <Grid>
-                <TextBlock Text="Subtotal" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                <TextBlock Text="Subtotal" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{Binding Subtotal, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" FontWeight="SemiBold"/>
               </Grid>
               <Grid>
-                <TextBlock Text="Tax (8.5%)" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                <TextBlock Text="Tax (8.5%)" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{Binding Tax, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" FontWeight="SemiBold"/>
               </Grid>
               <Grid>
-                <TextBlock Text="Member Discount" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                <TextBlock Text="Member Discount" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{Binding Discount, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" Foreground="#16A34A" FontWeight="SemiBold"/>
               </Grid>
               <Rectangle Height="1" Fill="{ThemeResource ControlStrokeColorDefaultBrush}"/>
               <Grid>
-                <TextBlock Text="Total" FontSize="20" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimary}"/>
+                <TextBlock Text="Total" FontSize="20" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                 <TextBlock Text="{Binding Total, Converter={StaticResource CurrencyFormatter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Right"/>
               </Grid>
-              <TextBlock Text="Payment Method" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+              <TextBlock Text="Payment Method" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
               <ComboBox ItemsSource="{Binding PaymentMethodOptions}"
                         SelectedItem="{Binding SelectedPaymentMethod, Mode=TwoWay}"
                         MinHeight="40"/>
@@ -277,13 +322,13 @@
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
                   <StackPanel Spacing="4">
-                    <TextBlock Text="Cash Received" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+                    <TextBlock Text="Cash Received" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
                     <TextBox Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              PlaceholderText="0.00"
                              MinHeight="40"/>
                   </StackPanel>
                   <StackPanel Grid.Column="1" Spacing="4">
-                    <TextBlock Text="Change" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="12"/>
+                    <TextBlock Text="Change" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
                     <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                             BorderThickness="1"
@@ -314,9 +359,10 @@
         </Grid>
       </Border>
     </Grid>
+    </ScrollViewer>
 
     <TextBlock x:Name="StatusText"
-               Grid.Row="2"
+               Grid.Row="3"
                Grid.ColumnSpan="2"
                Text="{Binding StatusMessage}"
                Foreground="{StaticResource DangerBrush}"

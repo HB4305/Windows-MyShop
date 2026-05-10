@@ -10,11 +10,15 @@ public partial class CustomerOrderViewModel : ObservableObject
 {
     private readonly CustomerOrderService _service;
     private readonly CurrentUserService _currentUserService;
+    private readonly SettingsManager _settingsManager;
 
-    public CustomerOrderViewModel(CustomerOrderService orderService, CurrentUserService currentUserService)
+    public CustomerOrderViewModel(CustomerOrderService orderService, CurrentUserService currentUserService, SettingsManager settingsManager)
     {
         _service = orderService;
         _currentUserService = currentUserService;
+        _settingsManager = settingsManager;
+
+        _ordersPerPage = _settingsManager.GetItemsPerPage();
     }
 
     // ── Collections ──────────────────────────────────────────────
@@ -53,6 +57,15 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     [ObservableProperty]
     private string? _searchQuery;
+
+    [ObservableProperty]
+    private int _startIndex = 0;
+
+    [ObservableProperty]
+    private int _endIndex = 0;
+
+    [ObservableProperty]
+    private int _filteredCount = 0;
 
     // ── Filter Options ──────────────────────────────────────────────
     public ObservableCollection<string> TabOptions { get; } = new()
@@ -98,6 +111,7 @@ public partial class CustomerOrderViewModel : ObservableObject
     [RelayCommand]
     public async Task LoadOrdersAsync()
     {
+        OrdersPerPage = _settingsManager.GetItemsPerPage();
         IsLoading = true;
         ErrorMessage = null;
         try
@@ -186,12 +200,16 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     private void ApplyPagination()
     {
-        var filtered = GetFilteredOrders().OrderByDescending(o => o.CreatedAt).ToList();
-        TotalPages = Math.Max(1, (int)Math.Ceiling((double)filtered.Count / OrdersPerPage));
+        var filteredList = GetFilteredOrders().OrderByDescending(o => o.CreatedAt).ToList();
+        FilteredCount = filteredList.Count;
+        TotalPages = Math.Max(1, (int)Math.Ceiling((double)FilteredCount / OrdersPerPage));
         CurrentPage = Math.Min(CurrentPage, TotalPages);
 
         PaginatedOrders = new ObservableCollection<CustomerOrder>(
-            filtered.Skip((CurrentPage - 1) * OrdersPerPage).Take(OrdersPerPage));
+            filteredList.Skip((CurrentPage - 1) * OrdersPerPage).Take(OrdersPerPage));
+
+        StartIndex = FilteredCount > 0 ? (CurrentPage - 1) * OrdersPerPage + 1 : 0;
+        EndIndex = Math.Min(CurrentPage * OrdersPerPage, FilteredCount);
     }
 
     private IEnumerable<CustomerOrder> GetFilteredOrders()

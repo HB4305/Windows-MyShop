@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MyShop.Models;
 using MyShop.Repositories;
@@ -9,6 +10,7 @@ public sealed partial class SupplierDialog : ContentDialog
 {
     private readonly SupplierRepository _repo;
     private readonly Supplier? _existingSupplier;
+    private ContentDialogResult _result = ContentDialogResult.None;
 
     public SupplierDialog(Supplier? supplier)
     {
@@ -18,63 +20,68 @@ public sealed partial class SupplierDialog : ContentDialog
 
         if (_existingSupplier != null)
         {
-            Title = "Edit Supplier";
+            DialogTitleText.Text = "Edit Supplier";
             NameTextBox.Text = _existingSupplier.Name;
             PhoneTextBox.Text = _existingSupplier.ContactPhone ?? "";
             TypeTextBox.Text = _existingSupplier.SupplierType ?? "";
         }
         else
         {
-            Title = "Add Supplier";
+            DialogTitleText.Text = "Add Supplier";
         }
     }
 
-    private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    public new async Task<ContentDialogResult> ShowAsync()
     {
-        var deferral = args.GetDeferral();
+        await base.ShowAsync();
+        return _result;
+    }
+
+    private void CancelBtn_Click(object sender, RoutedEventArgs e)
+    {
+        _result = ContentDialogResult.None;
+        Hide();
+    }
+
+    private async void SaveBtn_Click(object sender, RoutedEventArgs e)
+    {
         try
         {
-            ErrorText.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+            ErrorText.Visibility = Visibility.Collapsed;
 
             var name = NameTextBox.Text.Trim();
             if (string.IsNullOrWhiteSpace(name))
             {
                 ErrorText.Text = "Supplier name cannot be empty.";
-                ErrorText.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                args.Cancel = true;
+                ErrorText.Visibility = Visibility.Visible;
                 return;
             }
 
-            try
+            if (_existingSupplier != null)
             {
-                if (_existingSupplier != null)
-                {
-                    _existingSupplier.Name = name;
-                    _existingSupplier.ContactPhone = PhoneTextBox.Text.Trim();
-                    _existingSupplier.SupplierType = TypeTextBox.Text.Trim();
-                    await _repo.UpdateAsync(_existingSupplier);
-                }
-                else
-                {
-                    var newSupplier = new Supplier
-                    {
-                        Name = name,
-                        ContactPhone = PhoneTextBox.Text.Trim(),
-                        SupplierType = TypeTextBox.Text.Trim()
-                    };
-                    await _repo.CreateAsync(newSupplier);
-                }
+                _existingSupplier.Name = name;
+                _existingSupplier.ContactPhone = PhoneTextBox.Text.Trim();
+                _existingSupplier.SupplierType = TypeTextBox.Text.Trim();
+                await _repo.UpdateAsync(_existingSupplier);
             }
-            catch (System.Exception ex)
+            else
             {
-                ErrorText.Text = $"Error: {ex.Message}";
-                ErrorText.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
-                args.Cancel = true;
+                var newSupplier = new Supplier
+                {
+                    Name = name,
+                    ContactPhone = PhoneTextBox.Text.Trim(),
+                    SupplierType = TypeTextBox.Text.Trim()
+                };
+                await _repo.CreateAsync(newSupplier);
             }
+
+            _result = ContentDialogResult.Primary;
+            Hide();
         }
-        finally
+        catch (System.Exception ex)
         {
-            deferral.Complete();
+            ErrorText.Text = $"Error: {ex.Message}";
+            ErrorText.Visibility = Visibility.Visible;
         }
     }
 }

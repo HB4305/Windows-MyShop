@@ -10,7 +10,7 @@
     <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
     <conv:BoolToForegroundConverter x:Key="BoolToForegroundConverter"/>
 
-    <FontFamily x:Key="InterFont">Segoe UI, Segoe UI Variable Display</FontFamily>
+    <FontFamily x:Key="InterFont">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
 
     <SolidColorBrush x:Key="PrimaryBrush"     Color="#8B52FF"/>
     <SolidColorBrush x:Key="DarkTextBrush"    Color="#101828"/>
@@ -85,7 +85,7 @@
       <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,48">
 
         <Border Width="48" Height="48"
-                CornerRadius="14"
+                CornerRadius="20"
                 Background="{StaticResource PrimaryBrush}"
                 Padding="12">
           <Viewbox Width="24" Height="24">
@@ -99,11 +99,11 @@
           <TextBlock Text="ProSport Hub"
                      FontFamily="{StaticResource InterFont}"
                      FontSize="24" FontWeight="Bold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"/>
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
           <TextBlock Text="DATABASE CONFIGURATION"
                      FontFamily="{StaticResource InterFont}"
                      FontSize="12" FontWeight="400"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      CharacterSpacing="600"
                      Margin="0,2,0,0"/>
         </StackPanel>
@@ -114,11 +114,11 @@
         <TextBlock Text="Database Connection"
                    FontFamily="{StaticResource InterFont}"
                    FontSize="30" FontWeight="Bold"
-                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
         <TextBlock Text="Enter your PostgreSQL database connection details."
                    FontFamily="{StaticResource InterFont}"
                    FontSize="16" FontWeight="400"
-                   Foreground="{ThemeResource TextFillColorSecondary}"
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                    TextWrapping="Wrap"
                    Margin="0,8,0,0"/>
       </StackPanel>
@@ -131,7 +131,7 @@
           <TextBlock Text="Host"
                      FontFamily="{StaticResource InterFont}"
                      FontSize="14" FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      Margin="0,0,0,8"/>
           <TextBox Text="{Binding DbHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    PlaceholderText="db.xxxxxx.supabase.co"
@@ -139,9 +139,9 @@
                    FontSize="14"
                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                    Background="{ThemeResource ControlFillColorDefaultBrush}"
-                   Foreground="{ThemeResource TextFillColorPrimary}"
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                    BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                   CornerRadius="8"
+                   CornerRadius="20"
                    Padding="12,10,12,10"
                    Height="48"
                    VerticalContentAlignment="Center"
@@ -159,7 +159,7 @@
               <TextBlock Text="Port"
                          FontFamily="{StaticResource InterFont}"
                          FontSize="14" FontWeight="SemiBold"
-                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                          Margin="0,0,0,8"/>
               <TextBox Text="{Binding DbPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        PlaceholderText="5432"
@@ -167,9 +167,9 @@
                        FontSize="14"
                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                        Background="{ThemeResource ControlFillColorDefaultBrush}"
-                       Foreground="{ThemeResource TextFillColorPrimary}"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                        BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                       CornerRadius="8"
+                       CornerRadius="20"
                        Padding="12,10,12,10"
                        Height="48"
                        VerticalContentAlignment="Center"
@@ -181,7 +181,7 @@
               <TextBlock Text="Database Name"
                          FontFamily="{StaticResource InterFont}"
                          FontSize="14" FontWeight="SemiBold"
-                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                          Margin="0,0,0,8"/>
               <TextBox Text="{Binding DbName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        PlaceholderText="postgres"
@@ -189,9 +189,9 @@
                        FontSize="14"
                        IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                        Background="{ThemeResource ControlFillColorDefaultBrush}"
-                       Foreground="{ThemeResource TextFillColorPrimary}"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                        BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                       CornerRadius="8"
+                       CornerRadius="20"
                        Padding="12,10,12,10"
                        Height="48"
                        VerticalContentAlignment="Center"/>
@@ -202,7 +202,7 @@
           <TextBlock Text="Database User"
                      FontFamily="{StaticResource InterFont}"
                      FontSize="14" FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      Margin="0,0,0,8"/>
           <TextBox Text="{Binding DbUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    PlaceholderText="postgres"
@@ -210,9 +210,9 @@
                    FontSize="14"
                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                    Background="{ThemeResource ControlFillColorDefaultBrush}"
-                   Foreground="{ThemeResource TextFillColorPrimary}"
+                   Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                    BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                   CornerRadius="8"
+                   CornerRadius="20"
                    Padding="12,10,12,10"
                    Height="48"
                    VerticalContentAlignment="Center"
@@ -222,15 +222,15 @@
           <TextBlock Text="Database Password"
                      FontFamily="{StaticResource InterFont}"
                      FontSize="14" FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                      Margin="0,0,0,8"/>
           <Grid Margin="0,0,0,20">
             <PasswordBox x:Name="DbPasswordBox"
                          IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         Foreground="{ThemeResource TextFillColorPrimary}"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                          BorderBrush="{ThemeResource TextBoxBorderBrush}"
-                         CornerRadius="8"
+                         CornerRadius="20"
                          Padding="12,10,40,10"
                          Height="48"
                          VerticalContentAlignment="Center"/>
@@ -241,10 +241,11 @@
                     Width="32" Height="32"
                     Background="Transparent"
                     BorderThickness="0"
-                    Click="TogglePassword_Click">
+                    Click="TogglePassword_Click"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
               <Viewbox Width="17" Height="12">
                 <Path Data="M1 6C1 6 4 1 8.5 1C13 1 16 6 16 6C16 6 13 11 8.5 11C4 11 1 6 1 6ZM8.5 3C6.01 3 4 5.01 4 7.5C4 9.99 6.01 12 8.5 12C10.99 12 13 9.99 13 7.5C13 5.01 10.99 3 8.5 3ZM8.5 4.5C9.88 4.5 11 5.62 11 7C11 8.38 9.88 9.5 8.5 9.5C7.12 9.5 6 8.38 6 7C6 5.62 7.12 4.5 8.5 4.5ZM1 6V12H16V6"
-                      Stroke="{ThemeResource TextFillColorSecondary}" StrokeThickness="1"
+                      Stroke="{ThemeResource TextFillColorSecondaryBrush}" StrokeThickness="1"
                       Fill="Transparent" StrokeLineJoin="Round"/>
               </Viewbox>
             </Button>
@@ -271,10 +272,19 @@
           <Button Command="{Binding SaveCommand}"
                    HorizontalAlignment="Stretch"
                    Height="48"
-                   CornerRadius="14"
+                   CornerRadius="20"
                    Background="{StaticResource PrimaryBrush}"
                    BorderThickness="0"
-                   IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
+                   IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
+            <Button.Resources>
+              <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#8B52FF"/>
+              <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#8B52FF"/>
+              <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
+              <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#7C3AED"/>
+              <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#7C3AED"/>
+              <SolidColorBrush x:Key="ButtonForegroundPressed" Color="White"/>
+            </Button.Resources>
             <TextBlock Text="Save Configuration"
                        FontFamily="{StaticResource InterFont}"
                        FontSize="14" FontWeight="SemiBold"
@@ -289,7 +299,7 @@
                  Text="{Binding AppVersion}"
                  FontFamily="{StaticResource InterFont}"
                  FontSize="14" FontWeight="400"
-                 Foreground="{ThemeResource TextFillColorTertiary}"
+                 Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Bottom"/>
     </Grid>

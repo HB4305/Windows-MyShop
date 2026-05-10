@@ -10,14 +10,18 @@ public partial class CustomerViewModel : ObservableObject
 {
     private readonly CustomerService _service;
     private readonly SettingsManager _settingsManager;
+    private readonly CurrentUserService _currentUserService;
 
-    public CustomerViewModel(CustomerService service, SettingsManager settingsManager)
+    public CustomerViewModel(CustomerService service, SettingsManager settingsManager, CurrentUserService currentUserService)
     {
         _service = service;
         _settingsManager = settingsManager;
+        _currentUserService = currentUserService;
         var savedPageSize = _settingsManager.GetItemsPerPage();
         PageSize = Math.Max(1, savedPageSize);
     }
+
+    public bool IsOwner => _currentUserService.IsOwner;
 
     [ObservableProperty]
     private ObservableCollection<Customer> _customers = [];
@@ -58,6 +62,7 @@ public partial class CustomerViewModel : ObservableObject
     [RelayCommand]
     public async Task LoadCustomersAsync()
     {
+        PageSize = Math.Max(1, _settingsManager.GetItemsPerPage());
         try
         {
             IsLoading = true;
@@ -109,7 +114,7 @@ public partial class CustomerViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task DeleteCustomerAsync(Customer customer)
+    public async Task DeleteCustomerAsync(Customer customer)
     {
         if (customer == null) return;
         

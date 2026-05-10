@@ -15,6 +15,154 @@
       <Color x:Key="AppAccentColor">#8B52FF</Color>
       <SolidColorBrush x:Key="AppAccentBrush" Color="{StaticResource AppAccentColor}" />
       <SolidColorBrush x:Key="AppAccentBrushLow" Color="{StaticResource AppAccentColor}" Opacity="0.12" />
+      
+      <!-- Standardized Brushes for pages -->
+      <SolidColorBrush x:Key="AppPurpleBrush" Color="#8B52FF"/>
+      <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
+      <SolidColorBrush x:Key="PurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
+      <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
+      <SolidColorBrush x:Key="TextBoxBorderBrush" Color="#D1D5DB"/>
+
+      <!-- ── Pagination Button Styles ── -->
+      <Style x:Key="PageBtn" TargetType="Button">
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+      </Style>
+
+      <Style x:Key="PageBtnActive" TargetType="Button">
+        <Setter Property="Background" Value="#8B52FF"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+      </Style>
+      
+      <Style x:Key="PagerIconButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="4"/>
+      </Style>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+          <Color x:Key="SystemAccentColor">#8B52FF</Color>
+          <Color x:Key="SystemAccentColorDark1">#7A44E8</Color>
+          <Color x:Key="SystemAccentColorDark2">#6738CC</Color>
+          <Color x:Key="SystemAccentColorDark3">#552EAD</Color>
+          <Color x:Key="SystemAccentColorLight1">#9B69FF</Color>
+          <Color x:Key="SystemAccentColorLight2">#AD83FF</Color>
+          <Color x:Key="SystemAccentColorLight3">#C09DFF</Color>
+          <CornerRadius x:Key="ControlCornerRadius">20</CornerRadius>
+          <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+          <Color x:Key="SystemAccentColor">#8B52FF</Color>
+          <Color x:Key="SystemAccentColorDark1">#7A44E8</Color>
+          <Color x:Key="SystemAccentColorDark2">#6738CC</Color>
+          <Color x:Key="SystemAccentColorDark3">#552EAD</Color>
+          <Color x:Key="SystemAccentColorLight1">#9B69FF</Color>
+          <Color x:Key="SystemAccentColorLight2">#AD83FF</Color>
+          <Color x:Key="SystemAccentColorLight3">#C09DFF</Color>
+          <CornerRadius x:Key="ControlCornerRadius">20</CornerRadius>
+          <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <Color x:Key="SystemAccentColor">#8B52FF</Color>
+          <Color x:Key="SystemAccentColorDark1">#7A44E8</Color>
+          <Color x:Key="SystemAccentColorDark2">#6738CC</Color>
+          <Color x:Key="SystemAccentColorDark3">#552EAD</Color>
+          <Color x:Key="SystemAccentColorLight1">#9B69FF</Color>
+          <Color x:Key="SystemAccentColorLight2">#AD83FF</Color>
+          <Color x:Key="SystemAccentColorLight3">#C09DFF</Color>
+          <CornerRadius x:Key="ControlCornerRadius">20</CornerRadius>
+          <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+
+      <!-- ── Global Typography & Shape ── -->
+      <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+      <FontFamily x:Key="AppSignatureFontFamily">ms-appx:///Assets/Momo_Signature/MomoSignature-Regular.ttf#MomoSignature-Regular</FontFamily>
+
+      <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+      </Style>
+
+      <!-- ── Custom Button Styles ── -->
+      <Style x:Key="ColorPreservingButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="Button">
+              <ContentPresenter x:Name="ContentPresenter"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                CornerRadius="{TemplateBinding CornerRadius}"/>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+
+      <Style x:Key="DefaultContentDialogStyle" TargetType="ContentDialog">
+        <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
+        <Setter Property="Background" Value="{ThemeResource ContentDialogBackground}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ContentDialogBorderBrush}"/>
+      </Style>
+
+      <!-- ── Pagination Button Styles (Synced with Orders Management) ── -->
+      <Style x:Key="PageBtn" TargetType="Button">
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      </Style>
+
+      <Style x:Key="PageBtnActive" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="MinWidth" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="0"/>
+      </Style>
 
       <!-- ── Value Converters ── -->
       <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -37,10 +185,6 @@
       <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
       <conv:CountToVisibilityInverseConverter x:Key="CountToVisibilityInverseConverter"/>
       <conv:OrderIdConverter x:Key="OrderIdConverter"/>
-      <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
-      <conv:PercentageFormatter x:Key="PercentageFormatter"/>
-      <conv:DateFormatter x:Key="DateFormatter"/>
-
     </ResourceDictionary>
   </Application.Resources>
 

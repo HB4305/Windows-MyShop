@@ -125,6 +125,7 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
     private readonly SupplierRepository _supplierRepo;
     private readonly SportItemRepository _sportItemRepo;
     private readonly SupplyRepository _supplyRepo;
+    private ContentDialogResult _result = ContentDialogResult.None;
 
     public ObservableCollection<SupplyDetailItem> SelectedItems { get; set; } = new();
 
@@ -140,6 +141,12 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
         SelectedItems.CollectionChanged += (s, e) => UpdateTotalCost();
 
         Loaded += CreateSupplyOrderDialog_Loaded;
+    }
+
+    public new async Task<ContentDialogResult> ShowAsync()
+    {
+        await base.ShowAsync();
+        return _result;
     }
 
     private async void CreateSupplyOrderDialog_Loaded(object sender, RoutedEventArgs e)
@@ -170,13 +177,12 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
 
             try
             {
-                // Search for products matching keyword
                 var (items, _) = await _sportItemRepo.GetItemsAsync(1, 10, keyword, null, null, "name", true);
                 sender.ItemsSource = items.Select(r => r.Item).ToList();
             }
             catch
             {
-                // Ignore search errors to avoid popup spam
+                // Ignore search errors
             }
         }
     }
@@ -185,11 +191,8 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
     {
         if (args.SelectedItem is SportItem product)
         {
-            // Clear text
             sender.Text = string.Empty;
 
-            // Check if already in list with SAME VARIANT? Actually, we don't know the variant yet.
-            // Just add a new row and let them pick.
             var defaultVariant = product.Variants.FirstOrDefault();
             var newItem = new SupplyDetailItem
             {
@@ -235,9 +238,14 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
         ErrorText.Visibility = Visibility.Visible;
     }
 
-    private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    private void CancelBtn_Click(object sender, RoutedEventArgs e)
     {
-        var deferral = args.GetDeferral();
+        _result = ContentDialogResult.None;
+        Hide();
+    }
+
+    private async void CreateBtn_Click(object sender, RoutedEventArgs e)
+    {
         try
         {
             ErrorText.Visibility = Visibility.Collapsed;
@@ -246,14 +254,12 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
             if (selectedSupplier == null)
             {
                 ShowError("Please select a supplier.");
-                args.Cancel = true;
                 return;
             }
 
             if (SelectedItems.Count == 0)
             {
                 ShowError("Please add at least 1 product to the supply order.");
-                args.Cancel = true;
                 return;
             }
 
@@ -274,19 +280,14 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
                 ImportPrice = item.ImportPrice
             }).ToList();
 
-            try
-            {
-                await _supplyRepo.CreateSupplyOrderTransactionAsync(order, details);
-            }
-            catch (Exception ex)
-            {
-                ShowError($"Error creating supply order: {ex.Message}");
-                args.Cancel = true;
-            }
+            await _supplyRepo.CreateSupplyOrderTransactionAsync(order, details);
+            
+            _result = ContentDialogResult.Primary;
+            Hide();
         }
-        finally
+        catch (Exception ex)
         {
-            deferral.Complete();
+            ShowError($"Error creating supply order: {ex.Message}");
         }
     }
 }

@@ -11,11 +11,15 @@ public partial class StaffManagementViewModel : ObservableObject
 {
     private readonly UserRepository _userRepository;
     private readonly CurrentUserService _currentUserService;
+    private readonly SettingsManager _settingsManager;
 
-    public StaffManagementViewModel(UserRepository userRepository, CurrentUserService currentUserService)
+    public StaffManagementViewModel(UserRepository userRepository, CurrentUserService currentUserService, SettingsManager settingsManager)
     {
         _userRepository = userRepository;
         _currentUserService = currentUserService;
+        _settingsManager = settingsManager;
+
+        _pageSize = _settingsManager.GetItemsPerPage();
     }
 
     [ObservableProperty] private ObservableCollection<UserRecord> _staffMembers = [];
@@ -24,14 +28,39 @@ public partial class StaffManagementViewModel : ObservableObject
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private bool _isLoading;
 
-    public int TotalStaff => StaffMembers.Count;
+    // Pagination properties for UI synchronization
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TotalPages))]
+    [NotifyPropertyChangedFor(nameof(DisplayFrom))]
+    [NotifyPropertyChangedFor(nameof(DisplayTo))]
+    private int _currentPage = 1;
+
+    [ObservableProperty]
+    private int _pageSize = 10;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TotalPages))]
+    [NotifyPropertyChangedFor(nameof(DisplayFrom))]
+    [NotifyPropertyChangedFor(nameof(DisplayTo))]
+    private int _totalItems;
+
+    public int TotalPages => (TotalItems + PageSize - 1) / Math.Max(1, PageSize);
+    public int DisplayFrom => TotalItems == 0 ? 0 : (CurrentPage - 1) * PageSize + 1;
+    public int DisplayTo => Math.Min(CurrentPage * PageSize, TotalItems);
+
+    public int TotalStaffCount => StaffMembers.Count;
     public int SaleCount => StaffMembers.Count(user => NormalizeRole(user.Role) == "sale");
 
-    partial void OnSearchTextChanged(string value) => ApplyFilter();
+    partial void OnSearchTextChanged(string value)
+    {
+        CurrentPage = 1;
+        ApplyFilter();
+    }
 
     [RelayCommand]
-    private async Task LoadStaffAsync()
+    public async Task LoadStaffAsync()
     {
+        PageSize = Math.Max(1, _settingsManager.GetItemsPerPage());
         if (!_currentUserService.IsOwner)
         {
             StatusMessage = "Only owner accounts can manage staff.";
@@ -68,10 +97,7 @@ public partial class StaffManagementViewModel : ObservableObject
     [RelayCommand]
     private async Task CreateStaffAsync(StaffFormData? form)
     {
-        if (form is null)
-        {
-            return;
-        }
+        if (form is null) return;
 
         var validationError = Validate(form, requirePassword: true);
         if (validationError is not null)
@@ -110,10 +136,7 @@ public partial class StaffManagementViewModel : ObservableObject
     [RelayCommand]
     private async Task UpdateStaffAsync(StaffFormData? form)
     {
-        if (form?.Id is null)
-        {
-            return;
-        }
+        if (form?.Id is null) return;
 
         var validationError = Validate(form, requirePassword: false);
         if (validationError is not null)
@@ -159,12 +182,9 @@ public partial class StaffManagementViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task DeleteStaffAsync(UserRecord? user)
+    public async Task DeleteStaffAsync(UserRecord? user)
     {
-        if (user is null)
-        {
-            return;
-        }
+        if (user is null) return;
 
         if (NormalizeRole(user.Role) != "sale")
         {
@@ -189,6 +209,26 @@ public partial class StaffManagementViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private void NextPage()
+    {
+        if (CurrentPage < TotalPages)
+        {
+            CurrentPage++;
+            ApplyFilter();
+        }
+    }
+
+    [RelayCommand]
+    private void PreviousPage()
+    {
+        if (CurrentPage > 1)
+        {
+            CurrentPage--;
+            ApplyFilter();
+        }
+    }
+
     private void ApplyFilter()
     {
         var keyword = SearchText.Trim();
@@ -201,37 +241,30 @@ public partial class StaffManagementViewModel : ObservableObject
                 (user.Role?.Contains(keyword, StringComparison.OrdinalIgnoreCase) ?? false));
         }
 
-        FilteredStaffMembers = new ObservableCollection<UserRecord>(filtered);
+        var allFiltered = filtered.ToList();
+        TotalItems = allFiltered.Count;
+
+        // Apply client-side pagination
+        var paged = allFiltered
+            .Skip((CurrentPage - 1) * PageSize)
+            .Take(PageSize)
+            .ToList();
+
+        FilteredStaffMembers = new ObservableCollection<UserRecord>(paged);
     }
 
     private void NotifyStatsChanged()
     {
-        OnPropertyChanged(nameof(TotalStaff));
+        OnPropertyChanged(nameof(TotalStaffCount));
         OnPropertyChanged(nameof(SaleCount));
     }
 
     private static string? Validate(StaffFormData form, bool requirePassword)
     {
-        if (string.IsNullOrWhiteSpace(form.Email))
-        {
-            return "Email is required.";
-        }
-
-        if (!form.Email.Contains('@'))
-        {
-            return "Please enter a valid email address.";
-        }
-
-        if (requirePassword && string.IsNullOrWhiteSpace(form.Password))
-        {
-            return "Password is required for new staff accounts.";
-        }
-
-        if (!string.IsNullOrWhiteSpace(form.Password) && form.Password.Length < 6)
-        {
-            return "Password must be at least 6 characters.";
-        }
-
+        if (string.IsNullOrWhiteSpace(form.Email)) return "Email is required.";
+        if (!form.Email.Contains('@')) return "Please enter a valid email address.";
+        if (requirePassword && string.IsNullOrWhiteSpace(form.Password)) return "Password is required for new staff accounts.";
+        if (!string.IsNullOrWhiteSpace(form.Password) && form.Password.Length < 6) return "Password must be at least 6 characters.";
         return null;
     }
 

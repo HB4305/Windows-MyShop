@@ -12,7 +12,7 @@ namespace MyShop.Views;
 
 public sealed partial class PosPage : Page
 {
-    private const double StackedBreakpoint = 1120;
+    private const double StackedBreakpoint = 1100;
 
     public PosPage()
     {
@@ -21,6 +21,17 @@ public sealed partial class PosPage : Page
         if (ViewModel is not null)
         {
             ViewModel.ShowCheckoutResultDialogAsync = ShowCheckoutResultDialogAsync;
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+        Loaded += (s, e) => BuildPagination();
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(PosViewModel.CurrentPage) || 
+            e.PropertyName == nameof(PosViewModel.TotalPages))
+        {
+            BuildPagination();
         }
     }
 
@@ -207,18 +218,30 @@ public sealed partial class PosPage : Page
         Grid.SetRow(HeaderPanel, 0);
         Grid.SetColumn(HeaderPanel, 0);
         Grid.SetColumnSpan(HeaderPanel, 2);
-
+    
         Grid.SetRow(ProductPanel, 1);
         Grid.SetColumn(ProductPanel, 0);
         Grid.SetColumnSpan(ProductPanel, 1);
-
+    
         Grid.SetRow(CheckoutPanel, 1);
         Grid.SetColumn(CheckoutPanel, 1);
         Grid.SetColumnSpan(CheckoutPanel, 1);
+    
+        // Pagination outside card
+        var paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(PaginationPanel);
+        while (paginationBorder != null && paginationBorder is not Border)
+            paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(paginationBorder);
+
+        if (paginationBorder != null)
+        {
+            Grid.SetRow(paginationBorder, 2);
+            Grid.SetColumn(paginationBorder, 0);
+            Grid.SetColumnSpan(paginationBorder, 1);
+        }
 
         Grid.SetRow(StatusText, 2);
-        Grid.SetColumn(StatusText, 0);
-        Grid.SetColumnSpan(StatusText, 2);
+        Grid.SetColumn(StatusText, 1);
+        Grid.SetColumnSpan(StatusText, 1);
     }
 
     private void SetStackedLayout()
@@ -240,12 +263,131 @@ public sealed partial class PosPage : Page
         Grid.SetColumn(ProductPanel, 0);
         Grid.SetColumnSpan(ProductPanel, 1);
 
-        Grid.SetRow(CheckoutPanel, 2);
+        // Pagination outside card
+        var paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(PaginationPanel);
+        while (paginationBorder != null && paginationBorder is not Border)
+            paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(paginationBorder);
+
+        if (paginationBorder != null)
+        {
+            Grid.SetRow(paginationBorder, 2);
+            Grid.SetColumn(paginationBorder, 0);
+            Grid.SetColumnSpan(paginationBorder, 1);
+        }
+
+        Grid.SetRow(CheckoutPanel, 3);
         Grid.SetColumn(CheckoutPanel, 0);
         Grid.SetColumnSpan(CheckoutPanel, 1);
 
-        Grid.SetRow(StatusText, 3);
+        Grid.SetRow(StatusText, 4);
         Grid.SetColumn(StatusText, 0);
         Grid.SetColumnSpan(StatusText, 1);
+    }
+
+    private void BuildPagination()
+    {
+        if (ViewModel == null || PaginationPanel == null) return;
+        PaginationPanel.Children.Clear();
+
+        var total = ViewModel.TotalPages;
+        var current = ViewModel.CurrentPage;
+
+        void AddPageBtn(int page, bool isActive)
+        {
+            var btn = new Button
+            {
+                Content = page.ToString(),
+                MinWidth = 32,
+                Height = 32,
+                Padding = new Thickness(8, 4, 8, 4),
+                FontSize = 13,
+                CornerRadius = new CornerRadius(6),
+                Margin = new Thickness(2, 0, 2, 0),
+            };
+
+            if (isActive)
+                btn.Style = (Style)Application.Current.Resources["PageBtnActive"];
+            else
+                btn.Style = (Style)Application.Current.Resources["PageBtn"];
+
+            btn.Click += async (s, e) =>
+            {
+                ViewModel.CurrentPage = page;
+                await ViewModel.LoadProductsCommand.ExecuteAsync(null);
+            };
+
+            PaginationPanel.Children.Add(btn);
+        }
+
+        // Prev button
+        var prevBtn = new Button
+        {
+            Content = new TextBlock { Text = "Prev", FontSize = 13, FontFamily = new FontFamily("ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans") },
+            MinWidth = 52,
+            Height = 32,
+            Padding = new Thickness(8, 4, 8, 4),
+            Style = (Style)Application.Current.Resources["PageBtn"],
+            IsEnabled = current > 1
+        };
+        prevBtn.Click += async (s, e) =>
+        {
+            if (current > 1)
+            {
+                ViewModel.CurrentPage = current - 1;
+                await ViewModel.LoadProductsCommand.ExecuteAsync(null);
+            }
+        };
+        PaginationPanel.Children.Add(prevBtn);
+
+        // Page numbers
+        if (total <= 7)
+        {
+            for (int i = 1; i <= total; i++)
+                AddPageBtn(i, i == current);
+        }
+        else
+        {
+            AddPageBtn(1, current == 1);
+            if (current > 3) PaginationPanel.Children.Add(new TextBlock
+            {
+                Text = "...",
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(4, 0, 4, 0),
+                Foreground = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"]
+            });
+
+            for (int i = Math.Max(2, current - 1); i <= Math.Min(total - 1, current + 1); i++)
+                AddPageBtn(i, i == current);
+
+            if (current < total - 2) PaginationPanel.Children.Add(new TextBlock
+            {
+                Text = "...",
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(4, 0, 4, 0),
+                Foreground = (Brush)Application.Current.Resources["TextFillColorSecondaryBrush"]
+            });
+
+            AddPageBtn(total, current == total);
+        }
+
+        // Next button
+        var nextBtn = new Button
+        {
+            Content = new TextBlock { Text = "Next", FontSize = 13, FontFamily = new FontFamily("ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans") },
+            MinWidth = 52,
+            Height = 32,
+            Padding = new Thickness(8, 4, 8, 4),
+            Style = (Style)Application.Current.Resources["PageBtn"],
+            IsEnabled = current < total
+        };
+        nextBtn.Click += async (s, e) =>
+        {
+            if (current < total)
+            {
+                ViewModel.CurrentPage = current + 1;
+                await ViewModel.LoadProductsCommand.ExecuteAsync(null);
+            }
+        };
+        PaginationPanel.Children.Add(nextBtn);
     }
 }

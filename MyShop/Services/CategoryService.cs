@@ -14,6 +14,11 @@ public class CategoryService
         return await _repository.GetAllAsync();
     }
 
+    public async Task<(List<Category> Items, int TotalCount)> GetCategoriesAsync(int page, int pageSize, string keyword)
+    {
+        return await _repository.GetCategoriesAsync(page, pageSize, keyword);
+    }
+
     public async Task<Category?> GetByIdAsync(int id)
     {
         return await _repository.GetByIdAsync(id);

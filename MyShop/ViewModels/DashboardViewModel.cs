@@ -84,7 +84,7 @@ public partial class DashboardViewModel : ObservableObject
 
             var result = await dialog.ShowAsync();
 
-            if (result == ContentDialogResult.Primary)
+            if (dialog.IsSubmitted)
             {
                 var order = dialog.ViewModel.Order;
                 var details = dialog.ViewModel.OrderDetails.ToList();

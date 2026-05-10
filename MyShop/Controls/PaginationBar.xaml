@@ -4,19 +4,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Grid>
     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-      <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
-      <TextBlock Text="{Binding DisplayFrom, ElementName=Root}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
-      <TextBlock Text="-" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
-      <TextBlock Text="{Binding DisplayTo, ElementName=Root}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
-      <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
-      <TextBlock Text="{Binding TotalItems, ElementName=Root}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" FontSize="13"/>
-      <TextBlock Text="{Binding ItemLabel, ElementName=Root}" Foreground="{ThemeResource TextFillColorSecondary}" FontSize="13"/>
+      <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
+      <TextBlock Text="{Binding DisplayFrom, ElementName=Root}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13"/>
+      <TextBlock Text="-" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
+      <TextBlock Text="{Binding DisplayTo, ElementName=Root}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13"/>
+      <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
+      <TextBlock Text="{Binding TotalItems, ElementName=Root}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13"/>
+      <TextBlock Text="{Binding ItemLabel, ElementName=Root}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
     </StackPanel>
 
     <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
       <Button Command="{Binding PreviousCommand, ElementName=Root}"
               Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-              Foreground="{ThemeResource TextFillColorPrimary}"
+              Foreground="{ThemeResource TextFillColorPrimaryBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1"
               CornerRadius="{ThemeResource ControlCornerRadius}"
@@ -32,12 +32,12 @@
                    FontWeight="SemiBold"
                    HorizontalAlignment="Center"/>
       </Border>
-      <TextBlock VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorTertiary}" FontSize="13" Margin="4,0">
+      <TextBlock VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FontSize="13" Margin="4,0">
         <Run Text="/ "/><Run Text="{Binding TotalPages, ElementName=Root}"/>
       </TextBlock>
       <Button Command="{Binding NextCommand, ElementName=Root}"
               Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-              Foreground="{ThemeResource TextFillColorPrimary}"
+              Foreground="{ThemeResource TextFillColorPrimaryBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1"
               CornerRadius="{ThemeResource ControlCornerRadius}"

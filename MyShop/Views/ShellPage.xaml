@@ -29,17 +29,17 @@
                 Background="{StaticResource PurpleBrush}"
                 HorizontalAlignment="Left"
                 Margin="0,0,0,10">
-          <TextBlock Text="ES"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
+          <TextBlock Text="PS"
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                      FontWeight="Bold"
                      FontSize="14"
                      HorizontalAlignment="Center"
-                     VerticalAlignment="Center"/>
+                     VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </Border>
-        <TextBlock Text="Elite Sports"
+        <TextBlock Text="ProSport"
                    FontSize="18"
                    FontWeight="Bold"
-                   Foreground="{ThemeResource TextFillColorPrimary}"/>
+                   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
       </StackPanel>
 
       <!-- Navigation Menu -->
@@ -52,9 +52,9 @@
           <TextBlock Text="MENU"
                      FontSize="10"
                      FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorTertiary}"
+                     Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                      Margin="8,0,0,8"
-                     CharacterSpacing="60"/>
+                     CharacterSpacing="60" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
           <!-- Dashboard -->
           <Button x:Name="NavDashboard"
@@ -64,7 +64,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -77,7 +78,7 @@
                          FontSize="13"
                          FontWeight="SemiBold"
                          Foreground="{StaticResource PurpleBrush}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -89,7 +90,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -101,7 +103,7 @@
               <TextBlock Text="Reports"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -162,7 +164,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -174,7 +177,7 @@
               <TextBlock Text="Product Catalog"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -186,7 +189,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -198,7 +202,7 @@
               <TextBlock Text="Orders Management"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -210,7 +214,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -222,7 +227,7 @@
               <TextBlock Text="Customers"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -259,7 +264,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -271,7 +277,7 @@
               <TextBlock Text="Suppliers"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -283,7 +289,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -295,7 +302,7 @@
               <TextBlock Text="Category"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -307,7 +314,8 @@
                   BorderThickness="0"
                   Padding="10,8"
                   HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Left">
+                  HorizontalContentAlignment="Left"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
             <StackPanel Orientation="Horizontal"
                         Spacing="10">
               <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -319,7 +327,7 @@
               <TextBlock Text="Settings"
                          FontSize="13"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Button>
 
@@ -335,8 +343,8 @@
 
         <!-- Profile Info -->
         <Border Grid.Column="0"
-                Padding="10"
-                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Padding="12,10"
+                CornerRadius="20"
                 Background="{StaticResource PurpleLightBrush}">
           <Grid>
             <Grid.ColumnDefinitions>
@@ -348,7 +356,7 @@
             <Border Grid.Column="0"
                     Width="36"
                     Height="36"
-                    CornerRadius="18"
+                    CornerRadius="20"
                     Background="#FFFFFF"
                     Margin="0,0,10,0">
               <TextBlock x:Name="ProfileAvatarText"
@@ -367,13 +375,15 @@
                          Text="User"
                          FontSize="12"
                          FontWeight="SemiBold"
-                         Foreground="{ThemeResource TextFillColorPrimary}"/>
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock x:Name="ProfileRoleText"
                          Text=""
                          FontSize="10"
                          FontWeight="SemiBold"
                          Foreground="{ThemeResource TextFillColorSecondary}"
-                         CharacterSpacing="80"/>
+                         CharacterSpacing="80" 
+                         Margin="0,1,0,0"
+                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
           </Grid>
         </Border>
@@ -383,19 +393,19 @@
                 Click="Logout_Click"
                 Width="40"
                 Height="40"
-                Margin="6,0,0,0"
-                CornerRadius="{ThemeResource ControlCornerRadius}"
-                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                BorderThickness="1"
+                Margin="10,0,0,0"
+                CornerRadius="20"
+                Background="Transparent"
+                BorderThickness="0"
                 ToolTipService.ToolTip="Sign Out"
-                VerticalAlignment="Center">
-          <TextBlock FontFamily="Segoe MDL2 Assets"
-                     Text="&#xE8E8;"
-                     FontSize="14"
-                     Foreground="{ThemeResource TextFillColorSecondary}"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center"/>
+                VerticalAlignment="Center"
+                Style="{StaticResource ColorPreservingButtonStyle}">
+          <FontIcon Glyph="&#xE7E8;" 
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource DangerBrush}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
         </Button>
       </Grid>
 
@@ -425,8 +435,8 @@
                      Text="Welcome back, Alex"
                      FontSize="22"
                      FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorPrimary}"
-                     VerticalAlignment="Center"/>
+                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                     VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
           <!-- Right side icons -->
           <StackPanel Grid.Column="1"
@@ -445,7 +455,8 @@
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
                 ToolTipService.ToolTip="Toggle navigation"
-                Visibility="Collapsed">
+                Visibility="Collapsed"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                 <TextBlock FontFamily="Segoe MDL2 Assets"
                Text="&#xE700;"
                FontSize="16"
@@ -464,7 +475,8 @@
                     BorderThickness="0"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
-                    ToolTipService.ToolTip="Notifications">
+                    ToolTipService.ToolTip="Notifications"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE7E3;"
                          FontSize="16"
@@ -484,7 +496,8 @@
                     BorderThickness="0"
                   HorizontalContentAlignment="Center"
                   VerticalContentAlignment="Center"
-                    ToolTipService.ToolTip="Settings">
+                    ToolTipService.ToolTip="Settings"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
               <TextBlock FontFamily="Segoe MDL2 Assets"
                          Text="&#xE713;"
                          FontSize="16"
@@ -504,7 +517,7 @@
                          FontWeight="Bold"
                          Foreground="{StaticResource PurpleBrush}"
                          HorizontalAlignment="Center"
-                         VerticalAlignment="Center"/>
+                         VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Border>
 
           </StackPanel>
@@ -512,14 +525,8 @@
       </Border>
 
             <!-- Page Content Frame -->
-            <ScrollViewer Grid.Row="1"
-                      HorizontalScrollBarVisibility="Disabled"
-                      HorizontalScrollMode="Disabled"
-                VerticalScrollBarVisibility="Auto"
-                VerticalScrollMode="Enabled">
-         <Frame x:Name="ContentFrame"
-           Navigated="ContentFrame_Navigated"/>
-            </ScrollViewer>
+            <Frame Grid.Row="1" x:Name="ContentFrame"
+                   Navigated="ContentFrame_Navigated"/>
 
       <!-- Footer -->
       <Border Grid.Row="2"
@@ -530,7 +537,7 @@
         <TextBlock Text="© 2026 MyShop Performance Engine. All rights reserved. Data synced: 1 min ago."
                    FontSize="11"
                    Foreground="{ThemeResource TextFillColorTertiary}"
-                   HorizontalAlignment="Center"/>
+                   HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
       </Border>
 
     </Grid>

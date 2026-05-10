@@ -7,8 +7,9 @@
     xmlns:conv="using:MyShop.Converters"
     mc:Ignorable="d"
     x:Name="DialogRoot"
-    MinWidth="460"
-    CornerRadius="12">
+    Width="480"
+    CornerRadius="20"
+    Style="{StaticResource DefaultContentDialogStyle}">
 
     <ContentDialog.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
@@ -16,17 +17,17 @@
         <SolidColorBrush x:Key="ContentDialogBackground" Color="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
     </ContentDialog.Resources>
 
-    <StackPanel Spacing="24" Margin="4,4,4,4">
+    <StackPanel Spacing="24" Margin="4,4,4,4" Width="460">
         <!-- Header -->
         <StackPanel Spacing="16">
-            <Border Background="#F3F0FF"
+            <Border Background="{ThemeResource AppAccentBrushLow}"
                     CornerRadius="24"
                     Width="48" Height="48"
                     HorizontalAlignment="Left">
                 <TextBlock FontFamily="Segoe MDL2 Assets"
                            Text="&#xE77B;"
                            FontSize="20"
-                           Foreground="#7C3AED"
+                           Foreground="{ThemeResource AppAccentBrush}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
             </Border>
@@ -35,11 +36,11 @@
                 <TextBlock x:Name="FormTitle"
                            FontSize="22"
                            FontWeight="Bold"
-                           Foreground="{ThemeResource TextFillColorPrimary}"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBlock x:Name="FormSubtitle"
                            FontSize="14"
-                           Foreground="{ThemeResource TextFillColorSecondary}"
-                           Text="Manage customer contact information."/>
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           Text="Manage customer contact information." FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </StackPanel>
         </StackPanel>
 
@@ -50,21 +51,21 @@
             <!-- Name -->
             <StackPanel Spacing="8">
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="Full Name" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    <TextBlock Text="*" FontSize="14" Foreground="#DC2626"/>
+                    <TextBlock Text="Full Name" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
                 <TextBox x:Name="NameTextBox"
                          PlaceholderText="e.g. John Doe"
                          MaxLength="255"
-                         CornerRadius="8"
+                         CornerRadius="20"
                          Padding="12,12"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                          Text="{x:Bind CustomerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Border Visibility="{x:Bind NameValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="4,2,0,0">
                     <StackPanel Orientation="Horizontal" Spacing="6">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="#DC2626" VerticalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}" FontSize="12" Foreground="#DC2626"/>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -72,21 +73,21 @@
             <!-- Phone -->
             <StackPanel Spacing="8">
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    <TextBlock Text="*" FontSize="14" Foreground="#DC2626"/>
+                    <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
                 <TextBox x:Name="PhoneTextBox"
                          PlaceholderText="e.g. 0912345678"
                          MaxLength="20"
-                         CornerRadius="8"
+                         CornerRadius="20"
                          Padding="12,12"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                          Text="{x:Bind CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Border Visibility="{x:Bind PhoneValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="4,2,0,0">
                     <StackPanel Orientation="Horizontal" Spacing="6">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="#DC2626" VerticalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind PhoneValidationMessage, Mode=OneWay}" FontSize="12" Foreground="#DC2626"/>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind PhoneValidationMessage, Mode=OneWay}" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -94,16 +95,16 @@
             <!-- Address -->
             <StackPanel Spacing="8">
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBlock Text="Address" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}"/>
-                    <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="4" Padding="8,2">
-                        <TextBlock Text="Optional" FontSize="11" Foreground="{ThemeResource TextFillColorSecondary}"/>
+                    <TextBlock Text="Address" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="20" Padding="8,2">
+                        <TextBlock Text="Optional" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Border>
                 </StackPanel>
                 <TextBox PlaceholderText="Enter shipping address..."
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
                          MinHeight="100"
-                         CornerRadius="8"
+                         CornerRadius="20"
                          Padding="12,12"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -120,17 +121,19 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Click="CancelBtn_Click" HorizontalAlignment="Stretch" 
-                    Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-                    BorderThickness="1" CornerRadius="8" Padding="14,12">
-                <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimary}" HorizontalAlignment="Center"/>
+            <Button Grid.Column="0" Click="CancelBtn_Click" HorizontalAlignment="Stretch"
+                    Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="20" Padding="14,12"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
+                <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 
-            <Button Grid.Column="1" Click="SaveBtn_Click" HorizontalAlignment="Stretch" 
-                    Background="#7C3AED" BorderThickness="0" CornerRadius="8" Padding="14,12">
+            <Button Grid.Column="1" Click="SaveBtn_Click" HorizontalAlignment="Stretch"
+                    Background="{ThemeResource AppAccentBrush}" BorderThickness="0" CornerRadius="20" Padding="14,12"
+                  Style="{StaticResource ColorPreservingButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="SaveBtnText" Text="Save" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
+                    <TextBlock x:Name="SaveBtnText" Text="Save" FontSize="14" FontWeight="SemiBold" Foreground="White" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
             </Button>
         </Grid>

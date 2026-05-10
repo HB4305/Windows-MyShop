@@ -1,217 +1,286 @@
 <Page x:Class="MyShop.Views.ShiftReportLogsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:MyShop.Controls"
       xmlns:conv="using:MyShop.Converters"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
   <Page.Resources>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
     <conv:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter"/>
-    <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
+
+    <SolidColorBrush x:Key="AppPurpleBrush" Color="#8B52FF"/>
     <SolidColorBrush x:Key="PurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
     <SolidColorBrush x:Key="SuccessBrush" Color="#10B981"/>
     <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
 
-    <Style x:Key="PanelBorder" TargetType="Border">
+    <Style x:Key="StatsCardStyle" TargetType="Border">
       <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
       <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
       <Setter Property="BorderThickness" Value="1"/>
-      <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="Padding" Value="18"/>
+    </Style>
+
+    <!-- Pagination Button Styles -->
+    <Style x:Key="PageBtn" TargetType="Button">
+      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="MinWidth" Value="32"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+    </Style>
+
+    <Style x:Key="PageBtnActive" TargetType="Button">
+      <Setter Property="Background" Value="{StaticResource AppPurpleBrush}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="MinWidth" Value="32"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="CornerRadius" Value="6"/>
+      <Setter Property="BorderThickness" Value="0"/>
     </Style>
   </Page.Resources>
 
-  <Grid Padding="24,20" RowSpacing="18">
+  <Grid Padding="24,20" RowSpacing="20">
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="NarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="HeaderPanel.ColumnDefinitions[1].Width" Value="0"/>
+            <Setter Target="BackButton.(Grid.Row)" Value="1"/>
+            <Setter Target="BackButton.(Grid.Column)" Value="0"/>
+            <Setter Target="BackButton.Margin" Value="0,12,0,0"/>
+            <Setter Target="BackButton.HorizontalAlignment" Value="Left"/>
+
+            <Setter Target="StatsGrid.ColumnDefinitions[1].Width" Value="0"/>
+            <Setter Target="StatsGrid.ColumnDefinitions[2].Width" Value="0"/>
+            <Setter Target="Card2.(Grid.Row)" Value="1"/>
+            <Setter Target="Card2.(Grid.Column)" Value="0"/>
+            <Setter Target="Card2.Margin" Value="0,12,0,0"/>
+            <Setter Target="Card3.(Grid.Row)" Value="2"/>
+            <Setter Target="Card3.(Grid.Column)" Value="0"/>
+            <Setter Target="Card3.Margin" Value="0,12,0,0"/>
+
+            <Setter Target="ToolbarGridBorder.Margin" Value="0,12,0,0"/>
+            <Setter Target="ToolbarGridBorder.HorizontalAlignment" Value="Stretch"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="WideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1000"/>
+          </VisualState.StateTriggers>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/> <!-- Extra row for back button in narrow -->
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
-    <Grid Grid.Row="0" ColumnSpacing="16">
+    <!-- Header -->
+    <Grid x:Name="HeaderPanel" Grid.Row="0">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-
-      <StackPanel Spacing="2">
-        <TextBlock Text="Shift Log"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   Foreground="{ThemeResource TextFillColorPrimary}"/>
-        <TextBlock Text="Review submitted shift reports, discrepancies, and cashier notes from staff."
-                   FontSize="13"
-                   Foreground="{ThemeResource TextFillColorSecondary}"/>
-      </StackPanel>
-
-      <Button Grid.Column="1"
-              Click="BackToShiftManagement_Click"
-              Background="{ThemeResource ControlFillColorDefaultBrush}"
-              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-              BorderThickness="1"
-              Padding="14,10">
+      <controls:AppPageHeader Title="Shift Logs"
+                              Subtitle="Review submitted shift reports, discrepancies, and cashier notes."/>
+      <Button x:Name="BackButton" Grid.Column="1" Click="BackToShiftManagement_Click" 
+              Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+              BorderThickness="1" Padding="16,10" CornerRadius="20" VerticalAlignment="Center" Style="{StaticResource ColorPreservingButtonStyle}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <FontIcon Glyph="&#xE72B;" FontSize="14"/>
-          <TextBlock Text="Back"/>
+          <TextBlock Text="Back" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </StackPanel>
       </Button>
     </Grid>
 
-    <Border Grid.Row="1"
-            Style="{StaticResource PanelBorder}"
-            Padding="16"
-            Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}">
-      <TextBlock Text="{Binding StatusMessage}"
-                 TextWrapping="Wrap"
-                 Foreground="{ThemeResource TextFillColorPrimary}"/>
-    </Border>
-
-    <Grid Grid.Row="2" ColumnSpacing="12">
+    <!-- Stats Summary -->
+    <Grid x:Name="StatsGrid" Grid.Row="2" ColumnSpacing="16">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
 
-      <Border Style="{StaticResource PanelBorder}" Padding="16">
-        <StackPanel Spacing="10">
-          <TextBlock Text="Closed Reports" Foreground="{ThemeResource TextFillColorSecondary}"/>
-          <TextBlock Text="{Binding TotalReports}" FontSize="24" FontWeight="Bold"/>
+      <Border x:Name="Card1" Grid.Row="0" Grid.Column="0" Style="{StaticResource StatsCardStyle}">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Total Reports" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding TotalReports}" FontSize="24" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
         </StackPanel>
       </Border>
 
-      <Border Grid.Column="1" Style="{StaticResource PanelBorder}" Padding="16">
-        <StackPanel Spacing="10">
-          <TextBlock Text="Negative Discrepancies" Foreground="{ThemeResource TextFillColorSecondary}"/>
+      <Border x:Name="Card2" Grid.Column="1" Style="{StaticResource StatsCardStyle}">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Issues/Losses" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
           <TextBlock Text="{Binding NegativeDiscrepancyReports}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource DangerBrush}"/>
         </StackPanel>
       </Border>
 
-      <Border Grid.Column="2" Style="{StaticResource PanelBorder}" Padding="16">
-        <StackPanel Spacing="10">
-          <TextBlock Text="Total Revenue" Foreground="{ThemeResource TextFillColorSecondary}"/>
-          <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormatter}}" FontSize="24" FontWeight="Bold"/>
+      <Border x:Name="Card3" Grid.Column="2" Style="{StaticResource StatsCardStyle}">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Total Revenue" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormatter}}" FontSize="24" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
         </StackPanel>
       </Border>
     </Grid>
 
-    <Border Grid.Row="3" Style="{StaticResource PanelBorder}" Padding="18">
-      <Grid RowSpacing="16">
+    <!-- Premium Search Bar -->
+    <Border x:Name="ToolbarGridBorder" Grid.Row="3" MinHeight="48"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="1" CornerRadius="20" Padding="12,8">
+      <Grid x:Name="ToolbarGrid" ColumnSpacing="10">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.Column="0" PlaceholderText="Search by shift ID, staff, or notes..."
+                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
+                 FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        <ProgressRing Grid.Column="1" IsActive="{Binding IsLoading}" Width="24" Height="24" Foreground="{StaticResource AppPurpleBrush}"/>
+        <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                Background="Transparent" BorderThickness="0" Padding="8"
+                Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
+      </Grid>
+    </Border>
+
+    <!-- Main List Card -->
+    <Border Grid.Row="4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
+      <Grid>
         <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid ColumnSpacing="12">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="320"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
 
-          <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   PlaceholderText="Search by shift id, staff email, or note..."
-                   MinHeight="42"/>
+        <!-- Table Header -->
+        <Border Grid.Row="1" Background="{ThemeResource ControlFillColorDefaultBrush}"
+                CornerRadius="20" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                BorderThickness="0,1,0,1" Padding="16,12" Margin="0,4,0,0">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="80"/>
+              <ColumnDefinition Width="200"/>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="ID" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Text="STAFF" FontSize="11" FontWeight="SemiBold"/>
+            <TextBlock Grid.Column="2" Text="START" FontSize="11" FontWeight="SemiBold"/>
+            <TextBlock Grid.Column="3" Text="SUBMITTED" FontSize="11" FontWeight="SemiBold"/>
+            <TextBlock Grid.Column="4" Text="REVENUE" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Column="5" Text="EXPECTED" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Column="6" Text="ACTUAL" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Column="7" Text="DIFF" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Column="8" Text="NOTES" FontSize="11" FontWeight="SemiBold" Margin="20,0,0,0"/>
+          </Grid>
+        </Border>
 
-          <ProgressRing Grid.Column="1"
-                        Width="28"
-                        Height="28"
-                        IsActive="{Binding IsLoading}"
-                        VerticalAlignment="Center"/>
-        </Grid>
-
-        <Grid Grid.Row="1">
-          <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                        HorizontalScrollMode="Enabled"
-                        VerticalScrollBarVisibility="Disabled"
-                        VerticalScrollMode="Disabled">
-            <Grid MinWidth="1540">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
-
-              <Border Grid.Row="0"
-                      BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
-                      BorderThickness="0,0,0,1"
-                      Padding="12,10">
+        <!-- Table Body -->
+        <ListView Grid.Row="2" ItemsSource="{Binding PagedReportLogs}" SelectionMode="None" Padding="0,4"
+                  Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+          <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+              <Setter Property="Padding" Value="16,0"/>
+              <Setter Property="MinHeight" Value="56"/>
+              <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            </Style>
+          </ListView.ItemContainerStyle>
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
                 <Grid>
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="190"/>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="120"/>
                     <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
-                  <TextBlock Grid.Column="0" Text="Shift" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="1" Text="Staff" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="2" Text="Started At" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="3" Text="Submitted At" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="4" Text="Revenue" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="5" Text="Expected" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="6" Text="Actual" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="7" Text="Discrepancy" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="8" Text="Customers" HorizontalAlignment="Center"/>
-                  <TextBlock Grid.Column="9" Text="Reason Note" HorizontalAlignment="Center"/>
+                  <TextBlock Grid.Column="0" Text="{Binding ShiftId}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                  <TextBlock Grid.Column="1" Text="{Binding StaffEmail}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                  <TextBlock Grid.Column="2" Text="{Binding StartTime, Converter={StaticResource DateTimeOffsetConverter}}" VerticalAlignment="Center" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                  <TextBlock Grid.Column="3" Text="{Binding EndTime, Converter={StaticResource DateTimeOffsetConverter}}" VerticalAlignment="Center" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                  <TextBlock Grid.Column="4" Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                  <TextBlock Grid.Column="5" Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="6" Text="{Binding ActualCashTotal, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="7" Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" 
+                             Foreground="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}, ConverterParameter='color'}">
+                    <!-- Note: I should add a converter or logic for color if discrepancy is negative -->
+                  </TextBlock>
+                  <TextBlock Grid.Column="8" Text="{Binding Notes}" VerticalAlignment="Center" Margin="20,0,0,0" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 </Grid>
               </Border>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </Grid>
+    </Border>
 
-              <ListView Grid.Row="1"
-                        ItemsSource="{Binding FilteredReportLogs}"
-                        SelectionMode="None"
-                        BorderThickness="0"
-                        Background="Transparent"
-                        Padding="0,4"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ListView.ItemTemplate>
-                  <DataTemplate>
-                    <Grid Padding="12,10">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="190"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="*"/>
-                      </Grid.ColumnDefinitions>
-                      <TextBlock Grid.Column="0" Text="{Binding ShiftId}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="1" Text="{Binding StaffEmail}" HorizontalAlignment="Center" TextAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                      <TextBlock Grid.Column="2" Text="{Binding StartTime, Converter={StaticResource DateTimeOffsetConverter}}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="3" Text="{Binding EndTime, Converter={StaticResource DateTimeOffsetConverter}}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="4" Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="5" Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="6" Text="{Binding ActualCashTotal, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="7" Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="8" Text="{Binding CustomerCount}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                      <TextBlock Grid.Column="9" Text="{Binding Notes}" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
-                    </Grid>
-                  </DataTemplate>
-                </ListView.ItemTemplate>
-              </ListView>
-            </Grid>
-          </ScrollViewer>
+    <!-- Table Footer: Pagination (Docked to bottom) -->
+    <Border Grid.Row="5" 
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
+            BorderThickness="0,1,0,0"
+            Margin="-24,0,-24,-20" Padding="24,12">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
+          <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="{Binding TotalFilteredItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="logs" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </StackPanel>
 
-          <StackPanel HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Spacing="10"
-                      Visibility="{Binding FilteredReportLogs.Count, Converter={StaticResource CountToVisibilityConverter}}">
-            <Border Width="60" Height="60" CornerRadius="30" Background="{StaticResource PurpleLightBrush}">
-              <FontIcon Glyph="&#xE9D2;" FontSize="28" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </Border>
-            <TextBlock Text="No shift reports found" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondary}"/>
-          </StackPanel>
-        </Grid>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right" x:Name="ShiftLogsPaginationPanel"/>
       </Grid>
     </Border>
   </Grid>

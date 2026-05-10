@@ -150,89 +150,86 @@ public sealed partial class CustomerOrderPage : Page
     // ══ Custom Pagination ═════════════════════════════════════════
     private void BuildPaginationButtons()
     {
+        if (PaginationPanel == null) return;
         PaginationPanel.Children.Clear();
 
-        var current = ViewModel.CurrentPage;
         var total = ViewModel.TotalPages;
+        var current = ViewModel.CurrentPage;
+
+        void AddPageBtn(int page, bool isActive)
+        {
+            var btn = new Button
+            {
+                Content = page.ToString(),
+                MinWidth = 32,
+                Height = 32,
+                Padding = new Thickness(8, 4, 8, 4),
+                FontSize = 13,
+                CornerRadius = new CornerRadius(6),
+                Margin = new Thickness(2, 0, 2, 0),
+            };
+
+            if (isActive)
+            {
+                btn.Style = (Style)Resources["PageBtnActive"];
+            }
+            else
+            {
+                btn.Style = (Style)Resources["PageBtn"];
+            }
+
+            btn.Click += (s, e) =>
+            {
+                ViewModel.GoToPageCommand.Execute(page);
+            };
+
+            PaginationPanel.Children.Add(btn);
+        }
 
         // Prev button
         var prevBtn = new Button
         {
-            Content = new TextBlock { Text = "\uE76B", FontFamily = new FontFamily("Segoe MDL2 Assets"), FontSize = 12 },
+            Content = new TextBlock { Text = "Prev", FontSize = 13 },
+            MinWidth = 52,
+            Height = 32,
+            Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
-            IsEnabled = current > 1,
-            Tag = current - 1
         };
-        prevBtn.Click += (s, e) =>
-        {
-            if (s is Button b && b.Tag is int pg)
-                ViewModel.GoToPageCommand.Execute(pg);
-        };
+        prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.GoToPageCommand.Execute(current - 1); } };
         PaginationPanel.Children.Add(prevBtn);
 
-        // Page number buttons
-        var start = Math.Max(1, current - 2);
-        var end = Math.Min(total, current + 2);
-
-        if (start > 1)
+        // Page numbers logic (smart ellipsis)
+        if (total <= 7)
         {
-            AddPageButton(1, false);
-            if (start > 2)
-                AddEllipsis();
+            for (int i = 1; i <= total; i++)
+                AddPageBtn(i, i == current);
         }
-
-        for (int i = start; i <= end; i++)
-            AddPageButton(i, i == current);
-
-        if (end < total)
+        else
         {
-            if (end < total - 1)
-                AddEllipsis();
-            AddPageButton(total, false);
+            AddPageBtn(1, current == 1);
+            if (current > 3) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"] });
+
+            int start = Math.Max(2, current - 1);
+            int end = Math.Min(total - 1, current + 1);
+
+            for (int i = start; i <= end; i++)
+                AddPageBtn(i, i == current);
+
+            if (current < total - 2) PaginationPanel.Children.Add(new TextBlock { Text = "...", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(4, 0, 4, 0), Foreground = (Microsoft.UI.Xaml.Media.Brush)Resources["TextFillColorSecondaryBrush"] });
+            AddPageBtn(total, current == total);
         }
 
         // Next button
         var nextBtn = new Button
         {
-            Content = new TextBlock { Text = "\uE76C", FontFamily = new FontFamily("Segoe MDL2 Assets"), FontSize = 12 },
+            Content = new TextBlock { Text = "Next", FontSize = 13 },
+            MinWidth = 52,
+            Height = 32,
+            Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
-            IsEnabled = current < total,
-            Tag = current + 1
         };
-        nextBtn.Click += (s, e) =>
-        {
-            if (s is Button b && b.Tag is int pg)
-                ViewModel.GoToPageCommand.Execute(pg);
-        };
+        nextBtn.Click += (s, e) => { if (current < total) { ViewModel.GoToPageCommand.Execute(current + 1); } };
         PaginationPanel.Children.Add(nextBtn);
-    }
-
-    private void AddPageButton(int page, bool isActive)
-    {
-        var btn = new Button
-        {
-            Content = new TextBlock { Text = page.ToString() },
-            Style = (Style)Resources[isActive ? "PageBtnActive" : "PageBtn"],
-            Tag = page
-        };
-        btn.Click += (s, e) =>
-        {
-            if (s is Button b && b.Tag is int pg)
-                ViewModel.GoToPageCommand.Execute(pg);
-        };
-        PaginationPanel.Children.Add(btn);
-    }
-
-    private void AddEllipsis()
-    {
-        PaginationPanel.Children.Add(new TextBlock
-        {
-            Text = "...",
-            VerticalAlignment = VerticalAlignment.Center,
-            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(
-                Microsoft.UI.ColorHelper.FromArgb(255, 156, 163, 175)),
-            Margin = new Thickness(4, 0, 4, 0)
-        });
     }
 
     // ══ Detail Panel Buttons ═══════════════════════════════════════

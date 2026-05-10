@@ -1,12 +1,12 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace MyShop.Models.ReportModels;
 
 public class ProfitByCategory
 {
-  [JsonProperty("category_name")]
+  [JsonPropertyName("category_name")]
   public string CategoryName { get; set; } = string.Empty;
 
-  [JsonProperty("profit")]
+  [JsonPropertyName("profit")]
   public decimal Profit { get; set; }
 }

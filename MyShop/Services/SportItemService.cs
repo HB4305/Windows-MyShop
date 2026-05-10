@@ -10,13 +10,15 @@ namespace MyShop.Services;
 public class SportItemService
 {
     private readonly SportItemRepository _repository;
+    private readonly SupabaseStorageService _storageService;
     private readonly string _imagesBasePath;
 
-    public SportItemService(SportItemRepository repository)
+    public SportItemService(SportItemRepository repository, SupabaseStorageService storageService)
     {
         _repository = repository;
+        _storageService = storageService;
 
-        // Save image to the app data folder
+        // Save image to the app data folder (Keep for fallback/legacy)
         var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         _imagesBasePath = Path.Combine(appData, "MyShop", "Images");
         Directory.CreateDirectory(_imagesBasePath);
@@ -64,14 +66,28 @@ public class SportItemService
         => _repository.DeleteImageAsync(imageId);
 
     /// <summary>
-    /// Saves an image to the app data folder and returns the file path (used as a URL).
+    /// Resizes, compresses, and uploads an image to Supabase Storage.
+    /// Returns the public URL.
     /// </summary>
     public async Task<string> UploadImageAsync(byte[] bytes, string fileName)
     {
-        var extension = Path.GetExtension(fileName);
-        var safeName = $"{Guid.NewGuid()}{extension}";
-        var filePath = Path.Combine(_imagesBasePath, safeName);
-        await File.WriteAllBytesAsync(filePath, bytes);
-        return filePath; // used as image URL
+        try
+        {
+            // 1. Optimize image (Resize & Compress)
+            var optimizedBytes = Utils.ImageHelper.CompressAndResize(bytes);
+
+            // 2. Upload to Supabase Storage
+            var cloudUrl = await _storageService.UploadFileAsync(optimizedBytes, fileName);
+            return cloudUrl;
+        }
+        catch (Exception)
+        {
+            // Fallback to local if Cloud fails (or just rethrow)
+            var extension = Path.GetExtension(fileName);
+            var safeName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(_imagesBasePath, safeName);
+            await File.WriteAllBytesAsync(filePath, bytes);
+            return filePath;
+        }
     }
 }

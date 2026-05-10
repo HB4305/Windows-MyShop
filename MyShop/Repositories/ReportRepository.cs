@@ -1,6 +1,6 @@
 using MyShop.Models.ReportModels;
 using MyShop.Services;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Npgsql;
 
 namespace MyShop.Repositories;

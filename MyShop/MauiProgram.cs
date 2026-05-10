@@ -62,6 +62,7 @@ public static class MauiProgram
         Services.AddScoped<OrderDetailService>();
         Services.AddScoped<CustomerService>();
         Services.AddScoped<ShiftService>();
+        Services.AddScoped<SupabaseStorageService>();
         Services.AddSingleton<IInvoiceService, InvoiceService>();
         Services.AddSingleton<IFilePickerService>(new FilePickerServiceFactory().Create());
         Services.AddSingleton<IAiService, GeminiService>();

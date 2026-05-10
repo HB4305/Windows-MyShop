@@ -2,7 +2,7 @@ using System;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
-using Windows.UI;
+using Microsoft.UI;
 
 namespace MyShop.Converters;
 
@@ -31,14 +31,14 @@ public sealed class SportItemStockBarForegroundConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
-            return new SolidColorBrush(Color.FromArgb(255, 209, 213, 219));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 209, 213, 219));
         var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         if (stock <= 0)
-            return new SolidColorBrush(Color.FromArgb(255, 209, 213, 219));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 209, 213, 219));
         if (stock <= threshold)
-            return new SolidColorBrush(Color.FromArgb(255, 245, 158, 11));
-        return new SolidColorBrush(Color.FromArgb(255, 16, 185, 129));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 245, 158, 11));
+        return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 16, 185, 129));
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -73,14 +73,14 @@ public sealed class SportItemStatusBadgeBackgroundConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
-            return new SolidColorBrush(Color.FromArgb(255, 243, 244, 246));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 243, 244, 246));
         var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         if (stock <= 0)
-            return new SolidColorBrush(Color.FromArgb(255, 254, 226, 226));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 254, 226, 226));
         if (stock <= threshold)
-            return new SolidColorBrush(Color.FromArgb(255, 254, 243, 199));
-        return new SolidColorBrush(Color.FromArgb(255, 209, 250, 229));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 254, 243, 199));
+        return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 209, 250, 229));
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -94,14 +94,14 @@ public sealed class SportItemStatusBadgeForegroundConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, string language)
     {
         if (value is not SportItem item)
-            return new SolidColorBrush(Color.FromArgb(255, 75, 85, 99));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 75, 85, 99));
         var stock = ResolveStock(item);
         var threshold = item.LowStockThreshold ?? 10;
         if (stock <= 0)
-            return new SolidColorBrush(Color.FromArgb(255, 185, 28, 28));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 185, 28, 28));
         if (stock <= threshold)
-            return new SolidColorBrush(Color.FromArgb(255, 180, 83, 9));
-        return new SolidColorBrush(Color.FromArgb(255, 4, 120, 87));
+            return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 180, 83, 9));
+        return new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 4, 120, 87));
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
