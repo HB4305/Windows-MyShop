@@ -430,48 +430,77 @@
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Tab Bar -->
+        <!-- Tab Bar + Search -->
         <Border Grid.Row="0" Padding="24,12,24,0">
-          <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Disabled">
-            <StackPanel Orientation="Horizontal" Spacing="2">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <ScrollViewer Grid.Column="0" 
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Disabled">
+              <StackPanel Orientation="Horizontal" Spacing="2">
+                <!-- All Tab (active) -->
+                <Button x:Name="TabAll" Click="TabAll_Click" Style="{StaticResource TabBtnActive}">
+                  <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Text="All Orders"/>
+                    <Border Background="{StaticResource PurpleBrush}" CornerRadius="20" Padding="8,2">
+                      <TextBlock Text="1,240" FontSize="11" FontWeight="SemiBold"
+                                 FontFamily="{StaticResource AppSignatureFontFamily}" Foreground="White"/>
+                    </Border>
+                  </StackPanel>
+                </Button>
 
-              <!-- All Tab (active) -->
-              <Button x:Name="TabAll" Click="TabAll_Click" Style="{StaticResource TabBtnActive}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="All Orders"/>
-                  <Border Background="{StaticResource PurpleBrush}" CornerRadius="20" Padding="8,2">
-                    <TextBlock Text="1,240"
-                               FontSize="11"
-                               FontWeight="SemiBold"
-                               FontFamily="{StaticResource AppSignatureFontFamily}"
-                               Foreground="White"/>
-                  </Border>
-                </StackPanel>
-              </Button>
+                <!-- Pending -->
+                <Button x:Name="TabPending" Click="TabPending_Click" Style="{StaticResource TabBtn}">
+                  <TextBlock Text="Pending"/>
+                </Button>
 
-              <!-- Pending -->
-              <Button x:Name="TabPending" Click="TabPending_Click" Style="{StaticResource TabBtn}">
-                <TextBlock Text="Pending"/>
-              </Button>
+                <!-- Processing -->
+                <Button x:Name="TabProcessing" Click="TabProcessing_Click" Style="{StaticResource TabBtn}">
+                  <TextBlock Text="Processing"/>
+                </Button>
 
-              <!-- Processing -->
-              <Button x:Name="TabProcessing" Click="TabProcessing_Click" Style="{StaticResource TabBtn}">
-                <TextBlock Text="Processing"/>
-              </Button>
+                <!-- Shipped -->
+                <Button x:Name="TabShipped" Click="TabShipped_Click" Style="{StaticResource TabBtn}">
+                  <TextBlock Text="Shipped"/>
+                </Button>
 
-              <!-- Shipped -->
-              <Button x:Name="TabShipped" Click="TabShipped_Click" Style="{StaticResource TabBtn}">
-                <TextBlock Text="Shipped"/>
-              </Button>
+                <!-- Returned -->
+                <Button x:Name="TabReturned" Click="TabReturned_Click" Style="{StaticResource TabBtn}">
+                  <TextBlock Text="Returned"/>
+                </Button>
+              </StackPanel>
+            </ScrollViewer>
 
-              <!-- Returned -->
-              <Button x:Name="TabReturned" Click="TabReturned_Click" Style="{StaticResource TabBtn}">
-                <TextBlock Text="Returned"/>
-              </Button>
-
-            </StackPanel>
-          </ScrollViewer>
+            <!-- Search Bar -->
+            <Border Grid.Column="1"
+                    MinHeight="48"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="24"
+                    Padding="16,4"
+                    MinWidth="280"
+                    Margin="16,0,0,0">
+              <Grid ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="Search orders..."
+                         BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
+                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <Button Grid.Column="1" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                        Background="Transparent" BorderThickness="0" Padding="8"
+                        Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
+              </Grid>
+            </Border>
+          </Grid>
         </Border>
 
         <!-- Table -->

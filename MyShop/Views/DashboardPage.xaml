@@ -104,7 +104,7 @@
           </VisualState>
           <VisualState x:Name="WideState">
             <VisualState.StateTriggers>
-              <AdaptiveTrigger MinWindowWidth="1200"/>
+              <AdaptiveTrigger MinWindowWidth="1100"/>
             </VisualState.StateTriggers>
             <VisualState.Setters>
               <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="0"/>
@@ -176,10 +176,12 @@
             </Border>
   
             <!-- Create Order button -->
-            <Button Style="{StaticResource AccentButtonStyle}"
-                    CornerRadius="20"
-                    Padding="18,10"
-                    MinHeight="44"
+            <Button Style="{StaticResource ColorPreservingButtonStyle}"
+                    Background="{StaticResource AppPurpleBrush}"
+                    Foreground="White"
+                    CornerRadius="24"
+                    Padding="20,10"
+                    MinHeight="48"
                     Click="CreateOrderButton_Click">
               <StackPanel Orientation="Horizontal"
                   Spacing="6">
