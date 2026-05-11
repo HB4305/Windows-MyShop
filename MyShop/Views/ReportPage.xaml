@@ -9,6 +9,9 @@
       Tapped="Page_Tapped">
   <Page.Resources>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
+    <conv:PercentageFormatter x:Key="PercentageFormatter"/>
+    <conv:DateFormatter x:Key="DateFormatter"/>
     <SolidColorBrush x:Key="Accent" Color="#8B52FF"/>
     <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
     

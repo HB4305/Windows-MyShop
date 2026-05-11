@@ -443,7 +443,9 @@
 
   </Page.Resources>
 
-  <Grid Margin="0">
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
+  <Grid x:Name="OrderRoot" Margin="0" SizeChanged="OrderRoot_SizeChanged">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
         <VisualState x:Name="StatsNarrowState">
@@ -510,11 +512,15 @@
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="420"/>
     </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
 
     <!-- ═══════════════════════════════════════════════ -->
     <!-- LEFT PANEL: ORDER LIST                          -->
     <!-- ═══════════════════════════════════════════════ -->
-    <Grid Grid.Column="0">
+    <Grid x:Name="OrderListPanel" Grid.Column="0">
 
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
@@ -877,7 +883,8 @@
     <!-- ═══════════════════════════════════════════════ -->
     <!-- RIGHT PANEL: ORDER DETAIL                      -->
     <!-- ═══════════════════════════════════════════════ -->
-    <Border Grid.Column="1"
+    <Border x:Name="OrderDetailPanel"
+            Grid.Column="1"
             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
             BorderThickness="1,0,0,0"
@@ -1224,7 +1231,8 @@
     </Border>
 
     <!-- RIGHT PANEL: Empty State -->
-    <Border Grid.Column="1"
+    <Border x:Name="OrderEmptyDetailPanel"
+            Grid.Column="1"
             Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
             BorderThickness="1,0,0,0"
@@ -1256,5 +1264,6 @@
     </Border>
 
   </Grid>
+  </ScrollViewer>
 
 </Page>

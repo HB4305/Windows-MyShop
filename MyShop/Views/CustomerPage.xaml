@@ -35,6 +35,8 @@
         </Style>
     </Page.Resources>
 
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
     <Grid Margin="24,20">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -313,4 +315,5 @@
             </Border>
         </Grid>
     </Grid>
+    </ScrollViewer>
 </Page>

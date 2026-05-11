@@ -212,7 +212,8 @@ public sealed partial class PosPage : Page
 
         RootLayout.RowDefinitions.Clear();
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        RootLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+        RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         Grid.SetRow(HeaderPanel, 0);
@@ -223,9 +224,9 @@ public sealed partial class PosPage : Page
         Grid.SetColumn(ProductPanel, 0);
         Grid.SetColumnSpan(ProductPanel, 1);
     
-        Grid.SetRow(CheckoutPanel, 1);
-        Grid.SetColumn(CheckoutPanel, 1);
-        Grid.SetColumnSpan(CheckoutPanel, 1);
+        Grid.SetRow(CheckoutScroller, 1);
+        Grid.SetColumn(CheckoutScroller, 1);
+        Grid.SetColumnSpan(CheckoutScroller, 1);
     
         // Pagination outside card
         var paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(PaginationPanel);
@@ -254,6 +255,7 @@ public sealed partial class PosPage : Page
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         Grid.SetRow(HeaderPanel, 0);
         Grid.SetColumn(HeaderPanel, 0);
@@ -275,9 +277,9 @@ public sealed partial class PosPage : Page
             Grid.SetColumnSpan(paginationBorder, 1);
         }
 
-        Grid.SetRow(CheckoutPanel, 3);
-        Grid.SetColumn(CheckoutPanel, 0);
-        Grid.SetColumnSpan(CheckoutPanel, 1);
+        Grid.SetRow(CheckoutScroller, 3);
+        Grid.SetColumn(CheckoutScroller, 0);
+        Grid.SetColumnSpan(CheckoutScroller, 1);
 
         Grid.SetRow(StatusText, 4);
         Grid.SetColumn(StatusText, 0);

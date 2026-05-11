@@ -11,6 +11,7 @@ namespace MyShop.Views;
 
 public sealed partial class CustomerOrderPage : Page
 {
+    private const double SingleColumnBreakpoint = 1100;
     public CustomerOrderViewModel ViewModel { get; }
 
     public CustomerOrderPage()
@@ -25,6 +26,7 @@ public sealed partial class CustomerOrderPage : Page
                 await ViewModel.LoadOrdersCommand.ExecuteAsync(null);
                 BuildPaginationButtons();
                 UpdateTabStyles();
+                ApplyResponsiveLayout(ActualWidth);
             };
         }
         catch (Exception ex)
@@ -49,6 +51,67 @@ public sealed partial class CustomerOrderPage : Page
                 DispatcherQueue.TryEnqueue(() => UpdateStatusButtons());
             }
         };
+    }
+
+    private void OrderRoot_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ApplyResponsiveLayout(e.NewSize.Width);
+    }
+
+    private void ApplyResponsiveLayout(double width)
+    {
+        if (width < SingleColumnBreakpoint)
+        {
+            SetSingleColumnLayout();
+            return;
+        }
+
+        SetTwoColumnLayout();
+    }
+
+    private void SetTwoColumnLayout()
+    {
+        OrderRoot.ColumnDefinitions.Clear();
+        OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(420) });
+
+        OrderRoot.RowDefinitions.Clear();
+        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+        Grid.SetRow(OrderListPanel, 0);
+        Grid.SetColumn(OrderListPanel, 0);
+        Grid.SetColumnSpan(OrderListPanel, 1);
+
+        Grid.SetRow(OrderDetailPanel, 0);
+        Grid.SetColumn(OrderDetailPanel, 1);
+        Grid.SetColumnSpan(OrderDetailPanel, 1);
+
+        Grid.SetRow(OrderEmptyDetailPanel, 0);
+        Grid.SetColumn(OrderEmptyDetailPanel, 1);
+        Grid.SetColumnSpan(OrderEmptyDetailPanel, 1);
+    }
+
+    private void SetSingleColumnLayout()
+    {
+        OrderRoot.ColumnDefinitions.Clear();
+        OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        OrderRoot.RowDefinitions.Clear();
+        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+        Grid.SetRow(OrderListPanel, 0);
+        Grid.SetColumn(OrderListPanel, 0);
+        Grid.SetColumnSpan(OrderListPanel, 1);
+
+        Grid.SetRow(OrderDetailPanel, 1);
+        Grid.SetColumn(OrderDetailPanel, 0);
+        Grid.SetColumnSpan(OrderDetailPanel, 1);
+
+        Grid.SetRow(OrderEmptyDetailPanel, 1);
+        Grid.SetColumn(OrderEmptyDetailPanel, 0);
+        Grid.SetColumnSpan(OrderEmptyDetailPanel, 1);
     }
 
     // ══ Order Selection ═══════════════════════════════════════════

@@ -343,6 +343,8 @@
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- MAIN LAYOUT                                                  -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
   <Grid>
 
     <Grid.RowDefinitions>
@@ -912,5 +914,6 @@
     </Grid>
 
   </Grid>
+  </ScrollViewer>
 
 </Page>

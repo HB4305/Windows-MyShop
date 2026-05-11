@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using MyShop.Services;
 using MyShop.ViewModels;
 
 namespace MyShop.Views;
@@ -32,12 +31,6 @@ public sealed partial class ShiftReportLogsPage : Page
     {
         await ViewModel.LoadLogsCommand.ExecuteAsync(null);
         BuildPagination();
-    }
-
-    private void BackToShiftManagement_Click(object sender, RoutedEventArgs e)
-    {
-        var currentUser = App.Services.GetRequiredService<CurrentUserService>();
-        Frame.Navigate(currentUser.IsOwner ? typeof(DashboardPage) : typeof(ShiftManagementPage));
     }
 
     private void BuildPagination()

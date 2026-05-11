@@ -18,6 +18,8 @@
     </Style>
   </Page.Resources>
 
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
   <Grid x:Name="RootLayout" Padding="24,20" ColumnSpacing="20" RowSpacing="16" Loaded="RootLayout_Loaded" SizeChanged="RootLayout_SizeChanged">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="3*"/>
@@ -68,7 +70,7 @@
                                          SearchText="{Binding SearchText, Mode=TwoWay}"
                                          SearchItemsSource="{Binding ProductOptions}"
                                          SearchCommand="{Binding SearchCommand}"
-                                         SearchPlaceholderText="Search sports gear or scan barcode (F1)"
+                                         SearchPlaceholderText="Search sports gear"
                                          CategoryPlaceholderText="Category"
                                          SearchTextChanged="ProductFilterBar_SearchTextChanged"
                                          SearchSuggestionChosen="ProductFilterBar_SearchSuggestionChosen"
@@ -152,7 +154,10 @@
       </Grid>
     </Border>
 
-    <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer x:Name="CheckoutScroller"
+                  Grid.Row="1"
+                  Grid.Column="1"
+                  VerticalScrollBarVisibility="Auto">
       <Grid x:Name="CheckoutPanel" RowSpacing="16" Margin="0,0,12,0">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -369,4 +374,5 @@
                TextWrapping="Wrap"
                Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
   </Grid>
+  </ScrollViewer>
 </Page>
