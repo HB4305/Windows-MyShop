@@ -177,8 +177,11 @@ public class OrderRepository
         {
             results.Add(new DashboardTopSellerProduct
             {
-                // col 0=item_id, 1=name, 2=category_name, 3=selling_price, 4=image_urls
+                ItemId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
                 Name = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                CategoryName = reader.IsDBNull(2) ? null : reader.GetString(2),
+                SellingPrice = reader.IsDBNull(3) ? null : reader.GetDecimal(3),
+                ImageUrls = reader.IsDBNull(4) ? [] : reader.GetFieldValue<string[]>(4),
                 QuantitySold = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
                 CurrPeriodRevenue = reader.IsDBNull(6) ? 0m : reader.GetDecimal(6),
                 PrevPeriodRevenue = reader.IsDBNull(7) ? 0m : reader.GetDecimal(7)
