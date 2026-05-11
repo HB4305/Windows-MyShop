@@ -105,6 +105,14 @@ public partial class DashboardViewModel : ObservableObject
     }
 
     [RelayCommand]
+    public void RestockAll()
+    {
+        // For now, this is a placeholder. 
+        // Real implementation might navigate or open a bulk restock dialog.
+        Console.WriteLine("[DashboardVM] RestockAll command triggered.");
+    }
+
+    [RelayCommand]
     public async Task LoadDashboardAsync()
     {
         try

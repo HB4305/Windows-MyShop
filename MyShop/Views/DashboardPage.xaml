@@ -8,6 +8,8 @@
 
   <Page.Resources>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     <!-- Accent colors (matching Login) -->
     <SolidColorBrush x:Key="PurpleBrush"
         Color="#8B52FF"/>
@@ -48,7 +50,7 @@
     <Style x:Key="KpiValueStyle"
         TargetType="TextBlock">
       <Setter Property="FontFamily"
-          Value="{StaticResource AppSignatureFontFamily}"/>
+          Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize"
           Value="32"/>
       <Setter Property="FontWeight"
@@ -61,7 +63,7 @@
     <Style x:Key="KpiLabelStyle"
         TargetType="TextBlock">
       <Setter Property="FontFamily"
-          Value="{StaticResource AppSignatureFontFamily}"/>
+          Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize"
           Value="12"/>
       <Setter Property="Foreground"
@@ -71,67 +73,68 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <StackPanel x:Name="RootStack"
-                Margin="24"
-          Spacing="20">
-      <VisualStateManager.VisualStateGroups>
-        <VisualStateGroup>
-          <VisualState x:Name="NarrowState">
-            <VisualState.StateTriggers>
-              <AdaptiveTrigger MinWindowWidth="0"/>
-            </VisualState.StateTriggers>
-            <VisualState.Setters>
-              <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="1"/>
-              <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="0"/>
-              <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Left"/>
-              <Setter Target="HeaderActionsPanel.Margin" Value="0,12,0,0"/>
-              <Setter Target="HeaderActionsPanel.Orientation" Value="Vertical"/>
-              <Setter Target="KpiSpacerColumn1.Width" Value="0"/>
-              <Setter Target="KpiSpacerColumn2.Width" Value="0"/>
-              <Setter Target="KpiValueColumn2.Width" Value="0"/>
-              <Setter Target="KpiValueColumn3.Width" Value="0"/>
-              <Setter Target="KpiCardTwo.(Grid.Row)" Value="1"/>
-              <Setter Target="KpiCardTwo.(Grid.Column)" Value="0"/>
-              <Setter Target="KpiCardThree.(Grid.Row)" Value="2"/>
-              <Setter Target="KpiCardThree.(Grid.Column)" Value="0"/>
-              <Setter Target="MainSpacerColumn.Width" Value="0"/>
-              <Setter Target="MainRightColumn.Width" Value="0"/>
-              <Setter Target="RightContentPanel.(Grid.Row)" Value="1"/>
-              <Setter Target="RightContentPanel.(Grid.Column)" Value="0"/>
-              <Setter Target="RightContentPanel.Margin" Value="0,16,0,0"/>
-            </VisualState.Setters>
-          </VisualState>
-          <VisualState x:Name="WideState">
-            <VisualState.StateTriggers>
-              <AdaptiveTrigger MinWindowWidth="1100"/>
-            </VisualState.StateTriggers>
-            <VisualState.Setters>
-              <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="0"/>
-              <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="1"/>
-              <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Stretch"/>
-              <Setter Target="HeaderActionsPanel.Margin" Value="0"/>
-              <Setter Target="HeaderActionsPanel.Orientation" Value="Horizontal"/>
-              <Setter Target="KpiSpacerColumn1.Width" Value="16"/>
-              <Setter Target="KpiSpacerColumn2.Width" Value="16"/>
-              <Setter Target="KpiValueColumn2.Width" Value="*"/>
-              <Setter Target="KpiValueColumn3.Width" Value="*"/>
-              <Setter Target="KpiCardTwo.(Grid.Row)" Value="0"/>
-              <Setter Target="KpiCardTwo.(Grid.Column)" Value="2"/>
-              <Setter Target="KpiCardThree.(Grid.Row)" Value="0"/>
-              <Setter Target="KpiCardThree.(Grid.Column)" Value="4"/>
-              <Setter Target="MainSpacerColumn.Width" Value="16"/>
-              <Setter Target="MainRightColumn.Width" Value="*"/>
-              <Setter Target="RightContentPanel.(Grid.Row)" Value="0"/>
-              <Setter Target="RightContentPanel.(Grid.Column)" Value="2"/>
-              <Setter Target="RightContentPanel.Margin" Value="0"/>
-            </VisualState.Setters>
-          </VisualState>
-        </VisualStateGroup>
-      </VisualStateManager.VisualStateGroups>
-  
-        <!-- ═══════════════════════════ PAGE TITLE ═══════════════════════════ -->
-        <Grid x:Name="HeaderGrid">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="NarrowState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="1"/>
+            <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="0"/>
+            <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Left"/>
+            <Setter Target="HeaderActionsPanel.Margin" Value="0,12,0,0"/>
+            <Setter Target="HeaderActionsPanel.Orientation" Value="Vertical"/>
+            <Setter Target="KpiSpacerColumn1.Width" Value="0"/>
+            <Setter Target="KpiSpacerColumn2.Width" Value="0"/>
+            <Setter Target="KpiValueColumn2.Width" Value="0"/>
+            <Setter Target="KpiValueColumn3.Width" Value="0"/>
+            <Setter Target="KpiCardTwo.(Grid.Row)" Value="1"/>
+            <Setter Target="KpiCardTwo.(Grid.Column)" Value="0"/>
+            <Setter Target="KpiCardThree.(Grid.Row)" Value="2"/>
+            <Setter Target="KpiCardThree.(Grid.Column)" Value="0"/>
+            <Setter Target="MainSpacerColumn.Width" Value="0"/>
+            <Setter Target="MainRightColumn.Width" Value="0"/>
+            <Setter Target="RightContentPanel.(Grid.Row)" Value="1"/>
+            <Setter Target="RightContentPanel.(Grid.Column)" Value="0"/>
+            <Setter Target="RightContentPanel.Margin" Value="0,16,0,0"/>
+          </VisualState.Setters>
+        </VisualState>
+        <VisualState x:Name="WideState">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1100"/>
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="0"/>
+            <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="1"/>
+            <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Stretch"/>
+            <Setter Target="HeaderActionsPanel.Margin" Value="0"/>
+            <Setter Target="HeaderActionsPanel.Orientation" Value="Horizontal"/>
+            <Setter Target="KpiSpacerColumn1.Width" Value="16"/>
+            <Setter Target="KpiSpacerColumn2.Width" Value="16"/>
+            <Setter Target="KpiValueColumn2.Width" Value="*"/>
+            <Setter Target="KpiValueColumn3.Width" Value="*"/>
+            <Setter Target="KpiCardTwo.(Grid.Row)" Value="0"/>
+            <Setter Target="KpiCardTwo.(Grid.Column)" Value="2"/>
+            <Setter Target="KpiCardThree.(Grid.Row)" Value="0"/>
+            <Setter Target="KpiCardThree.(Grid.Column)" Value="4"/>
+            <Setter Target="MainSpacerColumn.Width" Value="16"/>
+            <Setter Target="MainRightColumn.Width" Value="*"/>
+            <Setter Target="RightContentPanel.(Grid.Row)" Value="0"/>
+            <Setter Target="RightContentPanel.(Grid.Column)" Value="2"/>
+            <Setter Target="RightContentPanel.Margin" Value="0"/>
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <Grid x:Name="HeaderGrid" Grid.Row="0" Margin="24,24,24,0">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
@@ -153,6 +156,28 @@
               VerticalAlignment="Center"
               Spacing="10">
   
+            <!-- Date picker button -->
+            <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="20"
+                    MinHeight="44"
+                    Padding="12,8">
+              <StackPanel Orientation="Horizontal"
+                  Spacing="6"
+                  VerticalAlignment="Center">
+                <TextBlock FontFamily="Segoe MDL2 Assets"
+                    Text="&#xE787;"
+                    FontSize="13"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    VerticalAlignment="Center"/>
+                <TextBlock Text="July 2026"
+                    FontSize="13"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                    VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              </StackPanel>
+            </Border>
+  
             <!-- Create Order button -->
             <Button Style="{StaticResource ColorPreservingButtonStyle}"
                     Background="{StaticResource AppPurpleBrush}"
@@ -172,14 +197,15 @@
                     FontSize="14"
                     FontWeight="SemiBold"
                     Foreground="White"
-                    VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
               </StackPanel>
             </Button>
   
           </StackPanel>
-        </Grid>
-  
-        <!-- ═══════════════════════════ KPI CARDS ═══════════════════════════ -->
+      </Grid>
+
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <StackPanel x:Name="RootStack" Margin="24,0,24,24" Spacing="20">
         <Grid x:Name="KpiGrid">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -202,11 +228,16 @@
                   Style="{StaticResource KpiLabelStyle}"
                   FontWeight="SemiBold"
                   CharacterSpacing="40"
-                  FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding TotalProductsDisplay}"
-                         Style="{StaticResource KpiValueStyle}"
-                         Margin="0,4,0,0"
-                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <Grid>
+                  <TextBlock Text="{Binding TotalProductsDisplay}"
+                             Style="{StaticResource KpiValueStyle}"
+                             Margin="0,4,0,0"
+                             Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                             FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <controls:ShimmerLoadingControl Width="80" Height="32" Margin="0,4,0,0" HorizontalAlignment="Left" 
+                                         Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
             </StackPanel>
           </Border>
   
@@ -217,13 +248,17 @@
             <StackPanel>
               <TextBlock Text="TODAY'S ORDERS"
                   Style="{StaticResource KpiLabelStyle}"
-                  FontWeight="SemiBold"
                   CharacterSpacing="40"
-                  FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding TotalTodayOrdersDisplay}"
-                         Style="{StaticResource KpiValueStyle}"
-                         Margin="0,4,0,0"
-                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <Grid>
+                  <TextBlock Text="{Binding TotalTodayOrdersDisplay}"
+                             Style="{StaticResource KpiValueStyle}"
+                             Margin="0,4,0,0"
+                             Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                             FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <controls:ShimmerLoadingControl Width="60" Height="32" Margin="0,4,0,0" HorizontalAlignment="Left"
+                                         Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
             </StackPanel>
           </Border>
   
@@ -234,13 +269,17 @@
             <StackPanel>
               <TextBlock Text="TODAY'S REVENUE"
                   Style="{StaticResource KpiLabelStyle}"
-                  FontWeight="SemiBold"
                   CharacterSpacing="40"
-                  FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding TodayRevenueDisplay}"
-                         Style="{StaticResource KpiValueStyle}"
-                         Margin="0,4,0,0"
-                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <Grid>
+                  <TextBlock Text="{Binding TodayRevenueDisplay}"
+                             Style="{StaticResource KpiValueStyle}"
+                             Margin="0,4,0,0"
+                             Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                             FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <controls:ShimmerLoadingControl Width="120" Height="32" Margin="0,4,0,0" HorizontalAlignment="Left"
+                                         Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
             </StackPanel>
           </Border>
         </Grid>
@@ -257,7 +296,7 @@
                 <TextBlock Text="Monthly Revenue Analysis"
                            FontSize="15"
                            FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
                 <TextBlock Text="Daily breakdown of revenue for the current month"
                            FontSize="12"
                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
@@ -362,11 +401,24 @@
                              VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
   
-                <!-- Loading state -->
-                <TextBlock Text="Loading..."
-                           Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                           FontSize="13"
-                           Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <!-- Skeleton loading state -->
+                <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="16">
+                    <StackPanel Spacing="8">
+                        <controls:ShimmerLoadingControl Width="180" Height="16"/>
+                        <controls:ShimmerLoadingControl Width="120" Height="12"/>
+                        <controls:ShimmerLoadingControl Width="60" Height="20" CornerRadius="10"/>
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <controls:ShimmerLoadingControl Width="160" Height="16"/>
+                        <controls:ShimmerLoadingControl Width="100" Height="12"/>
+                        <controls:ShimmerLoadingControl Width="60" Height="20" CornerRadius="10"/>
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <controls:ShimmerLoadingControl Width="200" Height="16"/>
+                        <controls:ShimmerLoadingControl Width="140" Height="12"/>
+                        <controls:ShimmerLoadingControl Width="60" Height="20" CornerRadius="10"/>
+                    </StackPanel>
+                </StackPanel>
   
                 <!-- Best sellers list -->
                 <ItemsControl ItemsSource="{Binding TopSellerItems}"
@@ -447,12 +499,15 @@
                                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
-                  <TextBlock Grid.Column="1"
-                             Text="Restock All"
-                             FontSize="12"
-                             Foreground="{StaticResource PurpleBrush}"
-                             FontWeight="SemiBold"
-                             VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <HyperlinkButton Grid.Column="1"
+                                   Content="Restock All"
+                                   FontSize="12"
+                                   Foreground="{StaticResource PurpleBrush}"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"
+                                   Padding="0"
+                                   Click="RestockAll_Click"/>
                 </Grid>
   
                 <!-- Table header -->
@@ -517,16 +572,15 @@
                         </Border>
   
                         <!-- Order button -->
-                        <Border Grid.Column="2"
-                                Background="{StaticResource PurpleLightBrush}"
-                                CornerRadius="20"
-                                Padding="8,3"
-                                HorizontalAlignment="Right">
-                          <TextBlock Text="Order"
-                                     FontSize="11"
-                                     Foreground="{StaticResource PurpleBrush}"
-                                     FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        </Border>
+                        <HyperlinkButton Grid.Column="2"
+                                        Content="Order"
+                                        FontSize="11"
+                                        Foreground="{StaticResource PurpleBrush}"
+                                        FontWeight="SemiBold"
+                                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"
+                                        Padding="0"
+                                        HorizontalAlignment="Right"
+                                        Click="RestockAll_Click"/>
                       </Grid>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
@@ -563,15 +617,38 @@
                                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
-                  <TextBlock Grid.Column="1"
-                             Text="View All Orders"
-                             FontSize="12"
-                             Foreground="{StaticResource PurpleBrush}"
-                             FontWeight="SemiBold"
-                             VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <HyperlinkButton Grid.Column="1"
+                                   Content="View All Orders"
+                                   FontSize="12"
+                                   Foreground="{StaticResource PurpleBrush}"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"
+                                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"
+                                   Padding="0"
+                                   Click="ViewAllOrders_Click"/>
                 </Grid>
   
-                <ItemsControl ItemsSource="{Binding RecentOrders}">
+                <!-- Skeleton loading state for Recent Orders -->
+                <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="16">
+                    <StackPanel Spacing="8">
+                        <controls:ShimmerLoadingControl Width="150" Height="14"/>
+                        <controls:ShimmerLoadingControl Width="220" Height="12"/>
+                        <controls:ShimmerLoadingControl Width="70" Height="18" CornerRadius="9"/>
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <controls:ShimmerLoadingControl Width="130" Height="14"/>
+                        <controls:ShimmerLoadingControl Width="200" Height="12"/>
+                        <controls:ShimmerLoadingControl Width="70" Height="18" CornerRadius="9"/>
+                    </StackPanel>
+                    <StackPanel Spacing="8">
+                        <controls:ShimmerLoadingControl Width="160" Height="14"/>
+                        <controls:ShimmerLoadingControl Width="210" Height="12"/>
+                        <controls:ShimmerLoadingControl Width="70" Height="18" CornerRadius="9"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <ItemsControl ItemsSource="{Binding RecentOrders}"
+                              Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                   <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="dashModels:DashboardRecentOrder">
                       <Border BorderBrush="#F3F4F6"
@@ -635,5 +712,6 @@
         </Grid>
   
       </StackPanel>
-  </ScrollViewer>
+    </ScrollViewer>
+  </Grid>
 </Page>
