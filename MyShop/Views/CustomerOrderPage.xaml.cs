@@ -27,6 +27,7 @@ public sealed partial class CustomerOrderPage : Page
                 BuildPaginationButtons();
                 UpdateTabStyles();
                 ApplyResponsiveLayout(ActualWidth);
+                UpdateDetailScrollerHeight(ActualHeight);
             };
         }
         catch (Exception ex)
@@ -56,6 +57,15 @@ public sealed partial class CustomerOrderPage : Page
     private void OrderRoot_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         ApplyResponsiveLayout(e.NewSize.Width);
+        UpdateDetailScrollerHeight(e.NewSize.Height);
+    }
+
+    private void UpdateDetailScrollerHeight(double rootHeight)
+    {
+        // In wide mode the detail ScrollViewer needs a bounded MaxHeight so it can scroll internally.
+        // We subtract the detail header (~60px) and footer (~62px) from the root height.
+        const double detailChrome = 122;
+        DetailScrollViewer.MaxHeight = Math.Max(200, rootHeight - detailChrome);
     }
 
     private void ApplyResponsiveLayout(double width)
@@ -71,28 +81,20 @@ public sealed partial class CustomerOrderPage : Page
 
     private void SetTwoColumnLayout()
     {
+        var detailWidth = ViewModel.ShowDetailPanel ? 420 : 0;
+
         OrderRoot.ColumnDefinitions.Clear();
         OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(420) });
+        OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(detailWidth) });
 
         OrderRoot.RowDefinitions.Clear();
-        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         OrderRoot.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         Grid.SetRow(OrderListPanel, 0);
         Grid.SetColumn(OrderListPanel, 0);
-        
-        if (ViewModel.ShowDetailPanel)
-        {
-            DetailColumn.Width = new GridLength(420);
-            Grid.SetColumnSpan(OrderListPanel, 1);
-        }
-        else
-        {
-            DetailColumn.Width = new GridLength(0);
-            Grid.SetColumnSpan(OrderListPanel, 2);
-        }
- 
+        Grid.SetColumnSpan(OrderListPanel, 1);
+
         Grid.SetRow(OrderDetailPanel, 0);
         Grid.SetColumn(OrderDetailPanel, 1);
         Grid.SetColumnSpan(OrderDetailPanel, 1);

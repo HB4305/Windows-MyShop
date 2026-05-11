@@ -50,6 +50,7 @@
     </Style>
   </Page.Resources>
 
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
   <Grid Padding="24,20" RowSpacing="20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -83,7 +84,7 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
@@ -159,7 +160,7 @@
       <Grid MinWidth="1160">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
 
@@ -281,4 +282,5 @@
       </Grid>
     </Border>
   </Grid>
+  </ScrollViewer>
 </Page>

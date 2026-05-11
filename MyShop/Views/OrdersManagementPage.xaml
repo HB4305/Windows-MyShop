@@ -344,13 +344,14 @@
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- MAIN LAYOUT                                                  -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
+  <ScrollViewer x:Name="PageScroller"
+                VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Disabled">
   <Grid>
 
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
     <VisualStateManager.VisualStateGroups>
@@ -442,7 +443,7 @@
     </Border>
 
     <!-- ── Body: Order List + Detail Panel ── -->
-    <Grid Grid.Row="1">
+    <Grid x:Name="BodyGrid" Grid.Row="1">
 
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
