@@ -23,6 +23,13 @@
       <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
       <SolidColorBrush x:Key="TextBoxBorderBrush" Color="#D1D5DB"/>
 
+      <SolidColorBrush x:Key="SkeletonBaseBrush" Color="{ThemeResource SkeletonBaseColor}" />
+      <LinearGradientBrush x:Key="SkeletonShimmerBrush" StartPoint="-1,0.5" EndPoint="2,0.5">
+          <GradientStop Color="Transparent" Offset="0" />
+          <GradientStop Color="{ThemeResource SkeletonShimmerColor}" Offset="0.5" />
+          <GradientStop Color="Transparent" Offset="1" />
+      </LinearGradientBrush>
+
       <!-- ── Pagination Button Styles ── -->
       <Style x:Key="PageBtn" TargetType="Button">
         <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
@@ -68,6 +75,8 @@
           <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <Color x:Key="SkeletonBaseColor">#2A2A2A</Color>
+          <Color x:Key="SkeletonShimmerColor">#1AFFFFFF</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
           <Color x:Key="SystemAccentColor">#8B52FF</Color>
@@ -82,6 +91,8 @@
           <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <Color x:Key="SkeletonBaseColor">#E5E5E5</Color>
+          <Color x:Key="SkeletonShimmerColor">#66FFFFFF</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
           <Color x:Key="SystemAccentColor">#8B52FF</Color>
@@ -96,6 +107,8 @@
           <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <Color x:Key="SkeletonBaseColor">#2A2A2A</Color>
+          <Color x:Key="SkeletonShimmerColor">#1AFFFFFF</Color>
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
@@ -168,6 +181,7 @@
       <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
       <conv:NullToBoolConverter x:Key="NullToBoolConverter"/>
       <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+      <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
       <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
       <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
       <conv:BoolToForegroundConverter x:Key="BoolToForegroundConverter"/>

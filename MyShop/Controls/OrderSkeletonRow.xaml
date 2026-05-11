@@ -1,0 +1,27 @@
+<UserControl x:Class="MyShop.Controls.OrderSkeletonRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:MyShop.Controls">
+
+    <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="12,12">
+        <Grid VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <controls:ShimmerLoadingControl Grid.Column="0" Width="70" Height="14" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <controls:ShimmerLoadingControl Width="32" Height="32" CornerRadius="16"/>
+                <controls:ShimmerLoadingControl Width="120" Height="14" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <controls:ShimmerLoadingControl Grid.Column="2" Width="90" Height="12" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <controls:ShimmerLoadingControl Grid.Column="3" Width="70" Height="22" CornerRadius="6" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </Grid>
+    </Border>
+</UserControl>
