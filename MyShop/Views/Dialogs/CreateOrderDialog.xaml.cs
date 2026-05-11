@@ -191,25 +191,62 @@ public sealed partial class CreateOrderDialog : ContentDialog
     private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
     {
         ErrorBorder.Visibility = Visibility.Collapsed;
-
+ 
+        // 1. Basic Customer Info
         if (string.IsNullOrWhiteSpace(ViewModel.Order.CustomerName))
         {
             ShowError("Customer Name is required.");
             return;
         }
-
+ 
+        if (string.IsNullOrWhiteSpace(ViewModel.Order.CustomerPhone))
+        {
+            ShowError("Phone Number is required.");
+            return;
+        }
+ 
+        // 2. Order Metadata
+        if (string.IsNullOrWhiteSpace(ViewModel.Order.OrderType))
+        {
+            ShowError("Please select an Order Type.");
+            return;
+        }
+ 
+        if (string.IsNullOrWhiteSpace(ViewModel.Order.PaymentMethod))
+        {
+            ShowError("Please select a Payment Method.");
+            return;
+        }
+ 
+        // 3. Shipping Address for Delivery
         if (ViewModel.Order.OrderType == "Delivery" && string.IsNullOrWhiteSpace(ViewModel.Order.ShippingAddress))
         {
             ShowError("Shipping Address is required for Delivery orders.");
             return;
         }
-
+ 
+        // 4. Order Items
         if (ViewModel.OrderDetails.Count == 0)
         {
             ShowError("Please add at least one product to the order.");
             return;
         }
-
+ 
+        // 5. Item Variants (Size/Color)
+        foreach (var detail in ViewModel.OrderDetails)
+        {
+            if (string.IsNullOrWhiteSpace(detail.SelectedSize))
+            {
+                ShowError($"Please select a size for '{detail.ItemName}'.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(detail.SelectedColor))
+            {
+                ShowError($"Please select a color for '{detail.ItemName}'.");
+                return;
+            }
+        }
+ 
         IsSubmitted = true;
         _result = ContentDialogResult.Primary;
         Hide();

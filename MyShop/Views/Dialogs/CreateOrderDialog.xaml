@@ -78,7 +78,7 @@
               </Grid.ColumnDefinitions>
               
               <StackPanel Spacing="8">
-                <TextBlock Text="ORDER TYPE" Style="{StaticResource HeaderStyle}" Margin="0"/>
+                <TextBlock Text="ORDER TYPE *" Style="{StaticResource HeaderStyle}" Margin="0"/>
                 <ComboBox x:Name="OrderTypeCombo"
                           HorizontalAlignment="Stretch"
                           CornerRadius="20"
@@ -91,7 +91,7 @@
               </StackPanel>
  
               <StackPanel Grid.Column="1" Spacing="8">
-                <TextBlock Text="PAYMENT METHOD" Style="{StaticResource HeaderStyle}" Margin="0"/>
+                <TextBlock Text="PAYMENT METHOD *" Style="{StaticResource HeaderStyle}" Margin="0"/>
                 <ComboBox x:Name="PaymentMethodCombo"
                           HorizontalAlignment="Stretch"
                           CornerRadius="20"
@@ -113,7 +113,7 @@
                        Background="{ThemeResource ControlFillColorDefaultBrush}"/>
 
               <TextBox x:Name="CustomerPhoneBox"
-                       Header="Phone Number"
+                       Header="Phone Number *"
                        PlaceholderText="e.g. 0912345678"
                        Text="{x:Bind ViewModel.Order.CustomerPhone, Mode=TwoWay}"
                        InputScope="TelephoneNumber"
