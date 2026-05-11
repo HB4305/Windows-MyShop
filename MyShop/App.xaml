@@ -23,6 +23,9 @@
       <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
       <SolidColorBrush x:Key="TextBoxBorderBrush" Color="#D1D5DB"/>
 
+      <!-- Skeleton brushes are defined per-theme below (ThemeDictionaries)
+           to support live theme switching and avoid GradientStop binding bug -->
+
       <!-- ── Pagination Button Styles ── -->
       <Style x:Key="PageBtn" TargetType="Button">
         <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
@@ -68,6 +71,15 @@
           <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <Color x:Key="SkeletonBaseColor">#252525</Color>
+          <!-- SkeletonBaseBrush: solid dark surface for skeleton blocks -->
+          <SolidColorBrush x:Key="SkeletonBaseBrush" Color="#252525"/>
+          <!-- SkeletonShimmerBrush: sweep gradient; same-hue transparent stops prevent black fringing -->
+          <LinearGradientBrush x:Key="SkeletonShimmerBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+            <GradientStop Color="#00252525" Offset="0"/>
+            <GradientStop Color="#3D3D3D"   Offset="0.5"/>
+            <GradientStop Color="#00252525" Offset="1"/>
+          </LinearGradientBrush>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
           <Color x:Key="SystemAccentColor">#8B52FF</Color>
@@ -82,6 +94,15 @@
           <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <Color x:Key="SkeletonBaseColor">#DEDEDE</Color>
+          <!-- SkeletonBaseBrush: mid-gray surface visible on white backgrounds -->
+          <SolidColorBrush x:Key="SkeletonBaseBrush" Color="#DEDEDE"/>
+          <!-- SkeletonShimmerBrush: lighter sweep; same-hue transparent stops prevent black fringing -->
+          <LinearGradientBrush x:Key="SkeletonShimmerBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+            <GradientStop Color="#00DEDEDE" Offset="0"/>
+            <GradientStop Color="#F8F8F8"   Offset="0.5"/>
+            <GradientStop Color="#00DEDEDE" Offset="1"/>
+          </LinearGradientBrush>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
           <Color x:Key="SystemAccentColor">#8B52FF</Color>
@@ -96,12 +117,19 @@
           <FontFamily x:Key="ContentControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="ControlContentThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
           <FontFamily x:Key="TextControlThemeFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
+          <Color x:Key="SkeletonBaseColor">#252525</Color>
+          <SolidColorBrush x:Key="SkeletonBaseBrush" Color="#252525"/>
+          <LinearGradientBrush x:Key="SkeletonShimmerBrush" StartPoint="0,0.5" EndPoint="1,0.5">
+            <GradientStop Color="#00252525" Offset="0"/>
+            <GradientStop Color="#3D3D3D"   Offset="0.5"/>
+            <GradientStop Color="#00252525" Offset="1"/>
+          </LinearGradientBrush>
         </ResourceDictionary>
       </ResourceDictionary.ThemeDictionaries>
 
       <!-- ── Global Typography & Shape ── -->
       <FontFamily x:Key="AppDefaultFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
-      <FontFamily x:Key="AppSignatureFontFamily">ms-appx:///Assets/Momo_Signature/MomoSignature-Regular.ttf#MomoSignature-Regular</FontFamily>
+      <FontFamily x:Key="AppSignatureFontFamily">ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans</FontFamily>
 
       <Style TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
@@ -168,6 +196,7 @@
       <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
       <conv:NullToBoolConverter x:Key="NullToBoolConverter"/>
       <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+      <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
       <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
       <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
       <conv:BoolToForegroundConverter x:Key="BoolToForegroundConverter"/>

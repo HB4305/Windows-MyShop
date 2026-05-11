@@ -35,8 +35,6 @@
         </Style>
     </Page.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Disabled">
     <Grid Margin="24,20">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
@@ -252,12 +250,19 @@
                         </ListView.ItemTemplate>
                     </ListView>
 
-                    <!-- Loading overlay -->
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
-                                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-                        <ProgressBar IsIndeterminate="True" Width="120" Foreground="{StaticResource AppPurpleBrush}"/>
-                        <TextBlock Text="Loading customers..." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    </StackPanel>
+                    <!-- Skeleton loading state -->
+                    <ItemsControl Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <ItemsControl.Items>
+                            <controls:CustomerSkeletonRow/>
+                            <controls:CustomerSkeletonRow/>
+                            <controls:CustomerSkeletonRow/>
+                            <controls:CustomerSkeletonRow/>
+                            <controls:CustomerSkeletonRow/>
+                            <controls:CustomerSkeletonRow/>
+                            <controls:CustomerSkeletonRow/>
+                            <controls:CustomerSkeletonRow/>
+                        </ItemsControl.Items>
+                    </ItemsControl>
                 </Grid>
             </Grid>
         </Border>
@@ -315,5 +320,4 @@
             </Border>
         </Grid>
     </Grid>
-    </ScrollViewer>
 </Page>

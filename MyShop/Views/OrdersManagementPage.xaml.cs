@@ -157,6 +157,7 @@ public sealed partial class OrdersManagementPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current > 1,
         };
         prevBtn.Click += (s, e) =>
         {
@@ -207,6 +208,7 @@ public sealed partial class OrdersManagementPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current < total,
         };
         nextBtn.Click += (s, e) =>
         {

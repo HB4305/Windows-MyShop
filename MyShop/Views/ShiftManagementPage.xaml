@@ -23,61 +23,66 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <Grid Padding="24,20" RowSpacing="18">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
 
-      <Grid Grid.Row="0">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        
-        <controls:AppPageHeader Grid.Column="0"
-                                Title="Shift Report"
-                                Subtitle="Track cashier sessions, expected cash, and drawer reconciliation."/>
+    <Grid Grid.Row="0" Padding="24,20,24,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      
+      <controls:AppPageHeader Grid.Column="0"
+                              Title="Shift Report"
+                              Subtitle="Track cashier sessions, expected cash, and drawer reconciliation."/>
 
-        <Button x:Name="ViewReportLogsButton"
-                Grid.Column="1"
-                Click="ViewReportLogs_Click"
-                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                BorderThickness="1"
-                Padding="14,10"
-                CornerRadius="20"
-                VerticalAlignment="Center"
-                ToolTipService.ToolTip="View submitted shift reports">
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <FontIcon Glyph="&#xE9D2;" FontSize="14"/>
-            <TextBlock Text="Report Logs" FontWeight="SemiBold" 
-                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          </StackPanel>
-        </Button>
-        <Button Grid.Column="2"
-                Command="{Binding LoadActiveShiftCommand}"
-                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                BorderThickness="1"
-                Padding="14,10"
-                CornerRadius="20"
-                VerticalAlignment="Center"
-                Margin="12,0,0,0"
-                ToolTipService.ToolTip="Refresh shift data">
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <FontIcon Glyph="&#xE72C;" FontSize="14"/>
-            <TextBlock Text="Refresh" FontWeight="SemiBold" 
-                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          </StackPanel>
-        </Button>
-      </Grid>
+      <Button x:Name="ViewReportLogsButton"
+              Grid.Column="1"
+              Click="ViewReportLogs_Click"
+              Background="{ThemeResource ControlFillColorDefaultBrush}"
+              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+              BorderThickness="1"
+              Padding="14,10"
+              CornerRadius="20"
+              VerticalAlignment="Center"
+              ToolTipService.ToolTip="View submitted shift reports">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <FontIcon Glyph="&#xE9D2;" FontSize="14"/>
+          <TextBlock Text="Report Logs" FontWeight="SemiBold" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </StackPanel>
+      </Button>
+      <Button Grid.Column="2"
+              Command="{Binding LoadActiveShiftCommand}"
+              Background="{ThemeResource ControlFillColorDefaultBrush}"
+              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+              BorderThickness="1"
+              Padding="14,10"
+              CornerRadius="20"
+              VerticalAlignment="Center"
+              Margin="12,0,0,0"
+              ToolTipService.ToolTip="Refresh shift data">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <FontIcon Glyph="&#xE72C;" FontSize="14"/>
+          <TextBlock Text="Refresh" FontWeight="SemiBold" 
+                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </StackPanel>
+      </Button>
+    </Grid>
 
-      <Border Grid.Row="1"
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <Grid Padding="24,10,24,20" RowSpacing="18">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+      <Border Grid.Row="0"
               Style="{StaticResource PanelBorder}"
               Padding="18"
               Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}">
@@ -89,7 +94,7 @@
         </StackPanel>
       </Border>
 
-      <Grid Grid.Row="2" ColumnSpacing="12" RowSpacing="12">
+      <Grid Grid.Row="1" ColumnSpacing="12" RowSpacing="12">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
@@ -102,12 +107,15 @@
               <FontIcon Glyph="&#xE8C7;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
               <TextBlock Text="Shift Revenue" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <TextBlock Text="{Binding ShiftRevenue, Converter={StaticResource CurrencyFormatter}}"
-                         FontSize="24"
-                         FontWeight="Bold"
-                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-            </StackPanel>
+            <Grid>
+                <TextBlock Text="{Binding ShiftRevenue, Converter={StaticResource CurrencyFormatter}}"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                           Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                <controls:ShimmerLoadingControl Width="120" Height="24" HorizontalAlignment="Left" IsShimmering="True"
+                                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
             <TextBlock Text="Paid sales recorded in the active shift."
                        FontSize="12"
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
@@ -120,10 +128,15 @@
               <FontIcon Glyph="&#xE716;" Foreground="{StaticResource SuccessBrush}" FontSize="16"/>
               <TextBlock Text="Customers Served" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
-            <TextBlock Text="{Binding ShiftCustomerCount}"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Grid>
+                <TextBlock Text="{Binding ShiftCustomerCount}"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                           Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                <controls:ShimmerLoadingControl Width="60" Height="24" HorizontalAlignment="Left" IsShimmering="True"
+                                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
             <TextBlock Text="Each completed order counts as one customer served."
                        FontSize="12"
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
@@ -136,10 +149,15 @@
               <FontIcon Glyph="&#xE9D9;" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
               <TextBlock Text="Average Spend" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
-            <TextBlock Text="{Binding AverageSpendPerCustomer, Converter={StaticResource CurrencyFormatter}}"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Grid>
+                <TextBlock Text="{Binding AverageSpendPerCustomer, Converter={StaticResource CurrencyFormatter}}"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                           Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                <controls:ShimmerLoadingControl Width="100" Height="24" HorizontalAlignment="Left" IsShimmering="True"
+                                             Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </Grid>
             <TextBlock Text="Average revenue per served customer in this shift."
                        FontSize="12"
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
@@ -147,7 +165,7 @@
         </Border>
       </Grid>
 
-      <Grid Grid.Row="3" ColumnSpacing="18" RowSpacing="18">
+      <Grid Grid.Row="2" ColumnSpacing="18" RowSpacing="18">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="360"/>
           <ColumnDefinition Width="*"/>
@@ -271,10 +289,15 @@
                     <FontIcon Glyph="&#xE8C7;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
                     <TextBlock Text="Expected Cash" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </StackPanel>
-                  <TextBlock Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}"
-                             FontSize="26"
-                             FontWeight="Bold"
-                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                  <Grid>
+                    <TextBlock Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                               Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                    <controls:ShimmerLoadingControl Width="140" Height="26" HorizontalAlignment="Left" IsShimmering="True"
+                                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                  </Grid>
                 </StackPanel>
               </Border>
 
@@ -296,10 +319,15 @@
                     <FontIcon Glyph="&#xE7BA;" Foreground="{StaticResource WarningBrush}" FontSize="16"/>
                     <TextBlock Text="Discrepancy" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </StackPanel>
-                  <TextBlock Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}"
-                             FontSize="26"
-                             FontWeight="Bold"
-                             Foreground="{StaticResource WarningBrush}"/>
+                  <Grid>
+                    <TextBlock Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource WarningBrush}"
+                               Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                    <controls:ShimmerLoadingControl Width="120" Height="26" HorizontalAlignment="Left" IsShimmering="True"
+                                                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                  </Grid>
                 </StackPanel>
               </Border>
             </Grid>
@@ -320,10 +348,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
-              <ProgressRing IsActive="{Binding IsBusy}"
-                            Width="28"
-                            Height="28"
-                            VerticalAlignment="Center"/>
+              <controls:ShimmerLoadingControl IsShimmering="{Binding IsBusy}"
+                                            Width="28"
+                                            Height="28"
+                                            CornerRadius="14"
+                                            VerticalAlignment="Center"
+                                            Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
               <Button Grid.Column="1"
                       Command="{Binding CloseShiftCommand}"
                       IsEnabled="{Binding HasActiveShift}"
@@ -340,6 +370,7 @@
           </StackPanel>
         </Border>
       </Grid>
-    </Grid>
-  </ScrollViewer>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
 </Page>

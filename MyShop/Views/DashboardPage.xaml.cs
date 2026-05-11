@@ -134,6 +134,18 @@ public sealed partial class DashboardPage : Page
         canvas.Children.Add(label);
     }
 
+    private void ViewAllOrders_Click(object sender, RoutedEventArgs e)
+    {
+        // Navigate to CustomerOrderPage (Orders Management)
+        this.Frame.Navigate(typeof(CustomerOrderPage));
+    }
+
+    private void RestockAll_Click(object sender, RoutedEventArgs e)
+    {
+        // Navigate to SportItemPage (Product Catalog) where stock can be managed
+        this.Frame.Navigate(typeof(SportItemPage));
+    }
+
     private async void CreateOrderButton_Click(object sender, RoutedEventArgs e)
     {
         try

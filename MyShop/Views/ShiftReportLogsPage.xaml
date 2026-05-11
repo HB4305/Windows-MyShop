@@ -50,8 +50,6 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
   <Grid Padding="24,20" RowSpacing="20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -85,7 +83,7 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
@@ -145,7 +143,7 @@
                  Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
                  FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        <ProgressRing Grid.Column="1" IsActive="{Binding IsLoading}" Width="24" Height="24" Foreground="{StaticResource AppPurpleBrush}"/>
+        <controls:ShimmerLoadingControl Grid.Column="1" Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
         <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
                 Background="Transparent" BorderThickness="0" Padding="8"
                 Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
@@ -161,7 +159,7 @@
       <Grid MinWidth="1160">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
 
@@ -192,6 +190,18 @@
             <TextBlock Grid.Column="8" Text="NOTES" FontSize="11" FontWeight="SemiBold" Margin="20,0,0,0"/>
           </Grid>
         </Border>
+
+        <!-- Loading State -->
+        <StackPanel Grid.Row="2" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+        </StackPanel>
 
         <!-- Table Body -->
         <ListView Grid.Row="1" ItemsSource="{Binding PagedReportLogs}" SelectionMode="None" Padding="0,4"
@@ -271,5 +281,4 @@
       </Grid>
     </Border>
   </Grid>
-  </ScrollViewer>
 </Page>

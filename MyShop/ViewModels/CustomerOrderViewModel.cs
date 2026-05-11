@@ -30,6 +30,9 @@ public partial class CustomerOrderViewModel : ObservableObject
     private bool _isLoading = false;
 
     [ObservableProperty]
+    private bool _isDetailLoading = false;
+
+    [ObservableProperty]
     private string? _errorMessage;
 
     [ObservableProperty]
@@ -254,8 +257,21 @@ public partial class CustomerOrderViewModel : ObservableObject
         ShowDetailPanel = true;
 
         // Only load details when needed (lazy load)
-        var details = await _service.GetOrderDetailsAsync(order.Id);
-        CurrentDetails = new ObservableCollection<OrderDetail>(details);
+        IsDetailLoading = true;
+        try
+        {
+            var details = await _service.GetOrderDetailsAsync(order.Id);
+            CurrentDetails = new ObservableCollection<OrderDetail>(details);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Failed to load order details: " + ex.Message;
+            CurrentDetails.Clear();
+        }
+        finally
+        {
+            IsDetailLoading = false;
+        }
     }
 
     // ── Close Detail Panel ───────────────────────────────────────

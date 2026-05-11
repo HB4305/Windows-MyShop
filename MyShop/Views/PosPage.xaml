@@ -113,11 +113,29 @@
             </GridView.ItemTemplate>
           </GridView>
 
-          <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
-                      Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-            <ProgressRing IsActive="True" Width="36" Height="36" Foreground="{StaticResource PurpleBrush}"/>
-            <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-          </StackPanel>
+          <!-- Skeleton Loading State -->
+          <GridView Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                    SelectionMode="None" Padding="0">
+              <GridView.ItemContainerStyle>
+                  <Style TargetType="GridViewItem">
+                      <Setter Property="Width" Value="190"/>
+                      <Setter Property="Height" Value="260"/>
+                      <Setter Property="Margin" Value="0,0,16,16"/>
+                  </Style>
+              </GridView.ItemContainerStyle>
+              <GridView.Items>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+                  <controls:PosProductSkeleton/>
+              </GridView.Items>
+          </GridView>
         </Grid>
 
       </Grid>
