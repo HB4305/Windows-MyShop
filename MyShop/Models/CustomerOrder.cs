@@ -67,7 +67,7 @@ public class CustomerOrder : INotifyPropertyChanged
     }
 
     private string? _paymentMethod = "Cash";
-    [RegularExpression("^(Cash|BankTransfer|COD)$", ErrorMessage = "Payment method must be 'Cash', 'BankTransfer', or 'COD'")]
+    [RegularExpression("^(Cash|BankTransfer|COD|CreditCard)$", ErrorMessage = "Payment method must be 'Cash', 'BankTransfer', 'COD', or 'CreditCard'")]
     public string? PaymentMethod
     {
         get => _paymentMethod;

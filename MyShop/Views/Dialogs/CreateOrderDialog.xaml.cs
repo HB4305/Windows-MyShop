@@ -15,6 +15,7 @@ public class CreateOrderDialogViewModel : INotifyPropertyChanged
 
     public CustomerOrder Order { get; } = new();
     public ObservableCollection<OrderDetail> OrderDetails { get; } = new();
+    public ObservableCollection<string> AvailablePaymentMethods { get; } = new();
 
     private decimal _totalAmount;
     public decimal TotalAmount
@@ -41,6 +42,26 @@ public class CreateOrderDialogViewModel : INotifyPropertyChanged
     {
         _itemService = App.Services.GetRequiredService<SportItemService>();
         OrderDetails.CollectionChanged += (s, e) => RecalculateTotal();
+        UpdateAvailablePaymentMethods("AtStore"); // Default
+    }
+ 
+    public void UpdateAvailablePaymentMethods(string orderType)
+    {
+        AvailablePaymentMethods.Clear();
+        if (orderType == "AtStore")
+        {
+            AvailablePaymentMethods.Add("Cash");
+            AvailablePaymentMethods.Add("BankTransfer");
+            AvailablePaymentMethods.Add("CreditCard");
+            if (Order.PaymentMethod == "COD") Order.PaymentMethod = "Cash";
+        }
+        else // Delivery
+        {
+            AvailablePaymentMethods.Add("COD");
+            AvailablePaymentMethods.Add("BankTransfer");
+            if (Order.PaymentMethod == "Cash" || Order.PaymentMethod == "CreditCard") 
+                Order.PaymentMethod = "COD";
+        }
     }
 
     public async Task<IEnumerable<SportItem>> SearchProductsAsync(string keyword)
@@ -118,6 +139,7 @@ public sealed partial class CreateOrderDialog : ContentDialog
         {
             var typeStr = item.Content.ToString() ?? "AtStore";
             ViewModel.Order.OrderType = typeStr;
+            ViewModel.UpdateAvailablePaymentMethods(typeStr);
             UpdateAddressVisibility();
         }
     }
