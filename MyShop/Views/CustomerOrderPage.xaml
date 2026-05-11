@@ -1210,23 +1210,26 @@
                   </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <VariableSizedWrapGrid Orientation="Horizontal">
-                  <TextBlock Text="Payment:" Style="{StaticResource SectionTitle}"
-                             VerticalAlignment="Center" Margin="0,0,12,8" FontSize="12"/>
-                  
+                <TextBlock Text="PAYMENT STATUS" Style="{StaticResource SectionTitle}" Margin="0,10,0,0"/>
+                
+                <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="170" ItemHeight="50">
                   <Grid Margin="0,0,8,8">
                     <!-- Paid Button (Active) -->
                     <Button x:Name="BtnPayPaidActive"
                             Content="Mark as Paid"
                             Click="PayPaid_Click"
                             Style="{StaticResource PrimaryBtn}"
-                            Visibility="{Binding IsPaid, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            Visibility="{Binding IsPaid, Converter={StaticResource BoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
                     <!-- Paid Button (Inactive) -->
                     <Button x:Name="BtnPayPaidInactive"
                             Content="Mark as Paid"
                             Click="PayPaid_Click"
                             Style="{StaticResource SecondaryBtn}"
-                            Visibility="{Binding IsPaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                            Visibility="{Binding IsPaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
                   </Grid>
  
                   <Grid Margin="0,0,8,8">
@@ -1235,13 +1238,17 @@
                             Content="Mark as Unpaid"
                             Click="PayUnpaid_Click"
                             Style="{StaticResource PrimaryBtn}"
-                            Visibility="{Binding IsUnpaid, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            Visibility="{Binding IsUnpaid, Converter={StaticResource BoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
                     <!-- Unpaid Button (Inactive) -->
                     <Button x:Name="BtnPayUnpaidInactive"
                             Content="Mark as Unpaid"
                             Click="PayUnpaid_Click"
                             Style="{StaticResource SecondaryBtn}"
-                            Visibility="{Binding IsUnpaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                            Visibility="{Binding IsUnpaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
                   </Grid>
                 </VariableSizedWrapGrid>
               </StackPanel>
