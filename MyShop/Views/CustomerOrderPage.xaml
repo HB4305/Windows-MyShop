@@ -24,6 +24,7 @@
     <conv:OrderIdConverter x:Key="OrderIdConverter"/>
     <conv:CurrentPageEndConverter x:Key="CurrentPageEndConverter"/>
     <conv:ItemIndexConverter x:Key="ItemIndexConverter"/>
+    <conv:StatusToButtonStyleConverter x:Key="StatusToButtonStyleConverter"/>
 
     <!-- ══ ListViewItem Style (selected row highlight) ══ -->
     <Style x:Key="OrderListViewItem" TargetType="ListViewItem">
@@ -82,30 +83,30 @@
       <Setter Property="CornerRadius" Value="12"/>
     </Style>
 
-    <Style x:Key="StatusBadgeBase" TargetType="Border">
-      <Setter Property="CornerRadius" Value="20"/>
-      <Setter Property="Padding" Value="10,4"/>
-    </Style>
-
     <Style x:Key="PrimaryBtn" TargetType="Button">
       <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
       <Setter Property="Foreground" Value="White"/>
-      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="FontSize" Value="13"/>
-      <Setter Property="Padding" Value="14,8"/>
-      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="16,8"/>
+      <Setter Property="CornerRadius" Value="20"/>
       <Setter Property="BorderThickness" Value="0"/>
     </Style>
-
+ 
     <Style x:Key="SecondaryBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="FontSize" Value="13"/>
-      <Setter Property="Padding" Value="14,8"/>
-      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="16,8"/>
+      <Setter Property="CornerRadius" Value="20"/>
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+    </Style>
+
+    <Style x:Key="StatusBadgeBase" TargetType="Border">
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="Padding" Value="10,4"/>
     </Style>
 
     <Style x:Key="IconBtn" TargetType="Button">
@@ -1180,54 +1181,69 @@
               <StackPanel Spacing="10">
                 <TextBlock Text="UPDATE STATUS" Style="{StaticResource SectionTitle}"/>
 
-                <ItemsControl x:Name="StatusButtonsPanel">
+                <ItemsControl x:Name="StatusButtonsPanel" ItemsSource="{Binding AvailableStatuses}">
                   <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                      <WrapPanel Orientation="Horizontal"/>
+                      <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="170" ItemHeight="50"/>
                     </ItemsPanelTemplate>
                   </ItemsControl.ItemsPanel>
-                  <Button x:Name="BtnStatusPending"
-                          Content="Pending"
-                          Click="StatusPending_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusProcessing"
-                          Content="Processing"
-                          Click="StatusProcessing_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusReadyForPickup"
-                          Content="Ready for Pickup"
-                          Click="StatusReadyForPickup_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusShipped"
-                          Content="Shipped"
-                          Click="StatusShipped_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusDelivered"
-                          Content="Delivered"
-                          Click="StatusDelivered_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusCompleted"
-                          Content="Completed"
-                          Click="StatusCompleted_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusCancelled"
-                          Content="Cancelled"
-                          Click="StatusCancelled_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:StatusOption">
+                      <Grid Margin="0,0,8,8">
+                        <!-- Active Status Button -->
+                        <Button Content="{Binding Name}"
+                                Click="DynamicStatusButton_Click"
+                                Style="{StaticResource PrimaryBtn}"
+                                Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"/>
+                        
+                        <!-- Inactive Status Button -->
+                        <Button Content="{Binding Name}"
+                                Click="DynamicStatusButton_Click"
+                                Style="{StaticResource SecondaryBtn}"
+                                Visibility="{Binding IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <StackPanel Orientation="Horizontal" Spacing="8">
+                <VariableSizedWrapGrid Orientation="Horizontal">
                   <TextBlock Text="Payment:" Style="{StaticResource SectionTitle}"
-                             VerticalAlignment="Center" Margin="0" FontSize="12"/>
-                  <Button x:Name="BtnPayPaid"
-                          Content="Mark as Paid"
-                          Click="PayPaid_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnPayUnpaid"
-                          Content="Mark as Unpaid"
-                          Click="PayUnpaid_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                </StackPanel>
+                             VerticalAlignment="Center" Margin="0,0,12,8" FontSize="12"/>
+                  
+                  <Grid Margin="0,0,8,8">
+                    <!-- Paid Button (Active) -->
+                    <Button x:Name="BtnPayPaidActive"
+                            Content="Mark as Paid"
+                            Click="PayPaid_Click"
+                            Style="{StaticResource PrimaryBtn}"
+                            Visibility="{Binding IsPaid, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <!-- Paid Button (Inactive) -->
+                    <Button x:Name="BtnPayPaidInactive"
+                            Content="Mark as Paid"
+                            Click="PayPaid_Click"
+                            Style="{StaticResource SecondaryBtn}"
+                            Visibility="{Binding IsPaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                  </Grid>
+ 
+                  <Grid Margin="0,0,8,8">
+                    <!-- Unpaid Button (Active) -->
+                    <Button x:Name="BtnPayUnpaidActive"
+                            Content="Mark as Unpaid"
+                            Click="PayUnpaid_Click"
+                            Style="{StaticResource PrimaryBtn}"
+                            Visibility="{Binding IsUnpaid, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <!-- Unpaid Button (Inactive) -->
+                    <Button x:Name="BtnPayUnpaidInactive"
+                            Content="Mark as Unpaid"
+                            Click="PayUnpaid_Click"
+                            Style="{StaticResource SecondaryBtn}"
+                            Visibility="{Binding IsUnpaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                  </Grid>
+                </VariableSizedWrapGrid>
               </StackPanel>
             </Border>
 

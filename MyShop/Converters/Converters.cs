@@ -429,3 +429,13 @@ public class CountToVisibilityInverseConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
 }
+
+public class StatusToButtonStyleConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        bool isActive = value is bool b && b;
+        return Application.Current.Resources[isActive ? "PrimaryBtn" : "SecondaryBtn"];
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
+}
