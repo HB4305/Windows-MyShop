@@ -69,8 +69,6 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
   <Grid Margin="24,20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -323,13 +321,19 @@
           </ListView.ItemTemplate>
         </ListView>
 
-        <!-- Loading overlay -->
-        <StackPanel Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
-                    Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-          <ProgressBar IsIndeterminate="True" Width="120" Foreground="{StaticResource AppPurpleBrush}"/>
-          <TextBlock Text="Loading products..." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        </StackPanel>
+        <!-- Skeleton loading state -->
+        <ItemsControl Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+          <ItemsControl.Items>
+            <controls:ProductSkeletonRow/>
+            <controls:ProductSkeletonRow/>
+            <controls:ProductSkeletonRow/>
+            <controls:ProductSkeletonRow/>
+            <controls:ProductSkeletonRow/>
+            <controls:ProductSkeletonRow/>
+            <controls:ProductSkeletonRow/>
+            <controls:ProductSkeletonRow/>
+          </ItemsControl.Items>
+        </ItemsControl>
 
         </Grid>
     </Border>
@@ -369,5 +373,4 @@
                TextWrapping="Wrap" HorizontalAlignment="Center" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" 
                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
   </Grid>
-  </ScrollViewer>
 </Page>

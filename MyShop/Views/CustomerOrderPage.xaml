@@ -19,6 +19,7 @@
     <conv:LineTotalConverter x:Key="LineTotalConverter"/>
     <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
     <conv:OrderIdConverter x:Key="OrderIdConverter"/>
     <conv:CurrentPageEndConverter x:Key="CurrentPageEndConverter"/>
@@ -443,8 +444,6 @@
 
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
   <Grid x:Name="OrderRoot" Margin="0" SizeChanged="OrderRoot_SizeChanged">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -562,17 +561,22 @@
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Total Orders" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
-              <TextBlock FontSize="22"
-                         FontWeight="Bold"
+              <Grid>
+                  <TextBlock FontSize="22"
+                             FontWeight="Bold"
+                             FontFamily="{StaticResource AppDefaultFontFamily}"
+                             Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                             Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <Run Text="{Binding TotalOrders, Mode=OneWay}"/>
+                    <Run Text=" orders"
+                         FontSize="12"
+                         FontWeight="Normal"
                          FontFamily="{StaticResource AppDefaultFontFamily}"
-                         Foreground="{ThemeResource TextFillColorPrimaryBrush}">
-                <Run Text="{Binding TotalOrders, Mode=OneWay}"/>
-                <Run Text=" orders"
-                     FontSize="12"
-                     FontWeight="Normal"
-                     FontFamily="{StaticResource AppDefaultFontFamily}"
-                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-              </TextBlock>
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                  </TextBlock>
+                  <controls:ShimmerLoadingControl Width="100" Height="28" HorizontalAlignment="Left" 
+                                                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
             </StackPanel>
           </Border>
 
@@ -583,11 +587,16 @@
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Pending" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
-              <TextBlock Text="{Binding PendingCount}"
-                         FontSize="22"
-                         FontWeight="Bold"
-                         FontFamily="{StaticResource AppDefaultFontFamily}"
-                         Foreground="{StaticResource AmberBrush}"/>
+              <Grid>
+                  <TextBlock Text="{Binding PendingCount}"
+                             FontSize="22"
+                             FontWeight="Bold"
+                             FontFamily="{StaticResource AppDefaultFontFamily}"
+                             Foreground="{StaticResource AmberBrush}"
+                             Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                  <controls:ShimmerLoadingControl Width="40" Height="28" HorizontalAlignment="Left" 
+                                                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
             </StackPanel>
           </Border>
 
@@ -598,11 +607,16 @@
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Processing" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
-              <TextBlock Text="{Binding ProcessingCount}"
-                         FontSize="22"
-                         FontWeight="Bold"
-                         FontFamily="{StaticResource AppDefaultFontFamily}"
-                         Foreground="{StaticResource BlueBrush}"/>
+              <Grid>
+                  <TextBlock Text="{Binding ProcessingCount}"
+                             FontSize="22"
+                             FontWeight="Bold"
+                             FontFamily="{StaticResource AppDefaultFontFamily}"
+                             Foreground="{StaticResource BlueBrush}"
+                             Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                  <controls:ShimmerLoadingControl Width="40" Height="28" HorizontalAlignment="Left" 
+                                                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
             </StackPanel>
           </Border>
 
@@ -613,12 +627,17 @@
                   BorderThickness="1">
             <StackPanel>
               <TextBlock Text="Total Revenue" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
-              <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyConverter}}"
-                         FontSize="18"
-                         FontWeight="Bold"
-                         FontFamily="{StaticResource AppDefaultFontFamily}"
-                         Foreground="{StaticResource GreenBrush}"
-                         TextTrimming="CharacterEllipsis"/>
+              <Grid>
+                  <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyConverter}}"
+                             FontSize="18"
+                             FontWeight="Bold"
+                             FontFamily="{StaticResource AppDefaultFontFamily}"
+                             Foreground="{StaticResource GreenBrush}"
+                             TextTrimming="CharacterEllipsis"
+                             Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                  <controls:ShimmerLoadingControl Width="100" Height="24" HorizontalAlignment="Left" 
+                                                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              </Grid>
             </StackPanel>
           </Border>
         </Grid>
@@ -739,20 +758,7 @@
       <!-- Table Container -->
       <Border Grid.Row="3" Margin="24,0,24,0">
         <Grid>
-          <!-- Loading overlay -->
-          <Border Background="{ThemeResource LayerOnMicaBaseAltFillColorDefaultBrush}"
-                  CornerRadius="20"
-                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  Canvas.ZIndex="10">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
-              <ProgressBar IsIndeterminate="True" Width="120"/>
-              <TextBlock Text="Loading orders..."
-                         FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                         HorizontalAlignment="Center"/>
-            </StackPanel>
-          </Border>
+          <!-- Actual content will be inside the Table structure below -->
 
           <!-- Table with header -->
           <Border CornerRadius="20"
@@ -803,18 +809,32 @@
                 </Border>
 
                 <!-- Table Body: ListView (clickable rows) -->
-                <ListView Grid.Row="1"
-                          ItemsSource="{Binding PaginatedOrders}"
-                          ItemTemplate="{StaticResource OrderTableRowTemplate}"
-                          ItemContainerStyle="{StaticResource OrderListViewItem}"
-                          SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
-                          SelectionMode="Single"
-                          SelectionChanged="OrderList_SelectionChanged"
-                          BorderThickness="0"
-                          Background="Transparent"
-                          Padding="0,4"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <Grid Grid.Row="1">
+                    <ListView ItemsSource="{Binding PaginatedOrders}"
+                              ItemTemplate="{StaticResource OrderTableRowTemplate}"
+                              ItemContainerStyle="{StaticResource OrderListViewItem}"
+                              SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
+                              SelectionMode="Single"
+                              SelectionChanged="OrderList_SelectionChanged"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              Padding="0,4"
+                              Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+
+                    <!-- Skeleton Loading State (Aligned with rows) -->
+                    <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <controls:CustomerOrderSkeletonRow/>
+                        <controls:CustomerOrderSkeletonRow/>
+                        <controls:CustomerOrderSkeletonRow/>
+                        <controls:CustomerOrderSkeletonRow/>
+                        <controls:CustomerOrderSkeletonRow/>
+                        <controls:CustomerOrderSkeletonRow/>
+                        <controls:CustomerOrderSkeletonRow/>
+                        <controls:CustomerOrderSkeletonRow/>
+                    </StackPanel>
+                </Grid>
 
                 <!-- Empty State (fixed overlay, shows when Count==0) -->
                 <StackPanel Grid.Row="1"
@@ -1023,12 +1043,19 @@
                   </Border>
                 </Grid>
 
-                <ItemsControl ItemsSource="{Binding CurrentDetails, Mode=OneWay}"
-                              ItemTemplate="{StaticResource OrderDetailItemTemplate}"/>
+                <Grid>
+                    <ItemsControl ItemsSource="{Binding CurrentDetails, Mode=OneWay}"
+                                  ItemTemplate="{StaticResource OrderDetailItemTemplate}"
+                                  Visibility="{Binding IsDetailLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                    
+                    <StackPanel Visibility="{Binding IsDetailLoading, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="10">
+                        <controls:ShimmerLoadingControl Height="60" CornerRadius="8"/>
+                        <controls:ShimmerLoadingControl Height="60" CornerRadius="8"/>
+                    </StackPanel>
+                </Grid>
 
                 <TextBlock Text="No items in this order."
                            FontSize="13" Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                           HorizontalAlignment="Center" Margin="0,4,0,0"
                            Visibility="{Binding CurrentDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
 
                 <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
@@ -1048,7 +1075,10 @@
                              Text="{Binding SelectedOrder.TotalAmount, Converter={StaticResource CurrencyConverter}}"
                              FontSize="18" FontWeight="Bold"
                              Foreground="{StaticResource PurpleBrush}"
-                             VerticalAlignment="Center"/>
+                             VerticalAlignment="Center"
+                             Visibility="{Binding IsDetailLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+                  <controls:ShimmerLoadingControl Grid.Column="1" Width="80" Height="24" HorizontalAlignment="Right"
+                                                  Visibility="{Binding IsDetailLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Grid>
               </StackPanel>
             </Border>
@@ -1264,6 +1294,4 @@
     </Border>
 
   </Grid>
-  </ScrollViewer>
-
 </Page>

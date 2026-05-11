@@ -48,8 +48,6 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
   <Grid Padding="24,20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -178,7 +176,7 @@
                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
                    FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <ProgressRing Width="20" Height="20" IsActive="{Binding IsLoading}" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,4,0"/>
+          <controls:ShimmerLoadingControl Grid.Column="1" Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
           <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
                   Background="Transparent" BorderThickness="0" Padding="8"
                   Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
@@ -229,8 +227,18 @@
               </Grid>
             </Border>
 
+            <!-- Loading State -->
+            <StackPanel Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+            </StackPanel>
+
             <!-- Table Body -->
-            <ListView Grid.Row="1" ItemsSource="{Binding FilteredStaffMembers}" SelectionMode="None" Padding="0,4">
+            <ListView Grid.Row="1" ItemsSource="{Binding FilteredStaffMembers}" SelectionMode="None" Padding="0,4"
+                      Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
               <ListView.ItemContainerStyle>
                   <Style TargetType="ListViewItem">
                       <Setter Property="Padding" Value="16,0"/>
@@ -307,5 +315,4 @@
     </StackPanel>
 
   </Grid>
-  </ScrollViewer>
 </Page>

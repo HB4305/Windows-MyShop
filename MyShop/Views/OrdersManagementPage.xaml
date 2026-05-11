@@ -18,6 +18,7 @@
     <conv:PayBadgeFgConverter x:Key="PayBadgeFgConverter"/>
     <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
     <conv:LineTotalConverter x:Key="LineTotalConverter"/>
 
@@ -573,7 +574,22 @@
                           SelectionChanged="OrderList_SelectionChanged"
                           BorderThickness="0"
                           Background="Transparent"
-                          Padding="0,4"/>
+                          Padding="0,4"
+                          Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                <!-- Skeleton Loading State -->
+                <ItemsControl Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ItemsControl.Items>
+                        <controls:OrderSkeletonRow/>
+                        <controls:OrderSkeletonRow/>
+                        <controls:OrderSkeletonRow/>
+                        <controls:OrderSkeletonRow/>
+                        <controls:OrderSkeletonRow/>
+                        <controls:OrderSkeletonRow/>
+                        <controls:OrderSkeletonRow/>
+                        <controls:OrderSkeletonRow/>
+                    </ItemsControl.Items>
+                </ItemsControl>
 
                 <!-- Empty State -->
                 <StackPanel Grid.Row="1"

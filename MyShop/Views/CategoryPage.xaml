@@ -50,8 +50,6 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
   <Grid Padding="24,20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -112,7 +110,7 @@
                    Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
                    FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <ProgressRing Grid.Column="1" IsActive="{Binding IsLoading}" Width="24" Height="24" Foreground="{StaticResource AppPurpleBrush}"/>
+          <!-- Removed ProgressRing -->
           <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
                   Command="{Binding SearchCommand}" Background="Transparent" BorderThickness="0" Padding="8"
                   Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
@@ -195,13 +193,16 @@
           </ListView.ItemTemplate>
         </ListView>
 
-        <!-- Loading overlay -->
-        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12"
-                    Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-          <ProgressBar IsIndeterminate="True" Width="120" Foreground="{StaticResource AppPurpleBrush}"/>
-          <TextBlock Text="Loading categories..." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        </StackPanel>
+        <!-- Skeleton Loading State -->
+        <ItemsControl Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ItemsControl.Items>
+                <controls:CategorySkeletonRow/>
+                <controls:CategorySkeletonRow/>
+                <controls:CategorySkeletonRow/>
+                <controls:CategorySkeletonRow/>
+                <controls:CategorySkeletonRow/>
+            </ItemsControl.Items>
+        </ItemsControl>
 
         <!-- Empty State -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
@@ -251,5 +252,4 @@
       </Grid>
     </Border>
   </Grid>
-  </ScrollViewer>
 </Page>

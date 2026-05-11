@@ -36,8 +36,6 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
   <Grid Padding="24,20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -115,7 +113,7 @@
                    Text="{Binding SearchSupplierKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
                    FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <ProgressRing Grid.Column="1" IsActive="{Binding IsLoadingSuppliers}" Width="24" Height="24" Foreground="{StaticResource AppPurpleBrush}"/>
+          <controls:ShimmerLoadingControl Grid.Column="1" Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoadingSuppliers}" Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource BoolToVisibilityConverter}}"/>
           <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
                   Background="Transparent" BorderThickness="0" Padding="8"
                   Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
@@ -164,8 +162,18 @@
                 </Grid>
               </Border>
   
+              <!-- Loading State -->
+              <StackPanel Grid.Row="1" Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource BoolToVisibilityConverter}}">
+                  <controls:SupplierSkeletonRow/>
+                  <controls:SupplierSkeletonRow/>
+                  <controls:SupplierSkeletonRow/>
+                  <controls:SupplierSkeletonRow/>
+                  <controls:SupplierSkeletonRow/>
+              </StackPanel>
+
               <!-- Table Body -->
-              <ListView Grid.Row="1" ItemsSource="{Binding Suppliers}" SelectionMode="None" Padding="0,4">
+              <ListView Grid.Row="1" ItemsSource="{Binding Suppliers}" SelectionMode="None" Padding="0,4"
+                        Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="16,0"/>
@@ -279,8 +287,16 @@
                 </Grid>
               </Border>
   
+              <!-- Loading State -->
+              <StackPanel Grid.Row="1" Visibility="{Binding IsLoadingOrders, Converter={StaticResource BoolToVisibilityConverter}}">
+                  <controls:OrderSkeletonRow/>
+                  <controls:OrderSkeletonRow/>
+                  <controls:OrderSkeletonRow/>
+              </StackPanel>
+
               <!-- Table Body -->
-              <ListView Grid.Row="1" ItemsSource="{Binding SupplyOrders}" SelectionMode="None" Padding="0,4">
+              <ListView Grid.Row="1" ItemsSource="{Binding SupplyOrders}" SelectionMode="None" Padding="0,4"
+                        Visibility="{Binding IsLoadingOrders, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="16,0"/>
@@ -333,5 +349,4 @@
       </Grid>
 
   </Grid>
-  </ScrollViewer>
 </Page>
