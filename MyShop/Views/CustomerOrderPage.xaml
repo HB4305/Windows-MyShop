@@ -1194,6 +1194,10 @@
                           Content="Processing"
                           Click="StatusProcessing_Click"
                           Style="{StaticResource SecondaryBtn}"/>
+                  <Button x:Name="BtnStatusReadyForPickup"
+                          Content="Ready for Pickup"
+                          Click="StatusReadyForPickup_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
                   <Button x:Name="BtnStatusShipped"
                           Content="Shipped"
                           Click="StatusShipped_Click"
@@ -1201,6 +1205,10 @@
                   <Button x:Name="BtnStatusDelivered"
                           Content="Delivered"
                           Click="StatusDelivered_Click"
+                          Style="{StaticResource SecondaryBtn}"/>
+                  <Button x:Name="BtnStatusCompleted"
+                          Content="Completed"
+                          Click="StatusCompleted_Click"
                           Style="{StaticResource SecondaryBtn}"/>
                   <Button x:Name="BtnStatusCancelled"
                           Content="Cancelled"

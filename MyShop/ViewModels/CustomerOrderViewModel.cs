@@ -76,10 +76,11 @@ public partial class CustomerOrderViewModel : ObservableObject
         "All",
         "Pending",
         "Processing",
-        "Completed",
+        "Ready for Pickup",
+        "Shipped",
         "Delivered",
-        "Cancelled",
-        "Shipped"
+        "Completed",
+        "Cancelled"
     };
 
     // ── Computed Stats ─────────────────────────────────────────────
@@ -230,14 +231,11 @@ public partial class CustomerOrderViewModel : ObservableObject
 
         if (ActiveTab != "All")
         {
-            var tabStatus = ActiveTab switch
+            source = ActiveTab switch
             {
-                "Completed" => null,
-                _ => ActiveTab
+                "Delivered" => source.Where(o => IsCompletedStatus(o.Status)),
+                _ => source.Where(o => o.Status == ActiveTab)
             };
-            source = tabStatus is null
-                ? source.Where(o => IsCompletedStatus(o.Status))
-                : source.Where(o => o.Status == tabStatus);
         }
 
         return source;

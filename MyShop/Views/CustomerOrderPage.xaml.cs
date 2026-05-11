@@ -331,6 +331,14 @@ public sealed partial class CustomerOrderPage : Page
         SetButtonsEnabled(true);
     }
 
+    private async void StatusReadyForPickup_Click(object sender, RoutedEventArgs e)
+    {
+        SetButtonsEnabled(false);
+        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Ready for Pickup");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
+    }
+
     private async void StatusShipped_Click(object sender, RoutedEventArgs e)
     {
         SetButtonsEnabled(false);
@@ -343,6 +351,14 @@ public sealed partial class CustomerOrderPage : Page
     {
         SetButtonsEnabled(false);
         await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Delivered");
+        UpdateStatusButtons();
+        SetButtonsEnabled(true);
+    }
+
+    private async void StatusCompleted_Click(object sender, RoutedEventArgs e)
+    {
+        SetButtonsEnabled(false);
+        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Completed");
         UpdateStatusButtons();
         SetButtonsEnabled(true);
     }
@@ -413,14 +429,42 @@ public sealed partial class CustomerOrderPage : Page
     // ══ Update Status & Payment Button Highlights ═════════════════
     private void UpdateStatusButtons()
     {
-        var orderStatus = ViewModel.SelectedOrder?.Status ?? "";
+        var order = ViewModel.SelectedOrder;
+        if (order == null) return;
+
+        var orderStatus = order.Status ?? "";
+        var orderType = order.OrderType ?? "AtStore";
+
+        // Always visible
         SetStatusButtonStyle(BtnStatusPending,    orderStatus, "Pending");
         SetStatusButtonStyle(BtnStatusProcessing, orderStatus, "Processing");
-        SetStatusButtonStyle(BtnStatusShipped,   orderStatus, "Shipped");
-        SetStatusButtonStyle(BtnStatusDelivered,  orderStatus, "Delivered");
         SetStatusButtonStyle(BtnStatusCancelled,  orderStatus, "Cancelled");
 
-        var payStatus = ViewModel.SelectedOrder?.PaymentStatus ?? "";
+        // Visibility based on type
+        if (orderType == "Delivery")
+        {
+            BtnStatusReadyForPickup.Visibility = Visibility.Collapsed;
+            BtnStatusCompleted.Visibility = Visibility.Collapsed;
+            
+            BtnStatusShipped.Visibility = Visibility.Visible;
+            BtnStatusDelivered.Visibility = Visibility.Visible;
+
+            SetStatusButtonStyle(BtnStatusShipped,   orderStatus, "Shipped");
+            SetStatusButtonStyle(BtnStatusDelivered,  orderStatus, "Delivered");
+        }
+        else // AtStore
+        {
+            BtnStatusShipped.Visibility = Visibility.Collapsed;
+            BtnStatusDelivered.Visibility = Visibility.Collapsed;
+
+            BtnStatusReadyForPickup.Visibility = Visibility.Visible;
+            BtnStatusCompleted.Visibility = Visibility.Visible;
+
+            SetStatusButtonStyle(BtnStatusReadyForPickup, orderStatus, "Ready for Pickup");
+            SetStatusButtonStyle(BtnStatusCompleted,      orderStatus, "Completed");
+        }
+
+        var payStatus = order.PaymentStatus ?? "";
         SetStatusButtonStyle(BtnPayPaid,   payStatus, "Paid");
         SetStatusButtonStyle(BtnPayUnpaid, payStatus, "Unpaid");
     }
@@ -436,8 +480,10 @@ public sealed partial class CustomerOrderPage : Page
     {
         BtnStatusPending.IsEnabled = enabled;
         BtnStatusProcessing.IsEnabled = enabled;
+        BtnStatusReadyForPickup.IsEnabled = enabled;
         BtnStatusShipped.IsEnabled = enabled;
         BtnStatusDelivered.IsEnabled = enabled;
+        BtnStatusCompleted.IsEnabled = enabled;
         BtnStatusCancelled.IsEnabled = enabled;
         BtnPayPaid.IsEnabled = enabled;
         BtnPayUnpaid.IsEnabled = enabled;
