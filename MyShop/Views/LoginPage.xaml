@@ -19,8 +19,8 @@
     <SolidColorBrush x:Key="ErrorBrush"    Color="#EF4444"/>
   </Page.Resources>
 
-  <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                HorizontalScrollMode="Enabled"
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                HorizontalScrollMode="Disabled"
                 VerticalScrollBarVisibility="Auto"
                 VerticalScrollMode="Enabled">
     <Grid x:Name="RootGrid">
@@ -44,14 +44,15 @@
         <!-- Tablet/Medium: Both panels visible, narrower margins -->
         <VisualState x:Name="MediumState">
           <VisualState.StateTriggers>
-            <AdaptiveTrigger MinWindowWidth="900"/>
+            <AdaptiveTrigger MinWindowWidth="800"/>
           </VisualState.StateTriggers>
           <VisualState.Setters>
             <Setter Target="LeftPanel.Visibility" Value="Visible"/>
             <Setter Target="LeftColumn.Width" Value="*"/>
-            <Setter Target="RightColumn.Width" Value="500"/>
-            <Setter Target="RightPanel.Margin" Value="40"/>
-            <Setter Target="RightPanel.HorizontalAlignment" Value="Stretch"/>
+            <Setter Target="RightColumn.Width" Value="*"/>
+            <Setter Target="RightPanel.MaxWidth" Value="500"/>
+            <Setter Target="RightPanel.Margin" Value="32"/>
+            <Setter Target="RightPanel.HorizontalAlignment" Value="Center"/>
           </VisualState.Setters>
         </VisualState>
 
@@ -62,10 +63,11 @@
           </VisualState.StateTriggers>
           <VisualState.Setters>
             <Setter Target="LeftPanel.Visibility" Value="Visible"/>
-            <Setter Target="LeftColumn.Width" Value="*"/>
-            <Setter Target="RightColumn.Width" Value="600"/>
+            <Setter Target="LeftColumn.Width" Value="1.2*"/>
+            <Setter Target="RightColumn.Width" Value="*"/>
+            <Setter Target="RightPanel.MaxWidth" Value="600"/>
             <Setter Target="RightPanel.Margin" Value="64"/>
-            <Setter Target="RightPanel.HorizontalAlignment" Value="Stretch"/>
+            <Setter Target="RightPanel.HorizontalAlignment" Value="Center"/>
           </VisualState.Setters>
         </VisualState>
       </VisualStateGroup>
@@ -75,7 +77,7 @@
       <!-- Left: Hero decoration -->
       <ColumnDefinition x:Name="LeftColumn" Width="*"/>
       <!-- Right: Login Form -->
-      <ColumnDefinition x:Name="RightColumn" Width="600"/>
+      <ColumnDefinition x:Name="RightColumn" Width="*"/>
     </Grid.ColumnDefinitions>
 
     <!-- ═══════════════════════════════════════════════ -->
@@ -133,6 +135,8 @@
         <Button Grid.Column="2"
                 Command="{Binding OpenConfigCommand}"
                 VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Margin="32,0,0,0"
                 Background="Transparent"
                 BorderThickness="0"
                 Padding="8,4"
@@ -272,62 +276,61 @@
     <!-- LEFT PANEL: Hero decoration -->
     <!-- ═══════════════════════════════════════════════ -->
     <Grid x:Name="LeftPanel" Grid.Column="0" Background="{StaticResource PrimaryBrush}">
-
-      <!-- Decorative circles (top-right) -->
-      <Grid Margin="138,0,138,0">
-        <Ellipse Width="600" Height="600"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 Opacity="0.08">
-          <Ellipse.Fill>
-            <SolidColorBrush Color="White"/>
-          </Ellipse.Fill>
-          <Ellipse.RenderTransform>
-            <TranslateTransform Y="-200"/>
-          </Ellipse.RenderTransform>
-        </Ellipse>
-
-        <!-- Small circle (top-left of ellipse) -->
-        <Border Width="80" Height="80"
-                CornerRadius="24"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="60,80,0,0">
-          <Grid>
-            <Border Background="White" Opacity="0.20" CornerRadius="24"/>
-            <Viewbox Width="40" Height="40" Margin="20">
-              <Path Data="M12 2L2 7L12 12L22 7L12 2Z M2 17L12 22L22 17"
-                    Stroke="White" StrokeThickness="2"
-                    StrokeLineJoin="Round" Fill="Transparent"/>
-            </Viewbox>
+      <Viewbox Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid Width="1000" Height="1000">
+          <Grid Margin="138,0,138,0">
+            <Ellipse Width="600" Height="600"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Opacity="0.08">
+              <Ellipse.Fill>
+                <SolidColorBrush Color="White"/>
+              </Ellipse.Fill>
+              <Ellipse.RenderTransform>
+                <TranslateTransform Y="-200"/>
+              </Ellipse.RenderTransform>
+            </Ellipse>
+    
+            <Border Width="80" Height="80"
+                    CornerRadius="24"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="60,80,0,0">
+              <Grid>
+                <Border Background="White" Opacity="0.20" CornerRadius="24"/>
+                <Viewbox Width="40" Height="40" Margin="20">
+                  <Path Data="M12 2L2 7L12 12L22 7L12 2Z M2 17L12 22L22 17"
+                        Stroke="White" StrokeThickness="2"
+                        StrokeLineJoin="Round" Fill="Transparent"/>
+                </Viewbox>
+              </Grid>
+            </Border>
+    
+            <StackPanel HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+              <TextBlock FontFamily="{StaticResource InterFont}"
+                         FontSize="72" FontWeight="Bold"
+                         Foreground="White"
+                         LineHeight="88">
+                <Run Text="Welcome to"/><LineBreak/>
+                <Run Text="ProSport Hub"/>
+              </TextBlock>
+    
+              <TextBlock FontFamily="{StaticResource InterFont}"
+                         FontSize="18" FontWeight="400"
+                         Foreground="White"
+                         Opacity="0.90"
+                         TextWrapping="Wrap"
+                         Margin="0,16,0,0"
+                         MaxWidth="512">
+                <Run Text="The ultimate platform for sports equipment"/>
+                <LineBreak/>
+                <Run Text="logistics, inventory and sales management."/>
+              </TextBlock>
+            </StackPanel>
           </Grid>
-        </Border>
-
-        <!-- Hero text (left-aligned on the right panel) -->
-        <StackPanel HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Margin="0,0,0,0">
-          <TextBlock FontFamily="{StaticResource InterFont}"
-                     FontSize="72" FontWeight="Bold"
-                     Foreground="White"
-                     LineHeight="88">
-            <Run Text="Welcome to"/><LineBreak/>
-            <Run Text="ProSport Hub"/>
-          </TextBlock>
-
-          <TextBlock FontFamily="{StaticResource InterFont}"
-                     FontSize="18" FontWeight="400"
-                     Foreground="White"
-                     Opacity="0.90"
-                     TextWrapping="Wrap"
-                     Margin="0,16,0,0"
-                     MaxWidth="512">
-            <Run Text="The ultimate platform for sports equipment"/>
-            <LineBreak/>
-            <Run Text="logistics, inventory and sales management."/>
-          </TextBlock>
-        </StackPanel>
-      </Grid>
+        </Grid>
+      </Viewbox>
     </Grid>
     </Grid>
   </ScrollViewer>
