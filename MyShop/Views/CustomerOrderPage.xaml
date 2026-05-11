@@ -467,6 +467,8 @@
 
   </Page.Resources>
 
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
   <Grid x:Name="OrderRoot" Margin="0" SizeChanged="OrderRoot_SizeChanged">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -844,7 +846,8 @@
                               Padding="0,4"
                               Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                              ScrollViewer.VerticalScrollMode="Disabled"/>
 
                     <!-- Skeleton Loading State (Aligned with rows) -->
                     <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -984,7 +987,8 @@
         </Border>
 
         <!-- Detail Content -->
-        <ScrollViewer Grid.Row="1"
+        <ScrollViewer x:Name="DetailScrollViewer"
+                      Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
                       Padding="20,16">
 
@@ -1344,4 +1348,5 @@
     </Border>
 
   </Grid>
+  </ScrollViewer>
 </Page>
