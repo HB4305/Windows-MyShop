@@ -39,18 +39,40 @@
                     BorderThickness="0"
                     CornerRadius="8"
                     Padding="0">
-              <ContentPresenter/>
+              <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                  <VisualState x:Name="Normal"/>
+                  <VisualState x:Name="PointerOver">
+                    <Storyboard>
+                      <ColorAnimation Storyboard.TargetName="Root"
+                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                      To="#F3F4F6" Duration="0:0:0.1"/>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Selected">
+                    <Storyboard>
+                      <ColorAnimation Storyboard.TargetName="Root"
+                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                      To="#EFE9FF" Duration="0:0:0.1"/>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="SelectedPointerOver">
+                    <Storyboard>
+                      <ColorAnimation Storyboard.TargetName="Root"
+                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                      To="#EFE9FF" Duration="0:0:0.1"/>
+                    </Storyboard>
+                  </VisualState>
+                </VisualStateGroup>
+              </VisualStateManager.VisualStateGroups>
+              <ContentPresenter x:Name="ContentPresenter"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"/>
             </Border>
-            <ControlTemplate.Triggers>
-              <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="Root" Property="Background"
-                        Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
-              </Trigger>
-              <Trigger Property="IsPointerOver" Value="True">
-                <Setter TargetName="Root" Property="Background"
-                        Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-              </Trigger>
-            </ControlTemplate.Triggers>
           </ControlTemplate>
         </Setter.Value>
       </Setter>
@@ -508,10 +530,10 @@
       </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
 
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="420"/>
-    </Grid.ColumnDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition x:Name="DetailColumn" Width="Auto"/>
+      </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
@@ -1294,10 +1316,7 @@
     <!-- RIGHT PANEL: Empty State -->
     <Border x:Name="OrderEmptyDetailPanel"
             Grid.Column="1"
-            Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
-            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-            BorderThickness="1,0,0,0"
-            Visibility="{Binding ShowDetailPanel, Converter={StaticResource InverseBoolConverter}}">
+            Visibility="Collapsed">
       <StackPanel HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Spacing="12">

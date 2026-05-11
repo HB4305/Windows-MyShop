@@ -46,6 +46,10 @@ public sealed partial class CustomerOrderPage : Page
             {
                 DispatcherQueue.TryEnqueue(() => UpdateTabStyles());
             }
+            if (e.PropertyName == nameof(ViewModel.ShowDetailPanel))
+            {
+                DispatcherQueue.TryEnqueue(() => ApplyResponsiveLayout(ActualWidth));
+            }
         };
     }
 
@@ -77,8 +81,18 @@ public sealed partial class CustomerOrderPage : Page
 
         Grid.SetRow(OrderListPanel, 0);
         Grid.SetColumn(OrderListPanel, 0);
-        Grid.SetColumnSpan(OrderListPanel, 1);
-
+        
+        if (ViewModel.ShowDetailPanel)
+        {
+            DetailColumn.Width = new GridLength(420);
+            Grid.SetColumnSpan(OrderListPanel, 1);
+        }
+        else
+        {
+            DetailColumn.Width = new GridLength(0);
+            Grid.SetColumnSpan(OrderListPanel, 2);
+        }
+ 
         Grid.SetRow(OrderDetailPanel, 0);
         Grid.SetColumn(OrderDetailPanel, 1);
         Grid.SetColumnSpan(OrderDetailPanel, 1);
