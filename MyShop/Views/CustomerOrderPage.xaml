@@ -69,7 +69,7 @@
     <!-- ══ Tab Count Badge (active tab) ══ -->
     <Style x:Key="TabCountBadgeActive" TargetType="Border">
       <Setter Property="CornerRadius" Value="20"/>
-      <Setter Property="Background" Value="#FFFFFF33"/>
+      <Setter Property="Background" Value="#FFFFFF4D"/>
       <Setter Property="Padding" Value="6,2"/>
       <Setter Property="MinWidth" Value="20"/>
     </Style>
@@ -195,7 +195,7 @@
       <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
       <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontSize" Value="13"/>
-      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontWeight" Value="ExtraBold"/>
       <Setter Property="Padding" Value="14,8"/>
       <Setter Property="CornerRadius" Value="8"/>
       <Setter Property="BorderThickness" Value="0"/>
@@ -660,9 +660,9 @@
               <Button x:Name="TabAll"
                       Click="TabAll_Click"
                       Style="{StaticResource TabBtnActive}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="All"/>
-                  <Border Style="{StaticResource TabCountBadgeActive}">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <TextBlock Text="All" VerticalAlignment="Center"/>
+                  <Border Style="{StaticResource TabCountBadgeActive}" VerticalAlignment="Center">
                     <TextBlock Text="{Binding TotalOrders}"
                                FontSize="11" FontWeight="SemiBold" Foreground="White"/>
                   </Border>
@@ -673,9 +673,9 @@
               <Button x:Name="TabPending"
                       Click="TabPending_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="Pending"/>
-                  <Border Style="{StaticResource TabCountBadge}">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <TextBlock Text="Pending" VerticalAlignment="Center"/>
+                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
                     <TextBlock Text="{Binding PendingCount}"
                                FontSize="11" FontWeight="SemiBold"
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
@@ -687,9 +687,9 @@
               <Button x:Name="TabProcessing"
                       Click="TabProcessing_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="Processing"/>
-                  <Border Style="{StaticResource TabCountBadge}">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <TextBlock Text="Processing" VerticalAlignment="Center"/>
+                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
                     <TextBlock Text="{Binding ProcessingCount}"
                                FontSize="11" FontWeight="SemiBold"
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
@@ -701,9 +701,9 @@
               <Button x:Name="TabDelivered"
                       Click="TabDelivered_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="Delivered"/>
-                  <Border Style="{StaticResource TabCountBadge}">
+                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                  <TextBlock Text="Delivered" VerticalAlignment="Center"/>
+                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
                     <TextBlock Text="{Binding CompletedCount}"
                                FontSize="11" FontWeight="SemiBold"
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>

@@ -127,6 +127,7 @@ public sealed partial class CustomerPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current > 1,
         };
         prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.CurrentPage--; _ = ViewModel.LoadCustomersAsync(); BuildPagination(); } };
         CustomerPaginationPanel.Children.Add(prevBtn);
@@ -160,6 +161,7 @@ public sealed partial class CustomerPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current < total,
         };
         nextBtn.Click += (s, e) => { if (current < total) { ViewModel.CurrentPage++; _ = ViewModel.LoadCustomersAsync(); BuildPagination(); } };
         CustomerPaginationPanel.Children.Add(nextBtn);

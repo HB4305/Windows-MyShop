@@ -58,7 +58,7 @@ public sealed partial class AppPageHeader : UserControl
             nameof(TitleFontFamily),
             typeof(FontFamily),
             typeof(AppPageHeader),
-            new PropertyMetadata(new FontFamily("ms-appx:///Assets/Momo_Signature/MomoSignature-Regular.ttf#MomoSignature-Regular")));
+            new PropertyMetadata(new FontFamily("ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans")));
 
     public FontFamily SubtitleFontFamily
     {

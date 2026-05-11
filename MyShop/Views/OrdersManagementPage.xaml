@@ -82,11 +82,11 @@
     </Style>
 
     <Style x:Key="TabBtnActive" TargetType="Button">
-      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
-      <Setter Property="FontFamily" Value="{StaticResource AppSignatureFontFamily}"/>
+      <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize" Value="13"/>
-      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontWeight" Value="ExtraBold"/>
       <Setter Property="Padding" Value="14,8"/>
       <Setter Property="CornerRadius" Value="8"/>
       <Setter Property="BorderThickness" Value="0"/>
@@ -118,7 +118,7 @@
 
     <!-- ══ Text Styles ══ -->
     <Style x:Key="SectionTitle" TargetType="TextBlock">
-      <Setter Property="FontFamily" Value="{StaticResource AppSignatureFontFamily}"/>
+      <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize" Value="11"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}"/>
@@ -131,7 +131,7 @@
     </Style>
 
     <Style x:Key="PageTitle" TargetType="TextBlock">
-      <Setter Property="FontFamily" Value="{StaticResource AppSignatureFontFamily}"/>
+      <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize" Value="22"/>
       <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
@@ -474,11 +474,11 @@
               <StackPanel Orientation="Horizontal" Spacing="2">
                 <!-- All Tab (active) -->
                 <Button x:Name="TabAll" Click="TabAll_Click" Style="{StaticResource TabBtnActive}">
-                  <StackPanel Orientation="Horizontal" Spacing="6">
-                    <TextBlock Text="All Orders"/>
-                    <Border Background="{StaticResource PurpleBrush}" CornerRadius="20" Padding="8,2">
+                  <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="All Orders" VerticalAlignment="Center"/>
+                    <Border Background="#FFFFFF4D" CornerRadius="20" Padding="8,2" VerticalAlignment="Center">
                       <TextBlock Text="1,240" FontSize="11" FontWeight="SemiBold"
-                                 FontFamily="{StaticResource AppSignatureFontFamily}" Foreground="White"/>
+                                 Foreground="White" VerticalAlignment="Center"/>
                     </Border>
                   </StackPanel>
                 </Button>

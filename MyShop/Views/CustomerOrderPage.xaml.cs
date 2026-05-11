@@ -185,9 +185,15 @@ public sealed partial class CustomerOrderPage : Page
             foreach (var child in sp.Children)
             {
                 if (child is TextBlock tb)
+                {
                     tb.Foreground = GrayBrush;
+                    tb.FontWeight = Microsoft.UI.Text.FontWeights.SemiBold;
+                }
                 if (child is Border b && b.Child is TextBlock btb)
+                {
                     btb.Foreground = GrayBrush;
+                    btb.FontWeight = Microsoft.UI.Text.FontWeights.SemiBold;
+                }
             }
         }
     }
@@ -203,9 +209,15 @@ public sealed partial class CustomerOrderPage : Page
             foreach (var child in sp.Children)
             {
                 if (child is TextBlock tb)
+                {
                     tb.Foreground = whiteBrush;
+                    tb.FontWeight = Microsoft.UI.Text.FontWeights.ExtraBold;
+                }
                 if (child is Border b && b.Child is TextBlock btb)
+                {
                     btb.Foreground = whiteBrush;
+                    btb.FontWeight = Microsoft.UI.Text.FontWeights.ExtraBold;
+                }
             }
         }
     }
@@ -257,6 +269,7 @@ public sealed partial class CustomerOrderPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current > 1,
         };
         prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.GoToPageCommand.Execute(current - 1); } };
         PaginationPanel.Children.Add(prevBtn);
@@ -290,6 +303,7 @@ public sealed partial class CustomerOrderPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current < total,
         };
         nextBtn.Click += (s, e) => { if (current < total) { ViewModel.GoToPageCommand.Execute(current + 1); } };
         PaginationPanel.Children.Add(nextBtn);
