@@ -153,28 +153,6 @@
               VerticalAlignment="Center"
               Spacing="10">
   
-            <!-- Date picker button -->
-            <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
-                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="20"
-                    MinHeight="44"
-                    Padding="12,8">
-              <StackPanel Orientation="Horizontal"
-                  Spacing="6"
-                  VerticalAlignment="Center">
-                <TextBlock FontFamily="Segoe MDL2 Assets"
-                    Text="&#xE787;"
-                    FontSize="13"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    VerticalAlignment="Center"/>
-                <TextBlock Text="July 2026"
-                    FontSize="13"
-                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                    VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              </StackPanel>
-            </Border>
-  
             <!-- Create Order button -->
             <Button Style="{StaticResource ColorPreservingButtonStyle}"
                     Background="{StaticResource AppPurpleBrush}"
@@ -650,44 +628,6 @@
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                 </ItemsControl>
-              </StackPanel>
-            </Border>
-  
-            <!-- Inventory Sync Panel -->
-            <Border Background="{StaticResource PurpleBrush}"
-                    CornerRadius="20"
-                    Padding="24,20">
-              <StackPanel Spacing="8">
-                <TextBlock Text="Inventory Sync?"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Foreground="White" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <TextBlock Text="Ensure your local stock matches the online storefront across all channels."
-                           FontSize="12"
-                           Foreground="White"
-                    Opacity="0.8"
-                           TextWrapping="Wrap"
-                           LineHeight="18" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <!-- Sync button -->
-                <Border Background="White"
-                        CornerRadius="20"
-                        Padding="14,10"
-                        Margin="0,4,0,0"
-                        HorizontalAlignment="Left">
-                  <StackPanel Orientation="Horizontal"
-                      Spacing="6">
-                    <TextBlock FontFamily="Segoe MDL2 Assets"
-                        Text="&#xE895;"
-                        FontSize="13"
-                        Foreground="{StaticResource PurpleBrush}"
-                        VerticalAlignment="Center"/>
-                    <TextBlock Text="Run Full Sync"
-                               FontSize="13"
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource PurpleBrush}"
-                               VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  </StackPanel>
-                </Border>
               </StackPanel>
             </Border>
   

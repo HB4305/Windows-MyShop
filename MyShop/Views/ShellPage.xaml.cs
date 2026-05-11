@@ -101,28 +101,28 @@ public sealed partial class ShellPage : Page
 
         NavDashboard.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavPos.Visibility = Visibility.Visible;
+        NavPos.Visibility = isOwner ? Visibility.Collapsed : Visibility.Visible;
         NavShiftManagement.Visibility = Visibility.Visible;
-        NavProductCatalog.Visibility = Visibility.Visible;
+        NavProductCatalog.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavOrders.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavCustomers.Visibility = Visibility.Visible;
+        NavCustomers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavStaffManagement.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavSuppliers.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavCategory.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavSettings.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        HeaderSettingsButton.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavSettings.Visibility = Visibility.Visible;
+        HeaderSettingsButton.Visibility = Visibility.Visible;
 
         NavDashboard.IsEnabled = isOwner;
         NavReports.IsEnabled = isOwner;
-        NavPos.IsEnabled = true;
-        NavProductCatalog.IsEnabled = true;
+        NavPos.IsEnabled = !isOwner;
+        NavProductCatalog.IsEnabled = isOwner;
         NavOrders.IsEnabled = isOwner;
-        NavCustomers.IsEnabled = true;
+        NavCustomers.IsEnabled = isOwner;
         NavStaffManagement.IsEnabled = isOwner;
         NavSuppliers.IsEnabled = isOwner;
         NavCategory.IsEnabled = isOwner;
-        NavSettings.IsEnabled = isOwner;
-        HeaderSettingsButton.IsEnabled = isOwner;
+        NavSettings.IsEnabled = true;
+        HeaderSettingsButton.IsEnabled = true;
 
         ShiftNavigationText.Text = isOwner ? "Shift Log" : "Shift Report";
         NavShiftManagement.Tag = isOwner ? "ShiftLogs" : "ShiftReport";
@@ -156,6 +156,7 @@ public sealed partial class ShellPage : Page
 
     private void NavPos_Click(object sender, RoutedEventArgs e)
     {
+        if (!_currentUserService.IsSale) return;
         _frame.Navigate(typeof(PosPage));
         UpdateActiveNav("POS");
         MaintainSidebarAfterNavigation();
@@ -187,6 +188,7 @@ public sealed partial class ShellPage : Page
 
     private void NavProductCatalog_Click(object sender, RoutedEventArgs e)
     {
+        if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(SportItemPage));
         UpdateActiveNav("ProductCatalog");
         MaintainSidebarAfterNavigation();
@@ -194,6 +196,7 @@ public sealed partial class ShellPage : Page
 
     private void NavOrders_Click(object sender, RoutedEventArgs e)
     {
+        if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(CustomerOrderPage));
         UpdateActiveNav("OrdersManagement");
         MaintainSidebarAfterNavigation();
@@ -201,6 +204,7 @@ public sealed partial class ShellPage : Page
 
     private void NavCustomers_Click(object sender, RoutedEventArgs e)
     {
+        if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(CustomerPage));
         UpdateActiveNav("Customers");
         MaintainSidebarAfterNavigation();
@@ -232,7 +236,6 @@ public sealed partial class ShellPage : Page
 
     private void NavSettings_Click(object sender, RoutedEventArgs e)
     {
-        if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(SettingsPage));
         UpdateActiveNav("Settings");
         MaintainSidebarAfterNavigation();
@@ -416,13 +419,12 @@ public sealed partial class ShellPage : Page
     {
         if (_currentUserService.IsSale)
         {
-            return tag is "POS" or "ShiftReport" or "ProductCatalog" or "Customers";
+            return tag is "POS" or "ShiftReport" or "Settings";
         }
 
         if (_currentUserService.IsOwner)
         {
             return tag is "Dashboard"
-                or "POS"
                 or "ShiftLogs"
                 or "Reports"
                 or "ProductCatalog"

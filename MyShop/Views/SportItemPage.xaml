@@ -69,6 +69,8 @@
     </Style>
   </Page.Resources>
 
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
   <Grid Margin="24,20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -367,4 +369,5 @@
                TextWrapping="Wrap" HorizontalAlignment="Center" Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" 
                FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
   </Grid>
+  </ScrollViewer>
 </Page>

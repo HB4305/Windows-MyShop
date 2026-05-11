@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Microsoft.UI.Xaml.Data;
 
 namespace MyShop.Converters;
@@ -9,20 +10,40 @@ public class PercentageFormatter : IValueConverter
     {
         if (value is decimal d)
         {
-            return $"{d:F2}%";
+            return FormatPercentage(d);
         }
 
         if (value is double db)
         {
-            return $"{db:F2}%";
+            return FormatPercentage((decimal)db);
         }
 
         if (value is float f)
         {
-            return $"{f:F2}%";
+            return FormatPercentage((decimal)f);
+        }
+
+        if (value is string text)
+        {
+            var normalized = text.Trim().TrimEnd('%');
+            if (decimal.TryParse(normalized, NumberStyles.Number, CultureInfo.CurrentCulture, out var currentCultureValue) ||
+                decimal.TryParse(normalized, NumberStyles.Number, CultureInfo.InvariantCulture, out currentCultureValue))
+            {
+                return FormatPercentage(currentCultureValue);
+            }
+        }
+
+        if (value is IFormattable formattable)
+        {
+            return $"{formattable.ToString("0.00", CultureInfo.InvariantCulture)}%";
         }
 
         return value?.ToString() ?? string.Empty;
+    }
+
+    private static string FormatPercentage(decimal value)
+    {
+        return $"{value.ToString("0.00", CultureInfo.InvariantCulture)}%";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

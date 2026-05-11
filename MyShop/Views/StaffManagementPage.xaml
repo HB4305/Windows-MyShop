@@ -48,6 +48,8 @@
     </Style>
   </Page.Resources>
 
+  <ScrollViewer VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
   <Grid Padding="24,20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -154,13 +156,17 @@
     </Grid>
 
     <!-- Toolbar synchronized -->
-    <Grid x:Name="ToolbarGrid" Grid.Row="3" ColumnSpacing="14" Margin="0,0,0,20">
+    <Grid x:Name="ToolbarGrid" Grid.Row="3" ColumnSpacing="14" RowSpacing="12" Margin="0,0,0,20">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
 
-      <Border Grid.Column="0" MinHeight="48" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+      <Border Grid.Row="0" Grid.Column="0" MinHeight="48" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12,8">
         <Grid ColumnSpacing="10">
           <Grid.ColumnDefinitions>
@@ -179,7 +185,7 @@
         </Grid>
       </Border>
 
-      <Button x:Name="AddButton" Grid.Column="1" Click="AddStaff_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
+      <Button x:Name="AddButton" Grid.Row="0" Grid.Column="1" Click="AddStaff_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
               CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
@@ -301,4 +307,5 @@
     </StackPanel>
 
   </Grid>
+  </ScrollViewer>
 </Page>

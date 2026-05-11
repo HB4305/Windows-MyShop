@@ -99,13 +99,15 @@
         <Border Style="{StaticResource PanelBorder}" Padding="16">
           <StackPanel Spacing="10">
             <StackPanel Orientation="Horizontal" Spacing="8">
-              <FontIcon Glyph="&#xEAFD;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
+              <FontIcon Glyph="&#xE8C7;" Foreground="{StaticResource PurpleBrush}" FontSize="16"/>
               <TextBlock Text="Shift Revenue" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>
-            <TextBlock Text="{Binding ShiftRevenue, Converter={StaticResource CurrencyFormatter}}"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="{Binding ShiftRevenue, Converter={StaticResource CurrencyFormatter}}"
+                         FontSize="24"
+                         FontWeight="Bold"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+            </StackPanel>
             <TextBlock Text="Paid sales recorded in the active shift."
                        FontSize="12"
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>

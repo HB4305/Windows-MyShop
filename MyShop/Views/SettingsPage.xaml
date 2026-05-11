@@ -122,7 +122,7 @@
   
         <!-- ── User Management (owner only) ── -->
         <Border Style="{StaticResource CardBorder}"
-                Visibility="{Binding IsOwnerView, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="Collapsed">
           <StackPanel Spacing="16">
   
             <TextBlock Text="User Management"
