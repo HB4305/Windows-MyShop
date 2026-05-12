@@ -18,6 +18,7 @@ public sealed partial class ShellPage : Page
     private readonly CurrentUserService _currentUserService;
     private bool _compactMode;
     private bool _compactSidebarExpanded;
+    private bool _wideSidebarCollapsed;
 
     public ShellPage()
     {
@@ -52,10 +53,14 @@ public sealed partial class ShellPage : Page
 
     private void ToggleSidebar_Click(object sender, RoutedEventArgs e)
     {
-        if (!_compactMode)
-            return;
-
-        _compactSidebarExpanded = !_compactSidebarExpanded;
+        if (_compactMode)
+        {
+            _compactSidebarExpanded = !_compactSidebarExpanded;
+        }
+        else
+        {
+            _wideSidebarCollapsed = !_wideSidebarCollapsed;
+        }
         ApplyResponsiveLayout(ActualWidth);
     }
 
@@ -66,20 +71,30 @@ public sealed partial class ShellPage : Page
 
         if (isCompact)
         {
-            NavToggleButton.Visibility = Visibility.Visible;
-            HeaderTitleText.Text = "Welcome back";
             HeaderTitleText.FontSize = 18;
-
+            NavToggleButton_Header.Visibility = Visibility.Visible;
+            NavToggleButton_Sidebar.Visibility = Visibility.Visible;
             SidebarColumn.Width = _compactSidebarExpanded ? new GridLength(220) : new GridLength(0);
             SidebarPanel.Visibility = _compactSidebarExpanded ? Visibility.Visible : Visibility.Collapsed;
             return;
         }
 
-        NavToggleButton.Visibility = Visibility.Collapsed;
-        HeaderTitleText.Text = "Welcome back, Alex";
+        // Wide mode
         HeaderTitleText.FontSize = 22;
-        SidebarColumn.Width = new GridLength(240);
-        SidebarPanel.Visibility = Visibility.Visible;
+        if (_wideSidebarCollapsed)
+        {
+            NavToggleButton_Header.Visibility = Visibility.Visible;
+            NavToggleButton_Sidebar.Visibility = Visibility.Collapsed;
+            SidebarColumn.Width = new GridLength(0);
+            SidebarPanel.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            NavToggleButton_Header.Visibility = Visibility.Collapsed;
+            NavToggleButton_Sidebar.Visibility = Visibility.Visible;
+            SidebarColumn.Width = new GridLength(240);
+            SidebarPanel.Visibility = Visibility.Visible;
+        }
     }
 
     private void MaintainSidebarAfterNavigation()
