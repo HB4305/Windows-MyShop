@@ -72,7 +72,7 @@ public sealed partial class ShellPage : Page
         if (isCompact)
         {
             HeaderTitleText.FontSize = 18;
-            NavToggleButton_Header.Visibility = Visibility.Visible;
+            NavToggleButton_Header.Visibility = _compactSidebarExpanded ? Visibility.Collapsed : Visibility.Visible;
             NavToggleButton_Sidebar.Visibility = Visibility.Visible;
             SidebarColumn.Width = _compactSidebarExpanded ? new GridLength(220) : new GridLength(0);
             SidebarPanel.Visibility = _compactSidebarExpanded ? Visibility.Visible : Visibility.Collapsed;
