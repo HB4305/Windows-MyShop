@@ -18,9 +18,9 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
-  <Grid x:Name="RootLayout" Padding="24,20" ColumnSpacing="20" RowSpacing="16" Loaded="RootLayout_Loaded" SizeChanged="RootLayout_SizeChanged">
+  <Grid x:Name="RootLayout" Padding="24,20" ColumnSpacing="20" RowSpacing="16" 
+        Loaded="RootLayout_Loaded" SizeChanged="RootLayout_SizeChanged"
+        VerticalAlignment="Stretch">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="3*"/>
       <ColumnDefinition Width="400"/>
@@ -77,75 +77,79 @@
                                          SearchQuerySubmitted="ProductFilterBar_SearchQuerySubmitted"
                                          CategorySelectionChanged="ProductFilterBar_CategorySelectionChanged"/>
 
-        <Grid Grid.Row="1">
-          <GridView ItemsSource="{Binding Products}"
-                    IsItemClickEnabled="True"
-                    ItemClick="ProductsGrid_ItemClick"
-                    SelectionMode="None"
-                    Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-            <GridView.ItemContainerStyle>
-              <Style TargetType="GridViewItem">
-                <Setter Property="Width" Value="190"/>
-                <Setter Property="Height" Value="260"/>
-                <Setter Property="Margin" Value="0,0,16,16"/>
-                <Setter Property="Padding" Value="0"/>
-              </Style>
-            </GridView.ItemContainerStyle>
-            <GridView.ItemTemplate>
-              <DataTemplate>
-                <StackPanel Spacing="8">
-                  <Border Height="152" CornerRadius="8" Background="{ThemeResource ControlFillColorSecondaryBrush}">
-                    <Grid>
-                      <Image Source="{Binding Item.ImageUrl}" Stretch="UniformToFill"/>
-                      <Border Background="{StaticResource PurpleLightBrush}" CornerRadius="6" Padding="8,4" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8">
-                        <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource PurpleBrush}">
-                          <Run Text="{Binding Item.EffectiveStockQuantity}"/>
-                          <Run Text=" in stock"/>
-                        </TextBlock>
-                      </Border>
-                    </Grid>
-                  </Border>
-                  <TextBlock Text="{Binding Item.Name}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextWrapping="Wrap" MaxLines="2"/>
-                  <TextBlock Text="{Binding CategoryName}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
-                  <TextBlock Text="{Binding Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}"/>
-                </StackPanel>
-              </DataTemplate>
-            </GridView.ItemTemplate>
-          </GridView>
-
-          <!-- Skeleton Loading State -->
-          <GridView Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                    SelectionMode="None" Padding="0">
+        <ScrollViewer Grid.Row="1" 
+                      VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled">
+          <Grid>
+            <GridView ItemsSource="{Binding Products}"
+                      IsItemClickEnabled="True"
+                      ItemClick="ProductsGrid_ItemClick"
+                      SelectionMode="None"
+                      Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                      Padding="0,0,0,16">
               <GridView.ItemContainerStyle>
-                  <Style TargetType="GridViewItem">
-                      <Setter Property="Width" Value="190"/>
-                      <Setter Property="Height" Value="260"/>
-                      <Setter Property="Margin" Value="0,0,16,16"/>
-                  </Style>
+                <Style TargetType="GridViewItem">
+                  <Setter Property="Width" Value="190"/>
+                  <Setter Property="Height" Value="260"/>
+                  <Setter Property="Margin" Value="0,0,16,16"/>
+                  <Setter Property="Padding" Value="0"/>
+                </Style>
               </GridView.ItemContainerStyle>
-              <GridView.Items>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-                  <controls:PosProductSkeleton/>
-              </GridView.Items>
-          </GridView>
-        </Grid>
+              <GridView.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel Spacing="8">
+                    <Border Height="152" CornerRadius="8" Background="{ThemeResource ControlFillColorSecondaryBrush}">
+                      <Grid>
+                        <Image Source="{Binding Item.ImageUrl}" Stretch="UniformToFill"/>
+                        <Border Background="{StaticResource PurpleLightBrush}" CornerRadius="6" Padding="8,4" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8">
+                          <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource PurpleBrush}">
+                            <Run Text="{Binding Item.EffectiveStockQuantity}"/>
+                            <Run Text=" in stock"/>
+                          </TextBlock>
+                        </Border>
+                      </Grid>
+                    </Border>
+                    <TextBlock Text="{Binding Item.Name}" FontSize="15" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" TextWrapping="Wrap" MaxLines="2"/>
+                    <TextBlock Text="{Binding CategoryName}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{Binding Item.SellingPrice, Converter={StaticResource CurrencyFormatter}}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}"/>
+                  </StackPanel>
+                </DataTemplate>
+              </GridView.ItemTemplate>
+            </GridView>
+  
+            <!-- Skeleton Loading State -->
+            <GridView Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                      SelectionMode="None" Padding="0">
+                <GridView.ItemContainerStyle>
+                    <Style TargetType="GridViewItem">
+                        <Setter Property="Width" Value="190"/>
+                        <Setter Property="Height" Value="260"/>
+                        <Setter Property="Margin" Value="0,0,16,16"/>
+                    </Style>
+                </GridView.ItemContainerStyle>
+                <GridView.Items>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                    <controls:PosProductSkeleton/>
+                </GridView.Items>
+            </GridView>
+          </Grid>
+        </ScrollViewer>
 
       </Grid>
     </Border>
 
-    <!-- Table Footer: Pagination (Docked to bottom) -->
-    <Border Grid.Row="2" Grid.Column="0" 
+    <Border x:Name="paginationBorder" Grid.Row="2" Grid.Column="0"
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
             BorderThickness="0,1,0,0"
-            Margin="-24,0,-20,-20" Padding="24,12">
+            Margin="0,-16,0,-20" Padding="0,12,0,12">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
@@ -190,12 +194,14 @@
               <TextBlock Text="Customer" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             </StackPanel>
           </Grid>
-          <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
-                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                  BorderThickness="1"
+          <Border Background="White"
+                  BorderThickness="0"
                   CornerRadius="24"
                   Padding="12,4"
                   MinHeight="48">
+            <Border.Shadow>
+              <ThemeShadow />
+            </Border.Shadow>
             <Grid ColumnSpacing="10">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -210,6 +216,7 @@
                               SuggestionChosen="CustomerSearchBox_SuggestionChosen"
                               QuerySubmitted="CustomerSearchBox_QuerySubmitted"
                               BorderThickness="0"
+                              BorderBrush="Transparent"
                               Background="Transparent"
                               VerticalAlignment="Center"
                               FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
@@ -387,10 +394,10 @@
     <TextBlock x:Name="StatusText"
                Grid.Row="3"
                Grid.ColumnSpan="2"
+               Margin="24,0,24,0"
                Text="{Binding StatusMessage}"
                Foreground="{StaticResource DangerBrush}"
                TextWrapping="Wrap"
                Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
   </Grid>
-  </ScrollViewer>
 </Page>

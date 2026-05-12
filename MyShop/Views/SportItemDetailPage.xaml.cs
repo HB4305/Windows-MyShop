@@ -26,6 +26,40 @@ public sealed partial class SportItemDetailPage : Page
             if (Frame.CanGoBack)
                 Frame.GoBack();
         };
+
+        ViewModel.ViewImageDetailRequested += async (s, url) => await ShowImageDetailAsync(url);
+    }
+
+    private async Task ShowImageDetailAsync(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url) || !System.Uri.TryCreate(url, System.UriKind.Absolute, out var uri))
+            return;
+
+        var image = new Image
+        {
+            Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(uri),
+            Stretch = Microsoft.UI.Xaml.Media.Stretch.Uniform
+        };
+
+        var dialog = new ContentDialog
+        {
+            Title = "Image Preview",
+            Content = image,
+            CloseButtonText = "Close",
+            XamlRoot = XamlRoot,
+            MaxWidth = 1000,
+            MaxHeight = 800
+        };
+
+        await dialog.ShowAsync();
+    }
+
+    private async void OnImageTapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+    {
+        if (ViewModel.PreviewImageUrl != null)
+        {
+            await ShowImageDetailAsync(ViewModel.PreviewImageUrl);
+        }
     }
 
     private async Task<bool> ShowConfirmationDialogAsync(string title, string content)

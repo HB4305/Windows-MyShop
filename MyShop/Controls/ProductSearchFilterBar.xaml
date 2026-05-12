@@ -17,17 +17,25 @@
               PlaceholderText="{Binding CategoryPlaceholderText, ElementName=Root}"
               MinHeight="48"
               CornerRadius="20"
+              BorderThickness="0"
+              Background="White"
               HorizontalAlignment="Stretch"
-              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+      <ComboBox.Shadow>
+        <ThemeShadow />
+      </ComboBox.Shadow>
+    </ComboBox>
 
     <!-- Unified Search Bar -->
     <Border Grid.Column="1"
             MinHeight="48"
-            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-            BorderThickness="1"
+            Background="White"
+            BorderThickness="0"
             CornerRadius="24"
             Padding="16,4">
+      <Border.Shadow>
+        <ThemeShadow />
+      </Border.Shadow>
       <Grid ColumnSpacing="10">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
@@ -43,6 +51,7 @@
                         SuggestionChosen="SearchAutoSuggestBox_SuggestionChosen"
                         QuerySubmitted="SearchAutoSuggestBox_QuerySubmitted"
                         BorderThickness="0"
+                        BorderBrush="Transparent"
                         Background="Transparent"
                         VerticalAlignment="Center"
                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>

@@ -66,6 +66,7 @@ public static class MauiProgram
         Services.AddSingleton<IInvoiceService, InvoiceService>();
         Services.AddSingleton<IFilePickerService>(new FilePickerServiceFactory().Create());
         Services.AddSingleton<IAiService, GeminiService>();
+        Services.AddSingleton<AiLogService>();
 
         // ── 5. ViewModels ─────────────────────────────────────────
         Services.AddTransient<LoginViewModel>();
@@ -84,6 +85,7 @@ public static class MauiProgram
         Services.AddTransient<ShiftViewModel>();
         Services.AddTransient<StaffManagementViewModel>();
         Services.AddTransient<ShiftReportLogsViewModel>();
+        Services.AddSingleton<AiStudioViewModel>();
 
         // ── 6. Build ───────────────────────────────────────────────
         _provider = Services.BuildServiceProvider();

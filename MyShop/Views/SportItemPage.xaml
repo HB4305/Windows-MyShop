@@ -79,7 +79,7 @@
           <VisualState.Setters>
             <Setter Target="ActionButtonsPanel.Visibility" Value="Collapsed"/>
             <Setter Target="ActionButtonsStack.Visibility" Value="Visible"/>
-            <Setter Target="SearchColSpan.ColumnSpan" Value="3"/>
+            <Setter Target="SearchColSpan.(Grid.ColumnSpan)" Value="3"/>
           </VisualState.Setters>
         </VisualState>
         <VisualState x:Name="WideState">

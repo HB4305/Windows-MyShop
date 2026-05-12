@@ -122,9 +122,22 @@
             <Setter Property="BorderThickness"
                     Value="1"/>
             <Setter Property="CornerRadius"
-                    Value="20"/>
+                    Value="12"/>
             <Setter Property="Background"
                     Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        </Style>
+
+        <LinearGradientBrush x:Key="AiGlassGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#1A8B52FF" Offset="0"/>
+            <GradientStop Color="#0D8B52FF" Offset="1"/>
+        </LinearGradientBrush>
+
+        <Style x:Key="PremiumCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="20"/>
         </Style>
     </Page.Resources>
 
@@ -216,6 +229,8 @@
                                 </Border>
                                 <Image Source="{Binding PreviewImageUrl, Converter={StaticResource StringToImageConverter}}"
                                        Stretch="UniformToFill"
+                                       Tapped="OnImageTapped"
+                                       IsHitTestVisible="True"
                                        Visibility="{Binding PreviewImageUrl, Converter={StaticResource StringToVisibilityConverter}}"/>
                                 <Button HorizontalAlignment="Right"
                                         VerticalAlignment="Top"
@@ -228,7 +243,9 @@
                                         BorderThickness="1"
                                         CornerRadius="20"
                                         Opacity="0.95"
-                  Style="{StaticResource ColorPreservingButtonStyle}">
+                                        Command="{Binding ViewImageDetailCommand}"
+                                        CommandParameter="{Binding PreviewImageUrl}"
+                                        Style="{StaticResource ColorPreservingButtonStyle}">
                                     <SymbolIcon Symbol="Zoom"/>
                                 </Button>
                             </Grid>
@@ -342,40 +359,45 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Background="{StaticResource SportPurpleSoftBrush}"
+                    <Border Background="{StaticResource AiGlassGradient}"
                             BorderBrush="{StaticResource SportPurpleLightBrush}"
                             BorderThickness="1"
                             CornerRadius="20"
-                            Padding="18">
-                        <StackPanel Spacing="12">
+                            Padding="20">
+                        <StackPanel Spacing="16">
                             <StackPanel Orientation="Horizontal"
-                                        Spacing="8">
-                                <FontIcon Glyph="&#xEF58;"
-                                          Foreground="{StaticResource SportPurpleBrush}"/>
+                                        Spacing="10">
+                                <Border Background="{StaticResource SportPurpleBrush}" 
+                                        CornerRadius="8" 
+                                        Padding="6">
+                                    <FontIcon Glyph="&#xEF58;" 
+                                              FontSize="14"
+                                              Foreground="White"/>
+                                </Border>
                                 <TextBlock Text="AI Content Assistant"
-                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           FontSize="15"
                                            Foreground="{StaticResource SportPurpleBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             </StackPanel>
-                            <TextBlock Text="Generate professional product descriptions using AI based on your images and specs."
+                            <TextBlock Text="Effortlessly generate product details, pricing, and variants directly from your images."
                                        FontSize="12"
                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                       TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                       TextWrapping="Wrap" Opacity="0.8" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                             <Button HorizontalAlignment="Stretch"
-                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                    BorderBrush="{StaticResource SportPurpleBrush}"
-                                    BorderThickness="1"
-                                    Foreground="{StaticResource SportPurpleBrush}"
-                                    CornerRadius="20"
-                                    Padding="12,8"
+                                    Background="{StaticResource SportPurpleBrush}"
+                                    Foreground="White"
+                                    Height="40"
+                                    CornerRadius="10"
                                     Command="{Binding AutoFillDetailsCommand}"
-                  Style="{StaticResource ColorPreservingButtonStyle}">
+                                    Style="{StaticResource DefaultButtonStyle}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal"
-                                                Spacing="8"
+                                                Spacing="10"
                                                 HorizontalAlignment="Center"
                                                 Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                                        <FontIcon Glyph="&#xEF58;"/>
-                                        <TextBlock Text="AI Auto-fill Details" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                        <FontIcon Glyph="&#xEF58;" FontSize="16"/>
+                                        <TextBlock Text="AI Auto-fill Details" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                                     </StackPanel>
                                     <ProgressRing IsActive="True"
                                                   Width="20"
@@ -388,6 +410,8 @@
                                        FontSize="11"
                                        FontStyle="Italic"
                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+
+
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -451,7 +475,6 @@
                                 <TextBlock Text="COST PRICE (USD)"
                                            Style="{StaticResource DetailFieldLabelStyle}"/>
                                 <controls:DecimalTextBox Text="{Binding CostPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         IsEnabled="{Binding IsEditMode}"
                                                          PlaceholderText="0.00"
                                                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                          Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -475,26 +498,31 @@
                         </StackPanel>
 
                         <!-- Fixed-attribute variant matrix (multi-row) -->
-                        <StackPanel Spacing="10">
+                        <StackPanel Spacing="12">
                             <Grid>
-                                <TextBlock Text="Variants matrix"
-                                           FontWeight="SemiBold"
-                                           FontSize="15"
-                                           Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                                           VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xE71D;" Foreground="{StaticResource SportPurpleBrush}" FontSize="16"/>
+                                    <TextBlock Text="Variants Matrix"
+                                               FontWeight="Bold"
+                                               FontSize="16"
+                                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                               VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                                </StackPanel>
                                 <Button HorizontalAlignment="Right"
-                                        Content="+ Add variant"
-                                        Style="{StaticResource DetailOutlineButtonStyle}"
+                                        Content="+ Add Variant"
+                                        Style="{StaticResource DefaultButtonStyle}"
+                                        Background="Transparent"
+                                        BorderThickness="0"
                                         Foreground="{StaticResource SportPurpleBrush}"
-                                        BorderBrush="{StaticResource SportPurpleLightBrush}"
+                                        FontWeight="SemiBold"
                                         Command="{Binding AddVariantCommand}"/>
                             </Grid>
                             <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                     BorderThickness="1"
-                                    CornerRadius="20"
-                                    Background="{ThemeResource ControlFillColorDefaultBrush}">
-                                <StackPanel Padding="12,10"
-                                            Spacing="10">
+                                    CornerRadius="16"
+                                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                                <StackPanel Padding="16"
+                                            Spacing="12">
                                     <Grid ColumnSpacing="12">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -505,23 +533,20 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0"
                                                    Text="SIZE"
-                                                   Style="{StaticResource DetailFieldLabelStyle}"
-                                                   Margin="0,0,0,4"/>
+                                                   Style="{StaticResource DetailFieldLabelStyle}"/>
                                         <TextBlock Grid.Column="1"
                                                    Text="COLOR"
-                                                   Style="{StaticResource DetailFieldLabelStyle}"
-                                                   Margin="0,0,0,4"/>
+                                                   Style="{StaticResource DetailFieldLabelStyle}"/>
                                         <TextBlock Grid.Column="2"
-                                                   Text="IN STOCK"
-                                                   Style="{StaticResource DetailFieldLabelStyle}"
-                                                   Margin="0,0,0,4"/>
+                                                   Text="STOCK"
+                                                   Style="{StaticResource DetailFieldLabelStyle}"/>
                                         <TextBlock Grid.Column="3"
-                                                   Text="VARIANT SKU"
-                                                   Style="{StaticResource DetailFieldLabelStyle}"
-                                                   Margin="0,0,0,4"/>
+                                                   Text="SKU"
+                                                   Style="{StaticResource DetailFieldLabelStyle}"/>
+                                        <Border Grid.Column="4" Width="86"/>
                                     </Grid>
 
-                                    <ItemsControl ItemsSource="{Binding Variants, Mode=OneWay}">
+                                    <ItemsControl ItemsSource="{x:Bind ViewModel.Variants, Mode=OneWay}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate x:DataType="models:SportItemVariant">
                                                 <Grid ColumnSpacing="12"
@@ -535,7 +560,7 @@
                                                     </Grid.ColumnDefinitions>
 
                                                     <TextBox Grid.Column="0"
-                                                             Text="{Binding SizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Text="{x:Bind SizeText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              PlaceholderText="Size (e.g. 9, XL)"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -543,7 +568,7 @@
                                                              BorderThickness="1"
                                                              Padding="10,8"/>
                                                     <TextBox Grid.Column="1"
-                                                             Text="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Text="{x:Bind Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              PlaceholderText="Color"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -551,16 +576,16 @@
                                                              BorderThickness="1"
                                                              Padding="10,8"/>
                                                     <controls:NumericTextBox Grid.Column="2"
-                                                                             IsEnabled="{Binding DataContext.IsEditMode, ElementName=Root}"
-                                                                             Text="{Binding StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                             Text="{x:Bind StockQuantityText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                              PlaceholderText="Stock"
                                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
                                                                              Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                                              BorderThickness="1"
+                                                                             CornerRadius="12"
                                                                              Padding="10,8"/>
                                                     <TextBox Grid.Column="3"
-                                                             Text="{Binding Sku, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Text="{x:Bind Sku, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              PlaceholderText="SKU"
                                                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                              Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -590,6 +615,7 @@
                                                      Background="{ThemeResource ControlFillColorDefaultBrush}"
                                                      Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                      BorderThickness="1"
+                                                     CornerRadius="12"
                                                      Padding="10,8"/>
                         </StackPanel>
 
@@ -611,8 +637,8 @@
                             </Grid>
                             <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                     BorderThickness="1"
-                                    CornerRadius="20"
-                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                                    CornerRadius="16"
+                                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
                                 <TextBox Text="{Binding ProductDescriptionUi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          AcceptsReturn="True"
                                          TextWrapping="Wrap"

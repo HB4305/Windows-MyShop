@@ -4,9 +4,11 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyShop.Models;
+using MyShop.Models.Ai;
 using MyShop.Services;
 
 namespace MyShop.ViewModels;
@@ -17,16 +19,19 @@ public partial class SportItemDetailViewModel : ObservableObject
     private readonly CategoryService _catService;
     private readonly IAiService _aiService;
     private readonly IFilePickerService _filePickerService;
+    private readonly AiLogService _aiLogService;
     private byte[]? _lastUploadedImageBytes;
+    private AiItemAnalysis? _pendingAiAnalysis;
 
     public Func<string, string, Task<bool>>? ShowConfirmationDialogAsync { get; set; }
 
-    public SportItemDetailViewModel(SportItemService service, CategoryService catService, IAiService aiService, IFilePickerService filePickerService)
+    public SportItemDetailViewModel(SportItemService service, CategoryService catService, IAiService aiService, IFilePickerService filePickerService, AiLogService aiLogService)
     {
         _service = service;
         _catService = catService;
         _aiService = aiService;
         _filePickerService = filePickerService;
+        _aiLogService = aiLogService;
         ImageUrls.CollectionChanged += OnImageUrlsCollectionChanged;
     }
 
@@ -148,6 +153,18 @@ public partial class SportItemDetailViewModel : ObservableObject
     /// <summary>Description field on the form (no DB column yet).</summary>
     [ObservableProperty]
     private string _productDescriptionUi = string.Empty;
+
+    [ObservableProperty]
+    private ObservableCollection<AiFieldSuggestion> _aiSuggestions = [];
+
+    [ObservableProperty]
+    private bool _isAiReviewVisible;
+
+    [ObservableProperty]
+    private string _aiReviewSummary = string.Empty;
+
+    [ObservableProperty]
+    private double _aiOverallConfidence;
 
     [ObservableProperty]
     private bool _isLoading;
@@ -404,6 +421,16 @@ public partial class SportItemDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void ViewImageDetail(string? url)
+    {
+        if (string.IsNullOrEmpty(url)) url = PreviewImageUrl;
+        if (string.IsNullOrEmpty(url)) return;
+        ViewImageDetailRequested?.Invoke(this, url);
+    }
+
+    public event EventHandler<string>? ViewImageDetailRequested;
+
+    [RelayCommand]
     private async Task GenerateAiDescriptionAsync()
     {
         try
@@ -432,6 +459,12 @@ public partial class SportItemDetailViewModel : ObservableObject
                 var colors = Variants.Select(v => v.Color).Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
                 if (sizes.Count > 0) sb.AppendLine($"- Available Sizes: {string.Join(", ", sizes)}");
                 if (colors.Count > 0) sb.AppendLine($"- Available Colors: {string.Join(", ", colors)}");
+            }
+
+            var categoryHint = BuildCategoryHint(SelectedCategory);
+            if (!string.IsNullOrWhiteSpace(categoryHint))
+            {
+                sb.AppendLine($"- Category preset: {categoryHint}");
             }
 
             sb.AppendLine("\nWrite a concise, high-impact description now:");
@@ -508,121 +541,289 @@ public partial class SportItemDetailViewModel : ObservableObject
 
     private async Task AnalyzeAndFillAsync(byte[] bytes)
     {
+        var sw = Stopwatch.StartNew();
+        var logEntry = new AiLogEntry
+        {
+            Operation = "ai_autofill"
+        };
+
         try
         {
             IsLoading = true;
             ErrorMessage = "AI is analyzing product details...";
             
-            // Pass the list of available category names to the AI
             var categoryNames = Categories.Select(c => c.Name).ToArray();
-            var json = await _aiService.AnalyzeItemAsync(bytes, categoryNames);
-            System.Console.WriteLine($"[AI] Raw JSON: {json}");
+            var categoryHint = BuildCategoryHint(SelectedCategory);
+            var rawJson = await _aiService.AnalyzeItemAsync(bytes, categoryNames, categoryHint);
 
-            // Clean JSON from any markdown wrappers
-            if (json.Contains("```"))
+            var cleanedJson = CleanJsonPayload(rawJson);
+            var analysis = ParseAiAnalysis(cleanedJson);
+            if (analysis == null)
             {
-                int start = json.IndexOf("{");
-                int end = json.LastIndexOf("}");
-                if (start >= 0 && end > start)
+                throw new InvalidOperationException("AI response is not valid JSON.");
+            }
+
+            var validationErrors = ValidateAiAnalysis(analysis, categoryNames);
+            if (validationErrors.Count > 0)
+            {
+                var repairedJson = await _aiService.RepairItemJsonAsync(cleanedJson, validationErrors.ToArray(), categoryNames);
+                repairedJson = CleanJsonPayload(repairedJson);
+                var repaired = ParseAiAnalysis(repairedJson);
+                if (repaired != null)
                 {
-                    json = json.Substring(start, end - start + 1);
+                    analysis = repaired;
+                }
+                else
+                {
+                    throw new InvalidOperationException("AI repair returned invalid JSON.");
                 }
             }
-            json = json.Trim();
+
+            _pendingAiAnalysis = analysis;
+            BuildAiSuggestions(analysis);
+            AiOverallConfidence = analysis.Confidence ?? 0;
             
-            using var doc = JsonDocument.Parse(json);
-            var root = doc.RootElement;
-
-            // 1. Name
-            if (root.TryGetProperty("name", out var nameProp))
-            {
-                Item.Name = nameProp.GetString();
-            }
-
-            // 2. Price
-            if (root.TryGetProperty("price", out var priceProp))
-            {
-                if (priceProp.ValueKind == JsonValueKind.Number)
-                    SellingPriceText = priceProp.GetDouble().ToString(CultureInfo.InvariantCulture);
-                else if (priceProp.ValueKind == JsonValueKind.String)
-                    SellingPriceText = priceProp.GetString();
-            }
-
-            // 3. Cost Price
-            if (root.TryGetProperty("cost_price", out var costProp))
-            {
-                if (costProp.ValueKind == JsonValueKind.Number)
-                    CostPriceText = costProp.GetDouble().ToString(CultureInfo.InvariantCulture);
-                else if (costProp.ValueKind == JsonValueKind.String)
-                    CostPriceText = costProp.GetString();
-            }
-
-            // 4. Low Stock Threshold
-            if (root.TryGetProperty("low_stock_threshold", out var lowStockProp))
-            {
-                if (lowStockProp.ValueKind == JsonValueKind.Number)
-                    LowStockThresholdText = lowStockProp.GetInt32().ToString();
-                else if (lowStockProp.ValueKind == JsonValueKind.String)
-                    LowStockThresholdText = lowStockProp.GetString();
-            }
-
-            // 5. Description
-            if (root.TryGetProperty("description", out var descProp))
-            {
-                ProductDescriptionUi = descProp.GetString() ?? string.Empty;
-            }
-
-            // 6. Category Matching
-            if (root.TryGetProperty("category", out var catProp))
-            {
-                var catName = catProp.GetString();
-                var found = Categories.FirstOrDefault(c => c.Name.Equals(catName, StringComparison.OrdinalIgnoreCase));
-                if (found != null)
-                {
-                    SelectedCategory = found;
-                }
-            }
-
-            // 7. Suggested Variants
-            if (root.TryGetProperty("suggested_variants", out var variantsProp) && variantsProp.ValueKind == JsonValueKind.Array)
-            {
-                Variants.Clear();
-                foreach (var vElement in variantsProp.EnumerateArray())
-                {
-                    var variant = new SportItemVariant { SportItemId = Item.Id };
-                    if (vElement.TryGetProperty("size", out var s)) variant.Size = s.GetString();
-                    if (vElement.TryGetProperty("color", out var c)) variant.Color = c.GetString();
-                    if (vElement.TryGetProperty("sku", out var sk)) variant.Sku = sk.GetString();
-                    variant.StockQuantity = 0; // Enforce 0 initial stock
-                    Variants.Add(variant);
-                }
-            }
-            else if (root.TryGetProperty("color", out var colorProp) && Variants.Count > 0)
-            {
-                // Fallback for single color
-                Variants[0].Color = colorProp.GetString();
-            }
-
-            // Notify all property changes
-            OnPropertyChanged(nameof(Item));
-            OnPropertyChanged(nameof(SellingPriceText));
-            OnPropertyChanged(nameof(CostPriceText));
-            OnPropertyChanged(nameof(LowStockThresholdText));
-            OnPropertyChanged(nameof(ProductDescriptionUi));
-            OnPropertyChanged(nameof(SelectedCategory));
-            OnPropertyChanged(nameof(Variants));
+            // Auto-apply all suggestions immediately
+            ApplyAiSuggestions();
 
             ErrorMessage = string.Empty;
-            System.Console.WriteLine("[AI] Auto-fill complete.");
+
+            logEntry.Success = true;
+            logEntry.ResponseSummary = $"fields={AiSuggestions.Count};confidence={AiOverallConfidence:0.00};errors={validationErrors.Count}";
+            ErrorMessage = string.Empty;
         }
         catch (Exception ex)
         {
-            System.Console.WriteLine($"[AI AutoFill] Error: {ex.Message}");
-            ErrorMessage = string.Empty;
+            ErrorMessage = $"AI Auto-fill Error: {ex.Message}";
+            logEntry.Success = false;
+            logEntry.Error = ex.Message;
         }
         finally
         {
+            sw.Stop();
+            logEntry.DurationMs = sw.ElapsedMilliseconds;
+            await SafeLogAsync(logEntry);
             IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    private void ApplyAiSuggestions()
+    {
+        if (_pendingAiAnalysis == null || AiSuggestions.Count == 0)
+        {
+            return;
+        }
+
+        // Applying all suggestions because the user wants "enough fields" fulfilled.
+        foreach (var suggestion in AiSuggestions)
+        {
+            switch (suggestion.Key)
+            {
+                case "name":
+                    Item.Name = _pendingAiAnalysis.Name ?? Item.Name;
+                    break;
+                case "price":
+                    if (_pendingAiAnalysis.Price.HasValue)
+                        SellingPriceText = _pendingAiAnalysis.Price.Value.ToString(CultureInfo.InvariantCulture);
+                    break;
+                case "cost_price":
+                    if (_pendingAiAnalysis.CostPrice.HasValue)
+                        CostPriceText = _pendingAiAnalysis.CostPrice.Value.ToString(CultureInfo.InvariantCulture);
+                    break;
+                case "low_stock_threshold":
+                    if (_pendingAiAnalysis.LowStockThreshold.HasValue)
+                        LowStockThresholdText = _pendingAiAnalysis.LowStockThreshold.Value.ToString();
+                    break;
+                case "description":
+                    if (!string.IsNullOrWhiteSpace(_pendingAiAnalysis.Description))
+                        ProductDescriptionUi = _pendingAiAnalysis.Description;
+                    break;
+                case "color":
+                    if (!string.IsNullOrWhiteSpace(_pendingAiAnalysis.Color) && Variants.Count > 0)
+                        Variants[0].Color = _pendingAiAnalysis.Color;
+                    break;
+                case "category":
+                    if (!string.IsNullOrWhiteSpace(_pendingAiAnalysis.Category))
+                    {
+                        var found = Categories.FirstOrDefault(c => c.Name.Equals(_pendingAiAnalysis.Category, StringComparison.OrdinalIgnoreCase));
+                        if (found != null) SelectedCategory = found;
+                    }
+                    break;
+                case "suggested_variants":
+                    if (_pendingAiAnalysis.SuggestedVariants.Count > 0)
+                    {
+                        Variants.Clear();
+                        foreach (var v in _pendingAiAnalysis.SuggestedVariants)
+                        {
+                            Variants.Add(new SportItemVariant
+                            {
+                                SportItemId = Item.Id,
+                                Size = v.Size,
+                                Color = v.Color,
+                                Sku = v.Sku,
+                                StockQuantity = 0
+                            });
+                        }
+                    }
+                    break;
+            }
+        }
+
+        IsAiReviewVisible = false;
+    }
+
+    [RelayCommand]
+    private void DismissAiSuggestions()
+    {
+        AiSuggestions.Clear();
+        IsAiReviewVisible = false;
+        AiReviewSummary = string.Empty;
+        _pendingAiAnalysis = null;
+    }
+
+    private static string CleanJsonPayload(string json)
+    {
+        if (json.Contains("```"))
+        {
+            int start = json.IndexOf("{");
+            int end = json.LastIndexOf("}");
+            if (start >= 0 && end > start)
+            {
+                json = json.Substring(start, end - start + 1);
+            }
+        }
+        return json.Trim();
+    }
+
+    private static AiItemAnalysis? ParseAiAnalysis(string json)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<AiItemAnalysis>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static List<string> ValidateAiAnalysis(AiItemAnalysis analysis, string[] availableCategories)
+    {
+        var errors = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(analysis.Name))
+            errors.Add("Name is required.");
+
+        if (!analysis.Price.HasValue || analysis.Price <= 0 || analysis.Price > 100000)
+            errors.Add("Price must be a positive number under 100000.");
+
+        if (analysis.CostPrice.HasValue && analysis.Price.HasValue && analysis.CostPrice > analysis.Price)
+            errors.Add("Cost price must not exceed selling price.");
+
+        if (analysis.LowStockThreshold.HasValue && (analysis.LowStockThreshold <= 0 || analysis.LowStockThreshold > 500))
+            errors.Add("Low stock threshold must be between 1 and 500.");
+
+        if (!string.IsNullOrWhiteSpace(analysis.Category))
+        {
+            var match = availableCategories.Any(c => c.Equals(analysis.Category, StringComparison.OrdinalIgnoreCase));
+            if (!match) errors.Add("Category must be one of the available categories.");
+        }
+        else
+        {
+            errors.Add("Category is required.");
+        }
+
+        if (analysis.SuggestedVariants == null || analysis.SuggestedVariants.Count == 0)
+            errors.Add("At least one suggested variant is required.");
+        else
+        {
+            foreach (var v in analysis.SuggestedVariants)
+            {
+                if (string.IsNullOrWhiteSpace(v.Size) && string.IsNullOrWhiteSpace(v.Color))
+                {
+                    errors.Add("Each variant should include a size or color.");
+                    break;
+                }
+            }
+        }
+
+        return errors;
+    }
+
+    private void BuildAiSuggestions(AiItemAnalysis analysis)
+    {
+        AiSuggestions.Clear();
+
+        AddSuggestion("name", "Name", analysis.Name, analysis);
+        AddSuggestion("price", "Price", analysis.Price?.ToString(CultureInfo.InvariantCulture), analysis);
+        AddSuggestion("cost_price", "Cost price", analysis.CostPrice?.ToString(CultureInfo.InvariantCulture), analysis);
+        AddSuggestion("category", "Category", analysis.Category, analysis);
+        AddSuggestion("low_stock_threshold", "Low stock", analysis.LowStockThreshold?.ToString(), analysis);
+        AddSuggestion("color", "Color", analysis.Color, analysis);
+        AddSuggestion("description", "Description", analysis.Description, analysis);
+
+        if (analysis.SuggestedVariants.Count > 0)
+        {
+            var summary = string.Join(", ", analysis.SuggestedVariants
+                .Select(v => $"{v.Size}/{v.Color}")
+                .Where(s => s != "/"));
+            AddSuggestion("suggested_variants", "Variants", summary, analysis);
+        }
+    }
+
+    private void AddSuggestion(string key, string label, string? value, AiItemAnalysis analysis)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return;
+
+        var confidence = analysis.FieldConfidence.TryGetValue(key, out var c) ? c : (analysis.Confidence ?? 0.5);
+        var reason = analysis.FieldReasons.TryGetValue(key, out var r) ? r : string.Empty;
+
+        AiSuggestions.Add(new AiFieldSuggestion
+        {
+            Key = key,
+            Label = label,
+            Value = value.Trim(),
+            Confidence = confidence,
+            Reason = reason,
+            IsAccepted = confidence >= 0.4 // Lowered threshold to include more fields as requested
+        });
+    }
+
+    private static string BuildCategoryHint(Category? category)
+    {
+        if (category == null || string.IsNullOrWhiteSpace(category.Name))
+            return string.Empty;
+
+        var name = category.Name.ToLowerInvariant();
+
+        if (name.Contains("shoe") || name.Contains("footwear") || name.Contains("sneaker"))
+            return "Use footwear sizing (US/EU), emphasize cushioning and traction.";
+
+        if (name.Contains("apparel") || name.Contains("clothing") || name.Contains("jersey") || name.Contains("shirt"))
+            return "Use apparel sizing (S/M/L/XL) and highlight fabric, fit, and breathability.";
+
+        if (name.Contains("racket"))
+            return "Use grip sizing (G2/G3 or 4 1/4) and highlight frame material and balance.";
+
+        if (name.Contains("ball"))
+            return "Use official ball size (e.g., Size 5/7) and note surface texture and bounce.";
+
+        return "Focus on category-appropriate features and sizing.";
+    }
+
+    private async Task SafeLogAsync(AiLogEntry entry)
+    {
+        try
+        {
+            await _aiLogService.LogAsync(entry);
+        }
+        catch
+        {
+            // Intentionally ignore logging errors.
         }
     }
 }

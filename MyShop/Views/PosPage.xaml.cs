@@ -212,7 +212,7 @@ public sealed partial class PosPage : Page
 
         RootLayout.RowDefinitions.Clear();
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RootLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
@@ -238,11 +238,13 @@ public sealed partial class PosPage : Page
             Grid.SetRow(paginationBorder, 2);
             Grid.SetColumn(paginationBorder, 0);
             Grid.SetColumnSpan(paginationBorder, 1);
+            paginationBorder.Margin = new Thickness(0, -16, 0, -20);
         }
 
-        Grid.SetRow(StatusText, 2);
-        Grid.SetColumn(StatusText, 1);
+        Grid.SetRow(StatusText, 3);
+        Grid.SetColumn(StatusText, 0);
         Grid.SetColumnSpan(StatusText, 1);
+        StatusText.Margin = new Thickness(0, 0, 0, -20);
     }
 
     private void SetStackedLayout()
@@ -252,9 +254,9 @@ public sealed partial class PosPage : Page
 
         RootLayout.RowDefinitions.Clear();
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RootLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RootLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         RootLayout.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         Grid.SetRow(HeaderPanel, 0);
@@ -275,6 +277,7 @@ public sealed partial class PosPage : Page
             Grid.SetRow(paginationBorder, 2);
             Grid.SetColumn(paginationBorder, 0);
             Grid.SetColumnSpan(paginationBorder, 1);
+            paginationBorder.Margin = new Thickness(0, 0, 0, 0);
         }
 
         Grid.SetRow(CheckoutScroller, 3);

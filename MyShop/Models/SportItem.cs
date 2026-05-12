@@ -1,31 +1,45 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MyShop.Models;
 
-public class SportItem
+public partial class SportItem : ObservableObject
 {
-    public int Id { get; set; }
+    [ObservableProperty]
+    private int _id;
 
-    public int CategoryId { get; set; }
+    [ObservableProperty]
+    private int _categoryId;
 
-    [Required]
-    public string Name { get; set; } = string.Empty;
+    [ObservableProperty]
+    [property: Required]
+    private string _name = string.Empty;
 
-    public decimal? CostPrice { get; set; }
+    [ObservableProperty]
+    private decimal? _costPrice;
 
-    public decimal? SellingPrice { get; set; }
+    [ObservableProperty]
+    private decimal? _sellingPrice;
 
-    public int? StockQuantity { get; set; }
+    [ObservableProperty]
+    private int? _stockQuantity;
 
-    public int? LowStockThreshold { get; set; }
+    [ObservableProperty]
+    private int? _lowStockThreshold;
 
-    [JsonPropertyName("image_urls")]
-    public List<string> ImageUrls { get; set; } = new();
+    [ObservableProperty]
+    [property: JsonPropertyName("image_urls")]
+    private List<string> _imageUrls = new();
 
-    [JsonIgnore]
-    public List<SportItemVariant> Variants { get; set; } = new();
+    [ObservableProperty]
+    [property: JsonIgnore]
+    private List<SportItemVariant> _variants = new();
+
+    [ObservableProperty]
+    private string? _description;
 
     [JsonIgnore]
     public int EffectiveStockQuantity =>
@@ -35,8 +49,6 @@ public class SportItem
 
     [JsonIgnore]
     public string? PrimaryVariantSku => Variants.FirstOrDefault(v => !string.IsNullOrWhiteSpace(v.Sku))?.Sku;
-
-    public string? Description { get; set; }
 
     /// <summary>Convenience for UI; must not be serialized — DB only has <c>image_urls</c>.</summary>
     [JsonIgnore]
