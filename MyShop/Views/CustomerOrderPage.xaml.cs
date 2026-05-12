@@ -88,7 +88,7 @@ public sealed partial class CustomerOrderPage : Page
         OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(detailWidth) });
 
         OrderRoot.RowDefinitions.Clear();
-        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        OrderRoot.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         OrderRoot.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
         Grid.SetRow(OrderListPanel, 0);
@@ -102,6 +102,9 @@ public sealed partial class CustomerOrderPage : Page
         Grid.SetRow(OrderEmptyDetailPanel, 0);
         Grid.SetColumn(OrderEmptyDetailPanel, 1);
         Grid.SetColumnSpan(OrderEmptyDetailPanel, 1);
+
+        OrderListPanel.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
+        MainScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
     }
 
     private void SetSingleColumnLayout()
@@ -124,6 +127,9 @@ public sealed partial class CustomerOrderPage : Page
         Grid.SetRow(OrderEmptyDetailPanel, 1);
         Grid.SetColumn(OrderEmptyDetailPanel, 0);
         Grid.SetColumnSpan(OrderEmptyDetailPanel, 1);
+
+        OrderListPanel.RowDefinitions[3].Height = GridLength.Auto;
+        MainScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
     }
 
     // ══ Order Selection ═══════════════════════════════════════════

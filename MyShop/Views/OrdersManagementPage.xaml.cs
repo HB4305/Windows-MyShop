@@ -29,7 +29,6 @@ public sealed partial class OrdersManagementPage : Page
         BuildPagination();
         UpdateBodyMinHeight();
     }
-
     private void OnScrollerSizeChanged(object sender, SizeChangedEventArgs e)
         => UpdateBodyMinHeight();
 
@@ -41,7 +40,6 @@ public sealed partial class OrdersManagementPage : Page
         var headerHeight = HeaderPanelBorder.ActualHeight;
         BodyGrid.MinHeight = Math.Max(0, available - headerHeight);
     }
-
     private async void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (OrderListView.SelectedItem is CustomerOrder order)
