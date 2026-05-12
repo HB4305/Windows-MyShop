@@ -472,30 +472,19 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1"
                                         Spacing="6">
-                                <TextBlock Text="COST PRICE (USD)"
+                                <TextBlock Text="CATEGORY"
                                            Style="{StaticResource DetailFieldLabelStyle}"/>
-                                <controls:DecimalTextBox Text="{Binding CostPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                         PlaceholderText="0.00"
-                                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                                         Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                                                         Padding="10,8"/>
+                                <ComboBox ItemsSource="{Binding Categories, Mode=OneWay}"
+                                          SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                                          DisplayMemberPath="Name"
+                                          HorizontalAlignment="Stretch"
+                                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                          Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                          Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                          BorderThickness="1"
+                                          Padding="10,8"/>
                             </StackPanel>
                         </Grid>
-
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="CATEGORY"
-                                       Style="{StaticResource DetailFieldLabelStyle}"/>
-                            <ComboBox ItemsSource="{Binding Categories, Mode=OneWay}"
-                                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-                                      DisplayMemberPath="Name"
-                                      HorizontalAlignment="Stretch"
-                                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                      Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                      Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                                      BorderThickness="1"
-                                      Padding="10,8"/>
-                        </StackPanel>
 
                         <!-- Fixed-attribute variant matrix (multi-row) -->
                         <StackPanel Spacing="12">
@@ -606,18 +595,38 @@
                             </Border>
                         </StackPanel>
 
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="LOW STOCK THRESHOLD"
-                                       Style="{StaticResource DetailFieldLabelStyle}"/>
-                            <controls:NumericTextBox Text="{Binding LowStockThresholdText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                     PlaceholderText="0"
-                                                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                                     Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                                                     BorderThickness="1"
-                                                     CornerRadius="12"
-                                                     Padding="10,8"/>
-                        </StackPanel>
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0"
+                                        Spacing="6">
+                                <TextBlock Text="LOW STOCK THRESHOLD"
+                                           Style="{StaticResource DetailFieldLabelStyle}"/>
+                                <controls:NumericTextBox Text="{Binding LowStockThresholdText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         PlaceholderText="0"
+                                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                                         Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                                         BorderThickness="1"
+                                                         CornerRadius="12"
+                                                         Padding="10,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1"
+                                        Spacing="6"
+                                        Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <TextBlock Text="COST PRICE (USD)"
+                                           Style="{StaticResource DetailFieldLabelStyle}"/>
+                                <controls:DecimalTextBox Text="{Binding CostPriceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         PlaceholderText="0.00"
+                                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                                         Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                                         Padding="10,8"
+                                                         IsEnabled="False"/>
+                            </StackPanel>
+                        </Grid>
 
                         <StackPanel Spacing="10">
                             <Grid>

@@ -18,6 +18,7 @@ public class ImportRow
     public string RawStock { get; set; } = string.Empty;
     public string RawLowStockThreshold { get; set; } = string.Empty;
     public string RawDescription { get; set; } = string.Empty;
+    public string RawImageUrls { get; set; } = string.Empty;
 
     // Parsed values (null = parse failed)
     public string? Name { get; set; }
@@ -27,6 +28,7 @@ public class ImportRow
     public int? StockQuantity { get; set; }
     public int? LowStockThreshold { get; set; }
     public string? Description { get; set; }
+    public List<string> ImageUrls { get; set; } = new();
 
     public List<string> Errors { get; set; } = new();
     public bool IsValid => Errors.Count == 0;
@@ -44,7 +46,7 @@ public class ImportRow
         StockQuantity = StockQuantity ?? 0,
         LowStockThreshold = LowStockThreshold ?? 5,
         Description = Description,
-        ImageUrls = new List<string>()
+        ImageUrls = ImageUrls
     };
 }
 
@@ -58,13 +60,13 @@ public class ExcelImportService
     // Expected header column names (case-insensitive match)
     private static readonly string[] ExpectedHeaders =
     {
-        "name", "category", "selling price",
+        "image urls", "name", "category", "selling price",
         "low stock threshold", "description"
     };
 
     /// <summary>
     /// Parse the stream of an .xlsx file. Returns parsed rows.
-    /// Expects columns: 1:Name | 2:Category | 3:Selling Price | 4:Low Stock | 5:Description
+    /// Expects columns: 1:Image URLs | 2:Name | 3:Category | 4:Selling Price | 5:Low Stock | 6:Description
     /// </summary>
     public List<ImportRow> ParseExcel(Stream stream)
     {
@@ -83,11 +85,12 @@ public class ExcelImportService
 
             var importRow = new ImportRow { RowNumber = r };
 
-            importRow.RawName = GetCellString(row, 1);
-            importRow.RawCategory = GetCellString(row, 2);
-            importRow.RawSellingPrice = GetCellString(row, 3);
-            importRow.RawLowStockThreshold = GetCellString(row, 4);
-            importRow.RawDescription = GetCellString(row, 5);
+            importRow.RawImageUrls = GetCellString(row, 1);
+            importRow.RawName = GetCellString(row, 2);
+            importRow.RawCategory = GetCellString(row, 3);
+            importRow.RawSellingPrice = GetCellString(row, 4);
+            importRow.RawLowStockThreshold = GetCellString(row, 5);
+            importRow.RawDescription = GetCellString(row, 6);
 
             // Cost and Stock default to 0
             importRow.CostPrice = 0;
@@ -134,6 +137,15 @@ public class ExcelImportService
             importRow.Description = string.IsNullOrWhiteSpace(importRow.RawDescription)
                 ? null : importRow.RawDescription.Trim();
 
+            // --- Image URLs (separated by ; or ,) ---
+            if (!string.IsNullOrWhiteSpace(importRow.RawImageUrls))
+            {
+                importRow.ImageUrls = importRow.RawImageUrls
+                    .Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .ToList();
+            }
+
             rows.Add(importRow);
         }
 
@@ -149,24 +161,26 @@ public class ExcelImportService
         var ws = wb.Worksheets.Add("Products");
 
         // Header row
-        ws.Cell(1, 1).Value = "Name *";
-        ws.Cell(1, 2).Value = "Category";
-        ws.Cell(1, 3).Value = "Selling Price *";
-        ws.Cell(1, 4).Value = "Low Stock Threshold";
-        ws.Cell(1, 5).Value = "Description";
+        ws.Cell(1, 1).Value = "Image URLs (split by ;)";
+        ws.Cell(1, 2).Value = "Name *";
+        ws.Cell(1, 3).Value = "Category";
+        ws.Cell(1, 4).Value = "Selling Price *";
+        ws.Cell(1, 5).Value = "Low Stock Threshold";
+        ws.Cell(1, 6).Value = "Description";
 
         // Style header
-        var headerRow = ws.Range(1, 1, 1, 5);
+        var headerRow = ws.Range(1, 1, 1, 6);
         headerRow.Style.Font.Bold = true;
         headerRow.Style.Fill.BackgroundColor = XLColor.FromHtml("#8B52FF");
         headerRow.Style.Font.FontColor = XLColor.White;
 
         // Sample data row
-        ws.Cell(2, 1).Value = "Nike Air Zoom";
-        ws.Cell(2, 2).Value = "Shoes";
-        ws.Cell(2, 3).Value = 99.99;
-        ws.Cell(2, 4).Value = 10;
-        ws.Cell(2, 5).Value = "Sample product description";
+        ws.Cell(2, 1).Value = "https://example.com/image1.jpg; https://example.com/image2.jpg";
+        ws.Cell(2, 2).Value = "Nike Air Zoom";
+        ws.Cell(2, 3).Value = "Shoes";
+        ws.Cell(2, 4).Value = 99.99;
+        ws.Cell(2, 5).Value = 10;
+        ws.Cell(2, 6).Value = "Sample product description";
 
         ws.Columns().AdjustToContents();
 
