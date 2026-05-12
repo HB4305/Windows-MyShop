@@ -27,6 +27,7 @@ public sealed partial class CustomerOrderPage : Page
                 BuildPaginationButtons();
                 UpdateTabStyles();
                 ApplyResponsiveLayout(ActualWidth);
+                UpdateDetailScrollerHeight(ActualHeight);
             };
         }
         catch (Exception ex)
@@ -46,9 +47,9 @@ public sealed partial class CustomerOrderPage : Page
             {
                 DispatcherQueue.TryEnqueue(() => UpdateTabStyles());
             }
-            if (e.PropertyName == nameof(ViewModel.SelectedOrder))
+            if (e.PropertyName == nameof(ViewModel.ShowDetailPanel))
             {
-                DispatcherQueue.TryEnqueue(() => UpdateStatusButtons());
+                DispatcherQueue.TryEnqueue(() => ApplyResponsiveLayout(ActualWidth));
             }
         };
     }
@@ -56,6 +57,15 @@ public sealed partial class CustomerOrderPage : Page
     private void OrderRoot_SizeChanged(object sender, SizeChangedEventArgs e)
     {
         ApplyResponsiveLayout(e.NewSize.Width);
+        UpdateDetailScrollerHeight(e.NewSize.Height);
+    }
+
+    private void UpdateDetailScrollerHeight(double rootHeight)
+    {
+        // In wide mode the detail ScrollViewer needs a bounded MaxHeight so it can scroll internally.
+        // We subtract the detail header (~60px) and footer (~62px) from the root height.
+        const double detailChrome = 122;
+        DetailScrollViewer.MaxHeight = Math.Max(200, rootHeight - detailChrome);
     }
 
     private void ApplyResponsiveLayout(double width)
@@ -71,9 +81,11 @@ public sealed partial class CustomerOrderPage : Page
 
     private void SetTwoColumnLayout()
     {
+        var detailWidth = ViewModel.ShowDetailPanel ? 420 : 0;
+
         OrderRoot.ColumnDefinitions.Clear();
         OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(420) });
+        OrderRoot.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(detailWidth) });
 
         OrderRoot.RowDefinitions.Clear();
         OrderRoot.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -90,6 +102,9 @@ public sealed partial class CustomerOrderPage : Page
         Grid.SetRow(OrderEmptyDetailPanel, 0);
         Grid.SetColumn(OrderEmptyDetailPanel, 1);
         Grid.SetColumnSpan(OrderEmptyDetailPanel, 1);
+
+        OrderListPanel.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
+        MainScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
     }
 
     private void SetSingleColumnLayout()
@@ -112,6 +127,9 @@ public sealed partial class CustomerOrderPage : Page
         Grid.SetRow(OrderEmptyDetailPanel, 1);
         Grid.SetColumn(OrderEmptyDetailPanel, 0);
         Grid.SetColumnSpan(OrderEmptyDetailPanel, 1);
+
+        OrderListPanel.RowDefinitions[3].Height = GridLength.Auto;
+        MainScroller.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
     }
 
     // ══ Order Selection ═══════════════════════════════════════════
@@ -122,7 +140,6 @@ public sealed partial class CustomerOrderPage : Page
 
         // SelectOrderAsync loads the order details (items) from the database
         await ViewModel.SelectOrderAsync(order);
-        UpdateStatusButtons();
     }
 
     // ══ Tab Handlers ═══════════════════════════════════════════════
@@ -315,51 +332,20 @@ public sealed partial class CustomerOrderPage : Page
         ViewModel.CloseDetailPanelCommand.Execute(null);
     }
 
-    private async void StatusPending_Click(object sender, RoutedEventArgs e)
+    private async void DynamicStatusButton_Click(object sender, RoutedEventArgs e)
     {
-        SetButtonsEnabled(false);
-        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Pending");
-        UpdateStatusButtons();
-        SetButtonsEnabled(true);
-    }
-
-    private async void StatusProcessing_Click(object sender, RoutedEventArgs e)
-    {
-        SetButtonsEnabled(false);
-        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Processing");
-        UpdateStatusButtons();
-        SetButtonsEnabled(true);
-    }
-
-    private async void StatusShipped_Click(object sender, RoutedEventArgs e)
-    {
-        SetButtonsEnabled(false);
-        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Shipped");
-        UpdateStatusButtons();
-        SetButtonsEnabled(true);
-    }
-
-    private async void StatusDelivered_Click(object sender, RoutedEventArgs e)
-    {
-        SetButtonsEnabled(false);
-        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Delivered");
-        UpdateStatusButtons();
-        SetButtonsEnabled(true);
-    }
-
-    private async void StatusCancelled_Click(object sender, RoutedEventArgs e)
-    {
-        SetButtonsEnabled(false);
-        await ViewModel.UpdateOrderStatusCommand.ExecuteAsync("Cancelled");
-        UpdateStatusButtons();
-        SetButtonsEnabled(true);
+        if (sender is Button btn && btn.DataContext is StatusOption option)
+        {
+            SetButtonsEnabled(false);
+            await ViewModel.UpdateOrderStatusCommand.ExecuteAsync(option.Name);
+            SetButtonsEnabled(true);
+        }
     }
 
     private async void PayPaid_Click(object sender, RoutedEventArgs e)
     {
         SetButtonsEnabled(false);
         await ViewModel.UpdatePaymentStatusCommand.ExecuteAsync("Paid");
-        UpdateStatusButtons();
         SetButtonsEnabled(true);
     }
 
@@ -367,7 +353,6 @@ public sealed partial class CustomerOrderPage : Page
     {
         SetButtonsEnabled(false);
         await ViewModel.UpdatePaymentStatusCommand.ExecuteAsync("Unpaid");
-        UpdateStatusButtons();
         SetButtonsEnabled(true);
     }
 
@@ -410,36 +395,13 @@ public sealed partial class CustomerOrderPage : Page
         await ViewModel.DeleteOrderCommand.ExecuteAsync(null);
     }
 
-    // ══ Update Status & Payment Button Highlights ═════════════════
-    private void UpdateStatusButtons()
-    {
-        var orderStatus = ViewModel.SelectedOrder?.Status ?? "";
-        SetStatusButtonStyle(BtnStatusPending,    orderStatus, "Pending");
-        SetStatusButtonStyle(BtnStatusProcessing, orderStatus, "Processing");
-        SetStatusButtonStyle(BtnStatusShipped,   orderStatus, "Shipped");
-        SetStatusButtonStyle(BtnStatusDelivered,  orderStatus, "Delivered");
-        SetStatusButtonStyle(BtnStatusCancelled,  orderStatus, "Cancelled");
-
-        var payStatus = ViewModel.SelectedOrder?.PaymentStatus ?? "";
-        SetStatusButtonStyle(BtnPayPaid,   payStatus, "Paid");
-        SetStatusButtonStyle(BtnPayUnpaid, payStatus, "Unpaid");
-    }
-
-    private void SetStatusButtonStyle(Button btn, string currentStatus, string btnStatus)
-    {
-        var isActive = string.Equals(currentStatus, btnStatus, System.StringComparison.OrdinalIgnoreCase);
-        btn.Style = (Style)Resources[isActive ? "PrimaryBtn" : "SecondaryBtn"];
-    }
-
     // ══ Status update loading feedback ══════════════════════════════
     private void SetButtonsEnabled(bool enabled)
     {
-        BtnStatusPending.IsEnabled = enabled;
-        BtnStatusProcessing.IsEnabled = enabled;
-        BtnStatusShipped.IsEnabled = enabled;
-        BtnStatusDelivered.IsEnabled = enabled;
-        BtnStatusCancelled.IsEnabled = enabled;
-        BtnPayPaid.IsEnabled = enabled;
-        BtnPayUnpaid.IsEnabled = enabled;
+        StatusButtonsPanel.IsEnabled = enabled;
+        BtnPayPaidActive.IsEnabled = enabled;
+        BtnPayPaidInactive.IsEnabled = enabled;
+        BtnPayUnpaidActive.IsEnabled = enabled;
+        BtnPayUnpaidInactive.IsEnabled = enabled;
     }
 }

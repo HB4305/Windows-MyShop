@@ -56,17 +56,6 @@
             <AdaptiveTrigger MinWindowWidth="0"/>
           </VisualState.StateTriggers>
           <VisualState.Setters>
-            <Setter Target="StatsGrid.ColumnDefinitions[0].Width" Value="*"/>
-            <Setter Target="StatsGrid.ColumnDefinitions[1].Width" Value="0"/>
-            <Setter Target="StatsGrid.ColumnDefinitions[2].Width" Value="0"/>
-            <Setter Target="Card1.(Grid.Row)" Value="0"/>
-            <Setter Target="Card1.(Grid.Column)" Value="0"/>
-            <Setter Target="Card2.(Grid.Row)" Value="1"/>
-            <Setter Target="Card2.(Grid.Column)" Value="0"/>
-            <Setter Target="Card2.Margin" Value="0,12,0,0"/>
-            <Setter Target="Card3.(Grid.Row)" Value="2"/>
-            <Setter Target="Card3.(Grid.Column)" Value="0"/>
-            <Setter Target="Card3.Margin" Value="0,12,0,0"/>
             <Setter Target="ToolbarGrid.ColumnDefinitions[1].Width" Value="0"/>
             <Setter Target="AddButton.(Grid.Row)" Value="1"/>
             <Setter Target="AddButton.(Grid.Column)" Value="0"/>
@@ -83,12 +72,12 @@
     </VisualStateManager.VisualStateGroups>
 
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/> <!-- Header -->
+      <RowDefinition Height="Auto"/> <!-- Message -->
+      <RowDefinition Height="Auto"/> <!-- Toolbar (Search/Add) -->
+      <RowDefinition Height="Auto"/> <!-- Stats -->
+      <RowDefinition Height="*"/>    <!-- List (Scrollable) -->
+      <RowDefinition Height="Auto"/> <!-- Pagination -->
     </Grid.RowDefinitions>
 
     <!-- Header -->
@@ -110,7 +99,7 @@
     </Border>
 
     <!-- Stats Cards synchronized styling -->
-    <Grid x:Name="StatsGrid" Grid.Row="2" ColumnSpacing="14" Margin="0,0,0,20">
+    <Grid x:Name="StatsGrid" Grid.Row="3" ColumnSpacing="14" Margin="0,0,0,20">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition x:Name="KpiSpacer1" Width="*"/>
@@ -154,7 +143,7 @@
     </Grid>
 
     <!-- Toolbar synchronized -->
-    <Grid x:Name="ToolbarGrid" Grid.Row="3" ColumnSpacing="14" RowSpacing="12" Margin="0,0,0,20">
+    <Grid x:Name="ToolbarGrid" Grid.Row="2" ColumnSpacing="14" RowSpacing="12" Margin="0,0,0,20">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
@@ -195,18 +184,17 @@
     <!-- List Content synchronized with CustomerPage -->
     <Grid Grid.Row="4">
       <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
-
-      <!-- Table synchronized -->
-      <Border Grid.Row="1" Style="{StaticResource PanelBorder}">
-        <Grid>
+      <!-- Table -->
+      <Border Grid.Row="0" Style="{StaticResource PanelBorder}">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled">
+          <Grid MinWidth="800">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!-- Table Header -->
@@ -227,92 +215,87 @@
               </Grid>
             </Border>
 
-            <!-- Loading State -->
-            <StackPanel Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-                <controls:StaffSkeletonRow/>
-                <controls:StaffSkeletonRow/>
-                <controls:StaffSkeletonRow/>
-                <controls:StaffSkeletonRow/>
-                <controls:StaffSkeletonRow/>
-            </StackPanel>
-
             <!-- Table Body -->
-            <ListView Grid.Row="1" ItemsSource="{Binding FilteredStaffMembers}" SelectionMode="None" Padding="0,4"
-                      Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-              <ListView.ItemContainerStyle>
+            <Grid Grid.Row="1">
+              <!-- Loading -->
+              <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+                <controls:StaffSkeletonRow/>
+              </StackPanel>
+
+              <ListView ItemsSource="{Binding FilteredStaffMembers}" SelectionMode="None" Padding="0,4"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollMode="Enabled"
+                        Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                <ListView.ItemContainerStyle>
                   <Style TargetType="ListViewItem">
-                      <Setter Property="Padding" Value="16,0"/>
-                      <Setter Property="MinHeight" Value="56"/>
-                      <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Padding" Value="16,0"/>
+                    <Setter Property="MinHeight" Value="56"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                   </Style>
-              </ListView.ItemContainerStyle>
-              <ListView.ItemTemplate>
-                <DataTemplate x:DataType="repo:UserRecord">
-                  <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
-                    <Grid ColumnSpacing="12">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1.2*"/>
-                        <ColumnDefinition Width="1.6*"/>
-                        <ColumnDefinition Width="100"/>
-                      </Grid.ColumnDefinitions>
-                      <TextBlock Text="{x:Bind Email}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                      <TextBlock Grid.Column="1" Text="SALE" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                      <TextBlock Grid.Column="2" Text="{x:Bind CreatedAtDisplay}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                      <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                        <Button Click="EditStaff_Click" Tag="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
-                          <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                        </Button>
-                        <Button Click="DeleteStaff_Click" Tag="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
-                          <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="#DC2626"/>
-                        </Button>
-                      </StackPanel>
-                    </Grid>
-                  </Border>
-                </DataTemplate>
-              </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                  <DataTemplate x:DataType="repo:UserRecord">
+                    <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
+                      <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="3*"/>
+                          <ColumnDefinition Width="1.2*"/>
+                          <ColumnDefinition Width="1.6*"/>
+                          <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{x:Bind Email}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="1" Text="SALE" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Grid.Column="2" Text="{x:Bind CreatedAtDisplay}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                          <Button Click="EditStaff_Click" Tag="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
+                            <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                          </Button>
+                          <Button Click="DeleteStaff_Click" Tag="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
+                            <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="#DC2626"/>
+                          </Button>
+                        </StackPanel>
+                      </Grid>
+                    </Border>
+                  </DataTemplate>
+                </ListView.ItemTemplate>
+              </ListView>
+            </Grid>
+          </Grid>
+        </ScrollViewer>
       </Border>
 
-      <!-- Table Footer (Docked to bottom) -->
-      <Border Grid.Row="2" 
-              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-              BorderThickness="0,1,0,0"
-              Margin="-24,0,-24,-20" Padding="24,12">
+      <!-- Pagination -->
+      <Border Grid.Row="1" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0"
+              Margin="-24,0,-24,0" Padding="24,12">
         <Grid>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-            <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            <TextBlock Text="staff members" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="4">
+            <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
+            <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" FontSize="13"/>
+            <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
+            <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" FontSize="13"/>
+            <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
+            <TextBlock Text="{Binding TotalItems}" FontWeight="SemiBold" FontSize="13"/>
+            <TextBlock Text="staff members" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13"/>
           </StackPanel>
-
-          <StackPanel Grid.Column="1"
-                      Orientation="Horizontal"
-                      Spacing="4"
-                      HorizontalAlignment="Right"
-                      x:Name="StaffPaginationPanel"/>
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" x:Name="StaffPaginationPanel"/>
         </Grid>
       </Border>
     </Grid>
 
     <!-- Empty State -->
-    <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+    <StackPanel Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
                 Visibility="{Binding TotalItems, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=inverse}">
-        <Border Width="64" Height="64" CornerRadius="32" Background="{StaticResource PurpleLightBrush}">
-            <FontIcon Glyph="&#xE716;" FontSize="28" Foreground="{StaticResource AppPurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
-        <TextBlock Text="No staff members found" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        <TextBlock Text="Try adjusting your search filters or add a new staff account." Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextAlignment="Center" MaxWidth="300" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+      <Border Width="64" Height="64" CornerRadius="32" Background="{StaticResource PurpleLightBrush}">
+        <FontIcon Glyph="&#xE716;" FontSize="28" Foreground="{StaticResource AppPurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Border>
+      <TextBlock Text="No staff members found" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
     </StackPanel>
-
   </Grid>
 </Page>

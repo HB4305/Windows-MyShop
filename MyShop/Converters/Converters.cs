@@ -221,7 +221,9 @@ public class OrderStatusToBrushConverter : IValueConverter
         ["Pending"]    = ("#FEF3C7", "#92400E"),  // amber
         ["Processing"] = ("#DBEAFE", "#1E40AF"),  // blue
         ["Shipped"]    = ("#E0E7FF", "#3730A3"),  // indigo
+        ["Ready for Pickup"] = ("#E0E7FF", "#3730A3"),  // indigo
         ["Delivered"]  = ("#D1FAE5", "#065F46"),  // green
+        ["Completed"]  = ("#D1FAE5", "#065F46"),  // green
         ["Cancelled"]  = ("#FEE2E2", "#991B1B"),  // red
     };
 
@@ -312,7 +314,9 @@ public class OrderStatusToForegroundConverter : IValueConverter
         ["Pending"]    = "#92400E",
         ["Processing"] = "#1E40AF",
         ["Shipped"]    = "#3730A3",
+        ["Ready for Pickup"] = "#3730A3",
         ["Delivered"]  = "#065F46",
+        ["Completed"]  = "#065F46",
         ["Cancelled"]  = "#991B1B",
     };
 
@@ -437,6 +441,16 @@ public class CountToVisibilityInverseConverter : IValueConverter
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
+}
+
+public class StatusToButtonStyleConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, string language)
+    {
+        bool isActive = value is bool b && b;
+        return Application.Current.Resources[isActive ? "PrimaryBtn" : "SecondaryBtn"];
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
 }
 
 /// <summary>Converts bool IsUser → HorizontalAlignment. true → Right, false → Left</summary>

@@ -24,6 +24,7 @@
     <conv:OrderIdConverter x:Key="OrderIdConverter"/>
     <conv:CurrentPageEndConverter x:Key="CurrentPageEndConverter"/>
     <conv:ItemIndexConverter x:Key="ItemIndexConverter"/>
+    <conv:StatusToButtonStyleConverter x:Key="StatusToButtonStyleConverter"/>
 
     <!-- ══ ListViewItem Style (selected row highlight) ══ -->
     <Style x:Key="OrderListViewItem" TargetType="ListViewItem">
@@ -38,18 +39,40 @@
                     BorderThickness="0"
                     CornerRadius="8"
                     Padding="0">
-              <ContentPresenter/>
+              <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                  <VisualState x:Name="Normal"/>
+                  <VisualState x:Name="PointerOver">
+                    <Storyboard>
+                      <ColorAnimation Storyboard.TargetName="Root"
+                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                      To="#F3F4F6" Duration="0:0:0.1"/>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Selected">
+                    <Storyboard>
+                      <ColorAnimation Storyboard.TargetName="Root"
+                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                      To="#EFE9FF" Duration="0:0:0.1"/>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="SelectedPointerOver">
+                    <Storyboard>
+                      <ColorAnimation Storyboard.TargetName="Root"
+                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                      To="#EFE9FF" Duration="0:0:0.1"/>
+                    </Storyboard>
+                  </VisualState>
+                </VisualStateGroup>
+              </VisualStateManager.VisualStateGroups>
+              <ContentPresenter x:Name="ContentPresenter"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"/>
             </Border>
-            <ControlTemplate.Triggers>
-              <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="Root" Property="Background"
-                        Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
-              </Trigger>
-              <Trigger Property="IsPointerOver" Value="True">
-                <Setter TargetName="Root" Property="Background"
-                        Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-              </Trigger>
-            </ControlTemplate.Triggers>
           </ControlTemplate>
         </Setter.Value>
       </Setter>
@@ -68,10 +91,11 @@
 
     <!-- ══ Tab Count Badge (active tab) ══ -->
     <Style x:Key="TabCountBadgeActive" TargetType="Border">
-      <Setter Property="CornerRadius" Value="20"/>
-      <Setter Property="Background" Value="#FFFFFF4D"/>
-      <Setter Property="Padding" Value="6,2"/>
-      <Setter Property="MinWidth" Value="20"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Padding" Value="4,0"/>
+      <Setter Property="MinWidth" Value="24"/>
+      <Setter Property="Height" Value="24"/>
     </Style>
 
     <!-- ══ Card ══ -->
@@ -82,30 +106,30 @@
       <Setter Property="CornerRadius" Value="12"/>
     </Style>
 
-    <Style x:Key="StatusBadgeBase" TargetType="Border">
-      <Setter Property="CornerRadius" Value="20"/>
-      <Setter Property="Padding" Value="10,4"/>
-    </Style>
-
     <Style x:Key="PrimaryBtn" TargetType="Button">
       <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
       <Setter Property="Foreground" Value="White"/>
-      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="FontSize" Value="13"/>
-      <Setter Property="Padding" Value="14,8"/>
-      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="16,8"/>
+      <Setter Property="CornerRadius" Value="20"/>
       <Setter Property="BorderThickness" Value="0"/>
     </Style>
-
+ 
     <Style x:Key="SecondaryBtn" TargetType="Button">
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
       <Setter Property="FontWeight" Value="SemiBold"/>
       <Setter Property="FontSize" Value="13"/>
-      <Setter Property="Padding" Value="14,8"/>
-      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Padding" Value="16,8"/>
+      <Setter Property="CornerRadius" Value="20"/>
       <Setter Property="BorderThickness" Value="1"/>
       <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+    </Style>
+
+    <Style x:Key="StatusBadgeBase" TargetType="Border">
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="Padding" Value="10,4"/>
     </Style>
 
     <Style x:Key="IconBtn" TargetType="Button">
@@ -193,7 +217,6 @@
 
     <Style x:Key="TabBtnActive" TargetType="Button">
       <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
-      <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="FontWeight" Value="ExtraBold"/>
       <Setter Property="Padding" Value="14,8"/>
@@ -203,10 +226,13 @@
 
     <!-- ══ Tab Count Badge (inactive tab) ══ -->
     <Style x:Key="TabCountBadge" TargetType="Border">
-      <Setter Property="CornerRadius" Value="20"/>
-      <Setter Property="Background" Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
-      <Setter Property="Padding" Value="6,2"/>
+      <Setter Property="CornerRadius" Value="10"/>
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Padding" Value="5,0"/>
       <Setter Property="MinWidth" Value="20"/>
+      <Setter Property="Height" Value="20"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
     <!-- ══ Pagination Button ══ -->
@@ -444,6 +470,9 @@
 
   </Page.Resources>
 
+  <ScrollViewer x:Name="MainScroller"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
   <Grid x:Name="OrderRoot" Margin="0" SizeChanged="OrderRoot_SizeChanged">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -464,6 +493,8 @@
             <Setter Target="StatsProcessingCard.(Grid.Column)" Value="0"/>
             <Setter Target="StatsRevenueCard.(Grid.Row)" Value="3"/>
             <Setter Target="StatsRevenueCard.(Grid.Column)" Value="0"/>
+            <Setter Target="MainScroller.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Target="OrderListPanel.RowDefinitions[3].Height" Value="Auto"/>
           </VisualState.Setters>
         </VisualState>
         <VisualState x:Name="StatsMediumState">
@@ -502,15 +533,17 @@
             <Setter Target="StatsProcessingCard.(Grid.Column)" Value="4"/>
             <Setter Target="StatsRevenueCard.(Grid.Row)" Value="0"/>
             <Setter Target="StatsRevenueCard.(Grid.Column)" Value="6"/>
+            <Setter Target="MainScroller.VerticalScrollBarVisibility" Value="Disabled"/>
+            <Setter Target="OrderListPanel.RowDefinitions[3].Height" Value="*"/>
           </VisualState.Setters>
         </VisualState>
       </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
 
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="420"/>
-    </Grid.ColumnDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition x:Name="DetailColumn" Width="Auto"/>
+      </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
@@ -660,12 +693,14 @@
               <Button x:Name="TabAll"
                       Click="TabAll_Click"
                       Style="{StaticResource TabBtnActive}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                  <TextBlock Text="All" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadgeActive}" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                  <TextBlock Text="All" Foreground="White" VerticalAlignment="Center"/>
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF"/>
                     <TextBlock Text="{Binding TotalOrders}"
-                               FontSize="11" FontWeight="SemiBold" Foreground="White"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold" Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -673,13 +708,15 @@
               <Button x:Name="TabPending"
                       Click="TabPending_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                   <TextBlock Text="Pending" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding PendingCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -687,13 +724,15 @@
               <Button x:Name="TabProcessing"
                       Click="TabProcessing_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                   <TextBlock Text="Processing" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding ProcessingCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -701,13 +740,15 @@
               <Button x:Name="TabDelivered"
                       Click="TabDelivered_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                   <TextBlock Text="Delivered" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding CompletedCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -715,13 +756,15 @@
               <Button x:Name="TabCancelled"
                       Click="TabCancelled_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="Cancelled"/>
-                  <Border Style="{StaticResource TabCountBadge}">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                  <TextBlock Text="Cancelled" VerticalAlignment="Center"/>
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding CancelledCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
             </StackPanel>
@@ -821,7 +864,8 @@
                               Padding="0,4"
                               Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollMode="Enabled"/>
 
                     <!-- Skeleton Loading State (Aligned with rows) -->
                     <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -961,7 +1005,8 @@
         </Border>
 
         <!-- Detail Content -->
-        <ScrollViewer Grid.Row="1"
+        <ScrollViewer x:Name="DetailScrollViewer"
+                      Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
                       Padding="20,16">
 
@@ -1180,46 +1225,76 @@
               <StackPanel Spacing="10">
                 <TextBlock Text="UPDATE STATUS" Style="{StaticResource SectionTitle}"/>
 
-                <ItemsControl x:Name="StatusButtonsPanel">
+                <ItemsControl x:Name="StatusButtonsPanel" ItemsSource="{Binding AvailableStatuses}">
                   <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                      <WrapPanel Orientation="Horizontal"/>
+                      <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="170" ItemHeight="50"/>
                     </ItemsPanelTemplate>
                   </ItemsControl.ItemsPanel>
-                  <Button x:Name="BtnStatusPending"
-                          Content="Pending"
-                          Click="StatusPending_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusProcessing"
-                          Content="Processing"
-                          Click="StatusProcessing_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusShipped"
-                          Content="Shipped"
-                          Click="StatusShipped_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusDelivered"
-                          Content="Delivered"
-                          Click="StatusDelivered_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnStatusCancelled"
-                          Content="Cancelled"
-                          Click="StatusCancelled_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:StatusOption">
+                      <Grid Margin="0,0,8,8">
+                        <!-- Active Status Button -->
+                        <Button Content="{Binding Name}"
+                                Click="DynamicStatusButton_Click"
+                                Style="{StaticResource PrimaryBtn}"
+                                Visibility="{Binding IsActive, Converter={StaticResource BoolToVisibilityConverter}}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"/>
+                        
+                        <!-- Inactive Status Button -->
+                        <Button Content="{Binding Name}"
+                                Click="DynamicStatusButton_Click"
+                                Style="{StaticResource SecondaryBtn}"
+                                Visibility="{Binding IsActive, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"/>
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                  <TextBlock Text="Payment:" Style="{StaticResource SectionTitle}"
-                             VerticalAlignment="Center" Margin="0" FontSize="12"/>
-                  <Button x:Name="BtnPayPaid"
-                          Content="Mark as Paid"
-                          Click="PayPaid_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                  <Button x:Name="BtnPayUnpaid"
-                          Content="Mark as Unpaid"
-                          Click="PayUnpaid_Click"
-                          Style="{StaticResource SecondaryBtn}"/>
-                </StackPanel>
+                <TextBlock Text="PAYMENT STATUS" Style="{StaticResource SectionTitle}" Margin="0,10,0,0"/>
+                
+                <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="170" ItemHeight="50">
+                  <Grid Margin="0,0,8,8">
+                    <!-- Paid Button (Active) -->
+                    <Button x:Name="BtnPayPaidActive"
+                            Content="Mark as Paid"
+                            Click="PayPaid_Click"
+                            Style="{StaticResource PrimaryBtn}"
+                            Visibility="{Binding IsPaid, Converter={StaticResource BoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
+                    <!-- Paid Button (Inactive) -->
+                    <Button x:Name="BtnPayPaidInactive"
+                            Content="Mark as Paid"
+                            Click="PayPaid_Click"
+                            Style="{StaticResource SecondaryBtn}"
+                            Visibility="{Binding IsPaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
+                  </Grid>
+ 
+                  <Grid Margin="0,0,8,8">
+                    <!-- Unpaid Button (Active) -->
+                    <Button x:Name="BtnPayUnpaidActive"
+                            Content="Mark as Unpaid"
+                            Click="PayUnpaid_Click"
+                            Style="{StaticResource PrimaryBtn}"
+                            Visibility="{Binding IsUnpaid, Converter={StaticResource BoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
+                    <!-- Unpaid Button (Inactive) -->
+                    <Button x:Name="BtnPayUnpaidInactive"
+                            Content="Mark as Unpaid"
+                            Click="PayUnpaid_Click"
+                            Style="{StaticResource SecondaryBtn}"
+                            Visibility="{Binding IsUnpaid, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
+                  </Grid>
+                </VariableSizedWrapGrid>
               </StackPanel>
             </Border>
 
@@ -1263,10 +1338,7 @@
     <!-- RIGHT PANEL: Empty State -->
     <Border x:Name="OrderEmptyDetailPanel"
             Grid.Column="1"
-            Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
-            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-            BorderThickness="1,0,0,0"
-            Visibility="{Binding ShowDetailPanel, Converter={StaticResource InverseBoolConverter}}">
+            Visibility="Collapsed">
       <StackPanel HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Spacing="12">
@@ -1294,4 +1366,5 @@
     </Border>
 
   </Grid>
+  </ScrollViewer>
 </Page>

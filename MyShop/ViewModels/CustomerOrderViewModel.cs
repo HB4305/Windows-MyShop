@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 
 namespace MyShop.ViewModels;
 
+public record StatusOption(string Name, bool IsActive);
+
 public partial class CustomerOrderViewModel : ObservableObject
 {
     private readonly CustomerOrderService _service;
@@ -76,10 +78,11 @@ public partial class CustomerOrderViewModel : ObservableObject
         "All",
         "Pending",
         "Processing",
-        "Completed",
+        "Ready for Pickup",
+        "Shipped",
         "Delivered",
-        "Cancelled",
-        "Shipped"
+        "Completed",
+        "Cancelled"
     };
 
     // ── Computed Stats ─────────────────────────────────────────────
@@ -100,6 +103,15 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     [ObservableProperty]
     private decimal _totalRevenue = 0m;
+ 
+    [ObservableProperty]
+    private bool _isPaid = false;
+ 
+    [ObservableProperty]
+    private bool _isUnpaid = true;
+ 
+    [ObservableProperty]
+    private ObservableCollection<StatusOption> _availableStatuses = new();
 
     // ── Helpers ────────────────────────────────────────────────────
     private int GetTabCount(string tab)
@@ -157,6 +169,35 @@ public partial class CustomerOrderViewModel : ObservableObject
         TotalRevenue = Orders
             .Where(o => o.PaymentStatus == "Paid")
             .Sum(o => o.TotalAmount ?? 0);
+ 
+        UpdateAvailableStatuses();
+    }
+ 
+    private void UpdateAvailableStatuses()
+    {
+        if (SelectedOrder == null) return;
+ 
+        var type = SelectedOrder.OrderType ?? "AtStore";
+        var currentStatus = SelectedOrder.Status ?? "";
+        
+        var list = new List<string> { "Pending", "Processing" };
+        if (type == "Delivery")
+        {
+            list.Add("Shipped");
+            list.Add("Delivered");
+        }
+        else
+        {
+            list.Add("Ready for Pickup");
+            list.Add("Completed");
+        }
+        list.Add("Cancelled");
+ 
+        AvailableStatuses = new ObservableCollection<StatusOption>(
+            list.Select(s => new StatusOption(s, string.Equals(s, currentStatus, StringComparison.OrdinalIgnoreCase))));
+ 
+        IsPaid = string.Equals(SelectedOrder.PaymentStatus, "Paid", StringComparison.OrdinalIgnoreCase);
+        IsUnpaid = !IsPaid;
     }
 
     // ── Tab Selection ─────────────────────────────────────────────
@@ -230,14 +271,11 @@ public partial class CustomerOrderViewModel : ObservableObject
 
         if (ActiveTab != "All")
         {
-            var tabStatus = ActiveTab switch
+            source = ActiveTab switch
             {
-                "Completed" => null,
-                _ => ActiveTab
+                "Delivered" => source.Where(o => IsCompletedStatus(o.Status)),
+                _ => source.Where(o => o.Status == ActiveTab)
             };
-            source = tabStatus is null
-                ? source.Where(o => IsCompletedStatus(o.Status))
-                : source.Where(o => o.Status == tabStatus);
         }
 
         return source;
@@ -254,6 +292,7 @@ public partial class CustomerOrderViewModel : ObservableObject
         // Get from the already loaded list (no DB query)
         SelectedOrder = Orders.FirstOrDefault(o => o.Id == order.Id) ?? order;
         SelectedOrderId = SelectedOrder.Id;
+        UpdateAvailableStatuses();
         ShowDetailPanel = true;
 
         // Only load details when needed (lazy load)
@@ -299,6 +338,7 @@ public partial class CustomerOrderViewModel : ObservableObject
             if (existing != null) existing.Status = status;
 
             RefreshStats();
+            UpdateAvailableStatuses();
             ApplyPagination();
             OnPropertyChanged(nameof(SelectedOrder));
         }
@@ -361,6 +401,11 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     [ObservableProperty]
     private CustomerOrder _selectedOrder = new();
+ 
+    partial void OnSelectedOrderChanged(CustomerOrder value)
+    {
+        UpdateAvailableStatuses();
+    }
 
     [ObservableProperty]
     private ObservableCollection<OrderDetail> _currentDetails = new();

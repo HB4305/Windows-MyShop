@@ -59,12 +59,11 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/> <!-- Page Header -->
+            <RowDefinition Height="Auto"/> <!-- Search & Add -->
+            <RowDefinition Height="Auto"/> <!-- Separator -->
+            <RowDefinition Height="*"/>    <!-- Table (Scrollable) -->
+            <RowDefinition Height="Auto"/> <!-- Pagination -->
         </Grid.RowDefinitions>
 
         <controls:AppPageHeader Grid.Row="0"
@@ -147,7 +146,8 @@
                 BorderThickness="1"
                 CornerRadius="20"
                 Padding="0">
-            <Grid>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled">
+            <Grid MinWidth="900">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -192,6 +192,8 @@
                               ItemClick="OnCustomerClick"
                               Padding="0,4,0,8"
                               SelectionMode="None"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollMode="Enabled"
                               Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -265,10 +267,11 @@
                     </ItemsControl>
                 </Grid>
             </Grid>
+            </ScrollViewer>
         </Border>
 
         <!-- Table Footer: Pagination (Docked to bottom) -->
-        <Border Grid.Row="5" 
+        <Border Grid.Row="4" 
                 BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
                 BorderThickness="0,1,0,0"
                 Margin="-24,0,-24,-20" Padding="24,12">
@@ -296,7 +299,7 @@
         </Border>
 
         <!-- Error Message -->
-        <TextBlock Grid.Row="5"
+        <TextBlock Grid.Row="4"
                    Margin="0,12,0,0"
                    Text="{Binding ErrorMessage}"
                    Foreground="#DC2626"

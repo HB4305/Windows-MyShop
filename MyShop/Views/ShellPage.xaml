@@ -20,27 +20,54 @@
       </Grid.RowDefinitions>
 
       <!-- Brand Header -->
-      <StackPanel Grid.Row="0"
-                  Margin="20,20,20,24">
-        <!-- Logo circle -->
-        <Border Width="40"
-                Height="40"
-                CornerRadius="20"
-                Background="{StaticResource PurpleBrush}"
-                HorizontalAlignment="Left"
-                Margin="0,0,0,10">
-          <TextBlock Text="PS"
-                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+      <Grid Grid.Row="0" Margin="20,20,12,24">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+          <!-- Logo circle -->
+          <Border Width="40"
+                  Height="40"
+                  CornerRadius="20"
+                  Background="{StaticResource PurpleBrush}"
+                  HorizontalAlignment="Left">
+            <TextBlock Text="PS"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                       FontWeight="Bold"
+                       FontSize="14"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </Border>
+          <TextBlock Text="ProSport"
+                     FontSize="18"
                      FontWeight="Bold"
+                     VerticalAlignment="Center"
+                     Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </StackPanel>
+
+        <Button x:Name="NavToggleButton_Sidebar"
+                Grid.Column="2"
+                Click="ToggleSidebar_Click"
+                Width="32"
+                Height="32"
+                Padding="0"
+                Background="Transparent"
+                BorderThickness="0"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                ToolTipService.ToolTip="Close navigation"
+                Style="{StaticResource ColorPreservingButtonStyle}">
+          <TextBlock FontFamily="Segoe MDL2 Assets"
+                     Text="&#xE72B;"
                      FontSize="14"
+                     Foreground="{ThemeResource TextFillColorSecondary}"
                      HorizontalAlignment="Center"
-                     VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        </Border>
-        <TextBlock Text="ProSport"
-                   FontSize="18"
-                   FontWeight="Bold"
-                   Foreground="{ThemeResource TextFillColorPrimary}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-      </StackPanel>
+                     VerticalAlignment="Center"/>
+        </Button>
+      </Grid>
 
       <!-- Navigation Menu -->
       <ScrollViewer Grid.Row="1"
@@ -456,12 +483,32 @@
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
-          <TextBlock x:Name="HeaderTitleText" Grid.Column="0"
-                     Text="Welcome back, Alex"
-                     FontSize="22"
-                     FontWeight="SemiBold"
-                     Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                     VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+            <Button x:Name="NavToggleButton_Header"
+                    Click="ToggleSidebar_Click"
+                    Width="40"
+                    Height="40"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    ToolTipService.ToolTip="Toggle navigation"
+                    Style="{StaticResource ColorPreservingButtonStyle}">
+              <TextBlock FontFamily="Segoe MDL2 Assets"
+                         Text="&#xE700;"
+                         FontSize="16"
+                         Foreground="{ThemeResource TextFillColorSecondary}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+            </Button>
+            <TextBlock x:Name="HeaderTitleText"
+                       Text="Welcome back, Alex"
+                       FontSize="22"
+                       FontWeight="SemiBold"
+                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                       VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </StackPanel>
 
           <!-- Right side icons -->
           <StackPanel Grid.Column="1"
@@ -470,25 +517,7 @@
                       VerticalAlignment="Center"
                       HorizontalAlignment="Right">
 
-              <Button x:Name="NavToggleButton"
-                Click="ToggleSidebar_Click"
-                Width="40"
-                Height="40"
-                Padding="0"
-                Background="Transparent"
-                BorderThickness="0"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                ToolTipService.ToolTip="Toggle navigation"
-                Visibility="Collapsed"
-                  Style="{StaticResource ColorPreservingButtonStyle}">
-                <TextBlock FontFamily="Segoe MDL2 Assets"
-               Text="&#xE700;"
-               FontSize="16"
-               Foreground="{ThemeResource TextFillColorSecondary}"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"/>
-              </Button>
+
 
             <!-- Settings gear -->
             <Button x:Name="HeaderSettingsButton"

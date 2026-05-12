@@ -83,8 +83,6 @@
 
     <Style x:Key="TabBtnActive" TargetType="Button">
       <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="FontWeight" Value="ExtraBold"/>
       <Setter Property="Padding" Value="14,8"/>
@@ -344,9 +342,10 @@
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <!-- MAIN LAYOUT                                                  -->
   <!-- ═══════════════════════════════════════════════════════════════ -->
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
+  <ScrollViewer x:Name="PageScroller"
+                VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Disabled">
-  <Grid>
+  <Grid x:Name="RootGrid">
 
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -360,18 +359,33 @@
             <AdaptiveTrigger MinWindowWidth="0"/>
           </VisualState.StateTriggers>
           <VisualState.Setters>
+            <Setter Target="RootGrid.RowDefinitions[1].Height" Value="Auto"/>
+            <Setter Target="PageScroller.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="1"/>
             <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="0"/>
             <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Left"/>
             <Setter Target="HeaderActionsPanel.Margin" Value="0,12,0,0"/>
             <Setter Target="HeaderActionsPanel.Orientation" Value="Vertical"/>
-            <Setter Target="HeaderPanelBorder.Padding" Value="24,16"/>
+            <Setter Target="BodyGrid.ColumnDefinitions[1].Width" Value="0"/>
+            <Setter Target="OrderListBorder.(Grid.Row)" Value="0"/>
+            <Setter Target="OrderListBorder.(Grid.Column)" Value="0"/>
+            <Setter Target="DetailPanelBorder.(Grid.Row)" Value="1"/>
+            <Setter Target="DetailPanelBorder.(Grid.Column)" Value="0"/>
+            <Setter Target="DetailPanelBorder.Margin" Value="0,16,0,0"/>
+            <Setter Target="DetailPanelBorder.BorderThickness" Value="0,1,0,0"/>
+            <Setter Target="EmptyDetailBorder.(Grid.Row)" Value="1"/>
+            <Setter Target="EmptyDetailBorder.(Grid.Column)" Value="0"/>
+            <Setter Target="EmptyDetailBorder.Visibility" Value="Collapsed"/>
           </VisualState.Setters>
         </VisualState>
         <VisualState x:Name="WideState">
           <VisualState.StateTriggers>
             <AdaptiveTrigger MinWindowWidth="1100"/>
           </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="RootGrid.RowDefinitions[1].Height" Value="*"/>
+            <Setter Target="PageScroller.VerticalScrollBarVisibility" Value="Disabled"/>
+          </VisualState.Setters>
         </VisualState>
       </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
@@ -442,8 +456,11 @@
     </Border>
 
     <!-- ── Body: Order List + Detail Panel ── -->
-    <Grid Grid.Row="1">
-
+    <Grid x:Name="BodyGrid" Grid.Row="1">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="380"/>
@@ -452,7 +469,9 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- LEFT: ORDER LIST                               -->
       <!-- ═══════════════════════════════════════════════ -->
-      <Grid Grid.Column="0">
+      <Border x:Name="OrderListBorder" Grid.Column="0">
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled">
+      <Grid MinWidth="1000">
 
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -475,32 +494,61 @@
                 <!-- All Tab (active) -->
                 <Button x:Name="TabAll" Click="TabAll_Click" Style="{StaticResource TabBtnActive}">
                   <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                    <TextBlock Text="All Orders" VerticalAlignment="Center"/>
-                    <Border Background="#FFFFFF4D" CornerRadius="20" Padding="8,2" VerticalAlignment="Center">
-                      <TextBlock Text="1,240" FontSize="11" FontWeight="SemiBold"
-                                 Foreground="White" VerticalAlignment="Center"/>
-                    </Border>
+                    <TextBlock Text="All Orders" Foreground="White" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF"/>
+                      <TextBlock Text="{Binding TotalOrders}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
                   </StackPanel>
                 </Button>
 
                 <!-- Pending -->
                 <Button x:Name="TabPending" Click="TabPending_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Pending"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Pending" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding PendingCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
 
                 <!-- Processing -->
                 <Button x:Name="TabProcessing" Click="TabProcessing_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Processing"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Processing" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding ProcessingCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
 
                 <!-- Shipped -->
                 <Button x:Name="TabShipped" Click="TabShipped_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Shipped"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Shipped" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding CompletedCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
 
                 <!-- Returned -->
                 <Button x:Name="TabReturned" Click="TabReturned_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Returned"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Returned" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding CancelledCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
               </StackPanel>
             </ScrollViewer>
@@ -661,11 +709,13 @@
         </Border>
 
       </Grid>
+      </ScrollViewer>
+      </Border>
 
       <!-- ═══════════════════════════════════════════════ -->
       <!-- RIGHT: ORDER DETAIL PANEL                      -->
       <!-- ═══════════════════════════════════════════════ -->
-      <Border Grid.Column="1"
+      <Border x:Name="DetailPanelBorder" Grid.Column="1"
               Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1,0,0,0"
@@ -896,7 +946,7 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- RIGHT: Empty State (no order selected)          -->
       <!-- ═══════════════════════════════════════════════ -->
-      <Border Grid.Column="1"
+      <Border x:Name="EmptyDetailBorder" Grid.Column="1"
               Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1,0,0,0"
@@ -928,8 +978,6 @@
       </Border>
 
     </Grid>
-
   </Grid>
   </ScrollViewer>
-
 </Page>

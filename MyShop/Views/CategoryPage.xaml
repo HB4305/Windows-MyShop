@@ -50,7 +50,7 @@
     </Style>
   </Page.Resources>
 
-  <Grid Padding="24,20">
+  <Grid Padding="24,20" VerticalAlignment="Stretch">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
         <VisualState x:Name="NarrowState">
@@ -67,7 +67,7 @@
         </VisualState>
         <VisualState x:Name="WideState">
           <VisualState.StateTriggers>
-            <AdaptiveTrigger MinWindowWidth="800"/>
+            <AdaptiveTrigger MinWindowWidth="900"/>
           </VisualState.StateTriggers>
         </VisualState>
       </VisualStateGroup>
@@ -88,6 +88,10 @@
 
     <!-- Toolbar: Search + Add -->
     <Grid x:Name="ToolbarGrid" Grid.Row="1" ColumnSpacing="14" Margin="0,0,0,20">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>

@@ -20,14 +20,26 @@ public sealed partial class OrdersManagementPage : Page
 
         Loaded += OnLoaded;
         OrderListView.SelectionChanged += OrderList_SelectionChanged;
+        PageScroller.SizeChanged += OnScrollerSizeChanged;
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         await _vm.LoadOrdersAsync();
         BuildPagination();
+        UpdateBodyMinHeight();
     }
+    private void OnScrollerSizeChanged(object sender, SizeChangedEventArgs e)
+        => UpdateBodyMinHeight();
 
+    private void UpdateBodyMinHeight()
+    {
+        var available = PageScroller.ViewportHeight > 0
+            ? PageScroller.ViewportHeight
+            : PageScroller.ActualHeight;
+        var headerHeight = HeaderPanelBorder.ActualHeight;
+        BodyGrid.MinHeight = Math.Max(0, available - headerHeight);
+    }
     private async void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (OrderListView.SelectedItem is CustomerOrder order)

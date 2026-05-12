@@ -91,14 +91,14 @@
     </VisualStateManager.VisualStateGroups>
 
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/> <!-- Row 0: Header -->
+      <RowDefinition Height="Auto"/> <!-- Row 1: Search -->
+      <RowDefinition Height="Auto"/> <!-- Row 2: Narrow actions -->
+      <RowDefinition Height="Auto"/> <!-- Row 3: Rectangle separator -->
+      <RowDefinition Height="Auto"/> <!-- Row 4: Filters -->
+      <RowDefinition Height="*"/>    <!-- Row 5: Table (Scrollable) -->
+      <RowDefinition Height="Auto"/> <!-- Row 6: Footer -->
+      <RowDefinition Height="Auto"/> <!-- Row 7: Error -->
     </Grid.RowDefinitions>
 
     <controls:AppPageHeader Grid.Row="0"
@@ -229,10 +229,11 @@
     <!-- Table -->
     <Border Grid.Row="5" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
-      <Grid>
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled">
+      <Grid MinWidth="900">
         <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/> <!-- Table Header -->
+          <RowDefinition Height="*"/>    <!-- Table Body (ListView) -->
         </Grid.RowDefinitions>
 
         <!-- Table Header -->
@@ -336,6 +337,7 @@
         </ItemsControl>
 
         </Grid>
+      </ScrollViewer>
     </Border>
 
     <!-- Table Footer: Pagination (Docked to bottom) -->
