@@ -25,7 +25,7 @@
     </Style>
 
     <Style x:Key="PageBtnActive" TargetType="Button">
-      <Setter Property="Background" Value="{StaticResource AppPurpleBrush}"/>
+      <Setter Property="Background" Value="{StaticResource AppAccentBrush}"/>
       <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="MinWidth" Value="32"/>
@@ -78,192 +78,204 @@
                             Title="Suppliers Management"
                             Subtitle="Manage your suppliers and track supply order history."/>
 
-    <!-- Tabs (Minimalist design) -->
+    <!-- Tabs -->
     <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="0,0,0,20">
       <Button x:Name="TabSuppliers" Click="TabSuppliers_Click" 
               Padding="20,10" CornerRadius="20"
               Background="{StaticResource AppPurpleBrush}" Foreground="White"
               Style="{StaticResource ColorPreservingButtonStyle}">
-          <TextBlock Text="Suppliers" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="Suppliers" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
       </Button>
       <Button x:Name="TabSupplyOrders" Click="TabSupplyOrders_Click" 
               Padding="20,10" CornerRadius="20"
               Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1"
               Style="{StaticResource ColorPreservingButtonStyle}">
-          <TextBlock Text="Supply History" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="Supply History" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
       </Button>
     </StackPanel>
 
-    <!-- Toolbar synchronized with CustomerPage -->
-    <Grid x:Name="SuppliersToolbarGrid" Grid.Row="2" ColumnSpacing="14" Margin="0,0,0,20">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-      </Grid.ColumnDefinitions>
+    <!-- Suppliers Tab Content -->
+    <Grid x:Name="SuppliersGrid" Grid.Row="2" Grid.RowSpan="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-      <Border Grid.Column="0" MinHeight="48" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12,8">
-        <Grid ColumnSpacing="10">
+        <!-- Toolbar -->
+        <Grid x:Name="SuppliersToolbarGrid" Grid.Row="0" ColumnSpacing="14" Margin="0,0,0,20">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <TextBox x:Name="SearchBox" Grid.Column="0" PlaceholderText="Search by name, phone..."
-                   Text="{Binding SearchSupplierKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
-                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <controls:ShimmerLoadingControl Grid.Column="1" Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoadingSuppliers}" Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource BoolToVisibilityConverter}}"/>
-          <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                  Background="Transparent" BorderThickness="0" Padding="8"
-                  Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
+
+          <Grid Grid.Column="0">
+            <TextBox x:Name="SearchBox" PlaceholderText="Search by name, phone..."
+                     Text="{Binding SearchSupplierKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource ModernSearchTextBoxStyle}"
+                     CornerRadius="24"
+                     Padding="16,12,80,12"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
+              <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoadingSuppliers}" Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                      Background="Transparent" BorderThickness="0" Padding="12"
+                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
+            </StackPanel>
+          </Grid>
+
+          <Button x:Name="AddSupplierButton" Grid.Column="1" Click="AddSupplier_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
+                  CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
+              <TextBlock Text="Add Supplier" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            </StackPanel>
+          </Button>
         </Grid>
-      </Border>
 
-      <Button x:Name="AddSupplierButton" Grid.Column="1" Click="AddSupplier_Click" 
-              Visibility="{Binding Visibility, ElementName=SuppliersGrid}"
-              Background="{StaticResource AppPurpleBrush}" Foreground="White" 
-              CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
-          <TextBlock Text="Add Supplier" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        </StackPanel>
-      </Button>
-
-      <Button x:Name="AddOrderButton" Grid.Column="1" Click="CreateSupplyOrder_Click" 
-              Visibility="{Binding Visibility, ElementName=SupplyOrdersGrid}"
-              Background="{StaticResource AppPurpleBrush}" Foreground="White" 
-              CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
-          <TextBlock Text="Create Supply Order" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        </StackPanel>
-      </Button>
+        <!-- Table -->
+        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+    
+                <!-- Table Header -->
+                <Border Grid.Row="0" Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        CornerRadius="20" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="0,0,0,1" Padding="16,14">
+                  <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="2*"/>
+                      <ColumnDefinition Width="1.5*"/>
+                      <ColumnDefinition Width="1.5*"/>
+                      <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="SUPPLIER NAME" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                    <TextBlock Grid.Column="1" Text="CONTACT PHONE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                    <TextBlock Grid.Column="2" Text="TYPE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                    <TextBlock Grid.Column="3" Text="ACTIONS" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  </Grid>
+                </Border>
+    
+                <!-- Loading State -->
+                <StackPanel Grid.Row="1" Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <controls:SupplierSkeletonRow/>
+                    <controls:SupplierSkeletonRow/>
+                    <controls:SupplierSkeletonRow/>
+                    <controls:SupplierSkeletonRow/>
+                    <controls:SupplierSkeletonRow/>
+                </StackPanel>
+  
+                <!-- Table Body -->
+                <ListView Grid.Row="1" ItemsSource="{Binding Suppliers}" SelectionMode="None" Padding="0,4"
+                          Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                  <ListView.ItemContainerStyle>
+                      <Style TargetType="ListViewItem">
+                          <Setter Property="Padding" Value="16,0"/>
+                          <Setter Property="MinHeight" Value="56"/>
+                          <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                      </Style>
+                  </ListView.ItemContainerStyle>
+                  <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="m:Supplier">
+                      <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
+                        <Grid ColumnSpacing="12">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="100"/>
+                          </Grid.ColumnDefinitions>
+                          <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                          <TextBlock Grid.Column="1" Text="{x:Bind ContactPhone}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                          <TextBlock Grid.Column="2" Text="{x:Bind SupplierType}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                          <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <Button Click="EditSupplier_Click" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
+                              <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            </Button>
+                            <Button Command="{Binding DataContext.DeleteSupplierCommand, ElementName=SuppliersGrid}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
+                              <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="#DC2626"/>
+                            </Button>
+                          </StackPanel>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+          </Border>
+    
+          <!-- Table Footer -->
+          <Border Grid.Row="2" 
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
+                  BorderThickness="0,1,0,0"
+                  Margin="-20,0,-20,-20" Padding="24,12">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
+                <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                <TextBlock Text="{Binding SupplierDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                <TextBlock Text="{Binding SupplierDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                <TextBlock Text="{Binding SupplierTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                <TextBlock Text="suppliers" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              </StackPanel>
+    
+              <StackPanel Grid.Column="1"
+                          Orientation="Horizontal"
+                          Spacing="4"
+                          HorizontalAlignment="Right"
+                          x:Name="SupplierPaginationPanel"/>
+            </Grid>
+          </Border>
     </Grid>
 
-    <Grid x:Name="SuppliersGrid" Grid.Row="3">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
-
-      <Border Grid.Row="0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
-          <Grid>
-              <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
-  
-              <!-- Table Header -->
-              <Border Grid.Row="0" Background="{ThemeResource ControlFillColorDefaultBrush}"
-                      CornerRadius="20" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                      BorderThickness="0,0,0,1" Padding="16,14">
-                <Grid ColumnSpacing="12">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                    <ColumnDefinition Width="100"/>
-                  </Grid.ColumnDefinitions>
-                  <TextBlock Text="SUPPLIER NAME" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="1" Text="CONTACT PHONE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="2" Text="TYPE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="3" Text="ACTIONS" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                </Grid>
-              </Border>
-  
-              <!-- Loading State -->
-              <StackPanel Grid.Row="1" Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource BoolToVisibilityConverter}}">
-                  <controls:SupplierSkeletonRow/>
-                  <controls:SupplierSkeletonRow/>
-                  <controls:SupplierSkeletonRow/>
-                  <controls:SupplierSkeletonRow/>
-                  <controls:SupplierSkeletonRow/>
-              </StackPanel>
-
-              <!-- Table Body -->
-              <ListView Grid.Row="1" ItemsSource="{Binding Suppliers}" SelectionMode="None" Padding="0,4"
-                        Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource InverseBoolToVisibilityConverter}}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Padding" Value="16,0"/>
-                        <Setter Property="MinHeight" Value="56"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                  <DataTemplate x:DataType="m:Supplier">
-                    <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
-                      <Grid ColumnSpacing="12">
-                        <Grid.ColumnDefinitions>
-                          <ColumnDefinition Width="2*"/>
-                          <ColumnDefinition Width="1.5*"/>
-                          <ColumnDefinition Width="1.5*"/>
-                          <ColumnDefinition Width="100"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="1" Text="{x:Bind ContactPhone}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="2" Text="{x:Bind SupplierType}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                          <Button Click="EditSupplier_Click" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
-                            <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                          </Button>
-                          <Button Command="{Binding DataContext.DeleteSupplierCommand, ElementName=SuppliersGrid}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="4" Style="{StaticResource ColorPreservingButtonStyle}">
-                            <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="#DC2626"/>
-                          </Button>
-                        </StackPanel>
-                      </Grid>
-                    </Border>
-                  </DataTemplate>
-                </ListView.ItemTemplate>
-              </ListView>
-          </Grid>
-        </Border>
-  
-        <!-- Table Footer (Docked to bottom) -->
-        <Border Grid.Row="1" 
-                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-                BorderThickness="0,1,0,0"
-                Margin="-20,0,-20,-20" Padding="24,12">
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*"/>
-              <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding SupplierDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding SupplierDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding SupplierTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="suppliers" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            </StackPanel>
-  
-            <StackPanel Grid.Column="1"
-                        Orientation="Horizontal"
-                        Spacing="4"
-                        HorizontalAlignment="Right"
-                        x:Name="SupplierPaginationPanel"/>
-          </Grid>
-        </Border>
-      </Grid>
-
-      <Grid x:Name="SupplyOrdersGrid" Grid.Row="3" Visibility="Collapsed">
+    <!-- Supply History Tab Content -->
+    <Grid x:Name="SupplyOrdersGrid" Grid.Row="2" Grid.RowSpan="2" Visibility="Collapsed">
         <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
   
+        <!-- Toolbar -->
+        <Grid x:Name="OrdersToolbarGrid" Grid.Row="0" ColumnSpacing="14" Margin="0,0,0,20">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
 
+          <Grid Grid.Column="0">
+            <TextBox PlaceholderText="Search orders by ID or supplier..."
+                     Text="{Binding SearchOrderKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource ModernSearchTextBoxStyle}"
+                     CornerRadius="24"
+                     Padding="16,12,80,12"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
+              <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoadingOrders}" Visibility="{Binding IsLoadingOrders, Converter={StaticResource BoolToVisibilityConverter}}"/>
+              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                      Background="Transparent" BorderThickness="0" Padding="12"
+                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
+            </StackPanel>
+          </Grid>
+
+          <Button x:Name="AddOrderButton" Grid.Column="1" Click="CreateSupplyOrder_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
+                  CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
+              <TextBlock Text="Create Supply Order" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            </StackPanel>
+          </Button>
+        </Grid>
   
         <!-- Table -->
-        <Border Grid.Row="0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
+        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
           <Grid>
               <Grid.RowDefinitions>
                   <RowDefinition Height="Auto"/>
@@ -281,10 +293,10 @@
                     <ColumnDefinition Width="1.5*"/>
                     <ColumnDefinition Width="1.5*"/>
                   </Grid.ColumnDefinitions>
-                  <TextBlock Text="ORDER ID" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="1" Text="SUPPLIER" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="2" Text="IMPORT DATE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                  <TextBlock Grid.Column="3" Text="TOTAL COST" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Right" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                  <TextBlock Text="ORDER ID" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="1" Text="SUPPLIER" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="2" Text="IMPORT DATE" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="3" Text="TOTAL COST" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Right" FontFamily="{StaticResource AppDefaultFontFamily}"/>
                 </Grid>
               </Border>
   
@@ -294,7 +306,7 @@
                   <controls:OrderSkeletonRow/>
                   <controls:OrderSkeletonRow/>
               </StackPanel>
-
+  
               <!-- Table Body -->
               <ListView Grid.Row="1" ItemsSource="{Binding SupplyOrders}" SelectionMode="None" Padding="0,4"
                         Visibility="{Binding IsLoadingOrders, Converter={StaticResource InverseBoolToVisibilityConverter}}">
@@ -315,10 +327,10 @@
                           <ColumnDefinition Width="1.5*"/>
                           <ColumnDefinition Width="1.5*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{x:Bind IdDisplay}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="1" Text="{x:Bind SupplierName}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="2" Text="{x:Bind ImportDateDisplay}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <TextBlock Grid.Column="3" Text="{x:Bind TotalCost, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource AppPurpleBrush}" FontWeight="SemiBold" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <TextBlock Text="{x:Bind IdDisplay}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                        <TextBlock Grid.Column="1" Text="{x:Bind SupplierName}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                        <TextBlock Grid.Column="2" Text="{x:Bind ImportDateDisplay}" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                        <TextBlock Grid.Column="3" Text="{x:Bind TotalCost, Converter={StaticResource CurrencyFormatter}}" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="{StaticResource AppPurpleBrush}" FontWeight="SemiBold" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
                       </Grid>
                     </Border>
                   </DataTemplate>
@@ -328,16 +340,23 @@
         </Border>
   
         <!-- Table Footer -->
-        <Border Grid.Row="1" Padding="0,14">
+        <Border Grid.Row="2" 
+                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
+                BorderThickness="0,1,0,0"
+                Margin="-20,0,-20,-20" Padding="24,12">
           <Grid>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
-              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding OrderDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding OrderDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="{Binding OrderTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
+              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="{Binding OrderDisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="{Binding OrderDisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="{Binding OrderTotalItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" FontFamily="{StaticResource AppDefaultFontFamily}"/>
             </StackPanel>
   
             <StackPanel Grid.Column="1"
@@ -347,7 +366,7 @@
                         x:Name="OrderPaginationPanel"/>
           </Grid>
         </Border>
-      </Grid>
+    </Grid>
 
   </Grid>
 </Page>
