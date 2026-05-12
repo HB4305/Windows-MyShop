@@ -20,7 +20,7 @@
 		<StackPanel Spacing="16">
 			<!-- Category icon circle -->
 			<Border Background="{ThemeResource AppAccentBrushLow}"
-					CornerRadius="20"
+					CornerRadius="24"
 					Width="48" Height="48"
 					HorizontalAlignment="Left">
 				<TextBlock FontFamily="Segoe MDL2 Assets"
@@ -64,7 +64,7 @@
 						 PlaceholderText="e.g. Running Shoes, Basketball..."
 						 TextChanged="CategoryNameTextBox_TextChanged"
 						 MaxLength="100"
-						 CornerRadius="20"
+						 CornerRadius="24"
 						 Padding="12,10"
 						 Background="{ThemeResource ControlFillColorDefaultBrush}"
 						 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
@@ -93,7 +93,7 @@
 							   FontWeight="SemiBold"
 							   Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					<Border Background="{ThemeResource ControlFillColorSecondaryBrush}"
-							CornerRadius="20"
+							CornerRadius="24"
 							Padding="6,1">
 						<TextBlock Text="Optional"
 								   FontSize="10"
@@ -105,7 +105,7 @@
 						 AcceptsReturn="True"
 						 MinHeight="90"
 						 MaxLength="300"
-						 CornerRadius="20"
+						 CornerRadius="24"
 						 Padding="12,10"
 						 Background="{ThemeResource ControlFillColorDefaultBrush}"
 						 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
@@ -131,7 +131,7 @@
 					Background="Transparent"
 					BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
 					BorderThickness="1"
-					CornerRadius="20"
+					CornerRadius="24"
 					Padding="14,10"
                   Style="{StaticResource ColorPreservingButtonStyle}">
 				<Button.Resources>
@@ -151,17 +151,12 @@
 					x:Name="SaveBtn"
 					Click="SaveBtn_Click"
 					HorizontalAlignment="Stretch"
-					Background="{ThemeResource AppAccentBrush}"
-					BorderBrush="{ThemeResource AppAccentBrush}"
+					Background="{StaticResource AppPurpleBrush}"
+					Foreground="White"
 					BorderThickness="0"
-					CornerRadius="20"
+					CornerRadius="24"
 					Padding="14,10"
-                  Style="{StaticResource ColorPreservingButtonStyle}">
-				<Button.Resources>
-					<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{ThemeResource SystemAccentColorLight1}"/>
-					<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{ThemeResource SystemAccentColorLight1}"/>
-					<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="White"/>
-				</Button.Resources>
+					Style="{StaticResource ColorPreservingButtonStyle}">
 				<StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
 					<TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" FontSize="12" Foreground="White" VerticalAlignment="Center"/>
 					<TextBlock x:Name="SaveBtnText"
@@ -173,3 +168,4 @@
 		</Grid>
 	</StackPanel>
 </ContentDialog>
+

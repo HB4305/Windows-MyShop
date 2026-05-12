@@ -141,7 +141,7 @@
             <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1"
-                    CornerRadius="20"
+                    CornerRadius="24"
                     Padding="16">
               <StackPanel Spacing="12">
                 <TextBlock Text="Create Sale User"
@@ -207,3 +207,4 @@
       </StackPanel>
   </ScrollViewer>
 </Page>
+

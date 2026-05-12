@@ -27,30 +27,7 @@
            to support live theme switching and avoid GradientStop binding bug -->
 
       <!-- ── Pagination Button Styles ── -->
-      <Style x:Key="PageBtn" TargetType="Button">
-        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-        <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimary}"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="MinWidth" Value="32"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="Padding" Value="8,4"/>
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
-        <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-      </Style>
 
-      <Style x:Key="PageBtnActive" TargetType="Button">
-        <Setter Property="Background" Value="#8B52FF"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="MinWidth" Value="32"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="Padding" Value="8,4"/>
-        <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-      </Style>
       
       <Style x:Key="PagerIconButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
@@ -135,6 +112,45 @@
         <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       </Style>
 
+      <!-- ── Modern Search Styles ── -->
+      <Style x:Key="ModernSearchTextBoxStyle" TargetType="TextBox">
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Padding" Value="16,12"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+        <Setter Property="IsDeleteButtonVisible" Value="False"/>
+        <Setter Property="Resources">
+          <ResourceDictionary>
+            <!-- Force a clean border on focus without the default WinUI 3 underline/thickness -->
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{ThemeResource ControlStrokeColorDefault}"/>
+            <!-- Remove the focus visual margin that can cause layout shifts -->
+            <Thickness x:Key="TextControlMargin">0</Thickness>
+          </ResourceDictionary>
+        </Setter>
+      </Style>
+
+      <Style x:Key="ModernSearchAutoSuggestBoxStyle" TargetType="AutoSuggestBox">
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Padding" Value="16,12,48,12"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+        <Setter Property="Resources">
+          <ResourceDictionary>
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{ThemeResource ControlStrokeColorDefault}"/>
+          </ResourceDictionary>
+        </Setter>
+      </Style>
+
       <!-- ── Custom Button Styles ── -->
       <Style x:Key="ColorPreservingButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
@@ -199,6 +215,7 @@
       <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
       <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
       <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+      <conv:InverseStringToVisibilityConverter x:Key="InverseStringToVisibilityConverter"/>
       <conv:BoolToForegroundConverter x:Key="BoolToForegroundConverter"/>
       <conv:HexToBrushConverter x:Key="HexToBrushConverter"/>
       <conv:StringToBoolConverter x:Key="StringToBoolConverter"/>

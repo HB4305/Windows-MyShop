@@ -21,6 +21,7 @@ public partial class CustomerOrderViewModel : ObservableObject
         _settingsManager = settingsManager;
 
         _ordersPerPage = _settingsManager.GetItemsPerPage();
+        _searchHistory = new ObservableCollection<string>(_settingsManager.GetSearchHistory());
     }
 
     // ── Collections ──────────────────────────────────────────────
@@ -71,6 +72,9 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     [ObservableProperty]
     private int _filteredCount = 0;
+
+    [ObservableProperty]
+    private ObservableCollection<string> _searchHistory = new();
 
     // ── Filter Options ──────────────────────────────────────────────
     public ObservableCollection<string> TabOptions { get; } = new()
@@ -211,6 +215,14 @@ public partial class CustomerOrderViewModel : ObservableObject
     {
         CurrentPage = 1;
         ApplyPagination();
+    }
+
+    [RelayCommand]
+    public void AddToHistory(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query)) return;
+        _settingsManager.AddSearchQuery(query);
+        SearchHistory = new ObservableCollection<string>(_settingsManager.GetSearchHistory());
     }
 
     // ── Pagination ─────────────────────────────────────────────────

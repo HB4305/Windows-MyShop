@@ -1,28 +1,33 @@
-using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MyShop.Models;
 
-public class SportItemVariant
+public partial class SportItemVariant : ObservableObject
 {
-    public int Id { get; set; }
+    [ObservableProperty]
+    private int _id;
 
-    public int SportItemId { get; set; }
+    [ObservableProperty]
+    private int _sportItemId;
 
-    public string? Size { get; set; }
+    [ObservableProperty]
+    private string? _size;
 
-    /// <summary>String wrapper for Size — supports both numeric and alphanumeric input (e.g., "9", "XL").</summary>
+    [ObservableProperty]
+    private string? _color;
+
+    [ObservableProperty]
+    private int _stockQuantity;
+
+    [ObservableProperty]
+    private string? _sku;
+
     public string SizeText
     {
         get => Size ?? string.Empty;
         set => Size = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
 
-    public string? Color { get; set; }
-
-    [Range(0, int.MaxValue)]
-    public int StockQuantity { get; set; }
-
-    /// <summary>String wrapper for StockQuantity — used for TextBox binding with numeric-only input.</summary>
     public string StockQuantityText
     {
         get => StockQuantity > 0 ? StockQuantity.ToString() : string.Empty;
@@ -34,8 +39,6 @@ public class SportItemVariant
                 StockQuantity = 0;
         }
     }
-
-    public string? Sku { get; set; }
 
     public string DisplayText => $"Size: {Size ?? "N/A"}, Color: {Color ?? "N/A"} (Stock: {StockQuantity})";
 }

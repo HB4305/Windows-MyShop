@@ -588,7 +588,7 @@
           </Grid.RowDefinitions>
 
           <!-- Total -->
-          <Border x:Name="StatsTotalCard" Grid.Column="0" CornerRadius="20" Padding="16,12"
+          <Border x:Name="StatsTotalCard" Grid.Column="0" CornerRadius="24" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -614,7 +614,7 @@
           </Border>
 
           <!-- Pending -->
-            <Border x:Name="StatsPendingCard" Grid.Column="2" CornerRadius="20" Padding="16,12"
+            <Border x:Name="StatsPendingCard" Grid.Column="2" CornerRadius="24" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -634,7 +634,7 @@
           </Border>
 
           <!-- Processing -->
-            <Border x:Name="StatsProcessingCard" Grid.Column="4" CornerRadius="20" Padding="16,12"
+            <Border x:Name="StatsProcessingCard" Grid.Column="4" CornerRadius="24" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -654,7 +654,7 @@
           </Border>
 
           <!-- Revenue -->
-            <Border x:Name="StatsRevenueCard" Grid.Column="6" CornerRadius="20" Padding="16,12"
+            <Border x:Name="StatsRevenueCard" Grid.Column="6" CornerRadius="24" Padding="16,12"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1">
@@ -770,30 +770,18 @@
             </StackPanel>
           </ScrollViewer>
 
-          <Border Grid.Column="1"
-                  MinHeight="48"
-                  Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                  BorderThickness="1"
-                  CornerRadius="24"
-                  Padding="16,4"
-                  MinWidth="280"
-                  Margin="16,0,0,0">
-            <Grid ColumnSpacing="10">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-              </Grid.ColumnDefinitions>
-              <TextBox Grid.Column="0"
-                       Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          <!-- Search Bar (Synced with global style) -->
+          <Grid Grid.Column="1"
+                MinWidth="280"
+                Margin="16,0,0,0">
+              <TextBox Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        PlaceholderText="Search orders..."
-                       BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
-                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-              <Button Grid.Column="1" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                      Background="Transparent" BorderThickness="0" Padding="8"
-                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
-            </Grid>
-          </Border>
+                       Style="{StaticResource ModernSearchTextBoxStyle}"/>
+              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                      Background="Transparent" BorderThickness="0" Padding="12" Margin="0,0,4,0"
+                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
+                      HorizontalAlignment="Right" VerticalAlignment="Center"/>
+          </Grid>
 
         </Grid>
       </Border>
@@ -804,7 +792,7 @@
           <!-- Actual content will be inside the Table structure below -->
 
           <!-- Table with header -->
-          <Border CornerRadius="20"
+          <Border CornerRadius="24"
                   Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                   BorderThickness="1"
@@ -820,11 +808,13 @@
                   <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Table Header (fixed, outside scroll) -->
+                <!-- Table Header (Synced with Staff) -->
                 <Border Grid.Row="0"
-                        BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        CornerRadius="20"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                         BorderThickness="0,0,0,1"
-                        Padding="12,10">
+                        Padding="16,14">
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition Width="80"/>
@@ -1079,7 +1069,7 @@
                   <TextBlock Grid.Column="0" Text="ITEMS" Style="{StaticResource SectionTitle}"/>
                   <Border Grid.Column="1"
                           Background="{ThemeResource ControlFillColorSecondaryBrush}"
-                          CornerRadius="20"
+                          CornerRadius="24"
                           Padding="8,4">
                     <TextBlock FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
                       <Run Text="{Binding CurrentDetails.Count, Mode=OneWay}"/>
@@ -1368,3 +1358,4 @@
   </Grid>
   </ScrollViewer>
 </Page>
+

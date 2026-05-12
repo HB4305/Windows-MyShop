@@ -82,50 +82,35 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Column="0"
-                    MinHeight="48"
-                    VerticalAlignment="Stretch"
-                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="20"
-                    Padding="12,8">
-                <Grid ColumnSpacing="10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <FontIcon Grid.Column="0" Glyph="&#xE721;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
-                    <TextBox x:Name="SearchBox"
-                             Grid.Column="1"
-                             PlaceholderText="Search customer name or phone..."
-                             Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             KeyDown="OnSearchKeyDown"
-                             BorderThickness="0"
-                             Background="Transparent"
-                             Padding="0,6"
-                             VerticalAlignment="Center"/>
-                    <Button Grid.Column="2"
-                            Content="&#xE721;"
+            <Grid Grid.Column="0">
+                <TextBox x:Name="SearchBox"
+                         PlaceholderText="Search customer name or phone..."
+                         Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         KeyDown="OnSearchKeyDown"
+                         Style="{StaticResource ModernSearchTextBoxStyle}"
+                         CornerRadius="24"
+                         Padding="16,12,80,12"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
+                    <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Button Content="&#xE721;"
                             FontFamily="Segoe MDL2 Assets"
                             Command="{Binding SearchCommand}"
                             Background="Transparent"
                             BorderThickness="0"
-                            Padding="8"
+                            Padding="12"
                             Foreground="{StaticResource AppPurpleBrush}"
                             ToolTipService.ToolTip="Search"
-                  Style="{StaticResource ColorPreservingButtonStyle}"/>
-                </Grid>
-            </Border>
+                            Style="{StaticResource ColorPreservingButtonStyle}"/>
+                </StackPanel>
+            </Grid>
 
             <Button x:Name="AddCustomerButton"
                     Grid.Column="1"
                     Background="{StaticResource AppPurpleBrush}"
                     Foreground="White"
-                    CornerRadius="20"
+                    CornerRadius="24"
                     Padding="16,10"
-                    MinHeight="48"
+                    Height="48"
                     Click="OnAddCustomerClick"
                   Style="{StaticResource ColorPreservingButtonStyle}"
                   Visibility="{Binding IsOwner, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -153,7 +138,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Table Header -->
+                <!-- Table Header (Synced with Staff) -->
                 <Border Grid.Row="0" Background="{ThemeResource ControlFillColorDefaultBrush}"
                         CornerRadius="20"
                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"

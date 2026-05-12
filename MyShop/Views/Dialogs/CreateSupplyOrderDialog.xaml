@@ -65,7 +65,7 @@
                         <ComboBox x:Name="SupplierComboBox" 
                                   PlaceholderText="Select supplier"
                                   DisplayMemberPath="Name"
-                                  CornerRadius="20"
+                                  CornerRadius="24"
                                   HorizontalAlignment="Stretch"/>
                     </StackPanel>
 
@@ -79,14 +79,14 @@
                                         SuggestionChosen="ProductSearchBox_SuggestionChosen"
                                         DisplayMemberPath="Name"
                                         TextMemberPath="Name"
-                                        CornerRadius="20"
+                                        Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
                                         VerticalAlignment="Bottom"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>
 
             <!-- Selected Products List -->
-            <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" MinHeight="250">
+            <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="24" MinHeight="250">
                 <ListView x:Name="ItemsListView" SelectionMode="None" MaxHeight="400">
                     <ListView.Header>
                         <Grid Padding="16,12" Background="{ThemeResource LayerFillColorDefaultBrush}">
@@ -129,7 +129,7 @@
                                           SelectedItem="{Binding SelectedSize, Mode=TwoWay}" 
                                           PlaceholderText="Size"
                                           HorizontalAlignment="Stretch" 
-                                          CornerRadius="20"
+                                          CornerRadius="24"
                                           VerticalAlignment="Center"/>
 
                                 <ComboBox Grid.Column="2" 
@@ -137,7 +137,7 @@
                                           SelectedItem="{Binding SelectedColor, Mode=TwoWay}" 
                                           PlaceholderText="Color"
                                           HorizontalAlignment="Stretch" 
-                                          CornerRadius="20"
+                                          CornerRadius="24"
                                           VerticalAlignment="Center"/>
                                 
                                 <NumberBox Grid.Column="3" 
@@ -145,7 +145,7 @@
                                            Minimum="1" 
                                            SpinButtonPlacementMode="Compact"
                                            HorizontalAlignment="Stretch"
-                                           CornerRadius="20"
+                                           CornerRadius="24"
                                            ValueChanged="NumberBox_ValueChanged"
                                            VerticalAlignment="Center"/>
                                 
@@ -153,7 +153,7 @@
                                            Value="{Binding ImportPrice, Mode=TwoWay}" 
                                            Minimum="0" 
                                            HorizontalAlignment="Stretch"
-                                           CornerRadius="20"
+                                           CornerRadius="24"
                                            ValueChanged="NumberBox_ValueChanged"
                                            VerticalAlignment="Center"/>
                                            
@@ -178,7 +178,7 @@
 
             <!-- Summary & Footer Buttons -->
             <StackPanel Grid.Row="2" Spacing="16">
-                <Border Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16" CornerRadius="20">
+                <Border Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16" CornerRadius="24">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="16">
                         <TextBlock Text="Total Cost:" VerticalAlignment="Center" FontSize="16" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                         <TextBlock x:Name="TotalCostText" Text="0" FontWeight="Bold" FontSize="20" Foreground="{ThemeResource AppAccentBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
@@ -194,13 +194,13 @@
 
                     <Button Grid.Column="1" x:Name="CancelBtn" Click="CancelBtn_Click" MinWidth="120"
                             Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                            BorderThickness="1" CornerRadius="20" Padding="24,10"
+                            BorderThickness="1" CornerRadius="24" Padding="24,10"
                             Style="{StaticResource ColorPreservingButtonStyle}">
                         <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Button>
 
                     <Button Grid.Column="2" x:Name="CreateBtn" Click="CreateBtn_Click" MinWidth="160"
-                            Background="{ThemeResource AppAccentBrush}" BorderThickness="0" CornerRadius="20" Padding="24,10"
+                            Background="{ThemeResource AppAccentBrush}" BorderThickness="0" CornerRadius="24" Padding="24,10"
                             Style="{StaticResource ColorPreservingButtonStyle}">
                         <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE710;" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
@@ -212,3 +212,4 @@
         </Grid>
     </StackPanel>
 </ContentDialog>
+

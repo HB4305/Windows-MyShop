@@ -153,27 +153,22 @@
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
-      <Border Grid.Row="0" Grid.Column="0" MinHeight="48" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12,8">
-        <Grid ColumnSpacing="10">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
-          <TextBox Grid.Column="0" PlaceholderText="Search by email or role..."
-                   Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
-                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <controls:ShimmerLoadingControl Grid.Column="1" Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
-          <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                  Background="Transparent" BorderThickness="0" Padding="8"
+      <Grid Grid.Row="0" Grid.Column="0">
+        <TextBox PlaceholderText="Search by email or role..."
+                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource ModernSearchTextBoxStyle}"
+                 CornerRadius="24"
+                 Padding="16,12,80,12"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
+          <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+          <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                  Background="Transparent" BorderThickness="0" Padding="12"
                   Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
-        </Grid>
-      </Border>
+        </StackPanel>
+      </Grid>
 
       <Button x:Name="AddButton" Grid.Row="0" Grid.Column="1" Click="AddStaff_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
-              CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
+              CornerRadius="24" Padding="16,10" Height="48" Style="{StaticResource ColorPreservingButtonStyle}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
           <TextBlock Text="Add Staff" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>

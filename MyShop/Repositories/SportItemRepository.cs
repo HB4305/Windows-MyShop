@@ -64,8 +64,7 @@ public class SportItemRepository
             { "name", "s.name" },
             { "selling_price", "s.selling_price" },
             { "stock_quantity", "s.stock_quantity" },
-            { "category_id", "s.category_id" },
-            { "created_at", "s.created_at" }
+            { "category_id", "s.category_id" }
         };
         var safeSort = allowedSortFields.TryGetValue(sortField, out var field) ? field : "s.id";
         var order = sortAscending ? "ASC" : "DESC";

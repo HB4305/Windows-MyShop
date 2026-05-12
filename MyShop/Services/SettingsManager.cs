@@ -74,4 +74,24 @@ public class SettingsManager
       config.Activity.LastActivity = null;
     SaveSettings(config);
   }
+
+  public List<string> GetSearchHistory()
+    => LoadSettings().Activity.SearchHistory;
+
+  public void AddSearchQuery(string query)
+  {
+    if (string.IsNullOrWhiteSpace(query)) return;
+    var config = LoadSettings();
+    var history = config.Activity.SearchHistory;
+    
+    // Move to top if exists, otherwise add to top
+    history.Remove(query);
+    history.Insert(0, query);
+    
+    // Limit to 10 items
+    if (history.Count > 10)
+      history.RemoveAt(10);
+      
+    SaveSettings(config);
+  }
 }

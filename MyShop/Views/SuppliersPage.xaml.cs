@@ -146,6 +146,7 @@ public sealed partial class SuppliersPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current > 1
         };
         prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.SupplierCurrentPage--; _ = ViewModel.LoadSuppliersAsync(); BuildSupplierPagination(); } };
         SupplierPaginationPanel.Children.Add(prevBtn);
@@ -179,6 +180,7 @@ public sealed partial class SuppliersPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current < total
         };
         nextBtn.Click += (s, e) => { if (current < total) { ViewModel.SupplierCurrentPage++; _ = ViewModel.LoadSuppliersAsync(); BuildSupplierPagination(); } };
         SupplierPaginationPanel.Children.Add(nextBtn);
@@ -232,6 +234,7 @@ public sealed partial class SuppliersPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current > 1
         };
         prevBtn.Click += (s, e) => { if (current > 1) { ViewModel.OrderCurrentPage--; _ = ViewModel.LoadSupplyOrdersAsync(); BuildOrderPagination(); } };
         OrderPaginationPanel.Children.Add(prevBtn);
@@ -265,6 +268,7 @@ public sealed partial class SuppliersPage : Page
             Height = 32,
             Padding = new Thickness(8, 4, 8, 4),
             Style = (Style)Resources["PageBtn"],
+            IsEnabled = current < total
         };
         nextBtn.Click += (s, e) => { if (current < total) { ViewModel.OrderCurrentPage++; _ = ViewModel.LoadSupplyOrdersAsync(); BuildOrderPagination(); } };
         OrderPaginationPanel.Children.Add(nextBtn);

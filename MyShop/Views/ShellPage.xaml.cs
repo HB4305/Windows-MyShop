@@ -116,7 +116,8 @@ public sealed partial class ShellPage : Page
 
         NavDashboard.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavPos.Visibility = isOwner ? Visibility.Collapsed : Visibility.Visible;
+        NavAiStudio.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
+        NavPos.Visibility = _currentUserService.IsSale ? Visibility.Visible : Visibility.Collapsed;
         NavShiftManagement.Visibility = Visibility.Visible;
         NavProductCatalog.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavOrders.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
@@ -129,7 +130,8 @@ public sealed partial class ShellPage : Page
 
         NavDashboard.IsEnabled = isOwner;
         NavReports.IsEnabled = isOwner;
-        NavPos.IsEnabled = !isOwner;
+        NavAiStudio.IsEnabled = isOwner;
+        NavPos.IsEnabled = _currentUserService.IsSale;
         NavProductCatalog.IsEnabled = isOwner;
         NavOrders.IsEnabled = isOwner;
         NavCustomers.IsEnabled = isOwner;
@@ -171,7 +173,6 @@ public sealed partial class ShellPage : Page
 
     private void NavPos_Click(object sender, RoutedEventArgs e)
     {
-        if (!_currentUserService.IsSale) return;
         _frame.Navigate(typeof(PosPage));
         UpdateActiveNav("POS");
         MaintainSidebarAfterNavigation();
@@ -198,6 +199,14 @@ public sealed partial class ShellPage : Page
         if (!_currentUserService.IsOwner) return;
         _frame.Navigate(typeof(ReportPage));
         UpdateActiveNav("Reports");
+        MaintainSidebarAfterNavigation();
+    }
+
+    private void NavAiStudio_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_currentUserService.IsOwner) return;
+        _frame.Navigate(typeof(AiStudioPage));
+        UpdateActiveNav("AiStudio");
         MaintainSidebarAfterNavigation();
     }
 
@@ -307,6 +316,10 @@ public sealed partial class ShellPage : Page
                 tag = "Reports";
                 title = "Business Analytics & Reports";
                 break;
+            case nameof(AiStudioPage):
+                tag = "AiStudio";
+                title = "AI Studio";
+                break;
             case nameof(SportItemPage):
             case nameof(ProductCatalogPage):
                 tag = "ProductCatalog";
@@ -353,6 +366,7 @@ public sealed partial class ShellPage : Page
         ResetNavStyle(NavPos);
         ResetNavStyle(NavShiftManagement);
         ResetNavStyle(NavReports);
+        ResetNavStyle(NavAiStudio);
         ResetNavStyle(NavProductCatalog);
         ResetNavStyle(NavOrders);
         ResetNavStyle(NavCustomers);
@@ -368,6 +382,7 @@ public sealed partial class ShellPage : Page
             "ShiftReport" => NavShiftManagement,
             "ShiftLogs" => NavShiftManagement,
             "Reports" => NavReports,
+            "AiStudio" => NavAiStudio,
             "ProductCatalog" => NavProductCatalog,
             "OrdersManagement" => NavOrders,
             "Customers" => NavCustomers,
@@ -399,6 +414,7 @@ public sealed partial class ShellPage : Page
             "ShiftReport" => typeof(ShiftManagementPage),
             "ShiftLogs" => typeof(ShiftReportLogsPage),
             "Reports" => typeof(ReportPage),
+            "AiStudio" => typeof(AiStudioPage),
             "ProductCatalog" => typeof(SportItemPage),
             "OrdersManagement" => typeof(CustomerOrderPage),
             "Customers" => typeof(CustomerPage),
@@ -440,8 +456,10 @@ public sealed partial class ShellPage : Page
         if (_currentUserService.IsOwner)
         {
             return tag is "Dashboard"
+                or "POS"
                 or "ShiftLogs"
                 or "Reports"
+                or "AiStudio"
                 or "ProductCatalog"
                 or "OrdersManagement"
                 or "Customers"

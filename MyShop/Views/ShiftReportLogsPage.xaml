@@ -50,7 +50,6 @@
     </Style>
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto">
   <Grid Padding="24,20" RowSpacing="20">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -84,7 +83,7 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
 
@@ -130,44 +129,37 @@
     </Grid>
 
     <!-- Premium Search Bar -->
-    <Border x:Name="ToolbarGridBorder" Grid.Row="2" MinHeight="48"
-            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-            BorderThickness="1" CornerRadius="20" Padding="12,8">
-      <Grid x:Name="ToolbarGrid" ColumnSpacing="10">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBox Grid.Column="0" PlaceholderText="Search by shift ID, staff, or notes..."
-                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
-                 FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-        <controls:ShimmerLoadingControl Grid.Column="1" Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                Background="Transparent" BorderThickness="0" Padding="8"
+    <Grid x:Name="ToolbarGridBorder" Grid.Row="2">
+       <TextBox PlaceholderText="Search by shift ID, staff, or notes..."
+                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource ModernSearchTextBoxStyle}"
+                CornerRadius="24"
+                Padding="16,12,80,12"/>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
+        <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                Background="Transparent" BorderThickness="0" Padding="12"
                 Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
-      </Grid>
-    </Border>
+      </StackPanel>
+    </Grid>
 
     <!-- Main List Card -->
     <Border Grid.Row="3" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20">
       <ScrollViewer HorizontalScrollBarVisibility="Auto"
                     HorizontalScrollMode="Enabled"
-                    VerticalScrollBarVisibility="Disabled">
+                    VerticalScrollBarVisibility="Auto">
       <Grid MinWidth="1160">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
 
-        <!-- Table Header -->
+        <!-- Table Header (Synced with Staff) -->
         <Border Grid.Row="0" Background="{ThemeResource ControlFillColorDefaultBrush}"
                 CornerRadius="20" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                BorderThickness="0,1,0,1" Padding="16,12" Margin="0,4,0,0">
+                BorderThickness="0,0,0,1" Padding="16,14">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="80"/>
@@ -191,18 +183,6 @@
             <TextBlock Grid.Column="8" Text="NOTES" FontSize="11" FontWeight="SemiBold" Margin="20,0,0,0"/>
           </Grid>
         </Border>
-
-        <!-- Loading State -->
-        <StackPanel Grid.Row="2" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
-            <controls:ShiftLogSkeletonRow/>
-            <controls:ShiftLogSkeletonRow/>
-            <controls:ShiftLogSkeletonRow/>
-            <controls:ShiftLogSkeletonRow/>
-            <controls:ShiftLogSkeletonRow/>
-            <controls:ShiftLogSkeletonRow/>
-            <controls:ShiftLogSkeletonRow/>
-            <controls:ShiftLogSkeletonRow/>
-        </StackPanel>
 
         <!-- Table Body -->
         <ListView Grid.Row="1" ItemsSource="{Binding PagedReportLogs}" SelectionMode="None" Padding="0,4"
@@ -237,15 +217,25 @@
                   <TextBlock Grid.Column="5" Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                   <TextBlock Grid.Column="6" Text="{Binding ActualCashTotal, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                   <TextBlock Grid.Column="7" Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" 
-                             Foreground="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}, ConverterParameter='color'}">
-                    <!-- Note: I should add a converter or logic for color if discrepancy is negative -->
-                  </TextBlock>
+                             Foreground="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}, ConverterParameter='color'}"/>
                   <TextBlock Grid.Column="8" Text="{Binding Notes}" VerticalAlignment="Center" Margin="20,0,0,0" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 </Grid>
               </Border>
             </DataTemplate>
           </ListView.ItemTemplate>
         </ListView>
+
+        <!-- Loading State -->
+        <StackPanel Grid.Row="1" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+            <controls:ShiftLogSkeletonRow/>
+        </StackPanel>
       </Grid>
       </ScrollViewer>
     </Border>
@@ -254,8 +244,8 @@
     <Border Grid.Row="4" 
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
             BorderThickness="0,1,0,0"
-            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-            Padding="0,12,0,0">
+            Background="{ThemeResource ControlFillColorDefaultBrush}"
+            Margin="-24,0,-24,-20" Padding="24,12">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
@@ -282,5 +272,4 @@
       </Grid>
     </Border>
   </Grid>
-  </ScrollViewer>
 </Page>

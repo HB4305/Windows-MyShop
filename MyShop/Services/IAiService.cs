@@ -14,5 +14,20 @@ public interface IAiService
     /// <summary>
     /// Analyzes an image and returns structured product data in JSON format.
     /// </summary>
-    Task<string> AnalyzeItemAsync(byte[] imageBytes, string[] availableCategories, string mimeType = "image/jpeg");
+    Task<string> AnalyzeItemAsync(byte[] imageBytes, string[] availableCategories, string? categoryHint = null, string mimeType = "image/jpeg");
+
+    /// <summary>
+    /// Repairs a JSON object to match the expected schema and constraints.
+    /// </summary>
+    Task<string> RepairItemJsonAsync(string rawJson, string[] validationErrors, string[] availableCategories);
+
+    /// <summary>
+    /// Runs a generic prompt without images.
+    /// </summary>
+    Task<string> RunPromptAsync(string systemInstruction, string prompt, System.Threading.CancellationToken ct = default);
+
+    /// <summary>
+    /// Parses a natural language search query into structured filter data.
+    /// </summary>
+    Task<Models.Ai.AiSearchFilter?> ParseSearchQueryAsync(string query);
 }

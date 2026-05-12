@@ -81,4 +81,13 @@ public sealed partial class AppPageHeader : UserControl
 
     public static readonly DependencyProperty SubtitleVisibilityProperty =
         DependencyProperty.Register(nameof(SubtitleVisibility), typeof(Visibility), typeof(AppPageHeader), new PropertyMetadata(Visibility.Visible));
+
+    public object Actions
+    {
+        get => (object)GetValue(ActionsProperty);
+        set => SetValue(ActionsProperty, value);
+    }
+
+    public static readonly DependencyProperty ActionsProperty =
+        DependencyProperty.Register(nameof(Actions), typeof(object), typeof(AppPageHeader), new PropertyMetadata(null));
 }

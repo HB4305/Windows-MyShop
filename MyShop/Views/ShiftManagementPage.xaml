@@ -47,7 +47,7 @@
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1"
               Padding="14,10"
-              CornerRadius="20"
+              CornerRadius="24"
               VerticalAlignment="Center"
               ToolTipService.ToolTip="View submitted shift reports">
         <StackPanel Orientation="Horizontal" Spacing="8">
@@ -62,7 +62,7 @@
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1"
               Padding="14,10"
-              CornerRadius="20"
+              CornerRadius="24"
               VerticalAlignment="Center"
               Margin="12,0,0,0"
               ToolTipService.ToolTip="Refresh shift data">
@@ -374,3 +374,4 @@
     </ScrollViewer>
   </Grid>
 </Page>
+

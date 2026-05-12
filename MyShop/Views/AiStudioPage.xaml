@@ -1,0 +1,200 @@
+<Page x:Class="MyShop.Views.AiStudioPage"
+      x:Name="Root"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:MyShop.Controls"
+      xmlns:conv="using:MyShop.Converters"
+      NavigationCacheMode="Required"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+        <conv:UserToAlignmentConverter x:Key="UserToAlignmentConverter"/>
+        <conv:UserToBackgroundConverter x:Key="UserToBackgroundConverter"/>
+        <conv:UserToBorderConverter x:Key="UserToBorderConverter"/>
+        <conv:UserToForegroundConverter x:Key="UserToForegroundConverter"/>
+        <conv:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter"/>
+
+        <Style x:Key="AiCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="24"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
+
+        <Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </Style>
+
+        <Style x:Key="SectionDescStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </Style>
+
+        <!-- Premium Purple Button -->
+        <Style x:Key="AiPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="MinHeight" Value="44"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Style" Value="{StaticResource ColorPreservingButtonStyle}"/>
+        </Style>
+
+        <!-- Suggested Question Chip -->
+        <Style x:Key="QuestionChipStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+            <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
+            <Setter Property="Style" Value="{StaticResource ColorPreservingButtonStyle}"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <controls:AppPageHeader Grid.Row="0"
+                                Margin="24,20,24,0"
+                                Title="AI Studio"
+                                Subtitle="Your intelligent AI assistant for shop management and strategy.">
+            <controls:AppPageHeader.Actions>
+                <Button Command="{Binding ClearHistoryCommand}"
+                        Style="{ThemeResource DefaultButtonStyle}"
+                        Padding="12,8" CornerRadius="24">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE74D;" FontSize="14"/>
+                        <TextBlock Text="Clear Chat" VerticalAlignment="Center" FontSize="13"/>
+                    </StackPanel>
+                </Button>
+            </controls:AppPageHeader.Actions>
+        </controls:AppPageHeader>
+
+        <Grid Grid.Row="1" Margin="24,20">
+            <!-- Main Chat Assistant Area (Full Width) -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="24"
+                    MaxWidth="1000" HorizontalAlignment="Stretch">
+                <Grid RowDefinitions="*,Auto,Auto">
+                    <!-- Chat History -->
+                    <ScrollViewer x:Name="ChatScrollViewer" Grid.Row="0" Padding="24,24,24,12" VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="ChatStackPanel">
+                            <ItemsControl x:Name="ChatItemsControl" ItemsSource="{Binding ChatMessages}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,16" HorizontalAlignment="{Binding IsUser, Converter={StaticResource UserToAlignmentConverter}}">
+                                            <Border CornerRadius="16" Padding="16,12" MaxWidth="700"
+                                                    Background="{Binding IsUser, Converter={StaticResource UserToBackgroundConverter}}"
+                                                    BorderBrush="{Binding IsUser, Converter={StaticResource UserToBorderConverter}}"
+                                                    BorderThickness="1">
+                                                <StackPanel Spacing="6">
+                                                    <TextBlock Text="{Binding Content}" TextWrapping="Wrap" FontSize="15"
+                                                               Foreground="{Binding IsUser, Converter={StaticResource UserToForegroundConverter}}"
+                                                               LineHeight="20"/>
+                                                    <TextBlock Text="{Binding TimestampUtc, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='HH:mm'}" 
+                                                               FontSize="11" Opacity="0.6" HorizontalAlignment="Right"
+                                                               Foreground="{Binding IsUser, Converter={StaticResource UserToForegroundConverter}}"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- AI Typing/Thinking Indicator -->
+                            <Grid Margin="0,0,0,16" HorizontalAlignment="Left" Visibility="{Binding IsThinking, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Border CornerRadius="16" Padding="16,12" Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <TextBlock Text="AI is thinking" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontStyle="Italic"/>
+                                        <ProgressBar IsIndeterminate="True" Width="60" VerticalAlignment="Center" Foreground="{StaticResource AppPurpleBrush}"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Suggested Questions (Chips) -->
+                    <ScrollViewer Grid.Row="1" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" Margin="24,0,24,16">
+                        <ItemsControl ItemsSource="{Binding SuggestedQuestions}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" Spacing="10"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding}" 
+                                            Command="{Binding DataContext.ApplySuggestedQuestionCommand, ElementName=Root}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource QuestionChipStyle}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!-- Input Area -->
+                    <Border Grid.Row="2" Padding="24" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Background="{ThemeResource ControlFillColorDefaultBrush}">
+                        <Grid ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="48"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     PlaceholderText="Type your message here..."
+                                     CornerRadius="16" Padding="16,12"
+                                     FontSize="14"
+                                     MinHeight="48"
+                                     AcceptsReturn="False"
+                                     VerticalAlignment="Center"
+                                     KeyDown="OnChatKeyDown"/>
+                            
+                            <Button Grid.Column="1" Command="{Binding SendChatCommand}"
+                                    Background="#8B52FF" 
+                                    Foreground="White"
+                                    Width="48" Height="48"
+                                    CornerRadius="24"
+                                    Padding="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsChatBusy, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                    Style="{StaticResource ColorPreservingButtonStyle}">
+                                <FontIcon Glyph="&#xE724;" FontSize="18" Foreground="White"/>
+                            </Button>
+                            
+                            <Button Grid.Column="1" Command="{Binding StopChatCommand}"
+                                    Background="#DC2626" 
+                                    Foreground="White"
+                                    Width="48" Height="48"
+                                    CornerRadius="24"
+                                    Padding="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsChatBusy, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    Style="{StaticResource ColorPreservingButtonStyle}">
+                                <FontIcon Glyph="&#xE73B;" FontSize="16" Foreground="White"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>
+

@@ -34,17 +34,23 @@ public class NullToBoolConverter : IValueConverter
 public class BoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
-        => value is true ? Visibility.Visible : Visibility.Collapsed;
+    {
+        bool result = value is true || (value is bool b && b);
+        return result ? Visibility.Visible : Visibility.Collapsed;
+    }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
 }
 
-/// <summary>Converts true → Collapsed, false → Visible (used for "Create New" title when no Id exists).</summary>
+/// <summary>Converts true → Collapsed, false → Visible</summary>
 public class InverseBoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
-        => value is true ? Visibility.Collapsed : Visibility.Visible;
+    {
+        bool result = value is true || (value is bool b && b);
+        return result ? Visibility.Collapsed : Visibility.Visible;
+    }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
@@ -178,11 +184,30 @@ public class StringToImageConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// <summary>Converts empty string -> false, has content -> true</summary>
+/// <summary>Converts empty string -> false, has content -> true. Supports Visibility return.</summary>
 public class StringToBoolConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, string language)
-        => !string.IsNullOrWhiteSpace(value?.ToString());
+    {
+        var s = value?.ToString();
+        var p = parameter?.ToString();
+        bool result;
+
+        if (!string.IsNullOrEmpty(p))
+        {
+            result = string.Equals(s, p, StringComparison.OrdinalIgnoreCase);
+        }
+        else
+        {
+            result = !string.IsNullOrWhiteSpace(s);
+        }
+
+        // Hardened check for Visibility target
+        if (targetType != null && (targetType == typeof(Visibility) || targetType.Name == "Visibility"))
+            return result ? Visibility.Visible : Visibility.Collapsed;
+        
+        return result;
+    }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
         => throw new NotImplementedException();
@@ -326,19 +351,7 @@ public class CurrencyConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
-/// Formats DateTimeOffset? → "dd/MM/yyyy HH:mm"
-public class DateTimeOffsetConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, string language)
-    {
-        if (value is DateTimeOffset dto)
-            return dto.ToString("dd/MM/yyyy HH:mm");
-        return "-";
-    }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
-        => throw new NotImplementedException();
-}
 
 /// Calculates line total: Quantity × UnitPrice
 public class LineTotalConverter : IValueConverter
@@ -439,3 +452,82 @@ public class StatusToButtonStyleConverter : IValueConverter
     }
     public object ConvertBack(object value, Type targetType, object parameter, string language) => throw new NotImplementedException();
 }
+
+/// <summary>Converts bool IsUser → HorizontalAlignment. true → Right, false → Left</summary>
+public class UserToAlignmentConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        bool isUser = value is true || (value is bool b && b);
+        return isUser ? HorizontalAlignment.Right : HorizontalAlignment.Left;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Converts bool IsUser → Background Brush</summary>
+public class UserToBackgroundConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        bool isUser = value is true || (value is bool b && b);
+        if (isUser)
+            return (Brush)Application.Current.Resources["PurpleBrush"];
+        
+        return (Brush)Application.Current.Resources["ControlFillColorDefaultBrush"];
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Converts bool IsUser → Border Brush</summary>
+public class UserToBorderConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        bool isUser = value is true || (value is bool b && b);
+        if (isUser)
+            return (Brush)Application.Current.Resources["PurpleBrush"];
+        
+        return (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Converts bool IsUser → Foreground Brush</summary>
+public class UserToForegroundConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        bool isUser = value is true || (value is bool b && b);
+        if (isUser)
+            return new SolidColorBrush(Microsoft.UI.Colors.White);
+        
+        return (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+
+/// <summary>Formats DateTimeOffset → HH:mm or custom format</summary>
+public class DateTimeOffsetConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        string format = parameter as string ?? "HH:mm";
+        if (value is DateTimeOffset dto)
+            return dto.ToLocalTime().ToString(format);
+        if (value is DateTime dt)
+            return dt.ToString(format);
+        return string.Empty;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}
+

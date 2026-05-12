@@ -22,7 +22,7 @@
 		<StackPanel Spacing="16">
 			<!-- Warning icon circle -->
 			<Border Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
-					CornerRadius="20"
+					CornerRadius="24"
 					Width="48" Height="48"
 					HorizontalAlignment="Left">
 				<TextBlock FontFamily="Segoe MDL2 Assets"
@@ -63,7 +63,7 @@
 					Background="{ThemeResource ControlFillColorDefaultBrush}"
 					BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
 					BorderThickness="1"
-					CornerRadius="20"
+					CornerRadius="24"
 					Padding="14,10"
                   Style="{StaticResource ColorPreservingButtonStyle}">
 				<TextBlock Text="Cancel"
@@ -81,7 +81,7 @@
 					Background="{ThemeResource SystemFillColorCriticalBrush}"
 					BorderBrush="{ThemeResource SystemFillColorCriticalBrush}"
 					BorderThickness="0"
-					CornerRadius="20"
+					CornerRadius="24"
 					Padding="14,10"
                    Style="{StaticResource ColorPreservingButtonStyle}">
 				<Button.Resources>
@@ -100,3 +100,4 @@
 		</Grid>
 	</StackPanel>
 </ContentDialog>
+

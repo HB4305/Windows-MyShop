@@ -20,25 +20,12 @@ public sealed partial class OrdersManagementPage : Page
 
         Loaded += OnLoaded;
         OrderListView.SelectionChanged += OrderList_SelectionChanged;
-        PageScroller.SizeChanged += OnScrollerSizeChanged;
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         await _vm.LoadOrdersAsync();
         BuildPagination();
-        UpdateBodyMinHeight();
-    }
-    private void OnScrollerSizeChanged(object sender, SizeChangedEventArgs e)
-        => UpdateBodyMinHeight();
-
-    private void UpdateBodyMinHeight()
-    {
-        var available = PageScroller.ViewportHeight > 0
-            ? PageScroller.ViewportHeight
-            : PageScroller.ActualHeight;
-        var headerHeight = HeaderPanelBorder.ActualHeight;
-        BodyGrid.MinHeight = Math.Max(0, available - headerHeight);
     }
     private async void OrderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -231,5 +218,22 @@ public sealed partial class OrdersManagementPage : Page
             }
         };
         PaginationPanel.Children.Add(nextBtn);
+    }
+
+    private void OrderSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+        {
+            _vm.SearchQuery = sender.Text;
+        }
+    }
+
+    private void OrderSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var query = args.QueryText;
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            _vm.AddToHistoryCommand.Execute(query);
+        }
     }
 }
