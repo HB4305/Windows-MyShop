@@ -366,7 +366,16 @@
             <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Left"/>
             <Setter Target="HeaderActionsPanel.Margin" Value="0,12,0,0"/>
             <Setter Target="HeaderActionsPanel.Orientation" Value="Vertical"/>
-            <Setter Target="HeaderPanelBorder.Padding" Value="24,16"/>
+            <Setter Target="BodyGrid.ColumnDefinitions[1].Width" Value="0"/>
+            <Setter Target="OrderListBorder.(Grid.Row)" Value="0"/>
+            <Setter Target="OrderListBorder.(Grid.Column)" Value="0"/>
+            <Setter Target="DetailPanelBorder.(Grid.Row)" Value="1"/>
+            <Setter Target="DetailPanelBorder.(Grid.Column)" Value="0"/>
+            <Setter Target="DetailPanelBorder.Margin" Value="0,16,0,0"/>
+            <Setter Target="DetailPanelBorder.BorderThickness" Value="0,1,0,0"/>
+            <Setter Target="EmptyDetailBorder.(Grid.Row)" Value="1"/>
+            <Setter Target="EmptyDetailBorder.(Grid.Column)" Value="0"/>
+            <Setter Target="EmptyDetailBorder.Visibility" Value="Collapsed"/>
           </VisualState.Setters>
         </VisualState>
         <VisualState x:Name="WideState">
@@ -448,7 +457,10 @@
 
     <!-- ── Body: Order List + Detail Panel ── -->
     <Grid x:Name="BodyGrid" Grid.Row="1">
-
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="380"/>
@@ -457,7 +469,9 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- LEFT: ORDER LIST                               -->
       <!-- ═══════════════════════════════════════════════ -->
-      <Grid Grid.Column="0">
+      <Border x:Name="OrderListBorder" Grid.Column="0">
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled">
+      <Grid MinWidth="1000">
 
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -695,11 +709,13 @@
         </Border>
 
       </Grid>
+      </ScrollViewer>
+      </Border>
 
       <!-- ═══════════════════════════════════════════════ -->
       <!-- RIGHT: ORDER DETAIL PANEL                      -->
       <!-- ═══════════════════════════════════════════════ -->
-      <Border Grid.Column="1"
+      <Border x:Name="DetailPanelBorder" Grid.Column="1"
               Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1,0,0,0"
@@ -930,7 +946,7 @@
       <!-- ═══════════════════════════════════════════════ -->
       <!-- RIGHT: Empty State (no order selected)          -->
       <!-- ═══════════════════════════════════════════════ -->
-      <Border Grid.Column="1"
+      <Border x:Name="EmptyDetailBorder" Grid.Column="1"
               Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
               BorderThickness="1,0,0,0"

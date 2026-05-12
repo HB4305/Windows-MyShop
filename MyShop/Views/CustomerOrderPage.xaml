@@ -470,6 +470,9 @@
 
   </Page.Resources>
 
+  <ScrollViewer x:Name="MainScroller"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled">
   <Grid x:Name="OrderRoot" Margin="0" SizeChanged="OrderRoot_SizeChanged">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -490,6 +493,8 @@
             <Setter Target="StatsProcessingCard.(Grid.Column)" Value="0"/>
             <Setter Target="StatsRevenueCard.(Grid.Row)" Value="3"/>
             <Setter Target="StatsRevenueCard.(Grid.Column)" Value="0"/>
+            <Setter Target="MainScroller.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Target="OrderListPanel.RowDefinitions[3].Height" Value="Auto"/>
           </VisualState.Setters>
         </VisualState>
         <VisualState x:Name="StatsMediumState">
@@ -528,6 +533,8 @@
             <Setter Target="StatsProcessingCard.(Grid.Column)" Value="4"/>
             <Setter Target="StatsRevenueCard.(Grid.Row)" Value="0"/>
             <Setter Target="StatsRevenueCard.(Grid.Column)" Value="6"/>
+            <Setter Target="MainScroller.VerticalScrollBarVisibility" Value="Disabled"/>
+            <Setter Target="OrderListPanel.RowDefinitions[3].Height" Value="*"/>
           </VisualState.Setters>
         </VisualState>
       </VisualStateGroup>
@@ -857,8 +864,8 @@
                               Padding="0,4"
                               Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                              ScrollViewer.VerticalScrollMode="Disabled"/>
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollMode="Enabled"/>
 
                     <!-- Skeleton Loading State (Aligned with rows) -->
                     <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -1359,4 +1366,5 @@
     </Border>
 
   </Grid>
+  </ScrollViewer>
 </Page>
