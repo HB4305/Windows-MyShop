@@ -5,7 +5,7 @@
     xmlns:conv="using:MyShop.Converters"
     x:Name="DialogRoot"
     Width="480"
-    CornerRadius="20"
+    CornerRadius="24"
     Style="{StaticResource DefaultContentDialogStyle}">
 
     <ContentDialog.Resources>
@@ -49,7 +49,7 @@
                            Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox Text="{x:Bind Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           PlaceholderText="staff@myshop.com"
-                          CornerRadius="20"
+                          CornerRadius="24"
                           Padding="12,10"
                           Background="{ThemeResource ControlFillColorDefaultBrush}"
                           BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
@@ -64,7 +64,7 @@
                            FontSize="14"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <Border CornerRadius="20"
+                <Border CornerRadius="24"
                         Padding="12,10"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -84,7 +84,7 @@
                 <PasswordBox x:Name="PasswordInput"
                               PlaceholderText="At least 6 characters"
                               PasswordChanged="PasswordInput_PasswordChanged"
-                              CornerRadius="20"
+                              CornerRadius="24"
                               Padding="12,10"
                               Background="{ThemeResource ControlFillColorDefaultBrush}"
                               BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
@@ -114,7 +114,7 @@
                     Background="Transparent"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1"
-                    CornerRadius="20"
+                    CornerRadius="24"
                     Padding="14,10"
                     Style="{StaticResource ColorPreservingButtonStyle}">
                 <TextBlock Text="Cancel"
@@ -130,7 +130,7 @@
                     HorizontalAlignment="Stretch"
                     Background="{ThemeResource AppAccentBrush}"
                     BorderThickness="0"
-                    CornerRadius="20"
+                    CornerRadius="24"
                     Padding="14,10"
                     Style="{StaticResource ColorPreservingButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
@@ -149,3 +149,4 @@
         </Grid>
     </StackPanel>
 </ContentDialog>
+

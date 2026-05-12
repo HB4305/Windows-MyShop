@@ -48,7 +48,7 @@
                                 Title="MyShop Reports"
                                 Subtitle="Overview, product sales, revenue, profit, and top performing products"/>
 
-        <Border x:Name="HeaderPeriodCard" Grid.Row="0" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="20" Padding="14,10">
+        <Border x:Name="HeaderPeriodCard" Grid.Row="0" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="24" Padding="14,10">
           <StackPanel Spacing="8">
             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
               <TextBlock Text="{Binding PeriodTitle}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
@@ -114,8 +114,8 @@
                       <TextBlock Text="{Binding Overview.RevenueChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
                   <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="4">
-                      <controls:ShimmerLoadingControl Width="140" Height="32"/>
-                      <controls:ShimmerLoadingControl Width="60" Height="14"/>
+                      <controls:ShimmerLoadingControl Width="140" Height="32" HorizontalAlignment="Left"/>
+                      <controls:ShimmerLoadingControl Width="60" Height="14" HorizontalAlignment="Left"/>
                   </StackPanel>
               </Grid>
             </StackPanel>
@@ -130,8 +130,8 @@
                       <TextBlock Text="{Binding Overview.QuantitySoldChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
                   <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="4">
-                      <controls:ShimmerLoadingControl Width="100" Height="32"/>
-                      <controls:ShimmerLoadingControl Width="60" Height="14"/>
+                      <controls:ShimmerLoadingControl Width="100" Height="32" HorizontalAlignment="Left"/>
+                      <controls:ShimmerLoadingControl Width="60" Height="14" HorizontalAlignment="Left"/>
                   </StackPanel>
               </Grid>
             </StackPanel>
@@ -146,8 +146,8 @@
                       <TextBlock Text="{Binding Overview.ProfitChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
                   <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="4">
-                      <controls:ShimmerLoadingControl Width="140" Height="32"/>
-                      <controls:ShimmerLoadingControl Width="60" Height="14"/>
+                      <controls:ShimmerLoadingControl Width="140" Height="32" HorizontalAlignment="Left"/>
+                      <controls:ShimmerLoadingControl Width="60" Height="14" HorizontalAlignment="Left"/>
                   </StackPanel>
               </Grid>
             </StackPanel>
@@ -162,8 +162,8 @@
                       <TextBlock Text="{Binding Overview.CustomersChangePercentage, Converter={StaticResource PercentageFormatter}}" Foreground="{StaticResource Accent}" FontWeight="SemiBold" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                   </StackPanel>
                   <StackPanel Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="4">
-                      <controls:ShimmerLoadingControl Width="80" Height="32"/>
-                      <controls:ShimmerLoadingControl Width="60" Height="14"/>
+                      <controls:ShimmerLoadingControl Width="80" Height="32" HorizontalAlignment="Left"/>
+                      <controls:ShimmerLoadingControl Width="60" Height="14" HorizontalAlignment="Left"/>
                   </StackPanel>
               </Grid>
             </StackPanel>
@@ -190,7 +190,7 @@
                                              CategorySelectionChanged="ProductFilterBar_CategorySelectionChanged"
                                              SearchClicked="ProductFilterBar_SearchClicked"/>
 
-            <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12">
+            <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="24" Padding="12">
                 <Grid>
                     <lvc:CartesianChart Height="280"
                                         LegendPosition="Hidden"
@@ -218,7 +218,7 @@
               <TextBlock Text="Revenue" FontSize="22" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Text="Daily revenue across the selected period." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
-              <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12">
+              <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="24" Padding="12">
                 <lvc:CartesianChart Height="240"
                                     LegendPosition="Hidden"
                                     Series="{Binding RevenueSeries}"
@@ -233,7 +233,7 @@
               <TextBlock Text="Profit by Category" FontSize="22" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               <TextBlock Text="Profit distribution by category for the selected period." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 
-              <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" Padding="12">
+              <Border Background="{ThemeResource ControlFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="24" Padding="12">
                 <lvc:PieChart Height="240"
                               LegendPosition="Right"
                               Series="{Binding ProfitSeries}"/>
@@ -309,3 +309,4 @@
   </ScrollViewer>
   </Grid>
 </Page>
+

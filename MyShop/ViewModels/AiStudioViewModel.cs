@@ -38,6 +38,9 @@ public partial class AiStudioViewModel : ObservableObject
     private bool _isChatBusy;
 
     [ObservableProperty]
+    private bool _isThinking;
+
+    [ObservableProperty]
     private string _chatError = string.Empty;
 
     [ObservableProperty]
@@ -126,6 +129,7 @@ public partial class AiStudioViewModel : ObservableObject
         try
         {
             IsChatBusy = true;
+            IsThinking = true; // Start thinking indicator
             ChatError = string.Empty;
 
             var context = await BuildChatContextAsync();
@@ -137,6 +141,8 @@ public partial class AiStudioViewModel : ObservableObject
                 token);
 
             var fullResponse = NormalizeChatResponse(response);
+            IsThinking = false; // Stop thinking indicator as soon as we have the response
+
             var assistantMessage = new AiChatMessage
             {
                 Role = "assistant",
@@ -185,6 +191,7 @@ public partial class AiStudioViewModel : ObservableObject
             logEntry.DurationMs = sw.ElapsedMilliseconds;
             await SafeLogAsync(logEntry);
             IsChatBusy = false;
+            IsThinking = false;
         }
     }
 

@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     x:Name="DialogRoot"
     Width="480"
-    CornerRadius="20"
+    CornerRadius="24"
     Style="{StaticResource DefaultContentDialogStyle}">
 
     <ContentDialog.Resources>
@@ -57,7 +57,7 @@
                 <TextBox x:Name="NameTextBox"
                          PlaceholderText="e.g. John Doe"
                          MaxLength="255"
-                         CornerRadius="20"
+                         CornerRadius="24"
                          Padding="12,12"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -79,7 +79,7 @@
                 <TextBox x:Name="PhoneTextBox"
                          PlaceholderText="e.g. 0912345678"
                          MaxLength="20"
-                         CornerRadius="20"
+                         CornerRadius="24"
                          Padding="12,12"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -96,7 +96,7 @@
             <StackPanel Spacing="8">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Text="Address" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="20" Padding="8,2">
+                    <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="24" Padding="8,2">
                         <TextBlock Text="Optional" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Border>
                 </StackPanel>
@@ -104,7 +104,7 @@
                          TextWrapping="Wrap"
                          AcceptsReturn="True"
                          MinHeight="100"
-                         CornerRadius="20"
+                         CornerRadius="24"
                          Padding="12,12"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -123,13 +123,13 @@
 
             <Button Grid.Column="0" Click="CancelBtn_Click" HorizontalAlignment="Stretch"
                     Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                    BorderThickness="1" CornerRadius="20" Padding="14,12"
+                    BorderThickness="1" CornerRadius="24" Padding="14,12"
                   Style="{StaticResource ColorPreservingButtonStyle}">
                 <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 
             <Button Grid.Column="1" Click="SaveBtn_Click" HorizontalAlignment="Stretch"
-                    Background="{ThemeResource AppAccentBrush}" BorderThickness="0" CornerRadius="20" Padding="14,12"
+                    Background="{ThemeResource AppAccentBrush}" BorderThickness="0" CornerRadius="24" Padding="14,12"
                   Style="{StaticResource ColorPreservingButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
@@ -139,3 +139,4 @@
         </Grid>
     </StackPanel>
 </ContentDialog>
+

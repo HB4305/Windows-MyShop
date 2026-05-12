@@ -58,7 +58,7 @@
                 <TextBlock Text="Supplier Name *" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox x:Name="NameTextBox" 
                          PlaceholderText="e.g. ABC Sports Co., Ltd."
-                         CornerRadius="20" Padding="12,10"
+                         CornerRadius="24" Padding="12,10"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
             </StackPanel>
@@ -68,7 +68,7 @@
                 <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox x:Name="PhoneTextBox" 
                          PlaceholderText="e.g. 0912345678"
-                         CornerRadius="20" Padding="12,10"
+                         CornerRadius="24" Padding="12,10"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
             </StackPanel>
@@ -78,7 +78,7 @@
                 <TextBlock Text="Type (Optional)" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <TextBox x:Name="TypeTextBox" 
                          PlaceholderText="e.g. Wholesale, Retail"
-                         CornerRadius="20" Padding="12,10"
+                         CornerRadius="24" Padding="12,10"
                          Background="{ThemeResource ControlFillColorDefaultBrush}"
                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
             </StackPanel>
@@ -95,13 +95,13 @@
 
             <Button Grid.Column="0" x:Name="CancelBtn" Click="CancelBtn_Click" HorizontalAlignment="Stretch"
                     Background="Transparent" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                    BorderThickness="1" CornerRadius="20" Padding="14,10"
+                    BorderThickness="1" CornerRadius="24" Padding="14,10"
                     Style="{StaticResource ColorPreservingButtonStyle}">
                 <TextBlock Text="Cancel" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 
             <Button Grid.Column="1" x:Name="SaveBtn" Click="SaveBtn_Click" HorizontalAlignment="Stretch"
-                    Background="{ThemeResource AppAccentBrush}" BorderThickness="0" CornerRadius="20" Padding="14,10"
+                    Background="{ThemeResource AppAccentBrush}" BorderThickness="0" CornerRadius="24" Padding="14,10"
                     Style="{StaticResource ColorPreservingButtonStyle}">
                 <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73E;" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
@@ -111,3 +111,4 @@
         </Grid>
     </StackPanel>
 </ContentDialog>
+

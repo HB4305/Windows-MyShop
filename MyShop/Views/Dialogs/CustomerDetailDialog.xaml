@@ -78,7 +78,7 @@
         </Border>
 
         <!-- Stats Row -->
-        <Border Grid.Row="1" Margin="0,0,0,24" Background="{ThemeResource ControlFillColorDefaultBrush}" CornerRadius="20" Padding="20,16">
+        <Border Grid.Row="1" Margin="0,0,0,24" Background="{ThemeResource ControlFillColorDefaultBrush}" CornerRadius="24" Padding="20,16">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -113,7 +113,7 @@
         <StackPanel Grid.Row="2" Spacing="12">
             <TextBlock Text="ORDER HISTORY" Style="{StaticResource SectionTitle}"/>
 
-            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="20" MinHeight="200" MaxHeight="300">
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="24" MinHeight="200" MaxHeight="300">
                 <Grid>
                     <ListView ItemsSource="{x:Bind Orders}" SelectionMode="None" Padding="0,4">
                         <ListView.Header>
@@ -144,7 +144,7 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" Text="{x:Bind Id, Converter={StaticResource OrderIdConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="#7C3AED" VerticalAlignment="Center"/>
                                         <TextBlock Grid.Column="1" Text="{x:Bind CreatedAt, Converter={StaticResource DateTimeOffsetConverter}}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
-                                        <Border Grid.Column="2" CornerRadius="20" Padding="8,2" HorizontalAlignment="Left" Background="{x:Bind Status, Converter={StaticResource OrderStatusToBrushConverter}}">
+                                        <Border Grid.Column="2" CornerRadius="24" Padding="8,2" HorizontalAlignment="Left" Background="{x:Bind Status, Converter={StaticResource OrderStatusToBrushConverter}}">
                                             <TextBlock Text="{x:Bind Status}" FontSize="10" FontWeight="SemiBold" Foreground="{x:Bind Status, Converter={StaticResource OrderStatusToForegroundConverter}}"/>
                                         </Border>
                                         <TextBlock Grid.Column="3" Text="{x:Bind TotalAmount, Converter={StaticResource CurrencyFormatter}}" FontSize="13" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" TextAlignment="Right"/>
@@ -168,3 +168,4 @@
         </Border>
     </Grid>
 </ContentDialog>
+

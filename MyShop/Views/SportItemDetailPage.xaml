@@ -216,11 +216,11 @@
                             Padding="16">
                         <StackPanel Spacing="12">
                             <Grid Height="280"
-                                  CornerRadius="20">
+                                  CornerRadius="24">
                                 <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                         BorderThickness="1"
-                                        CornerRadius="20"
+                                        CornerRadius="24"
                                         Visibility="{Binding PreviewImageUrl, Converter={StaticResource InverseStringToVisibilityConverter}}">
                                     <TextBlock Text="No image"
                                                HorizontalAlignment="Center"
@@ -241,7 +241,7 @@
                                         Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                         BorderThickness="1"
-                                        CornerRadius="20"
+                                        CornerRadius="24"
                                         Opacity="0.95"
                                         Command="{Binding ViewImageDetailCommand}"
                                         CommandParameter="{Binding PreviewImageUrl}"
@@ -286,10 +286,10 @@
                                             <DataTemplate>
                                                 <Grid Width="72"
                                                       Height="72"
-                                                      CornerRadius="20">
+                                                      CornerRadius="24">
                                                     <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                                             BorderThickness="1"
-                                                            CornerRadius="20">
+                                                            CornerRadius="24">
                                                         <Image Source="{Binding Converter={StaticResource StringToImageConverter}}"
                                                                Stretch="UniformToFill"/>
                                                     </Border>
@@ -302,7 +302,7 @@
                                                             Height="22"
                                                             Padding="0"
                                                             Background="{StaticResource DangerBrush}"
-                                                            CornerRadius="20"
+                                                            CornerRadius="24"
                   Style="{StaticResource ColorPreservingButtonStyle}">
                                                         <SymbolIcon Symbol="Cancel"
                                                                     Foreground="White"/>
@@ -342,7 +342,7 @@
                                             Background="Transparent"
                                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                                             BorderThickness="2"
-                                            CornerRadius="20"
+                                            CornerRadius="24"
                   Style="{StaticResource ColorPreservingButtonStyle}">
                                         <StackPanel Spacing="2"
                                                     VerticalAlignment="Center">
@@ -362,7 +362,7 @@
                     <Border Background="{StaticResource AiGlassGradient}"
                             BorderBrush="{StaticResource SportPurpleLightBrush}"
                             BorderThickness="1"
-                            CornerRadius="20"
+                            CornerRadius="24"
                             Padding="20">
                         <StackPanel Spacing="16">
                             <StackPanel Orientation="Horizontal"
@@ -665,3 +665,4 @@
         </StackPanel>
     </Grid>
 </Page>
+

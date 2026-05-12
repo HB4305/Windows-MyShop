@@ -18,8 +18,8 @@ public sealed partial class AiStudioPage : Page
     {
         if (DataContext is AiStudioViewModel vm)
         {
-            // Auto-scroll when new messages are added or content grows
-            ChatItemsControl.SizeChanged += (s, args) => ScrollToBottom();
+            // Auto-scroll when messages are added, content grows, or thinking indicator appears
+            ChatStackPanel.SizeChanged += (s, args) => ScrollToBottom();
             await vm.InitializeAsync();
         }
     }

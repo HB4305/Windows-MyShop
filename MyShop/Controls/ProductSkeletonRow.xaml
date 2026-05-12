@@ -15,8 +15,8 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" Spacing="12">
-                <controls:ShimmerLoadingControl Width="44" Height="44" CornerRadius="8"/>
-                <controls:ShimmerLoadingControl Width="140" Height="16" VerticalAlignment="Center"/>
+                <controls:ShimmerLoadingControl Width="44" Height="44" CornerRadius="8" HorizontalAlignment="Left"/>
+                <controls:ShimmerLoadingControl Width="140" Height="16" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
 
             <controls:ShimmerLoadingControl Grid.Column="1" Width="80" Height="14" VerticalAlignment="Center" HorizontalAlignment="Left"/>
@@ -24,8 +24,8 @@
             <controls:ShimmerLoadingControl Grid.Column="2" Width="60" Height="16" VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
             <StackPanel Grid.Column="3" VerticalAlignment="Center" Spacing="6">
-                <controls:ShimmerLoadingControl Width="140" Height="6" CornerRadius="3"/>
-                <controls:ShimmerLoadingControl Width="80" Height="12"/>
+                <controls:ShimmerLoadingControl Width="140" Height="6" CornerRadius="3" HorizontalAlignment="Left"/>
+                <controls:ShimmerLoadingControl Width="80" Height="12" HorizontalAlignment="Left"/>
             </StackPanel>
 
             <controls:ShimmerLoadingControl Grid.Column="4" Width="70" Height="24" CornerRadius="12" VerticalAlignment="Center" HorizontalAlignment="Left"/>

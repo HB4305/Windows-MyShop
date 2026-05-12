@@ -97,33 +97,26 @@
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
 
-      <Border Grid.Column="0"
-              MinHeight="48"
-              Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-              BorderThickness="1"
-              CornerRadius="20"
-              Padding="12,8">
-        <Grid ColumnSpacing="10">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
-          <TextBox Grid.Column="0" PlaceholderText="Search categories..."
-                   Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   BorderThickness="0" Background="Transparent" Padding="0,6" VerticalAlignment="Center"
-                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          <!-- Removed ProgressRing -->
-          <Button Grid.Column="2" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                  Command="{Binding SearchCommand}" Background="Transparent" BorderThickness="0" Padding="8"
+      <Grid x:Name="SearchColSpan" Grid.Column="0">
+        <TextBox x:Name="SearchBox"
+                 PlaceholderText="Search categories..."
+                 Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource ModernSearchTextBoxStyle}"
+                 CornerRadius="24"
+                 Padding="16,12,80,12"
+                 VerticalContentAlignment="Center"
+                 Height="48"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
+          <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
+          <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                  Command="{Binding SearchCommand}" Background="Transparent" BorderThickness="0" Padding="12"
                   Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
-        </Grid>
-      </Border>
+        </StackPanel>
+      </Grid>
 
       <Button x:Name="AddCategoryBtn" Grid.Column="1" Command="{Binding AddCategoryCommand}" 
               Background="{StaticResource AppPurpleBrush}" Foreground="White" 
-              CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
+              CornerRadius="24" Padding="16,10" Height="48" Style="{StaticResource ColorPreservingButtonStyle}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <FontIcon Glyph="&#xE710;" FontSize="15" Foreground="White"/>
           <TextBlock Text="Add Category" VerticalAlignment="Center" FontWeight="SemiBold" 
@@ -141,7 +134,7 @@
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Table Header -->
+        <!-- Table Header (Synced with Staff) -->
         <Border Grid.Row="0" Background="{ThemeResource ControlFillColorDefaultBrush}"
                 CornerRadius="20" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                 BorderThickness="0,0,0,1" Padding="16,14">

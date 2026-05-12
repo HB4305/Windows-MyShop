@@ -25,7 +25,7 @@ public partial class ReportViewModel : ObservableObject
   private static Brush SelectedButtonForegroundBrush => new SolidColorBrush(Colors.White);
 
   private static Brush UnselectedButtonForegroundBrush =>
-    Application.Current.Resources["TextFillColorPrimary"] as Brush ?? new SolidColorBrush(ColorHelper.FromArgb(255, 31, 41, 55));
+    Application.Current.Resources["TextFillColorPrimaryBrush"] as Brush ?? new SolidColorBrush(Colors.Gray);
 
   public ReportViewModel(
     ReportService reportService,

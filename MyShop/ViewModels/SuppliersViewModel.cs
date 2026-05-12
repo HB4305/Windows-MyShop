@@ -137,6 +137,12 @@ public partial class SuppliersViewModel : ObservableObject
     private ObservableCollection<SupplyOrder> _supplyOrders = [];
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(OrderTotalPages))]
+    [NotifyPropertyChangedFor(nameof(OrderDisplayFrom))]
+    [NotifyPropertyChangedFor(nameof(OrderDisplayTo))]
+    private int _orderCurrentPage = 1;
+
+    [ObservableProperty]
     private string _searchOrderKeyword = string.Empty;
 
     partial void OnSearchOrderKeywordChanged(string value)
@@ -144,12 +150,6 @@ public partial class SuppliersViewModel : ObservableObject
         OrderCurrentPage = 1;
         _ = LoadSupplyOrdersAsync();
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(OrderTotalPages))]
-    [NotifyPropertyChangedFor(nameof(OrderDisplayFrom))]
-    [NotifyPropertyChangedFor(nameof(OrderDisplayTo))]
-    private int _orderCurrentPage = 1;
 
     [ObservableProperty]
     private int _orderPageSize = 20;

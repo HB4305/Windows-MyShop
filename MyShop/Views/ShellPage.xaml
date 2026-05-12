@@ -396,7 +396,7 @@
         <!-- Profile Info -->
         <Border Grid.Column="0"
                 Padding="12,10"
-                CornerRadius="20"
+                CornerRadius="24"
                 Background="{StaticResource PurpleLightBrush}">
           <Grid>
             <Grid.ColumnDefinitions>
@@ -408,7 +408,7 @@
             <Border Grid.Column="0"
                     Width="36"
                     Height="36"
-                    CornerRadius="20"
+                    CornerRadius="24"
                     Background="#FFFFFF"
                     Margin="0,0,10,0">
               <TextBlock x:Name="ProfileAvatarText"
@@ -446,7 +446,7 @@
                 Width="40"
                 Height="40"
                 Margin="10,0,0,0"
-                CornerRadius="20"
+                CornerRadius="24"
                 Background="Transparent"
                 BorderThickness="0"
                 ToolTipService.ToolTip="Sign Out"
@@ -563,3 +563,4 @@
     </Grid>
   </Grid>
 </Page>
+

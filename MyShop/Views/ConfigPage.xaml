@@ -102,7 +102,7 @@
       <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,48">
 
         <Border Width="48" Height="48"
-                CornerRadius="20"
+                CornerRadius="24"
                 Background="{StaticResource PrimaryBrush}"
                 Padding="12">
           <Viewbox Width="24" Height="24">
@@ -289,7 +289,7 @@
           <Button Command="{Binding SaveCommand}"
                    HorizontalAlignment="Stretch"
                    Height="48"
-                   CornerRadius="20"
+                   CornerRadius="24"
                    Background="{StaticResource PrimaryBrush}"
                    BorderThickness="0"
                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
@@ -383,3 +383,4 @@
     </Grid>
   </ScrollViewer>
 </Page>
+
