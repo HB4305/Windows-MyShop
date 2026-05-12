@@ -117,7 +117,7 @@ public sealed partial class ShellPage : Page
         NavDashboard.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavReports.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavAiStudio.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
-        NavPos.Visibility = Visibility.Visible;
+        NavPos.Visibility = _currentUserService.IsSale ? Visibility.Visible : Visibility.Collapsed;
         NavShiftManagement.Visibility = Visibility.Visible;
         NavProductCatalog.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
         NavOrders.Visibility = isOwner ? Visibility.Visible : Visibility.Collapsed;
@@ -131,7 +131,7 @@ public sealed partial class ShellPage : Page
         NavDashboard.IsEnabled = isOwner;
         NavReports.IsEnabled = isOwner;
         NavAiStudio.IsEnabled = isOwner;
-        NavPos.IsEnabled = true;
+        NavPos.IsEnabled = _currentUserService.IsSale;
         NavProductCatalog.IsEnabled = isOwner;
         NavOrders.IsEnabled = isOwner;
         NavCustomers.IsEnabled = isOwner;

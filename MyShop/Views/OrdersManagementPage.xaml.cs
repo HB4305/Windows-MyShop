@@ -227,4 +227,13 @@ public sealed partial class OrdersManagementPage : Page
             _vm.SearchQuery = sender.Text;
         }
     }
+
+    private void OrderSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var query = args.QueryText;
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            _vm.AddToHistoryCommand.Execute(query);
+        }
+    }
 }

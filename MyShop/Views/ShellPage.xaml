@@ -483,8 +483,14 @@
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
-          <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+          <Grid Grid.Column="0" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="40"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
             <Button x:Name="NavToggleButton_Header"
+                    Grid.Column="0"
                     Click="ToggleSidebar_Click"
                     Width="40"
                     Height="40"
@@ -502,13 +508,17 @@
                          HorizontalAlignment="Center"
                          VerticalAlignment="Center"/>
             </Button>
+            
             <TextBlock x:Name="HeaderTitleText"
+                       Grid.Column="1"
+                       Margin="16,0,0,0"
                        Text="Welcome back, Alex"
                        FontSize="22"
                        FontWeight="SemiBold"
                        Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                       VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-          </StackPanel>
+                       VerticalAlignment="Center" 
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </Grid>
 
           <!-- Right side icons -->
           <StackPanel Grid.Column="1"
