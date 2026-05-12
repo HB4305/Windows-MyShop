@@ -54,7 +54,7 @@ public class SupplyRepository
         return Convert.ToInt32(result);
     }
 
-    public async Task<(List<SupplyOrder> Items, int TotalCount)> GetOrdersAsync(int page, int pageSize)
+    public async Task<(List<SupplyOrder> Items, int TotalCount)> GetOrdersAsync(int page, int pageSize, string searchTerm = null)
     {
         var items = new List<SupplyOrder>();
         int totalCount = 0;
@@ -65,6 +65,14 @@ public class SupplyRepository
                    so.id, so.supplier_id, s.name as supplier_name, so.import_date, so.total_cost
             FROM supplyorders so
             LEFT JOIN suppliers s ON so.supplier_id = s.id
+            WHERE 1=1 ";
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            sql += " AND (s.name ILIKE @search OR CAST(so.id AS TEXT) ILIKE @search) ";
+        }
+
+        sql += @"
             ORDER BY so.import_date DESC
             OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY";
 
@@ -73,6 +81,10 @@ public class SupplyRepository
         await using var cmd = new NpgsqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("offset", offset);
         cmd.Parameters.AddWithValue("pageSize", pageSize);
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            cmd.Parameters.AddWithValue("search", $"%{searchTerm}%");
+        }
 
         await using var reader = await cmd.ExecuteReaderAsync();
         while (await reader.ReadAsync())
