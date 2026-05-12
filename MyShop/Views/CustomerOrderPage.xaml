@@ -91,10 +91,11 @@
 
     <!-- ══ Tab Count Badge (active tab) ══ -->
     <Style x:Key="TabCountBadgeActive" TargetType="Border">
-      <Setter Property="CornerRadius" Value="20"/>
-      <Setter Property="Background" Value="#FFFFFF4D"/>
-      <Setter Property="Padding" Value="6,2"/>
-      <Setter Property="MinWidth" Value="20"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Background" Value="#FFFFFF"/>
+      <Setter Property="Padding" Value="4,0"/>
+      <Setter Property="MinWidth" Value="24"/>
+      <Setter Property="Height" Value="24"/>
     </Style>
 
     <!-- ══ Card ══ -->
@@ -216,7 +217,6 @@
 
     <Style x:Key="TabBtnActive" TargetType="Button">
       <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
-      <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="FontWeight" Value="ExtraBold"/>
       <Setter Property="Padding" Value="14,8"/>
@@ -226,10 +226,13 @@
 
     <!-- ══ Tab Count Badge (inactive tab) ══ -->
     <Style x:Key="TabCountBadge" TargetType="Border">
-      <Setter Property="CornerRadius" Value="20"/>
-      <Setter Property="Background" Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
-      <Setter Property="Padding" Value="6,2"/>
+      <Setter Property="CornerRadius" Value="10"/>
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Padding" Value="5,0"/>
       <Setter Property="MinWidth" Value="20"/>
+      <Setter Property="Height" Value="20"/>
+      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
     <!-- ══ Pagination Button ══ -->
@@ -685,12 +688,14 @@
               <Button x:Name="TabAll"
                       Click="TabAll_Click"
                       Style="{StaticResource TabBtnActive}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                  <TextBlock Text="All" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadgeActive}" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                  <TextBlock Text="All" Foreground="White" VerticalAlignment="Center"/>
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF"/>
                     <TextBlock Text="{Binding TotalOrders}"
-                               FontSize="11" FontWeight="SemiBold" Foreground="White"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold" Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -698,13 +703,15 @@
               <Button x:Name="TabPending"
                       Click="TabPending_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                   <TextBlock Text="Pending" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding PendingCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -712,13 +719,15 @@
               <Button x:Name="TabProcessing"
                       Click="TabProcessing_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                   <TextBlock Text="Processing" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding ProcessingCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -726,13 +735,15 @@
               <Button x:Name="TabDelivered"
                       Click="TabDelivered_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                   <TextBlock Text="Delivered" VerticalAlignment="Center"/>
-                  <Border Style="{StaticResource TabCountBadge}" VerticalAlignment="Center">
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding CompletedCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
 
@@ -740,13 +751,15 @@
               <Button x:Name="TabCancelled"
                       Click="TabCancelled_Click"
                       Style="{StaticResource TabBtn}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock Text="Cancelled"/>
-                  <Border Style="{StaticResource TabCountBadge}">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                  <TextBlock Text="Cancelled" VerticalAlignment="Center"/>
+                  <Grid Width="24" Height="24" VerticalAlignment="Center">
+                    <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
                     <TextBlock Text="{Binding CancelledCount}"
-                               FontSize="11" FontWeight="SemiBold"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  </Border>
+                               FontSize="11" FontWeight="Bold"
+                               Foreground="#000000"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                  </Grid>
                 </StackPanel>
               </Button>
             </StackPanel>

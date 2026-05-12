@@ -83,8 +83,6 @@
 
     <Style x:Key="TabBtnActive" TargetType="Button">
       <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
-      <Setter Property="Foreground" Value="White"/>
-      <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="FontWeight" Value="ExtraBold"/>
       <Setter Property="Padding" Value="14,8"/>
@@ -476,32 +474,61 @@
                 <!-- All Tab (active) -->
                 <Button x:Name="TabAll" Click="TabAll_Click" Style="{StaticResource TabBtnActive}">
                   <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                    <TextBlock Text="All Orders" VerticalAlignment="Center"/>
-                    <Border Background="#FFFFFF4D" CornerRadius="20" Padding="8,2" VerticalAlignment="Center">
-                      <TextBlock Text="1,240" FontSize="11" FontWeight="SemiBold"
-                                 Foreground="White" VerticalAlignment="Center"/>
-                    </Border>
+                    <TextBlock Text="All Orders" Foreground="White" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF"/>
+                      <TextBlock Text="{Binding TotalOrders}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
                   </StackPanel>
                 </Button>
 
                 <!-- Pending -->
                 <Button x:Name="TabPending" Click="TabPending_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Pending"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Pending" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding PendingCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
 
                 <!-- Processing -->
                 <Button x:Name="TabProcessing" Click="TabProcessing_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Processing"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Processing" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding ProcessingCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
 
                 <!-- Shipped -->
                 <Button x:Name="TabShipped" Click="TabShipped_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Shipped"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Shipped" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding CompletedCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
 
                 <!-- Returned -->
                 <Button x:Name="TabReturned" Click="TabReturned_Click" Style="{StaticResource TabBtn}">
-                  <TextBlock Text="Returned"/>
+                  <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Returned" VerticalAlignment="Center"/>
+                    <Grid Width="24" Height="24" VerticalAlignment="Center">
+                      <Ellipse Fill="#FFFFFF" Stroke="{ThemeResource ControlStrokeColorDefaultBrush}" StrokeThickness="1"/>
+                      <TextBlock Text="{Binding CancelledCount}" FontSize="11" FontWeight="Bold"
+                                 Foreground="#000000" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                  </StackPanel>
                 </Button>
               </StackPanel>
             </ScrollViewer>
