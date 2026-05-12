@@ -228,7 +228,7 @@ public sealed partial class PosPage : Page
         Grid.SetColumn(CheckoutScroller, 1);
         Grid.SetColumnSpan(CheckoutScroller, 1);
     
-        // Pagination outside card
+        // Pagination only on product list side
         var paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(PaginationPanel);
         while (paginationBorder != null && paginationBorder is not Border)
             paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(paginationBorder);
@@ -238,7 +238,8 @@ public sealed partial class PosPage : Page
             Grid.SetRow(paginationBorder, 2);
             Grid.SetColumn(paginationBorder, 0);
             Grid.SetColumnSpan(paginationBorder, 1);
-            paginationBorder.Margin = new Thickness(0, -16, 0, -20);
+            paginationBorder.Margin = new Thickness(-24, 0, 0, -20);
+            paginationBorder.Background = null;
         }
 
         Grid.SetRow(StatusText, 3);
@@ -267,7 +268,7 @@ public sealed partial class PosPage : Page
         Grid.SetColumn(ProductPanel, 0);
         Grid.SetColumnSpan(ProductPanel, 1);
 
-        // Pagination outside card
+        // Pagination 
         var paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(PaginationPanel);
         while (paginationBorder != null && paginationBorder is not Border)
             paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(paginationBorder);
@@ -277,7 +278,8 @@ public sealed partial class PosPage : Page
             Grid.SetRow(paginationBorder, 2);
             Grid.SetColumn(paginationBorder, 0);
             Grid.SetColumnSpan(paginationBorder, 1);
-            paginationBorder.Margin = new Thickness(0, 0, 0, 0);
+            paginationBorder.Margin = new Thickness(-24, 0, -24, 0);
+            paginationBorder.Background = null;
         }
 
         Grid.SetRow(CheckoutScroller, 3);
@@ -302,18 +304,25 @@ public sealed partial class PosPage : Page
             var btn = new Button
             {
                 Content = page.ToString(),
-                MinWidth = 32,
-                Height = 32,
-                Padding = new Thickness(8, 4, 8, 4),
-                FontSize = 13,
-                CornerRadius = new CornerRadius(6),
-                Margin = new Thickness(2, 0, 2, 0),
+                Margin = new Thickness(2, 0, 2, 0)
             };
 
+            var styleKey = isActive ? "PageBtnActive" : "PageBtn";
+            if (Application.Current.Resources.TryGetValue(styleKey, out var styleObj) && styleObj is Style s)
+            {
+                btn.Style = s;
+            }
+            else if (isActive)
+            {
+                // Absolute fallback for active color
+                btn.Background = (Brush)Application.Current.Resources["AppPurpleBrush"];
+                btn.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
+            }
+
             if (isActive)
-                btn.Style = (Style)Application.Current.Resources["PageBtnActive"];
-            else
-                btn.Style = (Style)Application.Current.Resources["PageBtn"];
+            {
+                btn.FontWeight = Microsoft.UI.Text.FontWeights.ExtraBold;
+            }
 
             btn.Click += async (s, e) =>
             {
@@ -328,12 +337,12 @@ public sealed partial class PosPage : Page
         var prevBtn = new Button
         {
             Content = new TextBlock { Text = "Prev", FontSize = 13, FontFamily = new FontFamily("ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans") },
-            MinWidth = 52,
-            Height = 32,
-            Padding = new Thickness(8, 4, 8, 4),
-            Style = (Style)Application.Current.Resources["PageBtn"],
+            Margin = new Thickness(2, 0, 2, 0),
             IsEnabled = current > 1
         };
+        if (Application.Current.Resources.TryGetValue("PageBtn", out var pStyleObj) && pStyleObj is Style ps)
+            prevBtn.Style = ps;
+
         prevBtn.Click += async (s, e) =>
         {
             if (current > 1)
@@ -379,12 +388,12 @@ public sealed partial class PosPage : Page
         var nextBtn = new Button
         {
             Content = new TextBlock { Text = "Next", FontSize = 13, FontFamily = new FontFamily("ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans") },
-            MinWidth = 52,
-            Height = 32,
-            Padding = new Thickness(8, 4, 8, 4),
-            Style = (Style)Application.Current.Resources["PageBtn"],
+            Margin = new Thickness(2, 0, 2, 0),
             IsEnabled = current < total
         };
+        if (Application.Current.Resources.TryGetValue("PageBtn", out var nStyleObj) && nStyleObj is Style ns)
+            nextBtn.Style = ns;
+
         nextBtn.Click += async (s, e) =>
         {
             if (current < total)

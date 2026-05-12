@@ -149,7 +149,7 @@
     <Border x:Name="paginationBorder" Grid.Row="2" Grid.Column="0"
             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
             BorderThickness="0,1,0,0"
-            Margin="0,-16,0,-20" Padding="0,12,0,12">
+            Margin="-24,0,0,-20" Padding="24,12,0,12">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
@@ -194,64 +194,47 @@
               <TextBlock Text="Customer" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             </StackPanel>
           </Grid>
-          <Border Background="White"
-                  BorderThickness="0"
-                  CornerRadius="24"
-                  Padding="12,4"
-                  MinHeight="48">
-            <Border.Shadow>
-              <ThemeShadow />
-            </Border.Shadow>
-            <Grid ColumnSpacing="10">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-              </Grid.ColumnDefinitions>
-              <AutoSuggestBox x:Name="CustomerSearchBox"
-                              Grid.Column="0"
-                              PlaceholderText="Search customer by name..."
-                              Text="{Binding CustomerSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              ItemsSource="{Binding CustomerSuggestions}"
-                              TextChanged="CustomerSearchBox_TextChanged"
-                              SuggestionChosen="CustomerSearchBox_SuggestionChosen"
-                              QuerySubmitted="CustomerSearchBox_QuerySubmitted"
-                              BorderThickness="0"
-                              BorderBrush="Transparent"
-                              Background="Transparent"
-                              VerticalAlignment="Center"
-                              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
-                <AutoSuggestBox.ItemTemplate>
-                  <DataTemplate>
-                    <Grid ColumnSpacing="10" MinWidth="260">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="36"/>
-                        <ColumnDefinition Width="*"/>
-                      </Grid.ColumnDefinitions>
-                      <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource PurpleLightBrush}">
-                        <FontIcon Glyph="&#xE77B;" FontSize="13" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                      </Border>
-                      <StackPanel Grid.Column="1" Spacing="1">
-                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-                        <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                      </StackPanel>
-                    </Grid>
-                  </DataTemplate>
-                </AutoSuggestBox.ItemTemplate>
-              </AutoSuggestBox>
-              <Button Grid.Column="1" Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                      Background="Transparent" BorderThickness="0" Padding="8"
-                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
-                      VerticalAlignment="Center"/>
-            </Grid>
-          </Border>
+          <Grid>
+            <AutoSuggestBox x:Name="CustomerSearchBox"
+                            PlaceholderText="Search customer by name..."
+                            Text="{Binding CustomerSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding CustomerSuggestions}"
+                            TextChanged="CustomerSearchBox_TextChanged"
+                            SuggestionChosen="CustomerSearchBox_SuggestionChosen"
+                            QuerySubmitted="CustomerSearchBox_QuerySubmitted"
+                            CornerRadius="24"
+                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
+              <AutoSuggestBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnSpacing="10" MinWidth="260">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="36"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource PurpleLightBrush}">
+                      <FontIcon Glyph="&#xE77B;" FontSize="13" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel Grid.Column="1" Spacing="1">
+                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                      <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    </StackPanel>
+                  </Grid>
+                </DataTemplate>
+              </AutoSuggestBox.ItemTemplate>
+            </AutoSuggestBox>
+            <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                    Background="Transparent" BorderThickness="0" Padding="12" Margin="0,0,4,0"
+                    Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
+                    HorizontalAlignment="Right" VerticalAlignment="Center"/>
+          </Grid>
           <TextBox PlaceholderText="Phone"
                    Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   MinHeight="42"
-                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                   CornerRadius="24"
+                   Style="{StaticResource ModernSearchTextBoxStyle}"/>
           <TextBox PlaceholderText="Address"
                    Text="{Binding CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   MinHeight="42"
-                   FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                   CornerRadius="24"
+                   Style="{StaticResource ModernSearchTextBoxStyle}"/>
         </StackPanel>
       </Border>
 
@@ -355,7 +338,7 @@
                     <TextBlock Text="Cash Received" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
                     <TextBox Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              PlaceholderText="0.00"
-                             MinHeight="40"/>
+                             Style="{StaticResource ModernSearchTextBoxStyle}"/>
                   </StackPanel>
                   <StackPanel Grid.Column="1" Spacing="4">
                     <TextBlock Text="Change" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
