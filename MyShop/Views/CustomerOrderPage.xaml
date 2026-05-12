@@ -470,8 +470,6 @@
 
   </Page.Resources>
 
-  <ScrollViewer VerticalScrollBarVisibility="Auto"
-                HorizontalScrollBarVisibility="Disabled">
   <Grid x:Name="OrderRoot" Margin="0" SizeChanged="OrderRoot_SizeChanged">
     <VisualStateManager.VisualStateGroups>
       <VisualStateGroup>
@@ -1361,5 +1359,4 @@
     </Border>
 
   </Grid>
-  </ScrollViewer>
 </Page>

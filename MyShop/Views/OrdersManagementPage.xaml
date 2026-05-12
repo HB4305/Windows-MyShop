@@ -345,11 +345,11 @@
   <ScrollViewer x:Name="PageScroller"
                 VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Disabled">
-  <Grid>
+  <Grid x:Name="RootGrid">
 
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <VisualStateManager.VisualStateGroups>
@@ -359,6 +359,8 @@
             <AdaptiveTrigger MinWindowWidth="0"/>
           </VisualState.StateTriggers>
           <VisualState.Setters>
+            <Setter Target="RootGrid.RowDefinitions[1].Height" Value="Auto"/>
+            <Setter Target="PageScroller.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Target="HeaderActionsPanel.(Grid.Row)" Value="1"/>
             <Setter Target="HeaderActionsPanel.(Grid.Column)" Value="0"/>
             <Setter Target="HeaderActionsPanel.HorizontalAlignment" Value="Left"/>
@@ -371,6 +373,10 @@
           <VisualState.StateTriggers>
             <AdaptiveTrigger MinWindowWidth="1100"/>
           </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="RootGrid.RowDefinitions[1].Height" Value="*"/>
+            <Setter Target="PageScroller.VerticalScrollBarVisibility" Value="Disabled"/>
+          </VisualState.Setters>
         </VisualState>
       </VisualStateGroup>
     </VisualStateManager.VisualStateGroups>
@@ -956,8 +962,6 @@
       </Border>
 
     </Grid>
-
   </Grid>
   </ScrollViewer>
-
 </Page>
