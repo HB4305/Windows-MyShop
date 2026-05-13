@@ -10,9 +10,6 @@
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         <conv:UserToAlignmentConverter x:Key="UserToAlignmentConverter"/>
-        <conv:UserToBackgroundConverter x:Key="UserToBackgroundConverter"/>
-        <conv:UserToBorderConverter x:Key="UserToBorderConverter"/>
-        <conv:UserToForegroundConverter x:Key="UserToForegroundConverter"/>
         <conv:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter"/>
 
         <Style x:Key="AiCardStyle" TargetType="Border">
@@ -103,17 +100,35 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="0,0,0,16" HorizontalAlignment="{Binding IsUser, Converter={StaticResource UserToAlignmentConverter}}">
-                                            <Border CornerRadius="16" Padding="16,12" MaxWidth="700"
-                                                    Background="{Binding IsUser, Converter={StaticResource UserToBackgroundConverter}}"
-                                                    BorderBrush="{Binding IsUser, Converter={StaticResource UserToBorderConverter}}"
+                                            <!-- USER MESSAGE BUBBLE -->
+                                            <Border Visibility="{Binding IsUser, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    CornerRadius="16" Padding="16,12" MaxWidth="700"
+                                                    Background="{StaticResource PurpleBrush}"
+                                                    BorderBrush="{StaticResource PurpleBrush}"
                                                     BorderThickness="1">
                                                 <StackPanel Spacing="6">
                                                     <TextBlock Text="{Binding Content}" TextWrapping="Wrap" FontSize="15"
-                                                               Foreground="{Binding IsUser, Converter={StaticResource UserToForegroundConverter}}"
+                                                               Foreground="White"
+                                                               LineHeight="20"/>
+                                                    <TextBlock Text="{Binding TimestampUtc, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='HH:mm'}" 
+                                                               FontSize="11" Opacity="0.8" HorizontalAlignment="Right"
+                                                               Foreground="White"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- AI MESSAGE BUBBLE -->
+                                            <Border Visibility="{Binding IsUser, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                                    CornerRadius="16" Padding="16,12" MaxWidth="700"
+                                                    Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                                    BorderThickness="1">
+                                                <StackPanel Spacing="6">
+                                                    <TextBlock Text="{Binding Content}" TextWrapping="Wrap" FontSize="15"
+                                                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                                LineHeight="20"/>
                                                     <TextBlock Text="{Binding TimestampUtc, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='HH:mm'}" 
                                                                FontSize="11" Opacity="0.6" HorizontalAlignment="Right"
-                                                               Foreground="{Binding IsUser, Converter={StaticResource UserToForegroundConverter}}"/>
+                                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                                 </StackPanel>
                                             </Border>
                                         </Grid>

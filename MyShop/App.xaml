@@ -140,6 +140,7 @@
       <Style x:Key="ModernSearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="CornerRadius" Value="24"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Height" Value="48"/>
         <Setter Property="Padding" Value="16,12"/>
@@ -152,6 +153,12 @@
             <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessDisabled">0</Thickness>
+            <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="Transparent"/>
           </ResourceDictionary>
         </Setter>
       </Style>
@@ -159,6 +166,7 @@
       <Style x:Key="ModernSearchAutoSuggestBoxStyle" TargetType="AutoSuggestBox" BasedOn="{StaticResource {x:Type AutoSuggestBox}}">
         <Setter Property="CornerRadius" Value="24"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Height" Value="48"/>
         <Setter Property="Padding" Value="16,12,48,12"/>
@@ -170,7 +178,12 @@
             <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessDisabled">0</Thickness>
             <Thickness x:Key="AutoSuggestBoxBorderThemeThickness">0</Thickness>
+            <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent"/>
           </ResourceDictionary>
         </Setter>
       </Style>
