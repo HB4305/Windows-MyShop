@@ -68,6 +68,26 @@ public sealed partial class ReportPage : Page
   private void YearPeriodButton_Click(object sender, RoutedEventArgs e)
     => ViewModel?.SetPeriod(ReportPeriod.Year);
 
+  private void ReportDatePicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+  {
+    if (ViewModel is not null && ViewModel.CustomRangeStart.HasValue && ViewModel.CustomRangeEnd.HasValue)
+    {
+      ViewModel.SetCustomPeriod(ViewModel.CustomRangeStart.Value.DateTime, ViewModel.CustomRangeEnd.Value.DateTime);
+    }
+  }
+
+  private void ClearCustomRange_Click(object sender, RoutedEventArgs e)
+  {
+    if (ViewModel is not null)
+    {
+      ViewModel.CustomRangeStart = null;
+      ViewModel.CustomRangeEnd = null;
+      // Default back to Week or previous selection? 
+      // User said "xoá lọc", so maybe go back to default period.
+      ViewModel.SetPeriod(ReportPeriod.Week);
+    }
+  }
+
   private async void ProductFilterBar_CategorySelectionChanged(ProductSearchFilterBar sender, SelectionChangedEventArgs e)
   {
     if (ViewModel is not null)

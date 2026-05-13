@@ -6,7 +6,8 @@ public enum ReportPeriod
 {
   Week,
   Month,
-  Year
+  Year,
+  Custom
 }
 
 public abstract class PeriodSelection
@@ -47,4 +48,20 @@ public class YearPeriodSelection : PeriodSelection
   public override ReportPeriod Period => ReportPeriod.Year;
 
   public override (DateTime Start, DateTime End) Range => DateTimeUtils.GetLastYearRange(ReferenceDate);
+}
+
+public class CustomPeriodSelection : PeriodSelection
+{
+    private readonly DateTime _start;
+    private readonly DateTime _end;
+
+    public CustomPeriodSelection(DateTime start, DateTime end) : base(start)
+    {
+        _start = start.Date;
+        _end = end.Date.AddDays(1);
+    }
+
+    public override ReportPeriod Period => ReportPeriod.Custom;
+
+    public override (DateTime Start, DateTime End) Range => (_start, _end);
 }
