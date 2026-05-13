@@ -19,6 +19,7 @@ public sealed partial class ShellPage : Page
     private bool _compactMode;
     private bool _compactSidebarExpanded;
     private bool _wideSidebarCollapsed;
+    private string? _currentActiveTag;
 
     public ShellPage()
     {
@@ -29,6 +30,9 @@ public sealed partial class ShellPage : Page
 
         Loaded += ShellPage_OnLoaded;
         SizeChanged += ShellPage_SizeChanged;
+        this.ActualThemeChanged += (s, e) => {
+            if (_currentActiveTag != null) UpdateActiveNav(_currentActiveTag);
+        };
 
         var remember = _settingsManager.GetRememberLastActivity();
         var lastActivity = remember ? _settingsManager.GetLastActivity() : null;
@@ -393,6 +397,7 @@ public sealed partial class ShellPage : Page
             _ => null
         };
         if (activeBtn != null) SetActiveNavStyle(activeBtn);
+        _currentActiveTag = activeTag;
     }
 
     private bool TryNavigateToTag(string? tag)

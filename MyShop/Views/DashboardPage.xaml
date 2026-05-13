@@ -175,7 +175,7 @@
   
             <!-- Create Order button -->
             <Button Background="{StaticResource AppPurpleBrush}"
-                    Foreground="White"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     CornerRadius="24"
                     Padding="20,10"
                     MinHeight="48"
@@ -185,12 +185,12 @@
                 <TextBlock FontFamily="Segoe MDL2 Assets"
                     Text="&#xE710;"
                     FontSize="14"
-                    Foreground="White"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     VerticalAlignment="Center"/>
                 <TextBlock Text="Create Order"
                     FontSize="14"
                     FontWeight="SemiBold"
-                    Foreground="White"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
               </StackPanel>
             </Button>
