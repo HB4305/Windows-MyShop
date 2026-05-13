@@ -190,7 +190,7 @@
                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                    BorderBrush="{ThemeResource TextBoxBorderBrush}"
                    CornerRadius="24"
-                   Padding="16,12,16,12"
+                   Padding="16,15,16,9"
                    Height="56"
                    VerticalContentAlignment="Center"/>
 
@@ -208,7 +208,7 @@
                          Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                          BorderBrush="{ThemeResource TextBoxBorderBrush}"
                          CornerRadius="24"
-                         Padding="16,12,48,12"
+                         Padding="16,15,48,9"
                          Height="56"
                          VerticalContentAlignment="Center"/>
             <Button HorizontalAlignment="Right"

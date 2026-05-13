@@ -109,6 +109,7 @@ public class ReportRepository
             {
                 // col 0=id, 1=product_name, 2=category_name, 3=image_urls, 4=total_quantity_sold, 5=gross_revenue, 6=profit
                 ProductName = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                CategoryName = reader.IsDBNull(2) ? "Uncategorized" : reader.GetString(2),
                 GrossRevenue = reader.IsDBNull(5) ? 0m : reader.GetDecimal(5),
                 Profit = reader.IsDBNull(6) ? 0m : reader.GetDecimal(6),
                 TotalQuantitySold = reader.IsDBNull(4) ? 0 : reader.GetInt32(4)
