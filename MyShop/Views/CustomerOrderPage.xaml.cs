@@ -401,6 +401,12 @@ public sealed partial class CustomerOrderPage : Page
         BtnPayUnpaidActive.IsEnabled = enabled;
         BtnPayUnpaidInactive.IsEnabled = enabled;
     }
+    private void ClearDateFilter_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.FromDate = null;
+        ViewModel.ToDate = null;
+    }
+
     private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
         var query = args.QueryText;

@@ -11,6 +11,7 @@
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <conv:StringToBoolConverter x:Key="StringToBoolConverter"/>
     <conv:CurrencyFormatter x:Key="CurrencyFormatter"/>
     <conv:PercentageFormatter x:Key="PercentageFormatter"/>
     <conv:DateFormatter x:Key="DateFormatter"/>
@@ -81,6 +82,30 @@
                       BorderThickness="0"
                       FontSize="12"
                       Padding="10,4"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <TextBlock Text="Custom Range" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              <CalendarDatePicker x:Name="ReportFromDatePicker" 
+                                  PlaceholderText="From" 
+                                  Date="{Binding CustomRangeStart, Mode=TwoWay}"
+                                  DateChanged="ReportDatePicker_DateChanged"
+                                  Width="140"
+                                  CornerRadius="12"/>
+              <CalendarDatePicker x:Name="ReportToDatePicker" 
+                                  PlaceholderText="To" 
+                                  Date="{Binding CustomRangeEnd, Mode=TwoWay}"
+                                  DateChanged="ReportDatePicker_DateChanged"
+                                  Width="140"
+                                  CornerRadius="12"/>
+              
+              <!-- Clear Custom Filter Button -->
+              <Button Click="ClearCustomRange_Click"
+                      Style="{StaticResource IconBtn}"
+                      Visibility="{Binding PeriodSelection.Period, Converter={StaticResource StringToBoolConverter}, ConverterParameter='Custom'}"
+                      ToolTipService.ToolTip="Clear custom range">
+                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+              </Button>
             </StackPanel>
           </StackPanel>
         </Border>
