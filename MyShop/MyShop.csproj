@@ -48,10 +48,11 @@
           AfterTargets="ObfuscateDesktop"
           Condition="'$(Configuration)' == 'Release' and '$(TargetFramework)' == 'net10.0-desktop'">
     <PropertyGroup>
-      <RootReleaseDir>$(MSBuildProjectDirectory)\..\Release\</RootReleaseDir>
+      <RootReleaseDir>$(MSBuildProjectDirectory)\..\Release\MyShop-win-x64\</RootReleaseDir>
     </PropertyGroup>
     <ItemGroup>
-      <RootReleaseFiles Include="$(TargetDir)**\*.*" />
+      <RootReleaseFiles Include="$(TargetDir)**\*.*"
+                        Exclude="$(TargetDir).env;$(TargetDir).env.*;$(TargetDir).env copy" />
     </ItemGroup>
     <MakeDir Directories="$(RootReleaseDir)" />
     <Copy SourceFiles="@(RootReleaseFiles)"
