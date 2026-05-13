@@ -120,7 +120,4 @@ public sealed partial class ProductSearchFilterBar : UserControl
 
     private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         => CategorySelectionChanged?.Invoke(this, e);
-
-    private void SearchButton_Click(object sender, RoutedEventArgs e)
-        => SearchClicked?.Invoke(this, e);
 }
