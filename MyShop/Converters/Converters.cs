@@ -529,7 +529,7 @@ public class DateTimeOffsetConverter : IValueConverter
         if (value is DateTimeOffset dto)
             return dto.ToLocalTime().ToString(format);
         if (value is DateTime dt)
-            return dt.ToString(format);
+            return dt.ToLocalTime().ToString(format);
         return string.Empty;
     }
 

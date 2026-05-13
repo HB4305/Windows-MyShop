@@ -189,15 +189,15 @@
                 BorderThickness="0,0,0,1" Padding="16,14">
           <Grid>
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="80"/>
-              <ColumnDefinition Width="200"/>
-              <ColumnDefinition Width="150"/>
-              <ColumnDefinition Width="150"/>
-              <ColumnDefinition Width="120"/>
-              <ColumnDefinition Width="120"/>
-              <ColumnDefinition Width="120"/>
-              <ColumnDefinition Width="100"/>
-              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="0.6*"/>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="1*"/>
+              <ColumnDefinition Width="1.4*"/>
+              <ColumnDefinition Width="1.4*"/>
+              <ColumnDefinition Width="1.4*"/>
+              <ColumnDefinition Width="1.4*"/>
+              <ColumnDefinition Width="2.5*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="ID" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
             <TextBlock Grid.Column="1" Text="STAFF" FontSize="11" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
@@ -226,15 +226,15 @@
               <Border BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="0,10">
                 <Grid>
                   <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1.4*"/>
+                    <ColumnDefinition Width="1.4*"/>
+                    <ColumnDefinition Width="1.4*"/>
+                    <ColumnDefinition Width="1.4*"/>
+                    <ColumnDefinition Width="2.5*"/>
                   </Grid.ColumnDefinitions>
                   <TextBlock Grid.Column="0" Text="{Binding ShiftId}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
                   <TextBlock Grid.Column="1" Text="{Binding StaffEmail}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" FontFamily="{StaticResource AppDefaultFontFamily}"/>
