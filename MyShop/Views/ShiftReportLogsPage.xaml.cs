@@ -40,6 +40,16 @@ public sealed partial class ShiftReportLogsPage : Page
         // although OnSearchTextChanged in VM already calls ApplyFilter.
     }
 
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
     private void BuildPagination()
     {
         if (ShiftLogsPaginationPanel == null) return;

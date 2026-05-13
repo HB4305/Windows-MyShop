@@ -123,4 +123,24 @@ public sealed partial class AddEditCustomerDialog : ContentDialog, INotifyProper
         storage = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb)
+        {
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+            else if (tb == AddressTextBox) AddressWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+        }
+    }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb)
+        {
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+            else if (tb == AddressTextBox) AddressWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+        }
+    }
 }

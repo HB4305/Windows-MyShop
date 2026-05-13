@@ -115,22 +115,30 @@
       </Grid.ColumnDefinitions>
 
       <!-- Standardized Premium Search Bar (Matching Report Design) -->
-      <Grid x:Name="SearchColSpan" Grid.Column="0" VerticalAlignment="Center">
+      <Border x:Name="SearchColSpan"
+              Grid.Column="0"
+              Background="{ThemeResource ControlFillColorDefaultBrush}"
+              BorderThickness="1"
+              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+              CornerRadius="24"
+              Height="48"
+              VerticalAlignment="Center">
           <AutoSuggestBox x:Name="SearchBox"
                           PlaceholderText="Search products..."
                           Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           QuerySubmitted="OnSearchQuerySubmitted"
                           QueryIcon="Find"
-                          CornerRadius="24"
-                          Background="{ThemeResource ControlFillColorDefaultBrush}"
-                          BorderThickness="1"
-                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                          Padding="16,12,12,12"
-                          Height="48"
-                          VerticalAlignment="Center"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Padding="16,0,12,0"
+                          VerticalAlignment="Stretch"
                           VerticalContentAlignment="Center"
+                          GotFocus="SearchBox_GotFocus"
+                          LostFocus="SearchBox_LostFocus"
                           FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
               <AutoSuggestBox.Resources>
+                  <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                  <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                   <!-- Style the internal search button -->
                   <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
                       <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
@@ -144,7 +152,7 @@
                   </Style>
               </AutoSuggestBox.Resources>
           </AutoSuggestBox>
-      </Grid>
+      </Border>
 
       <!-- Action Buttons (Visible in Wide) -->
       <StackPanel x:Name="ActionButtonsPanel" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="14">

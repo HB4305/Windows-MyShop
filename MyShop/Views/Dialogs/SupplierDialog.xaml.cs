@@ -47,13 +47,12 @@ public sealed partial class SupplierDialog : ContentDialog
     {
         try
         {
-            ErrorText.Visibility = Visibility.Collapsed;
-
+            NameErrorText.Visibility = Visibility.Collapsed;
             var name = NameTextBox.Text.Trim();
             if (string.IsNullOrWhiteSpace(name))
             {
-                ErrorText.Text = "Supplier name cannot be empty.";
-                ErrorText.Visibility = Visibility.Visible;
+                NameErrorText.Text = "Supplier name cannot be empty.";
+                NameErrorText.Visibility = Visibility.Visible;
                 return;
             }
 
@@ -80,8 +79,28 @@ public sealed partial class SupplierDialog : ContentDialog
         }
         catch (System.Exception ex)
         {
-            ErrorText.Text = $"Error: {ex.Message}";
-            ErrorText.Visibility = Visibility.Visible;
+            NameErrorText.Text = $"Error: {ex.Message}";
+            NameErrorText.Visibility = Visibility.Visible;
+        }
+    }
+
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb)
+        {
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+            else if (tb == TypeTextBox) TypeWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+        }
+    }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb)
+        {
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+            else if (tb == TypeTextBox) TypeWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
         }
     }
 }

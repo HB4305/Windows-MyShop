@@ -154,22 +154,30 @@
       </Grid.RowDefinitions>
 
       <!-- Standardized Premium Search Bar (Matching Report Design) -->
-      <Grid Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+      <Border x:Name="SearchWrapper"
+              Grid.Row="0" Grid.Column="0"
+              Background="{ThemeResource ControlFillColorDefaultBrush}"
+              BorderThickness="1"
+              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+              CornerRadius="24"
+              Height="48"
+              VerticalAlignment="Center">
           <AutoSuggestBox x:Name="SearchBox"
                           PlaceholderText="Search staff by name or phone..."
                           Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           QuerySubmitted="OnSearchQuerySubmitted"
                           QueryIcon="Find"
-                          CornerRadius="24"
-                          Background="{ThemeResource ControlFillColorDefaultBrush}"
-                          BorderThickness="1"
-                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                          Padding="16,12,12,12"
-                          Height="48"
-                          VerticalAlignment="Center"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Padding="16,0,12,0"
+                          VerticalAlignment="Stretch"
                           VerticalContentAlignment="Center"
+                          GotFocus="SearchBox_GotFocus"
+                          LostFocus="SearchBox_LostFocus"
                           FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
               <AutoSuggestBox.Resources>
+                  <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                  <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                   <!-- Style the internal search button -->
                   <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
                       <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
@@ -183,7 +191,7 @@
                   </Style>
               </AutoSuggestBox.Resources>
           </AutoSuggestBox>
-      </Grid>
+      </Border>
 
       <Button x:Name="AddButton" Grid.Row="0" Grid.Column="1" Click="AddStaff_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
               CornerRadius="24" Padding="16,10" Height="48" Style="{StaticResource ColorPreservingButtonStyle}">

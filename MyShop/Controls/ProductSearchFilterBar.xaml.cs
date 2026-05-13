@@ -108,6 +108,16 @@ public sealed partial class ProductSearchFilterBar : UserControl
         SearchClicked?.Invoke(this, new RoutedEventArgs());
     }
 
+    private void SearchAutoSuggestBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void SearchAutoSuggestBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
     private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         => CategorySelectionChanged?.Invoke(this, e);
 

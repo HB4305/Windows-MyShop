@@ -157,50 +157,21 @@
               VerticalAlignment="Center"
               Spacing="10">
   
-            <!-- Date picker button -->
-            <!-- Premium Date Picker (Button + Flyout) -->
-            <Button x:Name="DatePickerButton"
-                    Background="{ThemeResource ControlFillColorDefaultBrush}"
+            <!-- Today's Date Display (Non-interactive) -->
+            <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1"
                     CornerRadius="24"
                     MinHeight="44"
-                    Padding="12,8"
-                    Style="{StaticResource ColorPreservingButtonStyle}">
+                    Padding="16,8">
               <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                 <FontIcon Glyph="&#xE787;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                <TextBlock Text="{Binding SelectedDate, Converter={StaticResource DateToMonthYearConverter}}" 
+                <TextBlock Text="{Binding TodayDisplay}" 
                            FontSize="14" 
                            Foreground="{ThemeResource TextFillColorPrimaryBrush}" 
                            FontFamily="{StaticResource AppDefaultFontFamily}"/>
-                <FontIcon Glyph="&#xE70D;" FontSize="10" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
               </StackPanel>
-              
-              <Button.Flyout>
-                <Flyout Placement="BottomEdgeAlignedRight">
-                  <Flyout.FlyoutPresenterStyle>
-                    <Style TargetType="FlyoutPresenter">
-                      <Setter Property="Padding" Value="0"/>
-                      <Setter Property="BorderThickness" Value="0"/>
-                      <Setter Property="CornerRadius" Value="16"/>
-                      <Setter Property="Background" Value="Transparent"/>
-                    </Style>
-                  </Flyout.FlyoutPresenterStyle>
-                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                          BorderThickness="1"
-                          CornerRadius="16"
-                          Padding="4">
-                    <CalendarView x:Name="DashboardCalendarView"
-                                  Language="en-US"
-                                  SelectedDatesChanged="CalendarView_SelectedDatesChanged"
-                                  SelectionMode="Single"
-                                  BorderThickness="0"
-                                  HorizontalAlignment="Stretch"/>
-                  </Border>
-                </Flyout>
-              </Button.Flyout>
-            </Button>
+            </Border>
   
             <!-- Create Order button -->
             <Button Background="{StaticResource AppPurpleBrush}"

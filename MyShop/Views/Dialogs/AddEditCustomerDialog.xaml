@@ -54,14 +54,27 @@
                     <TextBlock Text="Full Name" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
-                <TextBox x:Name="NameTextBox"
-                         PlaceholderText="e.g. John Doe"
-                         MaxLength="255"
-                         CornerRadius="24"
-                         Padding="12,12"
-                         Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                         Text="{x:Bind CustomerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Border x:Name="NameWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <TextBox x:Name="NameTextBox"
+                             PlaceholderText="e.g. John Doe"
+                             MaxLength="255"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,12"
+                             Text="{x:Bind CustomerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             GotFocus="TextBox_GotFocus"
+                             LostFocus="TextBox_LostFocus"
+                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                        <TextBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
                 <Border Visibility="{x:Bind NameValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="4,2,0,0">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
@@ -76,14 +89,27 @@
                     <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </StackPanel>
-                <TextBox x:Name="PhoneTextBox"
-                         PlaceholderText="e.g. 0912345678"
-                         MaxLength="20"
-                         CornerRadius="24"
-                         Padding="12,12"
-                         Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                         Text="{x:Bind CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Border x:Name="PhoneWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <TextBox x:Name="PhoneTextBox"
+                             PlaceholderText="e.g. 0912345678"
+                             MaxLength="20"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,12"
+                             Text="{x:Bind CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             GotFocus="TextBox_GotFocus"
+                             LostFocus="TextBox_LostFocus"
+                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                        <TextBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
                 <Border Visibility="{x:Bind PhoneValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="4,2,0,0">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
@@ -100,15 +126,29 @@
                         <TextBlock Text="Optional" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Border>
                 </StackPanel>
-                <TextBox PlaceholderText="Enter shipping address..."
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         MinHeight="100"
-                         CornerRadius="24"
-                         Padding="12,12"
-                         Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                         Text="{x:Bind CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Border x:Name="AddressWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <TextBox x:Name="AddressTextBox"
+                             PlaceholderText="Enter shipping address..."
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             MinHeight="100"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,12"
+                             Text="{x:Bind CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             GotFocus="TextBox_GotFocus"
+                             LostFocus="TextBox_LostFocus"
+                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                        <TextBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
             </StackPanel>
         </StackPanel>
 

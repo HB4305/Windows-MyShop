@@ -72,15 +72,34 @@
                     <!-- Product Search -->
                     <StackPanel Grid.Column="1" Spacing="8">
                         <TextBlock Text="Add Product" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <AutoSuggestBox x:Name="ProductSearchBox"
-                                        PlaceholderText="Search by name..."
-                                        QueryIcon="Find"
-                                        TextChanged="ProductSearchBox_TextChanged"
-                                        SuggestionChosen="ProductSearchBox_SuggestionChosen"
-                                        DisplayMemberPath="Name"
-                                        TextMemberPath="Name"
-                                        Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
-                                        VerticalAlignment="Bottom"/>
+                        <Border x:Name="SearchWrapper"
+                                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                BorderThickness="1"
+                                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                CornerRadius="24"
+                                Height="48"
+                                VerticalAlignment="Bottom">
+                            <AutoSuggestBox x:Name="ProductSearchBox"
+                                            PlaceholderText="Search by name..."
+                                            QueryIcon="Find"
+                                            TextChanged="ProductSearchBox_TextChanged"
+                                            SuggestionChosen="ProductSearchBox_SuggestionChosen"
+                                            DisplayMemberPath="Name"
+                                            TextMemberPath="Name"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Padding="16,0,12,0"
+                                            VerticalAlignment="Stretch"
+                                            VerticalContentAlignment="Center"
+                                            GotFocus="ProductSearchBox_GotFocus"
+                                            LostFocus="ProductSearchBox_LostFocus"
+                                            FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                                <AutoSuggestBox.Resources>
+                                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                                </AutoSuggestBox.Resources>
+                            </AutoSuggestBox>
+                        </Border>
                     </StackPanel>
                 </Grid>
             </StackPanel>

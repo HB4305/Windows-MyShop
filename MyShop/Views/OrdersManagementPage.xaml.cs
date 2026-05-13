@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using MyShop.Models;
 using MyShop.Services;
 using MyShop.ViewModels;
@@ -227,5 +224,15 @@ public sealed partial class OrdersManagementPage : Page
         {
             _vm.AddToHistoryCommand.Execute(query);
         }
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
     }
 }

@@ -40,6 +40,16 @@ public sealed partial class CustomerPage : Page
         ViewModel.SearchCommand.Execute(null);
     }
 
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
     private async void OnAddCustomerClick(object sender, RoutedEventArgs e)
     {
         GlobalLoadingOverlay.Visibility = Visibility.Visible;

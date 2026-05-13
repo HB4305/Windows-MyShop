@@ -1,7 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
 using MyShop.ViewModels;
 using MyShop.Views.Dialogs;
@@ -42,9 +38,29 @@ public sealed partial class SuppliersPage : Page
         _ = ViewModel.LoadSuppliersAsync();
     }
 
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+    }
+
     private void OnOrderSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
         _ = ViewModel.LoadSupplyOrdersAsync();
+    }
+
+    private void OrderSearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        OrderSearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void OrderSearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        OrderSearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
     }
 
     private void TabSuppliers_Click(object sender, RoutedEventArgs e)

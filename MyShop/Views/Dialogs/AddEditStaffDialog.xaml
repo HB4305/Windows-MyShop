@@ -47,12 +47,26 @@
                            FontSize="14"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <TextBox Text="{x:Bind Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          PlaceholderText="staff@myshop.com"
-                          CornerRadius="24"
-                          Padding="12,10"
-                          Background="{ThemeResource ControlFillColorDefaultBrush}"
-                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+                <Border x:Name="EmailWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <TextBox x:Name="EmailTextBox"
+                             Text="{x:Bind Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             PlaceholderText="staff@myshop.com"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,10"
+                             GotFocus="TextBox_GotFocus"
+                             LostFocus="TextBox_LostFocus"
+                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                        <TextBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
                 <TextBlock Text="{x:Bind EmailValidationMessage, Mode=OneWay}"
                             FontSize="12"
                             Foreground="{ThemeResource SystemFillColorCriticalBrush}"
@@ -65,7 +79,7 @@
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 <Border CornerRadius="24"
-                        Padding="12,10"
+                        Padding="16,10"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                         BorderThickness="1">
@@ -81,13 +95,26 @@
                            FontSize="14"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <PasswordBox x:Name="PasswordInput"
-                              PlaceholderText="At least 6 characters"
-                              PasswordChanged="PasswordInput_PasswordChanged"
-                              CornerRadius="24"
-                              Padding="12,10"
-                              Background="{ThemeResource ControlFillColorDefaultBrush}"
-                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+                <Border x:Name="PasswordWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <PasswordBox x:Name="PasswordInput"
+                                  PlaceholderText="At least 6 characters"
+                                  PasswordChanged="PasswordInput_PasswordChanged"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Padding="16,10"
+                                  GotFocus="TextBox_GotFocus"
+                                  LostFocus="TextBox_LostFocus"
+                                  FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                        <PasswordBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </PasswordBox.Resources>
+                    </PasswordBox>
+                </Border>
                 <TextBlock x:Name="PasswordHintText"
                            FontSize="12"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"

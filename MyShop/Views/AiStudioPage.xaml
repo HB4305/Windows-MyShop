@@ -38,8 +38,13 @@
             <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </Style>
 
+        <SolidColorBrush x:Key="AppPurpleBrush" Color="#8B52FF"/>
+        <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
+        <SolidColorBrush x:Key="PurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
+        <SolidColorBrush x:Key="DangerBrush" Color="#DC2626"/>
+
         <!-- Premium Purple Button -->
-        <Style x:Key="AiPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Style x:Key="AiPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ColorPreservingButtonStyle}">
             <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="CornerRadius" Value="20"/>
@@ -47,11 +52,10 @@
             <Setter Property="MinHeight" Value="44"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Style" Value="{StaticResource ColorPreservingButtonStyle}"/>
         </Style>
 
         <!-- Suggested Question Chip -->
-        <Style x:Key="QuestionChipStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Style x:Key="QuestionChipStyle" TargetType="Button" BasedOn="{StaticResource ColorPreservingButtonStyle}">
             <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
             <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -59,7 +63,6 @@
             <Setter Property="Padding" Value="12,6"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
-            <Setter Property="Style" Value="{StaticResource ColorPreservingButtonStyle}"/>
         </Style>
     </Page.Resources>
 
@@ -156,24 +159,38 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="48"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     PlaceholderText="Ask AI anything about your shop..."
-                                     CornerRadius="24" 
-                                     Padding="12,12"
-                                     FontSize="14"
-                                     Height="48"
-                                     AcceptsReturn="False"
-                                     VerticalAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                     BorderThickness="1"
-                                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"
-                                     KeyDown="OnChatKeyDown">
-                            </TextBox>
+                            <!-- Standardized Premium Input Bar -->
+                            <Border x:Name="InputWrapper" 
+                                    Grid.Column="0" 
+                                    VerticalAlignment="Center"
+                                    Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                    CornerRadius="24"
+                                    Height="48"
+                                    Padding="16,0">
+                                <TextBox Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         PlaceholderText="Ask AI anything about your shop..."
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         FontSize="14"
+                                         AcceptsReturn="False"
+                                         VerticalAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         GotFocus="InputBox_GotFocus"
+                                         LostFocus="InputBox_LostFocus"
+                                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"
+                                         KeyDown="OnChatKeyDown">
+                                    <TextBox.Resources>
+                                        <!-- Remove default focus visual and border -->
+                                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                                    </TextBox.Resources>
+                                </TextBox>
+                            </Border>
                             
                             <Button Grid.Column="1" Command="{Binding SendChatCommand}"
-                                    Background="#8B52FF" 
+                                    Background="{StaticResource AppPurpleBrush}" 
                                     Foreground="White"
                                     Width="48" Height="48"
                                     CornerRadius="24"
@@ -186,7 +203,7 @@
                             </Button>
                             
                             <Button Grid.Column="1" Command="{Binding StopChatCommand}"
-                                    Background="#DC2626" 
+                                    Background="{StaticResource DangerBrush}" 
                                     Foreground="White"
                                     Width="48" Height="48"
                                     CornerRadius="24"

@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using MyShop.ViewModels;
 
 namespace MyShop.Views;
@@ -38,5 +35,15 @@ public sealed partial class AiStudioPage : Page
                 vm.SendChatCommand.Execute(null);
             }
         }
+    }
+
+    private void InputBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        InputWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void InputBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        InputWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
     }
 }

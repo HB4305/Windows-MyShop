@@ -43,12 +43,8 @@ public partial class DashboardViewModel : ObservableObject
 
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private string _errorMessage = string.Empty;
-    [ObservableProperty] private DateTimeOffset _selectedDate = DateTimeOffset.Now;
 
-    partial void OnSelectedDateChanged(DateTimeOffset value)
-    {
-        _ = LoadDashboardAsync();
-    }
+    public string TodayDisplay => DateTime.Now.ToString("MMMM d, yyyy", new System.Globalization.CultureInfo("en-US"));
 
     // ── Raw data ────────────────────────────────────────────────────────
     [ObservableProperty] private int _totalProducts;
@@ -126,15 +122,15 @@ public partial class DashboardViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            var selectedDateTime = SelectedDate.DateTime;
+            var today = DateTime.Today;
             
             var totalProductsTask = _sportItemService.GetTotalCountAsync();
-            var totalTodayOrdersTask = _orderService.GetOrderCountByDateAsync(selectedDateTime);
-            var todayRevenueTask = _orderService.GetRevenueByDateAsync(selectedDateTime);
+            var totalTodayOrdersTask = _orderService.GetOrderCountByDateAsync(today);
+            var todayRevenueTask = _orderService.GetRevenueByDateAsync(today);
             var topSellerItemsTask = _orderService.GetTopSellingProductsAsync(nDays: 30);
             var lowStockItemsTask = _sportItemService.GetLowStockProductsAsync();
             var recentOrdersTask = _orderService.GetRecentOrdersAsync();
-            var dailyRevenuePointsTask = _orderService.GetMonthlyRevenueAsync(selectedDateTime);
+            var dailyRevenuePointsTask = _orderService.GetMonthlyRevenueAsync(today);
 
             await Task.WhenAll(
                 totalProductsTask,
@@ -145,21 +141,21 @@ public partial class DashboardViewModel : ObservableObject
                 recentOrdersTask,
                 dailyRevenuePointsTask);
 
-            TotalProducts = totalProductsTask.Result;
-            TotalTodayOrders = totalTodayOrdersTask.Result;
-            TodayRevenue = todayRevenueTask.Result;
-            LowStockItems = lowStockItemsTask.Result;
-            TopSellerItems = topSellerItemsTask.Result;
-            RecentOrders = recentOrdersTask.Result;
-            var rawPoints = dailyRevenuePointsTask.Result;
+            TotalProducts = await totalProductsTask;
+            TotalTodayOrders = await totalTodayOrdersTask;
+            TodayRevenue = await todayRevenueTask;
+            LowStockItems = await lowStockItemsTask;
+            TopSellerItems = await topSellerItemsTask;
+            RecentOrders = await recentOrdersTask;
+            var rawPoints = await dailyRevenuePointsTask;
             var pointsMap = new Dictionary<DateTime, RevenueReport>();
             foreach (var p in rawPoints)
             {
                 pointsMap[p.Date.Date] = p;
             }
 
-            var start = new DateTime(selectedDateTime.Year, selectedDateTime.Month, 1);
-            var daysInMonth = DateTime.DaysInMonth(selectedDateTime.Year, selectedDateTime.Month);
+            var start = new DateTime(today.Year, today.Month, 1);
+            var daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
             var monthPoints = new List<RevenueReport>(daysInMonth);
             for (int i = 0; i < daysInMonth; i++)
             {

@@ -34,7 +34,8 @@ public sealed partial class AddEditStaffDialog : ContentDialog, INotifyPropertyC
             FormTitle.Text = "New Staff";
             FormSubtitle.Text = "Create a new staff account that can sign in to MyShop.";
             SaveBtnText.Text = "Create Staff";
-            PasswordHintText.Text = "Password is required for a new staff account.";
+            PasswordHintText.Text = string.Empty;
+            PasswordHintText.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -152,5 +153,17 @@ public sealed partial class AddEditStaffDialog : ContentDialog, INotifyPropertyC
 
         storage = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender == EmailTextBox) EmailWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+        else if (sender == PasswordInput) PasswordWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender == EmailTextBox) EmailWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+        else if (sender == PasswordInput) PasswordWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
     }
 }

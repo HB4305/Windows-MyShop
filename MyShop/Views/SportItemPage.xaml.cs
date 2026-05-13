@@ -192,6 +192,16 @@ public sealed partial class SportItemPage : Page
         ViewModel.SearchCommand.Execute(null);
     }
 
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchColSpan.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchColSpan.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
     private void OnAddItemClick(object sender, RoutedEventArgs e)
     {
         Frame.Navigate(typeof(SportItemDetailPage), null);
