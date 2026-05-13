@@ -16,7 +16,7 @@ public partial class App : Application
 
     public App()
     {
-        // Set global culture to Vietnamese for correct date and number formatting
+        // Set global culture to English for correct date and number formatting
         var culture = new System.Globalization.CultureInfo("en-US");
         System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
         System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
@@ -24,7 +24,7 @@ public partial class App : Application
         System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
 
         // Uno-specific primary language override
-        Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "vi-VN";
+        Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "en-US";
 
         this.InitializeComponent();
     }

@@ -80,6 +80,27 @@ public partial class CustomerOrderViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<string> _searchHistory = new();
 
+    // ── Date Range Filtering ─────────────────────────────────────
+    [ObservableProperty]
+    private DateTimeOffset? _fromDate;
+
+    [ObservableProperty]
+    private DateTimeOffset? _toDate;
+
+    partial void OnFromDateChanged(DateTimeOffset? value)
+    {
+        CurrentPage = 1;
+        ApplyPagination();
+        OnPropertyChanged(nameof(IsDateFilterActive));
+    }
+
+    partial void OnToDateChanged(DateTimeOffset? value)
+    {
+        CurrentPage = 1;
+        ApplyPagination();
+        OnPropertyChanged(nameof(IsDateFilterActive));
+    }
+
     // ── Filter Options ──────────────────────────────────────────────
     public ObservableCollection<string> TabOptions { get; } = new()
     {
@@ -96,6 +117,8 @@ public partial class CustomerOrderViewModel : ObservableObject
     // ── Computed Stats ─────────────────────────────────────────────
     [ObservableProperty]
     private int _totalOrders = 0;
+
+    public bool IsDateFilterActive => FromDate.HasValue || ToDate.HasValue;
 
     [ObservableProperty]
     private int _pendingCount = 0;
@@ -292,6 +315,18 @@ public partial class CustomerOrderViewModel : ObservableObject
                 "Delivered" => source.Where(o => IsCompletedStatus(o.Status)),
                 _ => source.Where(o => o.Status == ActiveTab)
             };
+        }
+
+        if (FromDate.HasValue)
+        {
+            var from = FromDate.Value.Date;
+            source = source.Where(o => o.CreatedAt.HasValue && o.CreatedAt.Value.Date >= from);
+        }
+
+        if (ToDate.HasValue)
+        {
+            var to = ToDate.Value.Date;
+            source = source.Where(o => o.CreatedAt.HasValue && o.CreatedAt.Value.Date <= to);
         }
 
         return source;

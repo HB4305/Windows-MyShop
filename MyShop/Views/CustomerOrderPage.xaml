@@ -6,7 +6,8 @@
       xmlns:m="using:MyShop.Models"
       xmlns:vm="using:MyShop.ViewModels"
       xmlns:conv="using:MyShop.Converters"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      Language="en-US">
 
   <Page.Resources>
     <!-- ══ Converters ══ -->
@@ -269,7 +270,7 @@
             <ColumnDefinition Width="190"/>
             <ColumnDefinition Width="130"/>
             <ColumnDefinition Width="170"/>
-            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="110"/>
             <ColumnDefinition Width="120"/>
@@ -321,7 +322,7 @@
 
           <!-- Date -->
           <TextBlock Grid.Column="4"
-                     Text="{x:Bind CreatedAt, Mode=OneWay, Converter={StaticResource DateTimeOffsetConverter}}"
+                     Text="{x:Bind CreatedAt, Mode=OneWay, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='HH:mm dd/MM/yyyy'}"
                      FontSize="12"
                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                      VerticalAlignment="Center"
@@ -683,6 +684,7 @@
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
           <!-- Tab Buttons -->
@@ -771,12 +773,39 @@
             </StackPanel>
           </ScrollViewer>
 
+          <!-- Date Range Search -->
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="16,0,0,0" Language="en-US">
+              <CalendarDatePicker x:Name="FromDatePicker" 
+                                  PlaceholderText="From" 
+                                  Date="{Binding FromDate, Mode=TwoWay}"
+                                  Width="150"
+                                  CornerRadius="8"
+                                  Language="en-US"
+                                  CalendarIdentifier="GregorianCalendar"/>
+              <TextBlock Text="–" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+              <CalendarDatePicker x:Name="ToDatePicker" 
+                                  PlaceholderText="To" 
+                                  Date="{Binding ToDate, Mode=TwoWay}"
+                                  Width="150"
+                                  CornerRadius="8"
+                                  Language="en-US"
+                                  CalendarIdentifier="GregorianCalendar"/>
+              
+              <!-- Clear Filter Button -->
+              <Button Style="{StaticResource IconBtn}" 
+                      Click="ClearDateFilter_Click"
+                      ToolTipService.ToolTip="Clear date filter"
+                      Visibility="{Binding IsDateFilterActive, Converter={StaticResource BoolToVisibilityConverter}}">
+                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+              </Button>
+          </StackPanel>
+
           <!-- Standardized Premium Search Bar -->
           <Border x:Name="SearchWrapper"
-                  Grid.Column="1" 
+                  Grid.Column="2" 
                   VerticalAlignment="Center" 
                   Margin="16,0,0,0" 
-                  Width="400"
+                  Width="300"
                   Background="{ThemeResource ControlFillColorDefaultBrush}"
                   BorderThickness="1"
                   BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -854,7 +883,7 @@
                       <ColumnDefinition Width="190"/>
                       <ColumnDefinition Width="130"/>
                       <ColumnDefinition Width="170"/>
-                      <ColumnDefinition Width="140"/>
+                      <ColumnDefinition Width="180"/>
                       <ColumnDefinition Width="120"/>
                       <ColumnDefinition Width="110"/>
                       <ColumnDefinition Width="120"/>
@@ -866,10 +895,10 @@
                     <TextBlock Grid.Column="2" Text="Phone" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="3" Text="Staff" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="4" Text="Date" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                    <TextBlock Grid.Column="5" Text="Order Type" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Text="Type" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="6" Text="Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                    <TextBlock Grid.Column="7" Text="Payment Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                    <TextBlock Grid.Column="8" Text="Payment Method" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Text="Payment" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Text="Method" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="9" Text="Total" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                   </Grid>
                 </Border>
