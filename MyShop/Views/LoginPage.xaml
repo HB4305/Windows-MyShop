@@ -105,15 +105,14 @@
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Logo icon (rounded square 48x48) -->
         <Border Grid.Column="0"
                 Width="48" Height="48"
-                CornerRadius="{ThemeResource OverlayCornerRadius}"
+                CornerRadius="24"
                 Background="{StaticResource PrimaryBrush}"
                 Padding="12">
           <Viewbox Width="24" Height="24">
             <Path Data="M12 2L2 7L12 12L22 7L12 2Z M2 17L12 22L22 17 M2 12L12 17L22 12"
-                  Stroke="{ThemeResource TextFillColorPrimaryBrush}" StrokeThickness="2"
+                  Stroke="White" StrokeThickness="2"
                   StrokeLineJoin="Round" Fill="Transparent"/>
           </Viewbox>
         </Border>
@@ -121,7 +120,8 @@
         <!-- Brand text -->
         <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
           <TextBlock Text="ProSport Hub"
-                     Style="{StaticResource TitleTextBlockStyle}"
+                     FontFamily="{StaticResource InterFont}"
+                     FontSize="24" FontWeight="Bold"
                      Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
           <TextBlock Text="INVENTORY MANAGEMENT"
                      FontFamily="{StaticResource InterFont}"
@@ -299,7 +299,7 @@
               <Grid>
                 <Border Background="White" Opacity="0.20" CornerRadius="24"/>
                 <Viewbox Width="40" Height="40" Margin="20">
-                  <Path Data="M12 2L2 7L12 12L22 7L12 2Z M2 17L12 22L22 17"
+                  <Path Data="M12 2L2 7L12 12L22 7L12 2Z M2 17L12 22L22 17 M2 12L12 17L22 12"
                         Stroke="White" StrokeThickness="2"
                         StrokeLineJoin="Round" Fill="Transparent"/>
                 </Viewbox>
