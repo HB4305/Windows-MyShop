@@ -223,6 +223,9 @@ public partial class SportItemDetailViewModel : ObservableObject
                 [
                     new SportItemVariant()
                 ];
+
+                if (Categories.Count > 0)
+                    SelectedCategory = Categories[0];
             }
 
             SelectedImageIndex = ImageUrls.Count > 0 ? 0 : 0;
@@ -364,6 +367,20 @@ public partial class SportItemDetailViewModel : ObservableObject
     {
         if (SelectedImageIndex < 0 || SelectedImageIndex >= ImageUrls.Count - 1) return;
         ImageUrls.Move(SelectedImageIndex, SelectedImageIndex + 1);
+    }
+
+    [RelayCommand]
+    private void SelectNextImage()
+    {
+        if (ImageUrls.Count <= 1) return;
+        SelectedImageIndex = (SelectedImageIndex + 1) % ImageUrls.Count;
+    }
+
+    [RelayCommand]
+    private void SelectPreviousImage()
+    {
+        if (ImageUrls.Count <= 1) return;
+        SelectedImageIndex = (SelectedImageIndex - 1 + ImageUrls.Count) % ImageUrls.Count;
     }
 
     [RelayCommand]

@@ -147,11 +147,11 @@
       <Setter Property="CornerRadius" Value="8"/>
     </Style>
 
-    <Style x:Key="SearchBoxText" TargetType="TextBox">
+    <Style x:Key="SearchBoxText" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="Padding" Value="0,8,10,8"/>
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
@@ -770,17 +770,36 @@
             </StackPanel>
           </ScrollViewer>
 
-          <!-- Search Bar (Synced with global style) -->
-          <Grid Grid.Column="1"
-                MinWidth="280"
-                Margin="16,0,0,0">
-              <TextBox Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                       PlaceholderText="Search orders..."
-                       Style="{StaticResource ModernSearchTextBoxStyle}"/>
-              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                      Background="Transparent" BorderThickness="0" Padding="12" Margin="0,0,4,0"
-                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
-                      HorizontalAlignment="Right" VerticalAlignment="Center"/>
+          <!-- Standardized Premium Search Bar (Matching Report Design) -->
+          <Grid Grid.Column="1" VerticalAlignment="Center" Margin="16,0,0,0" Width="400">
+              <AutoSuggestBox x:Name="SearchBox"
+                              PlaceholderText="Search orders..."
+                              Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              QuerySubmitted="OnSearchQuerySubmitted"
+                              QueryIcon="Find"
+                              CornerRadius="24"
+                              Background="{ThemeResource ControlFillColorDefaultBrush}"
+                              BorderThickness="1"
+                              BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                              Padding="16,12,12,12"
+                              Height="48"
+                              VerticalAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                  <AutoSuggestBox.Resources>
+                      <!-- Style the internal search button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                          <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                          <Setter Property="Background" Value="Transparent"/>
+                          <Setter Property="BorderThickness" Value="0"/>
+                      </Style>
+                      <!-- Targeted style to hide the clear button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxDeleteButtonStyle">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                          <Setter Property="Width" Value="0"/>
+                      </Style>
+                  </AutoSuggestBox.Resources>
+              </AutoSuggestBox>
           </Grid>
 
         </Grid>

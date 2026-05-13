@@ -43,6 +43,12 @@ public partial class DashboardViewModel : ObservableObject
 
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private string _errorMessage = string.Empty;
+    [ObservableProperty] private DateTimeOffset _selectedDate = DateTimeOffset.Now;
+
+    partial void OnSelectedDateChanged(DateTimeOffset value)
+    {
+        _ = LoadDashboardAsync();
+    }
 
     // ── Raw data ────────────────────────────────────────────────────────
     [ObservableProperty] private int _totalProducts;
@@ -120,15 +126,15 @@ public partial class DashboardViewModel : ObservableObject
             IsLoading = true;
             ErrorMessage = string.Empty;
 
-            var now = DateTime.Now;
-
+            var selectedDateTime = SelectedDate.DateTime;
+            
             var totalProductsTask = _sportItemService.GetTotalCountAsync();
-            var totalTodayOrdersTask = _orderService.GetOrderCountByDateAsync(now);
-            var todayRevenueTask = _orderService.GetRevenueByDateAsync(now);
+            var totalTodayOrdersTask = _orderService.GetOrderCountByDateAsync(selectedDateTime);
+            var todayRevenueTask = _orderService.GetRevenueByDateAsync(selectedDateTime);
             var topSellerItemsTask = _orderService.GetTopSellingProductsAsync(nDays: 30);
             var lowStockItemsTask = _sportItemService.GetLowStockProductsAsync();
             var recentOrdersTask = _orderService.GetRecentOrdersAsync();
-            var dailyRevenuePointsTask = _orderService.GetMonthlyRevenueAsync(now);
+            var dailyRevenuePointsTask = _orderService.GetMonthlyRevenueAsync(selectedDateTime);
 
             await Task.WhenAll(
                 totalProductsTask,
@@ -152,8 +158,8 @@ public partial class DashboardViewModel : ObservableObject
                 pointsMap[p.Date.Date] = p;
             }
 
-            var start = new DateTime(now.Year, now.Month, 1);
-            var daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
+            var start = new DateTime(selectedDateTime.Year, selectedDateTime.Month, 1);
+            var daysInMonth = DateTime.DaysInMonth(selectedDateTime.Year, selectedDateTime.Month);
             var monthPoints = new List<RevenueReport>(daysInMonth);
             for (int i = 0; i < daysInMonth; i++)
             {

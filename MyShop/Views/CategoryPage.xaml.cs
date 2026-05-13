@@ -54,6 +54,11 @@ public sealed partial class CategoryPage : Page
         BuildPagination();
     }
 
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        ViewModel.SearchCommand.Execute(null);
+    }
+
     private void EditCategory_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button btn && btn.DataContext is Category category)

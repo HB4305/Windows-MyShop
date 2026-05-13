@@ -33,6 +33,13 @@ public sealed partial class ShiftReportLogsPage : Page
         BuildPagination();
     }
 
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        ViewModel.CurrentPage = 1;
+        // SearchText is already bound, so we just need to ensure the list is refreshed if needed,
+        // although OnSearchTextChanged in VM already calls ApplyFilter.
+    }
+
     private void BuildPagination()
     {
         if (ShiftLogsPaginationPanel == null) return;

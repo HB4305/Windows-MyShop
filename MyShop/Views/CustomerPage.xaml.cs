@@ -35,12 +35,9 @@ public sealed partial class CustomerPage : Page
         BuildPagination();
     }
 
-    private void OnSearchKeyDown(object sender, KeyRoutedEventArgs e)
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
-        if (e.Key == Windows.System.VirtualKey.Enter)
-        {
-            ViewModel.SearchCommand.Execute(null);
-        }
+        ViewModel.SearchCommand.Execute(null);
     }
 
     private async void OnAddCustomerClick(object sender, RoutedEventArgs e)

@@ -220,15 +220,7 @@ public sealed partial class OrdersManagementPage : Page
         PaginationPanel.Children.Add(nextBtn);
     }
 
-    private void OrderSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-    {
-        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-        {
-            _vm.SearchQuery = sender.Text;
-        }
-    }
-
-    private void OrderSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
         var query = args.QueryText;
         if (!string.IsNullOrWhiteSpace(query))

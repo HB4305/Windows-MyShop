@@ -404,4 +404,12 @@ public sealed partial class CustomerOrderPage : Page
         BtnPayUnpaidActive.IsEnabled = enabled;
         BtnPayUnpaidInactive.IsEnabled = enabled;
     }
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var query = args.QueryText;
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            ViewModel.AddToHistoryCommand.Execute(query);
+        }
+    }
 }

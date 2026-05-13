@@ -157,13 +157,20 @@
                                 <ColumnDefinition Width="48"/>
                             </Grid.ColumnDefinitions>
                             <TextBox Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     PlaceholderText="Type your message here..."
-                                     CornerRadius="16" Padding="16,12"
+                                     PlaceholderText="Ask AI anything about your shop..."
+                                     CornerRadius="24" 
+                                     Padding="12,12"
                                      FontSize="14"
-                                     MinHeight="48"
+                                     Height="48"
                                      AcceptsReturn="False"
                                      VerticalAlignment="Center"
-                                     KeyDown="OnChatKeyDown"/>
+                                     VerticalContentAlignment="Center"
+                                     Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                     BorderThickness="1"
+                                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"
+                                     KeyDown="OnChatKeyDown">
+                            </TextBox>
                             
                             <Button Grid.Column="1" Command="{Binding SendChatCommand}"
                                     Background="#8B52FF" 

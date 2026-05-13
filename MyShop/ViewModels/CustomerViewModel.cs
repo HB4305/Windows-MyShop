@@ -59,6 +59,12 @@ public partial class CustomerViewModel : ObservableObject
     [ObservableProperty]
     private string _searchKeyword = string.Empty;
 
+    partial void OnSearchKeywordChanged(string value)
+    {
+        CurrentPage = 1;
+        _ = LoadCustomersAsync();
+    }
+
     [RelayCommand]
     public async Task LoadCustomersAsync()
     {

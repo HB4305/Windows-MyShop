@@ -186,16 +186,9 @@ public sealed partial class SportItemPage : Page
         _ = ViewModel.ReloadWithCurrentSortAsync();
     }
 
-    private void OnSearchKeyDown(object sender, KeyRoutedEventArgs e)
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
-        if (e.Key != VirtualKey.Enter)
-            return;
-        e.Handled = true;
-
-        // Ensure the VM receives the exact typed string (some platforms don't flush binding on Enter).
-        if (sender is TextBox tb)
-            ViewModel.SearchKeyword = tb.Text ?? string.Empty;
-
+        ViewModel.SearchKeyword = args.QueryText ?? string.Empty;
         ViewModel.SearchCommand.Execute(null);
     }
 

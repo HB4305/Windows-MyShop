@@ -41,10 +41,6 @@
                       VerticalAlignment="Stretch"
                       VerticalContentAlignment="Center"
                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
-          <AutoSuggestBox.Resources>
-              <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
-              <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{ThemeResource ControlStrokeColorDefault}"/>
-          </AutoSuggestBox.Resources>
       </AutoSuggestBox>
 
       <Button Command="{Binding SearchCommand, ElementName=Root}"

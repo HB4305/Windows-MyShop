@@ -1,8 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
 using MyShop.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -110,12 +112,20 @@ public sealed partial class CreateOrderDialog : ContentDialog
     public CreateOrderDialogViewModel ViewModel { get; }
     public bool IsSubmitted { get; private set; }
     private ContentDialogResult _result = ContentDialogResult.None;
+    private readonly Dictionary<DependencyObject, (Brush? BorderBrush, Thickness BorderThickness)> _focusedControlStates = new();
 
     public CreateOrderDialog()
     {
         ViewModel = new CreateOrderDialogViewModel();
         this.InitializeComponent();
         this.DataContext = ViewModel;
+
+        // Initialize defaults to match UI selection
+        ViewModel.Order.OrderType = "AtStore";
+        if (string.IsNullOrEmpty(ViewModel.Order.PaymentMethod))
+        {
+            ViewModel.Order.PaymentMethod = "Cash";
+        }
 
         Loaded += CreateOrderDialog_Loaded;
     }
@@ -129,6 +139,17 @@ public sealed partial class CreateOrderDialog : ContentDialog
     private void CreateOrderDialog_Loaded(object sender, RoutedEventArgs e)
     {
         UpdateAddressVisibility();
+    }
+
+    private Border? GetFocusBorder(object sender)
+    {
+        return sender switch
+        {
+            AutoSuggestBox searchBox => searchBox.Parent as Border,
+            NumberBox numberBox => numberBox.Parent as Border,
+            MyShop.Controls.NumericTextBox numericTextBox => numericTextBox.Parent as Border,
+            _ => null
+        };
     }
 
     private void OrderTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -168,7 +189,69 @@ public sealed partial class CreateOrderDialog : ContentDialog
         }
     }
 
+    private void Input_GotFocus(object sender, RoutedEventArgs e)
+    {
+        var focusBorder = GetFocusBorder(sender);
+        if (focusBorder != null)
+        {
+            if (!_focusedControlStates.ContainsKey(focusBorder))
+            {
+                _focusedControlStates[focusBorder] = (focusBorder.BorderBrush, focusBorder.BorderThickness);
+            }
+
+            if (Application.Current.Resources.TryGetValue("PurpleBrush", out var purpleObj) && purpleObj is Brush purple)
+            {
+                focusBorder.BorderBrush = purple;
+            }
+
+            focusBorder.BorderThickness = new Thickness(1);
+            return;
+        }
+
+        if (sender is not Control control)
+        {
+            return;
+        }
+
+        if (!_focusedControlStates.ContainsKey(control))
+        {
+            _focusedControlStates[control] = (control.BorderBrush, control.BorderThickness);
+        }
+
+        if (Application.Current.Resources.TryGetValue("PurpleBrush", out var purpleObj2) && purpleObj2 is Brush purple2)
+        {
+            control.BorderBrush = purple2;
+        }
+
+        control.BorderThickness = new Thickness(1);
+    }
+
+    private void Input_LostFocus(object sender, RoutedEventArgs e)
+    {
+        var focusBorder = GetFocusBorder(sender);
+        if (focusBorder != null)
+        {
+            if (_focusedControlStates.TryGetValue(focusBorder, out var state))
+            {
+                focusBorder.BorderBrush = state.BorderBrush;
+                focusBorder.BorderThickness = state.BorderThickness;
+            }
+            return;
+        }
+
+        if (sender is Control control && _focusedControlStates.TryGetValue(control, out var state2))
+        {
+            control.BorderBrush = state2.BorderBrush;
+            control.BorderThickness = state2.BorderThickness;
+        }
+    }
+
     private void Quantity_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    {
+        ViewModel.RecalculateTotal();
+    }
+
+    private void Quantity_TextChanged(object sender, TextChangedEventArgs e)
     {
         ViewModel.RecalculateTotal();
     }
@@ -190,71 +273,81 @@ public sealed partial class CreateOrderDialog : ContentDialog
 
     private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
     {
-        ErrorBorder.Visibility = Visibility.Collapsed;
- 
+        // Clear all validation errors first
+        ClearAllValidationErrors();
+        bool hasError = false;
+
         // 1. Basic Customer Info
         if (string.IsNullOrWhiteSpace(ViewModel.Order.CustomerName))
         {
-            ShowError("Customer Name is required.");
-            return;
+            ShowFieldError(CustomerNameErrorBorder, CustomerNameErrorText, "Name is required");
+            hasError = true;
         }
- 
+
         if (string.IsNullOrWhiteSpace(ViewModel.Order.CustomerPhone))
         {
-            ShowError("Phone Number is required.");
-            return;
+            ShowFieldError(CustomerPhoneErrorBorder, CustomerPhoneErrorText, "Phone Number is required");
+            hasError = true;
         }
- 
+
         // 2. Order Metadata
         if (string.IsNullOrWhiteSpace(ViewModel.Order.OrderType))
         {
-            ShowError("Please select an Order Type.");
-            return;
+            ShowFieldError(OrderTypeErrorBorder, OrderTypeErrorText, "Order Type is required");
+            hasError = true;
         }
- 
+
         if (string.IsNullOrWhiteSpace(ViewModel.Order.PaymentMethod))
         {
-            ShowError("Please select a Payment Method.");
-            return;
+            ShowFieldError(PaymentMethodErrorBorder, PaymentMethodErrorText, "Payment Method is required");
+            hasError = true;
         }
- 
+
         // 3. Shipping Address for Delivery
         if (ViewModel.Order.OrderType == "Delivery" && string.IsNullOrWhiteSpace(ViewModel.Order.ShippingAddress))
         {
-            ShowError("Shipping Address is required for Delivery orders.");
-            return;
+            ShowFieldError(CustomerAddressErrorBorder, CustomerAddressErrorText, "Address is required for Delivery");
+            hasError = true;
         }
- 
+
+        if (hasError) return;
+
         // 4. Order Items
         if (ViewModel.OrderDetails.Count == 0)
         {
-            ShowError("Please add at least one product to the order.");
+            ShowFieldError(OrderItemsErrorBorder, OrderItemsErrorText, "Please add at least one product");
             return;
         }
- 
+
         // 5. Item Variants (Size/Color)
         foreach (var detail in ViewModel.OrderDetails)
         {
-            if (string.IsNullOrWhiteSpace(detail.SelectedSize))
+            if (string.IsNullOrWhiteSpace(detail.SelectedSize) || string.IsNullOrWhiteSpace(detail.SelectedColor))
             {
-                ShowError($"Please select a size for '{detail.ItemName}'.");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(detail.SelectedColor))
-            {
-                ShowError($"Please select a color for '{detail.ItemName}'.");
+                ShowFieldError(OrderItemsErrorBorder, OrderItemsErrorText, $"Missing Size/Color for '{detail.ItemName}'");
                 return;
             }
         }
- 
+
         IsSubmitted = true;
         _result = ContentDialogResult.Primary;
         Hide();
     }
 
-    private void ShowError(string message)
+    private void ClearAllValidationErrors()
     {
-        ErrorTextBlock.Text = message;
-        ErrorBorder.Visibility = Visibility.Visible;
+        OrderTypeErrorBorder.Visibility = Visibility.Collapsed;
+        PaymentMethodErrorBorder.Visibility = Visibility.Collapsed;
+        CustomerNameErrorBorder.Visibility = Visibility.Collapsed;
+        CustomerPhoneErrorBorder.Visibility = Visibility.Collapsed;
+        CustomerAddressErrorBorder.Visibility = Visibility.Collapsed;
+        OrderItemsErrorBorder.Visibility = Visibility.Collapsed;
     }
+
+    private void ShowFieldError(Border errorBorder, TextBlock errorText, string message)
+    {
+        errorBorder.Visibility = Visibility.Visible;
+        errorText.Text = message;
+    }
+
 }

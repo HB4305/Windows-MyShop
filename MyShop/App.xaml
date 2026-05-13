@@ -113,7 +113,7 @@
       </Style>
 
       <!-- ── Modern Search Styles ── -->
-      <Style x:Key="ModernSearchTextBoxStyle" TargetType="TextBox">
+      <Style x:Key="ModernSearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="CornerRadius" Value="24"/>
         <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -121,20 +121,10 @@
         <Setter Property="Height" Value="48"/>
         <Setter Property="Padding" Value="16,12"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
         <Setter Property="IsDeleteButtonVisible" Value="False"/>
-        <Setter Property="Resources">
-          <ResourceDictionary>
-            <!-- Force a clean border on focus without the default WinUI 3 underline/thickness -->
-            <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
-            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{ThemeResource ControlStrokeColorDefault}"/>
-            <!-- Remove the focus visual margin that can cause layout shifts -->
-            <Thickness x:Key="TextControlMargin">0</Thickness>
-          </ResourceDictionary>
-        </Setter>
       </Style>
 
-      <Style x:Key="ModernSearchAutoSuggestBoxStyle" TargetType="AutoSuggestBox">
+      <Style x:Key="ModernSearchAutoSuggestBoxStyle" TargetType="AutoSuggestBox" BasedOn="{StaticResource {x:Type AutoSuggestBox}}">
         <Setter Property="CornerRadius" Value="24"/>
         <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -142,11 +132,68 @@
         <Setter Property="Height" Value="48"/>
         <Setter Property="Padding" Value="16,12,48,12"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
+      </Style>
+
+      <!-- Global Implicit Styles for consistent focus effect -->
+      <Style TargetType="TextBox">
         <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12,12"/>
         <Setter Property="Resources">
           <ResourceDictionary>
             <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
-            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{ThemeResource ControlStrokeColorDefault}"/>
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#8B52FF"/>
+          </ResourceDictionary>
+        </Setter>
+      </Style>
+
+      <Style TargetType="AutoSuggestBox">
+        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="16,12,48,12"/>
+        <Setter Property="Resources">
+          <ResourceDictionary>
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#8B52FF"/>
+          </ResourceDictionary>
+        </Setter>
+      </Style>
+
+      <Style TargetType="controls:DecimalTextBox" BasedOn="{StaticResource {x:Type TextBox}}"/>
+      <Style TargetType="controls:NumericTextBox" BasedOn="{StaticResource {x:Type TextBox}}"/>
+
+      <Style TargetType="PasswordBox">
+        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12,12"/>
+        <Setter Property="Resources">
+          <ResourceDictionary>
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+            <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#8B52FF"/>
+          </ResourceDictionary>
+        </Setter>
+      </Style>
+
+      <Style TargetType="ComboBox">
+        <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
+        <Setter Property="CornerRadius" Value="24"/>
+        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12,12"/>
+        <Setter Property="Resources">
+          <ResourceDictionary>
+            <Thickness x:Key="ComboBoxBorderThemeThicknessFocused">1</Thickness>
+            <SolidColorBrush x:Key="ComboBoxBorderBrushFocused" Color="#8B52FF"/>
           </ResourceDictionary>
         </Setter>
       </Style>

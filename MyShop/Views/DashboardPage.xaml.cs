@@ -146,6 +146,15 @@ public sealed partial class DashboardPage : Page
         this.Frame.Navigate(typeof(SportItemPage));
     }
 
+    private void CalendarView_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
+    {
+        if (args.AddedDates.Count > 0 && DataContext is DashboardViewModel vm)
+        {
+            vm.SelectedDate = args.AddedDates[0];
+            DatePickerButton.Flyout.Hide();
+        }
+    }
+
     private async void CreateOrderButton_Click(object sender, RoutedEventArgs e)
     {
         try

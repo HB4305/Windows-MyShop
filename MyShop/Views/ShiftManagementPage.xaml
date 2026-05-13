@@ -241,7 +241,12 @@
                              Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
                   <TextBox Text="{Binding StartingCashText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                            PlaceholderText="0.00"
-                           MinHeight="42"/>
+                           MinHeight="42"
+                           CornerRadius="24"
+                           Padding="12,12"
+                           Background="{ThemeResource ControlFillColorDefaultBrush}"
+                           BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                           BorderThickness="1"/>
                 </StackPanel>
                 <Button Command="{Binding OpenShiftCommand}"
                         Background="{StaticResource PurpleBrush}"
@@ -309,7 +314,12 @@
                   </StackPanel>
                   <TextBox Text="{Binding ActualCashTotalText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                            PlaceholderText="0.00"
-                           MinHeight="42"/>
+                           MinHeight="42"
+                           CornerRadius="24"
+                           Padding="12,12"
+                           Background="{ThemeResource ControlFillColorDefaultBrush}"
+                           BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                           BorderThickness="1"/>
                 </StackPanel>
               </Border>
 
@@ -340,7 +350,12 @@
                        PlaceholderText="Add cash differences or shift notes..."
                        AcceptsReturn="True"
                        TextWrapping="Wrap"
-                       MinHeight="120"/>
+                       MinHeight="120"
+                       CornerRadius="24"
+                       Padding="12,12"
+                       Background="{ThemeResource ControlFillColorDefaultBrush}"
+                       BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                       BorderThickness="1"/>
             </StackPanel>
 
             <Grid ColumnSpacing="12">

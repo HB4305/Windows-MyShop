@@ -41,6 +41,25 @@ public class OrderDetail : INotifyPropertyChanged
         }
     }
 
+    public string QuantityText
+    {
+        get => Quantity > 0 ? Quantity.ToString() : string.Empty;
+        set
+        {
+            if (int.TryParse(value, out var q))
+            {
+                int max = (int)MaxQuantity;
+                Quantity = Math.Min(q, max);
+            }
+            else
+            {
+                Quantity = 0;
+            }
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(QuantityText));
+        }
+    }
+
     [Required(ErrorMessage = "Unit price is required")]
     [Range(0, 9999999999.99, ErrorMessage = "Unit price exceeds allowed range")]
     public decimal UnitPrice { get; set; }

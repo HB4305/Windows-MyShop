@@ -35,6 +35,11 @@ public sealed partial class StaffManagementPage : Page
         await ViewModel.LoadStaffAsync();
         BuildPagination();
     }
+    
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        _ = ViewModel.LoadStaffAsync();
+    }
 
     private async void AddStaff_Click(object sender, RoutedEventArgs e)
     {
