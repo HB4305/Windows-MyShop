@@ -44,6 +44,25 @@
     <Exec Command="&quot;$(ObfuscarPath)&quot; $(MSBuildProjectDirectory)\obfuscar.xml" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
 
+  <Target Name="CopyDesktopReleaseToRootRelease"
+          AfterTargets="ObfuscateDesktop"
+          Condition="'$(Configuration)' == 'Release' and '$(TargetFramework)' == 'net10.0-desktop'">
+    <PropertyGroup>
+      <RootReleaseDir>$(MSBuildProjectDirectory)\..\Release\MyShop-win-x64\</RootReleaseDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <RootReleaseFiles Include="$(TargetDir)**\*.*"
+                        Exclude="$(TargetDir).env;$(TargetDir).env.*;$(TargetDir).env copy" />
+    </ItemGroup>
+    <MakeDir Directories="$(RootReleaseDir)" />
+    <Copy SourceFiles="@(RootReleaseFiles)"
+          DestinationFiles="@(RootReleaseFiles->'$(RootReleaseDir)%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true" />
+    <WriteLinesToFile File="$(RootReleaseDir)README_RUN.txt"
+                      Overwrite="true"
+                      Lines="Run MyShop.exe to start the application.;Keep all files in this Release folder together." />
+  </Target>
+
   <Target Name="ObfuscatePublish" AfterTargets="Publish" Condition="'$(TargetFramework)' == 'net10.0-desktop'">
     <PropertyGroup>
       <ObfuscarPath>$(NuGetPackageRoot)obfuscar\2.2.38\tools\Obfuscar.Console.exe</ObfuscarPath>

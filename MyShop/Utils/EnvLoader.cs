@@ -9,11 +9,18 @@ public static class EnvLoader
 {
     public static void Load()
     {
-        // Try to find .env in common locations (project root, app bin)
+        var appDataFolder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "MyShop");
+        Directory.CreateDirectory(appDataFolder);
+        var appDataEnv = Path.Combine(appDataFolder, ".env");
+
+        // Try to find .env in common locations (installed app, user app data, project root).
         var paths = new[]
         {
-            ".env",
             Path.Combine(AppContext.BaseDirectory, ".env"),
+            appDataEnv,
+            ".env",
             // Go up a few levels for IDE/Dev environments
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".env"),
             Path.Combine(Directory.GetCurrentDirectory(), ".env")
