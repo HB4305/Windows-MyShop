@@ -5,6 +5,9 @@
 
 # dotenv files
 .env
+.env.*
+.env copy
+!.env.example
 
 # User-specific files
 *.rsuser

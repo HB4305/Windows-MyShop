@@ -25,3 +25,15 @@ Rebuild the installer with Inno Setup:
 ```
 
 The installer script excludes `.env`, `.env copy`, `.env.*`, and `*.pdb` so real API keys are not packaged.
+
+After installing with `MyShopSetup.exe`, put runtime `.env` configuration here:
+
+```text
+%APPDATA%\MyShop\.env
+```
+
+For example:
+
+```powershell
+notepad "$env:APPDATA\MyShop\.env"
+```
