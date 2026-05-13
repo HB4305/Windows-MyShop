@@ -253,6 +253,7 @@
                         Foreground="White"
                         BorderThickness="0"
                         Padding="16,12"
+                        CornerRadius="24"
                         HorizontalAlignment="Stretch">
                   <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                     <FontIcon Glyph="&#xE710;" Foreground="White" FontSize="14"/>
@@ -375,7 +376,8 @@
                       Background="{StaticResource SuccessBrush}"
                       Foreground="White"
                       BorderThickness="0"
-                      Padding="18,12">
+                      Padding="18,12"
+                      CornerRadius="24">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                   <FontIcon Glyph="&#xE73E;" Foreground="White" FontSize="14"/>
                   <TextBlock Text="Submit Shift Report" FontWeight="SemiBold"/>

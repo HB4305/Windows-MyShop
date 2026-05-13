@@ -473,7 +473,7 @@
                       Foreground="White"
                       BorderThickness="0"
                       Padding="18,14"
-                      CornerRadius="{ThemeResource ControlCornerRadius}"
+                      CornerRadius="24"
                       HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                   <FontIcon Glyph="&#xE8C7;" Foreground="White"/>
