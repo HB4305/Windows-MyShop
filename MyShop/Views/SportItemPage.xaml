@@ -155,8 +155,19 @@
           </AutoSuggestBox>
       </Border>
 
-      <!-- Action Buttons (Visible in Wide) -->
       <StackPanel x:Name="ActionButtonsPanel" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="14">
+        <!-- Download Template Button -->
+        <Button x:Name="DownloadTemplateButton"
+                Style="{StaticResource BulkImportButtonStyle}"
+                Click="OnDownloadTemplateClick"
+                ToolTipService.ToolTip="Download Excel Template">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon Glyph="&#xE896;" FontSize="15" Foreground="{StaticResource AppPurpleBrush}"/>
+            <TextBlock Text="Template" VerticalAlignment="Center" FontWeight="SemiBold" 
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </StackPanel>
+        </Button>
+
         <Button x:Name="ImportButton"
                 Style="{StaticResource BulkImportButtonStyle}"
                 Click="OnBulkImportClick">
@@ -180,8 +191,18 @@
       </StackPanel>
     </Grid>
 
-    <!-- Action Buttons (Visible in Narrow) -->
     <StackPanel x:Name="ActionButtonsStack" Grid.Row="2" Visibility="Collapsed" Spacing="12" Margin="0,0,0,20">
+       <Button x:Name="DownloadTemplateButtonNarrow"
+                Style="{StaticResource BulkImportButtonStyle}"
+                HorizontalAlignment="Stretch"
+                Click="OnDownloadTemplateClick">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon Glyph="&#xE896;" FontSize="15" Foreground="{StaticResource AppPurpleBrush}"/>
+            <TextBlock Text="Download Template" VerticalAlignment="Center" FontWeight="SemiBold" 
+                       FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          </StackPanel>
+        </Button>
+
        <Button x:Name="ImportButtonNarrow"
                 Style="{StaticResource BulkImportButtonStyle}"
                 HorizontalAlignment="Stretch"
