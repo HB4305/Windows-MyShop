@@ -161,7 +161,7 @@ public class ExcelImportService
         var ws = wb.Worksheets.Add("Products");
 
         // Header row
-        ws.Cell(1, 1).Value = "Image URLs (split by ;)";
+        ws.Cell(1, 1).Value = "Image Paths or URLs (split by ;)";
         ws.Cell(1, 2).Value = "Name *";
         ws.Cell(1, 3).Value = "Category";
         ws.Cell(1, 4).Value = "Selling Price *";
@@ -175,7 +175,7 @@ public class ExcelImportService
         headerRow.Style.Font.FontColor = XLColor.White;
 
         // Sample data row
-        ws.Cell(2, 1).Value = "https://example.com/image1.jpg; https://example.com/image2.jpg";
+        ws.Cell(2, 1).Value = @"C:\Photos\sample_product_1.jpg; D:\Downloads\sample_product_2.png";
         ws.Cell(2, 2).Value = "Nike Air Zoom";
         ws.Cell(2, 3).Value = "Shoes";
         ws.Cell(2, 4).Value = 99.99;
