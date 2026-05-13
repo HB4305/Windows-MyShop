@@ -295,7 +295,7 @@ public class SportItemRepository
 
         var result = await cmd.ExecuteScalarAsync();
         var newId = Convert.ToInt32(result);
-        await ReplaceVariantsAsync(conn, newId, item.Variants);
+        await ReplaceVariantsAsync(conn, newId, item.Variants ?? new());
         return newId;
     }
 
@@ -378,7 +378,7 @@ public class SportItemRepository
         cmd.Parameters.AddWithValue("id", item.Id);
         AddSportItemParams(cmd, item);
         await cmd.ExecuteNonQueryAsync();
-        await ReplaceVariantsAsync(conn, item.Id, item.Variants);
+        await ReplaceVariantsAsync(conn, item.Id, item.Variants ?? new());
     }
 
     public async Task DeductVariantStockAsync(long variantId, int quantity)

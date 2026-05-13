@@ -10,6 +10,7 @@
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
+    <conv:DateToMonthYearConverter x:Key="DateToMonthYearConverter"/>
     <!-- Accent colors (matching Login) -->
     <SolidColorBrush x:Key="PurpleBrush"
         Color="#8B52FF"/>
@@ -156,31 +157,25 @@
               VerticalAlignment="Center"
               Spacing="10">
   
-            <!-- Date picker button -->
+            <!-- Today's Date Display (Non-interactive) -->
             <Border Background="{ThemeResource ControlFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1"
                     CornerRadius="24"
                     MinHeight="44"
-                    Padding="12,8">
-              <StackPanel Orientation="Horizontal"
-                  Spacing="6"
-                  VerticalAlignment="Center">
-                <TextBlock FontFamily="Segoe MDL2 Assets"
-                    Text="&#xE787;"
-                    FontSize="13"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    VerticalAlignment="Center"/>
-                <TextBlock Text="July 2026"
-                    FontSize="13"
-                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                    VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                    Padding="16,8">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <FontIcon Glyph="&#xE787;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                <TextBlock Text="{Binding TodayDisplay}" 
+                           FontSize="14" 
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" 
+                           FontFamily="{StaticResource AppDefaultFontFamily}"/>
               </StackPanel>
             </Border>
   
             <!-- Create Order button -->
             <Button Background="{StaticResource AppPurpleBrush}"
-                    Foreground="White"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     CornerRadius="24"
                     Padding="20,10"
                     MinHeight="48"
@@ -190,12 +185,12 @@
                 <TextBlock FontFamily="Segoe MDL2 Assets"
                     Text="&#xE710;"
                     FontSize="14"
-                    Foreground="White"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     VerticalAlignment="Center"/>
                 <TextBlock Text="Create Order"
                     FontSize="14"
                     FontWeight="SemiBold"
-                    Foreground="White"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                     VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
               </StackPanel>
             </Button>

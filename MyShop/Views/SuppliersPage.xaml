@@ -25,7 +25,7 @@
     </Style>
 
     <Style x:Key="PageBtnActive" TargetType="Button">
-      <Setter Property="Background" Value="{StaticResource AppAccentBrush}"/>
+      <Setter Property="Background" Value="{StaticResource AppPurpleBrush}"/>
       <Setter Property="Foreground" Value="White"/>
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="MinWidth" Value="32"/>
@@ -109,19 +109,46 @@
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
-          <Grid Grid.Column="0">
-            <TextBox x:Name="SearchBox" PlaceholderText="Search by name, phone..."
-                     Text="{Binding SearchSupplierKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource ModernSearchTextBoxStyle}"
-                     CornerRadius="24"
-                     Padding="16,12,80,12"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
-              <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoadingSuppliers}" Visibility="{Binding IsLoadingSuppliers, Converter={StaticResource BoolToVisibilityConverter}}"/>
-              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                      Background="Transparent" BorderThickness="0" Padding="12"
-                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
-            </StackPanel>
-          </Grid>
+          <!-- Standardized Premium Search Bar (Synchronized with Shift Log) -->
+          <Border x:Name="SearchWrapper"
+                  Grid.Column="0"
+                  Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderThickness="1"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  CornerRadius="24"
+                  Height="48"
+                  VerticalAlignment="Center">
+              <AutoSuggestBox x:Name="SearchBox"
+                              Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
+                              PlaceholderText="Search suppliers..."
+                              Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              QuerySubmitted="OnSearchQuerySubmitted"
+                              QueryIcon="Find"
+                              VerticalAlignment="Stretch"
+                              VerticalContentAlignment="Center"
+                              GotFocus="SearchBox_GotFocus"
+                              LostFocus="SearchBox_LostFocus"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              Padding="16,0,12,0"
+                              FontFamily="{StaticResource AppDefaultFontFamily}">
+                  <AutoSuggestBox.Resources>
+                      <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                      <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                      <!-- Style the internal search button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                          <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                          <Setter Property="Background" Value="Transparent"/>
+                          <Setter Property="BorderThickness" Value="0"/>
+                      </Style>
+                      <!-- Targeted style to hide the clear button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxDeleteButtonStyle">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                          <Setter Property="Width" Value="0"/>
+                      </Style>
+                  </AutoSuggestBox.Resources>
+              </AutoSuggestBox>
+          </Border>
 
           <Button x:Name="AddSupplierButton" Grid.Column="1" Click="AddSupplier_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
                   CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
@@ -209,8 +236,7 @@
     
           <!-- Table Footer -->
           <Border Grid.Row="2" 
-                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-                  BorderThickness="0,1,0,0"
+                  BorderThickness="0"
                   Margin="-20,0,-20,-20" Padding="24,12">
             <Grid>
               <Grid.ColumnDefinitions>
@@ -251,19 +277,46 @@
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
-          <Grid Grid.Column="0">
-            <TextBox PlaceholderText="Search orders by ID or supplier..."
-                     Text="{Binding SearchOrderKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource ModernSearchTextBoxStyle}"
-                     CornerRadius="24"
-                     Padding="16,12,80,12"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
-              <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoadingOrders}" Visibility="{Binding IsLoadingOrders, Converter={StaticResource BoolToVisibilityConverter}}"/>
-              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                      Background="Transparent" BorderThickness="0" Padding="12"
-                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
-            </StackPanel>
-          </Grid>
+          <!-- Standardized Premium Search Bar (Matching Report Design) -->
+          <Border x:Name="OrderSearchWrapper"
+                  Grid.Column="0"
+                  Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderThickness="1"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  CornerRadius="24"
+                  Height="48"
+                  VerticalAlignment="Center">
+              <AutoSuggestBox x:Name="OrderSearchBox"
+                              Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
+                              PlaceholderText="Search orders by ID or supplier..."
+                              Text="{Binding SearchOrderQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              QuerySubmitted="OnOrderSearchQuerySubmitted"
+                              QueryIcon="Find"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              Padding="16,0,12,0"
+                              VerticalAlignment="Stretch"
+                              VerticalContentAlignment="Center"
+                              GotFocus="OrderSearchBox_GotFocus"
+                              LostFocus="OrderSearchBox_LostFocus"
+                              FontFamily="{StaticResource AppDefaultFontFamily}">
+                  <AutoSuggestBox.Resources>
+                      <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                      <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                      <!-- Style the internal search button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                          <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                          <Setter Property="Background" Value="Transparent"/>
+                          <Setter Property="BorderThickness" Value="0"/>
+                      </Style>
+                      <!-- Targeted style to hide the clear button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxDeleteButtonStyle">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                          <Setter Property="Width" Value="0"/>
+                      </Style>
+                  </AutoSuggestBox.Resources>
+              </AutoSuggestBox>
+          </Border>
 
           <Button x:Name="AddOrderButton" Grid.Column="1" Click="CreateSupplyOrder_Click" Background="{StaticResource AppPurpleBrush}" Foreground="White" 
                   CornerRadius="20" Padding="16,10" MinHeight="48" Style="{StaticResource ColorPreservingButtonStyle}">
@@ -341,9 +394,8 @@
   
         <!-- Table Footer -->
         <Border Grid.Row="2" 
-                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-                BorderThickness="0,1,0,0"
-                Margin="-20,0,-20,-20" Padding="24,12">
+                BorderThickness="0"
+                Margin="-24,0,-24,-20" Padding="24,12">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>

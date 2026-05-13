@@ -67,6 +67,8 @@ public partial class ReportViewModel : ObservableObject
   [ObservableProperty] private List<string> _productOptions;
   [ObservableProperty] private string _selectedCategory = "All";
   [ObservableProperty] private string _productSearchText = string.Empty;
+  [ObservableProperty] private DateTimeOffset? _customRangeStart;
+  [ObservableProperty] private DateTimeOffset? _customRangeEnd;
   [ObservableProperty] private ISeries[] _soldQuantitySeries = [];
   [ObservableProperty] private Axis[] _soldQuantityXAxes = [];
   [ObservableProperty] private Axis[] _soldQuantityYAxes = [];
@@ -84,6 +86,7 @@ public partial class ReportViewModel : ObservableObject
     ReportPeriod.Week => "Previous Week",
     ReportPeriod.Month => "Previous Month",
     ReportPeriod.Year => "Previous Year",
+    ReportPeriod.Custom => "Custom Range",
     _ => "Selected Period"
   };
 
@@ -98,6 +101,9 @@ public partial class ReportViewModel : ObservableObject
   public Brush MonthButtonForeground => GetPeriodButtonForeground(ReportPeriod.Month);
 
   public Brush YearButtonForeground => GetPeriodButtonForeground(ReportPeriod.Year);
+
+  public Brush CustomButtonBackground => GetPeriodButtonBackground(ReportPeriod.Custom);
+  public Brush CustomButtonForeground => GetPeriodButtonForeground(ReportPeriod.Custom);
 
   private async Task InitializeAsync()
   {
@@ -159,6 +165,19 @@ public partial class ReportViewModel : ObservableObject
 
     ProductSalesFilter.Period = period;
     PeriodSelection = ReportService.CreatePeriodSelection(period);
+    
+    // Clear custom range when switching back to standard periods
+    CustomRangeStart = null;
+    CustomRangeEnd = null;
+
+    NotifyPeriodChanged();
+    _ = LoadReportAsync();
+  }
+
+  public void SetCustomPeriod(DateTime start, DateTime end)
+  {
+    ProductSalesFilter.Period = ReportPeriod.Custom;
+    PeriodSelection = ReportService.CreateCustomPeriodSelection(start, end);
     NotifyPeriodChanged();
     _ = LoadReportAsync();
   }
@@ -273,6 +292,8 @@ public partial class ReportViewModel : ObservableObject
     OnPropertyChanged(nameof(WeekButtonForeground));
     OnPropertyChanged(nameof(MonthButtonForeground));
     OnPropertyChanged(nameof(YearButtonForeground));
+    OnPropertyChanged(nameof(CustomButtonBackground));
+    OnPropertyChanged(nameof(CustomButtonForeground));
   }
 
   private void RefreshCharts()

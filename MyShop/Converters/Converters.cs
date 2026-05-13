@@ -507,7 +507,13 @@ public class UserToForegroundConverter : IValueConverter
         if (isUser)
             return new SolidColorBrush(Microsoft.UI.Colors.White);
         
-        return (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
+        // Use a more specific resource or fallback to black/white depending on theme
+        var brush = Application.Current.Resources["TextFillColorPrimaryBrush"] as Brush;
+        if (brush != null) return brush;
+
+        // Fallback logic if resource is missing
+        bool isDark = Application.Current.RequestedTheme == ApplicationTheme.Dark;
+        return new SolidColorBrush(isDark ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.Black);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, string language)
@@ -523,7 +529,7 @@ public class DateTimeOffsetConverter : IValueConverter
         if (value is DateTimeOffset dto)
             return dto.ToLocalTime().ToString(format);
         if (value is DateTime dt)
-            return dt.ToString(format);
+            return dt.ToLocalTime().ToString(format);
         return string.Empty;
     }
 
@@ -531,3 +537,20 @@ public class DateTimeOffsetConverter : IValueConverter
         => throw new NotImplementedException();
 }
 
+
+/// <summary>Formats Date → "MMMM d, yyyy" in English (e.g. July 4, 2026)</summary>
+public class DateToMonthYearConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, string language)
+    {
+        var culture = new CultureInfo("en-US");
+        if (value is DateTimeOffset dto)
+            return dto.ToString("MMMM d, yyyy", culture);
+        if (value is DateTime dt)
+            return dt.ToString("MMMM d, yyyy", culture);
+        return string.Empty;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, string language)
+        => throw new NotImplementedException();
+}

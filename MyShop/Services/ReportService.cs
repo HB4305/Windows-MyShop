@@ -19,6 +19,11 @@ public class ReportService
     };
   }
 
+  public static PeriodSelection CreateCustomPeriodSelection(DateTime start, DateTime end)
+  {
+      return new CustomPeriodSelection(start, end);
+  }
+
   public async Task<ReportOverview> GetReportOverviewAsync(PeriodSelection periodSelection)
   {
     var currentRange = periodSelection.Range;
@@ -81,6 +86,7 @@ public class ReportService
       ReportPeriod.Week => (currentRange.Start.AddDays(-7), currentRange.Start),
       ReportPeriod.Month => (currentRange.Start.AddMonths(-1), currentRange.Start),
       ReportPeriod.Year => (currentRange.Start.AddYears(-1), currentRange.Start),
+      ReportPeriod.Custom => (currentRange.Start.AddDays(-(currentRange.End - currentRange.Start).TotalDays), currentRange.Start),
       _ => (currentRange.Start, currentRange.End)
     };
   }

@@ -24,9 +24,11 @@ public partial class StaffManagementViewModel : ObservableObject
 
     [ObservableProperty] private ObservableCollection<UserRecord> _staffMembers = [];
     [ObservableProperty] private ObservableCollection<UserRecord> _filteredStaffMembers = [];
-    [ObservableProperty] private string _searchText = string.Empty;
+    [ObservableProperty] private string _searchQuery = string.Empty;
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private bool _isLoading;
+
+    public bool ShowEmptyState => !IsLoading && TotalItems == 0;
 
     // Pagination properties for UI synchronization
     [ObservableProperty]
@@ -51,7 +53,7 @@ public partial class StaffManagementViewModel : ObservableObject
     public int TotalStaffCount => StaffMembers.Count;
     public int SaleCount => StaffMembers.Count(user => NormalizeRole(user.Role) == "sale");
 
-    partial void OnSearchTextChanged(string value)
+    partial void OnSearchQueryChanged(string value)
     {
         CurrentPage = 1;
         ApplyFilter();
@@ -231,7 +233,7 @@ public partial class StaffManagementViewModel : ObservableObject
 
     private void ApplyFilter()
     {
-        var keyword = SearchText.Trim();
+        var keyword = SearchQuery.Trim();
         IEnumerable<UserRecord> filtered = StaffMembers;
 
         if (!string.IsNullOrWhiteSpace(keyword))
@@ -270,4 +272,7 @@ public partial class StaffManagementViewModel : ObservableObject
 
     private static string NormalizeRole(string? role)
         => role?.Trim().ToLowerInvariant() == "owner" ? "owner" : "sale";
+
+    partial void OnIsLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowEmptyState));
+    partial void OnTotalItemsChanged(int value) => OnPropertyChanged(nameof(ShowEmptyState));
 }

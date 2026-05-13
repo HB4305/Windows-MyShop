@@ -35,12 +35,19 @@ public sealed partial class CustomerPage : Page
         BuildPagination();
     }
 
-    private void OnSearchKeyDown(object sender, KeyRoutedEventArgs e)
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
-        if (e.Key == Windows.System.VirtualKey.Enter)
-        {
-            ViewModel.SearchCommand.Execute(null);
-        }
+        ViewModel.SearchCommand.Execute(null);
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
     }
 
     private async void OnAddCustomerClick(object sender, RoutedEventArgs e)
@@ -50,23 +57,31 @@ public sealed partial class CustomerPage : Page
         {
             var dialog = new AddEditCustomerDialog(null) { XamlRoot = this.XamlRoot };
             GlobalLoadingOverlay.Visibility = Visibility.Collapsed;
-            if (await dialog.ShowAsync() == ContentDialogResult.Primary) await ViewModel.LoadCustomersAsync();
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary) 
+            {
+                var customer = dialog.GetCustomer();
+                await ViewModel.SaveCustomerCommand.ExecuteAsync(customer);
+            }
         }
         finally { GlobalLoadingOverlay.Visibility = Visibility.Collapsed; }
     }
 
     private async void OnEditCustomerClick(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Customer customer)
+        if (sender is Button btn && btn.Tag is Customer customer)
         {
             var dialog = new AddEditCustomerDialog(customer) { XamlRoot = this.XamlRoot };
-            if (await dialog.ShowAsync() == ContentDialogResult.Primary) await ViewModel.LoadCustomersAsync();
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary) 
+            {
+                var updatedCustomer = dialog.GetCustomer();
+                await ViewModel.SaveCustomerCommand.ExecuteAsync(updatedCustomer);
+            }
         }
     }
 
     private async void OnDeleteCustomerClick(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Customer customer)
+        if (sender is Button btn && btn.Tag is Customer customer)
         {
             var dialog = new ConfirmationDialog("Delete Customer", $"Are you sure you want to delete {customer.Name}?");
             dialog.XamlRoot = this.XamlRoot;

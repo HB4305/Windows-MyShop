@@ -38,6 +38,10 @@ public partial class CustomerOrderViewModel : ObservableObject
     [ObservableProperty]
     private string? _errorMessage;
 
+    public bool ShowEmptyState => !IsLoading && PaginatedOrders.Count == 0;
+
+    public bool ShowEmptyDetailState => !IsDetailLoading && CurrentDetails.Count == 0;
+
     [ObservableProperty]
     private bool _showDetailPanel = false;
 
@@ -76,6 +80,27 @@ public partial class CustomerOrderViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<string> _searchHistory = new();
 
+    // ── Date Range Filtering ─────────────────────────────────────
+    [ObservableProperty]
+    private DateTimeOffset? _fromDate;
+
+    [ObservableProperty]
+    private DateTimeOffset? _toDate;
+
+    partial void OnFromDateChanged(DateTimeOffset? value)
+    {
+        CurrentPage = 1;
+        ApplyPagination();
+        OnPropertyChanged(nameof(IsDateFilterActive));
+    }
+
+    partial void OnToDateChanged(DateTimeOffset? value)
+    {
+        CurrentPage = 1;
+        ApplyPagination();
+        OnPropertyChanged(nameof(IsDateFilterActive));
+    }
+
     // ── Filter Options ──────────────────────────────────────────────
     public ObservableCollection<string> TabOptions { get; } = new()
     {
@@ -92,6 +117,8 @@ public partial class CustomerOrderViewModel : ObservableObject
     // ── Computed Stats ─────────────────────────────────────────────
     [ObservableProperty]
     private int _totalOrders = 0;
+
+    public bool IsDateFilterActive => FromDate.HasValue || ToDate.HasValue;
 
     [ObservableProperty]
     private int _pendingCount = 0;
@@ -290,6 +317,18 @@ public partial class CustomerOrderViewModel : ObservableObject
             };
         }
 
+        if (FromDate.HasValue)
+        {
+            var from = FromDate.Value.Date;
+            source = source.Where(o => o.CreatedAt.HasValue && o.CreatedAt.Value.Date >= from);
+        }
+
+        if (ToDate.HasValue)
+        {
+            var to = ToDate.Value.Date;
+            source = source.Where(o => o.CreatedAt.HasValue && o.CreatedAt.Value.Date <= to);
+        }
+
         return source;
     }
 
@@ -424,4 +463,10 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     /// <summary>Alias for CurrentDetails — used by XAML binding.</summary>
     public ObservableCollection<OrderDetail> SelectedOrderDetails => CurrentDetails;
+
+    partial void OnIsLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowEmptyState));
+    partial void OnPaginatedOrdersChanged(ObservableCollection<CustomerOrder> value) => OnPropertyChanged(nameof(ShowEmptyState));
+
+    partial void OnIsDetailLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowEmptyDetailState));
+    partial void OnCurrentDetailsChanged(ObservableCollection<OrderDetail> value) => OnPropertyChanged(nameof(ShowEmptyDetailState));
 }

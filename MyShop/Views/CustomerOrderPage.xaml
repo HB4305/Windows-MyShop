@@ -6,7 +6,8 @@
       xmlns:m="using:MyShop.Models"
       xmlns:vm="using:MyShop.ViewModels"
       xmlns:conv="using:MyShop.Converters"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      Language="en-US">
 
   <Page.Resources>
     <!-- ══ Converters ══ -->
@@ -43,25 +44,19 @@
                 <VisualStateGroup x:Name="CommonStates">
                   <VisualState x:Name="Normal"/>
                   <VisualState x:Name="PointerOver">
-                    <Storyboard>
-                      <ColorAnimation Storyboard.TargetName="Root"
-                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                      To="#F3F4F6" Duration="0:0:0.1"/>
-                    </Storyboard>
+                    <VisualState.Setters>
+                      <Setter Target="Root.Background" Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
+                    </VisualState.Setters>
                   </VisualState>
                   <VisualState x:Name="Selected">
-                    <Storyboard>
-                      <ColorAnimation Storyboard.TargetName="Root"
-                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                      To="#EFE9FF" Duration="0:0:0.1"/>
-                    </Storyboard>
+                    <VisualState.Setters>
+                      <Setter Target="Root.Background" Value="{ThemeResource AppAccentBrushLow}"/>
+                    </VisualState.Setters>
                   </VisualState>
                   <VisualState x:Name="SelectedPointerOver">
-                    <Storyboard>
-                      <ColorAnimation Storyboard.TargetName="Root"
-                                      Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                      To="#EFE9FF" Duration="0:0:0.1"/>
-                    </Storyboard>
+                    <VisualState.Setters>
+                      <Setter Target="Root.Background" Value="{ThemeResource AppAccentBrushLow}"/>
+                    </VisualState.Setters>
                   </VisualState>
                 </VisualStateGroup>
               </VisualStateManager.VisualStateGroups>
@@ -79,8 +74,9 @@
     </Style>
 
     <!-- ══ Accent Colors ══ -->
+    <SolidColorBrush x:Key="AppPurpleBrush"    Color="#8B52FF"/>
     <SolidColorBrush x:Key="PurpleBrush"       Color="#8B52FF"/>
-    <SolidColorBrush x:Key="PurpleLightBrush"  Color="#1A8B52FF"/> <!-- Faint purple -->
+    <SolidColorBrush x:Key="PurpleLightBrush"  Color="#8B52FF" Opacity="0.12"/> <!-- Faint purple -->
     <SolidColorBrush x:Key="AmberBrush"        Color="#D97706"/>
     <SolidColorBrush x:Key="BlueBrush"         Color="#2563EB"/>
     <SolidColorBrush x:Key="GreenBrush"        Color="#059669"/>
@@ -147,11 +143,11 @@
       <Setter Property="CornerRadius" Value="8"/>
     </Style>
 
-    <Style x:Key="SearchBoxText" TargetType="TextBox">
+    <Style x:Key="SearchBoxText" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="Padding" Value="0,8,10,8"/>
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
@@ -268,7 +264,7 @@
             <ColumnDefinition Width="190"/>
             <ColumnDefinition Width="130"/>
             <ColumnDefinition Width="170"/>
-            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="120"/>
             <ColumnDefinition Width="110"/>
             <ColumnDefinition Width="120"/>
@@ -320,7 +316,7 @@
 
           <!-- Date -->
           <TextBlock Grid.Column="4"
-                     Text="{x:Bind CreatedAt, Mode=OneWay, Converter={StaticResource DateTimeOffsetConverter}}"
+                     Text="{x:Bind CreatedAt, Mode=OneWay, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='HH:mm dd/MM/yyyy'}"
                      FontSize="12"
                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                      VerticalAlignment="Center"
@@ -682,6 +678,7 @@
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
           <!-- Tab Buttons -->
@@ -770,18 +767,77 @@
             </StackPanel>
           </ScrollViewer>
 
-          <!-- Search Bar (Synced with global style) -->
-          <Grid Grid.Column="1"
-                MinWidth="280"
-                Margin="16,0,0,0">
-              <TextBox Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                       PlaceholderText="Search orders..."
-                       Style="{StaticResource ModernSearchTextBoxStyle}"/>
-              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                      Background="Transparent" BorderThickness="0" Padding="12" Margin="0,0,4,0"
-                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
-                      HorizontalAlignment="Right" VerticalAlignment="Center"/>
-          </Grid>
+          <!-- Date Range Search -->
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="16,0,0,0" Language="en-US">
+              <CalendarDatePicker x:Name="FromDatePicker" 
+                                  PlaceholderText="From" 
+                                  Date="{Binding FromDate, Mode=TwoWay}"
+                                  Width="150"
+                                  CornerRadius="8"
+                                  Language="en-US"
+                                  CalendarIdentifier="GregorianCalendar"/>
+              <TextBlock Text="–" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+              <CalendarDatePicker x:Name="ToDatePicker" 
+                                  PlaceholderText="To" 
+                                  Date="{Binding ToDate, Mode=TwoWay}"
+                                  Width="150"
+                                  CornerRadius="8"
+                                  Language="en-US"
+                                  CalendarIdentifier="GregorianCalendar"/>
+              
+              <!-- Clear Filter Button -->
+              <Button Style="{StaticResource IconBtn}" 
+                      Click="ClearDateFilter_Click"
+                      ToolTipService.ToolTip="Clear date filter"
+                      Visibility="{Binding IsDateFilterActive, Converter={StaticResource BoolToVisibilityConverter}}">
+                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+              </Button>
+          </StackPanel>
+
+          <!-- Standardized Premium Search Bar -->
+          <Border x:Name="SearchWrapper"
+                  Grid.Column="2" 
+                  VerticalAlignment="Center" 
+                  Margin="16,0,0,0" 
+                  Width="300"
+                  Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderThickness="1"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  CornerRadius="24"
+                  Height="48"
+                  Padding="16,0">
+              <AutoSuggestBox x:Name="SearchBox"
+                              PlaceholderText="Search orders..."
+                              Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              QuerySubmitted="OnSearchQuerySubmitted"
+                              QueryIcon="Find"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              VerticalAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              GotFocus="SearchBox_GotFocus"
+                              LostFocus="SearchBox_LostFocus"
+                              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                  <AutoSuggestBox.Resources>
+                      <!-- Style the internal search button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                          <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                          <Setter Property="Background" Value="Transparent"/>
+                          <Setter Property="BorderThickness" Value="0"/>
+                      </Style>
+                      <!-- Targeted style to hide the clear button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxDeleteButtonStyle">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                          <Setter Property="Width" Value="0"/>
+                      </Style>
+                      <!-- Remove default focus visual and border -->
+                      <Thickness x:Key="AutoSuggestBoxBorderThemeThickness">0</Thickness>
+                      <Thickness x:Key="AutoSuggestBoxBorderThemeThicknessFocused">0</Thickness>
+                      <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                      <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                  </AutoSuggestBox.Resources>
+              </AutoSuggestBox>
+          </Border>
 
         </Grid>
       </Border>
@@ -821,7 +877,7 @@
                       <ColumnDefinition Width="190"/>
                       <ColumnDefinition Width="130"/>
                       <ColumnDefinition Width="170"/>
-                      <ColumnDefinition Width="140"/>
+                      <ColumnDefinition Width="180"/>
                       <ColumnDefinition Width="120"/>
                       <ColumnDefinition Width="110"/>
                       <ColumnDefinition Width="120"/>
@@ -833,10 +889,10 @@
                     <TextBlock Grid.Column="2" Text="Phone" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="3" Text="Staff" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="4" Text="Date" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                    <TextBlock Grid.Column="5" Text="Order Type" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Text="Type" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="6" Text="Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                    <TextBlock Grid.Column="7" Text="Payment Status" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                    <TextBlock Grid.Column="8" Text="Payment Method" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="7" Text="Payment" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Grid.Column="8" Text="Method" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Grid.Column="9" Text="Total" Style="{StaticResource TableHeaderText}" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                   </Grid>
                 </Border>
@@ -876,7 +932,7 @@
                             VerticalAlignment="Center"
                             Spacing="10"
                             Canvas.ZIndex="10"
-                            Visibility="{Binding PaginatedOrders.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                            Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVisibilityConverter}}">
                   <Border Width="60" Height="60" CornerRadius="30"
                           Background="{StaticResource PurpleLightBrush}" HorizontalAlignment="Center">
                     <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -1091,7 +1147,7 @@
 
                 <TextBlock Text="No items in this order."
                            FontSize="13" Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                           Visibility="{Binding CurrentDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                           Visibility="{Binding ShowEmptyDetailState, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                 <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
                         BorderThickness="0,1,0,0" Margin="0,8,0,0"/>

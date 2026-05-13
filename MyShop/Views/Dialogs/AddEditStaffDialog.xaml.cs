@@ -34,7 +34,8 @@ public sealed partial class AddEditStaffDialog : ContentDialog, INotifyPropertyC
             FormTitle.Text = "New Staff";
             FormSubtitle.Text = "Create a new staff account that can sign in to MyShop.";
             SaveBtnText.Text = "Create Staff";
-            PasswordHintText.Text = "Password is required for a new staff account.";
+            PasswordHintText.Text = string.Empty;
+            PasswordHintText.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -152,5 +153,37 @@ public sealed partial class AddEditStaffDialog : ContentDialog, INotifyPropertyC
 
         storage = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb == EmailTextBox)
+        {
+            EmailWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+        }
+    }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb == EmailTextBox)
+        {
+            EmailWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+        }
+    }
+
+    private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is PasswordBox pb && pb == PasswordInput)
+        {
+            PasswordWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+        }
+    }
+
+    private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is PasswordBox pb && pb == PasswordInput)
+        {
+            PasswordWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+        }
     }
 }

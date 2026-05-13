@@ -10,9 +10,6 @@
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"/>
         <conv:UserToAlignmentConverter x:Key="UserToAlignmentConverter"/>
-        <conv:UserToBackgroundConverter x:Key="UserToBackgroundConverter"/>
-        <conv:UserToBorderConverter x:Key="UserToBorderConverter"/>
-        <conv:UserToForegroundConverter x:Key="UserToForegroundConverter"/>
         <conv:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter"/>
 
         <Style x:Key="AiCardStyle" TargetType="Border">
@@ -38,8 +35,13 @@
             <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
         </Style>
 
+        <SolidColorBrush x:Key="AppPurpleBrush" Color="#8B52FF"/>
+        <SolidColorBrush x:Key="PurpleBrush" Color="#8B52FF"/>
+        <SolidColorBrush x:Key="PurpleLightBrush" Color="#8B52FF" Opacity="0.12"/>
+        <SolidColorBrush x:Key="DangerBrush" Color="#DC2626"/>
+
         <!-- Premium Purple Button -->
-        <Style x:Key="AiPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Style x:Key="AiPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource ColorPreservingButtonStyle}">
             <Setter Property="Background" Value="{StaticResource PurpleBrush}"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="CornerRadius" Value="20"/>
@@ -47,11 +49,10 @@
             <Setter Property="MinHeight" Value="44"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Style" Value="{StaticResource ColorPreservingButtonStyle}"/>
         </Style>
 
         <!-- Suggested Question Chip -->
-        <Style x:Key="QuestionChipStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+        <Style x:Key="QuestionChipStyle" TargetType="Button" BasedOn="{StaticResource ColorPreservingButtonStyle}">
             <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
             <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -59,8 +60,8 @@
             <Setter Property="Padding" Value="12,6"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
-            <Setter Property="Style" Value="{StaticResource ColorPreservingButtonStyle}"/>
         </Style>
+
     </Page.Resources>
 
     <Grid>
@@ -99,23 +100,50 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Margin="0,0,0,16" HorizontalAlignment="{Binding IsUser, Converter={StaticResource UserToAlignmentConverter}}">
-                                            <Border CornerRadius="16" Padding="16,12" MaxWidth="700"
-                                                    Background="{Binding IsUser, Converter={StaticResource UserToBackgroundConverter}}"
-                                                    BorderBrush="{Binding IsUser, Converter={StaticResource UserToBorderConverter}}"
+                                            <!-- USER MESSAGE BUBBLE -->
+                                            <Border Visibility="{Binding IsUser, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                    CornerRadius="16" Padding="16,12" MaxWidth="700"
+                                                    Background="{StaticResource PurpleBrush}"
+                                                    BorderBrush="{StaticResource PurpleBrush}"
                                                     BorderThickness="1">
                                                 <StackPanel Spacing="6">
                                                     <TextBlock Text="{Binding Content}" TextWrapping="Wrap" FontSize="15"
-                                                               Foreground="{Binding IsUser, Converter={StaticResource UserToForegroundConverter}}"
+                                                               Foreground="White"
+                                                               LineHeight="20"/>
+                                                    <TextBlock Text="{Binding TimestampUtc, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='HH:mm'}" 
+                                                               FontSize="11" Opacity="0.8" HorizontalAlignment="Right"
+                                                               Foreground="White"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <!-- AI MESSAGE BUBBLE -->
+                                            <Border Visibility="{Binding IsUser, Converter={StaticResource InverseBoolToVisibilityConverter}}"
+                                                    CornerRadius="16" Padding="16,12" MaxWidth="700"
+                                                    Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                                    BorderThickness="1">
+                                                <StackPanel Spacing="6">
+                                                    <TextBlock Text="{Binding Content}" TextWrapping="Wrap" FontSize="15"
+                                                               Foreground="{ThemeResource TextFillColorPrimaryBrush}"
                                                                LineHeight="20"/>
                                                     <TextBlock Text="{Binding TimestampUtc, Converter={StaticResource DateTimeOffsetConverter}, ConverterParameter='HH:mm'}" 
                                                                FontSize="11" Opacity="0.6" HorizontalAlignment="Right"
-                                                               Foreground="{Binding IsUser, Converter={StaticResource UserToForegroundConverter}}"/>
+                                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                                 </StackPanel>
                                             </Border>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+
+                            <!-- AI Error Indicator -->
+                            <Grid Margin="0,0,0,16" HorizontalAlignment="Center" Visibility="{Binding ChatError, Converter={StaticResource StringToVisibilityConverter}}">
+                                <Border CornerRadius="12" Padding="12,8" Background="{ThemeResource SystemFillColorCriticalBrush}" Opacity="0.1"/>
+                                <StackPanel Orientation="Horizontal" Spacing="8" Padding="12,8">
+                                    <FontIcon Glyph="&#xEA39;" FontSize="14" Foreground="{StaticResource DangerBrush}"/>
+                                    <TextBlock Text="{Binding ChatError}" FontSize="13" Foreground="{StaticResource DangerBrush}" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Grid>
 
                             <!-- AI Typing/Thinking Indicator -->
                             <Grid Margin="0,0,0,16" HorizontalAlignment="Left" Visibility="{Binding IsThinking, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -150,23 +178,42 @@
                     </ScrollViewer>
 
                     <!-- Input Area -->
-                    <Border Grid.Row="2" Padding="24" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Background="{ThemeResource ControlFillColorDefaultBrush}">
+                    <Border Grid.Row="2" Padding="24" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Background="Transparent">
                         <Grid ColumnSpacing="12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="48"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                     PlaceholderText="Type your message here..."
-                                     CornerRadius="16" Padding="16,12"
+                            
+                            <!-- Standardized Premium Input Bar -->
+                            <TextBox x:Name="ChatInputBox"
+                                     Grid.Column="0" 
+                                     Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource ModernSearchTextBoxStyle}"
+                                     PlaceholderText="Ask AI anything about your shop..."
                                      FontSize="14"
-                                     MinHeight="48"
                                      AcceptsReturn="False"
                                      VerticalAlignment="Center"
-                                     KeyDown="OnChatKeyDown"/>
+                                     VerticalContentAlignment="Center"
+                                     BorderThickness="1"
+                                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                     Background="Transparent"
+                                     CornerRadius="24"
+                                     Height="48"
+                                     KeyDown="OnChatKeyDown">
+                                <TextBox.Resources>
+                                    <Thickness x:Key="TextControlThemePadding">20,12,16,12</Thickness>
+                                    <Thickness x:Key="TextControlBorderThemeThickness">1</Thickness>
+                                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+                                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#8B52FF"/>
+                                    <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+                                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+                                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+                                </TextBox.Resources>
+                            </TextBox>
                             
                             <Button Grid.Column="1" Command="{Binding SendChatCommand}"
-                                    Background="#8B52FF" 
+                                    Background="{StaticResource AppPurpleBrush}" 
                                     Foreground="White"
                                     Width="48" Height="48"
                                     CornerRadius="24"
@@ -179,7 +226,7 @@
                             </Button>
                             
                             <Button Grid.Column="1" Command="{Binding StopChatCommand}"
-                                    Background="#DC2626" 
+                                    Background="{StaticResource DangerBrush}" 
                                     Foreground="White"
                                     Width="48" Height="48"
                                     CornerRadius="24"

@@ -61,7 +61,10 @@
 
                     <!-- Supplier Selection -->
                     <StackPanel Spacing="8">
-                        <TextBlock Text="Supplier *" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <TextBlock Text="Supplier" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                            <TextBlock Text="*" FontSize="13" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                        </StackPanel>
                         <ComboBox x:Name="SupplierComboBox" 
                                   PlaceholderText="Select supplier"
                                   DisplayMemberPath="Name"
@@ -71,16 +74,37 @@
 
                     <!-- Product Search -->
                     <StackPanel Grid.Column="1" Spacing="8">
-                        <TextBlock Text="Add Product" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                        <AutoSuggestBox x:Name="ProductSearchBox"
-                                        PlaceholderText="Search by name..."
-                                        QueryIcon="Find"
-                                        TextChanged="ProductSearchBox_TextChanged"
-                                        SuggestionChosen="ProductSearchBox_SuggestionChosen"
-                                        DisplayMemberPath="Name"
-                                        TextMemberPath="Name"
-                                        Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
-                                        VerticalAlignment="Bottom"/>
+                        <TextBlock Text="Add product" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                        <Border x:Name="SearchWrapper"
+                                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                BorderThickness="1"
+                                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                CornerRadius="24"
+                                Height="48"
+                                VerticalAlignment="Bottom">
+                            <AutoSuggestBox x:Name="ProductSearchBox"
+                                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
+                                            PlaceholderText="Search by name..."
+                                            QueryIcon="Find"
+                                            TextChanged="ProductSearchBox_TextChanged"
+                                            SuggestionChosen="ProductSearchBox_SuggestionChosen"
+                                            DisplayMemberPath="Name"
+                                            TextMemberPath="Name"
+                                            VerticalAlignment="Stretch"
+                                            VerticalContentAlignment="Center"
+                                            GotFocus="ProductSearchBox_GotFocus"
+                                            LostFocus="ProductSearchBox_LostFocus"
+                                            FontFamily="{StaticResource AppDefaultFontFamily}">
+                                <AutoSuggestBox.Resources>
+                                    <!-- Style the internal search button -->
+                                    <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                                        <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                    </Style>
+                                </AutoSuggestBox.Resources>
+                            </AutoSuggestBox>
+                        </Border>
                     </StackPanel>
                 </Grid>
             </StackPanel>

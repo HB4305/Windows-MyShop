@@ -40,25 +40,42 @@
 
         <Border Background="{ThemeResource ControlStrokeColorDefaultBrush}" Height="1" Margin="-4,0,-4,0"/>
 
-        <StackPanel Spacing="10">
-            <TextBlock Text="Reason for shortage"
-                       FontSize="14"
-                       FontWeight="SemiBold"
-                       Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-            <TextBox x:Name="ReasonTextBox"
-                     Text="{x:Bind Reason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     PlaceholderText="Explain why actual cash is lower than expected cash..."
-                     AcceptsReturn="True"
-                     TextWrapping="Wrap"
-                     MinHeight="140"
-                     CornerRadius="8"
-                     Padding="12"
-                     Background="{ThemeResource ControlFillColorDefaultBrush}"
-                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
-            <TextBlock Text="{x:Bind ValidationMessage, Mode=OneWay}"
-                       FontSize="12"
-                       Foreground="#DC2626"
-                       Visibility="{x:Bind ValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"/>
+        <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="Reason for shortage"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="*" FontSize="13" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            </StackPanel>
+            <Border x:Name="ReasonWrapper"
+                    Background="{ThemeResource ControlFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="24">
+                <TextBox x:Name="ReasonTextBox"
+                         Text="{x:Bind Reason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="Explain why actual cash is lower than expected cash..."
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         MinHeight="140"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="16,10"
+                         GotFocus="TextBox_GotFocus"
+                         LostFocus="TextBox_LostFocus">
+                    <TextBox.Resources>
+                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                    </TextBox.Resources>
+                </TextBox>
+            </Border>
+            <Border Visibility="{x:Bind ValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="0,2,0,0">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind ValidationMessage, Mode=OneWay}" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                </StackPanel>
+            </Border>
         </StackPanel>
 
         <Border Background="{ThemeResource ControlStrokeColorDefaultBrush}" Height="1" Margin="-4,0,-4,0"/>
@@ -71,29 +88,33 @@
 
             <Button Grid.Column="0"
                     Click="CancelBtn_Click"
+                    HorizontalAlignment="Stretch"
                     Background="Transparent"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                     BorderThickness="1"
-                    CornerRadius="8"
-                    Padding="14,12">
+                    CornerRadius="24"
+                    Padding="14,10"
+                    Style="{StaticResource ColorPreservingButtonStyle}">
                 <TextBlock Text="Cancel"
                            FontSize="14"
                            FontWeight="SemiBold"
                            Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
 
             <Button Grid.Column="1"
                     Click="ConfirmBtn_Click"
+                    HorizontalAlignment="Stretch"
                     Background="#B45309"
                     BorderThickness="0"
-                    CornerRadius="8"
-                    Padding="14,12">
+                    CornerRadius="24"
+                    Padding="14,10"
+                    Style="{StaticResource ColorPreservingButtonStyle}">
                 <TextBlock Text="Submit Report"
                            FontSize="14"
                            FontWeight="SemiBold"
                            Foreground="White"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
             </Button>
         </Grid>
     </StackPanel>

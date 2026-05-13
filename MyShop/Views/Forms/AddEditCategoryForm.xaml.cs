@@ -1,10 +1,13 @@
 using MyShop.Models;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
 
 namespace MyShop.Views.Forms;
 
-public sealed partial class AddEditCategoryForm : ContentDialog
+public sealed partial class AddEditCategoryForm : ContentDialog, INotifyPropertyChanged
 {
 	private ContentDialogResult _result = ContentDialogResult.None;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public AddEditCategoryForm(Category? category = null)
 	{
@@ -26,11 +29,14 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 			SaveBtnText.Text = "Save Changes";
 			CategoryName = category.Name;
 			CategoryDescription = category.Description ?? string.Empty;
+			_isDirty = true; // For edit, we want to show validation if they clear it
 		}
 
-		UpdateSaveButtonState();
+		// Don't call UpdateSaveButtonState here to avoid premature validation
 		Loaded += (_, _) => CategoryNameTextBox.Focus(FocusState.Programmatic);
 	}
+
+	private bool _isDirty = false;
 
 	public string CategoryName { get; set; } = string.Empty;
 
@@ -46,6 +52,7 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 	{
 		get
 		{
+			if (!_isDirty) return string.Empty;
 			if (IsNameEmpty) return "Category name is required";
 			if (IsNameTooLong) return "Category name must not exceed 100 characters";
 			return string.Empty;
@@ -63,13 +70,40 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 		}
 	}
 
+	private void SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+	{
+		if (Equals(storage, value)) return;
+		storage = value;
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+	{
+		if (sender is TextBox tb)
+		{
+			if (tb == CategoryNameTextBox) CategoryNameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+			else if (tb == DescriptionTextBox) DescriptionWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+		}
+	}
+
+	private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+	{
+		if (sender is TextBox tb)
+		{
+			if (tb == CategoryNameTextBox) CategoryNameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+			else if (tb == DescriptionTextBox) DescriptionWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+		}
+	}
+
 	private void UpdateSaveButtonState()
 	{
-		SaveBtn.IsEnabled = !IsNameInvalid;
+		// Keep the button enabled so users can see validation errors on click
+		SaveBtn.IsEnabled = true;
 	}
 
 	private void CategoryNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
 	{
+		_isDirty = true;
 		Bindings.Update();
 		UpdateSaveButtonState();
 	}
@@ -81,6 +115,12 @@ public sealed partial class AddEditCategoryForm : ContentDialog
 
 	private void SaveBtn_Click(object sender, RoutedEventArgs e)
 	{
+		_isDirty = true;
+		Bindings.Update();
+		UpdateSaveButtonState();
+
+		if (IsNameInvalid) return;
+
 		_result = ContentDialogResult.Primary;
 		Hide();
 	}

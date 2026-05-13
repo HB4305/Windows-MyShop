@@ -10,7 +10,7 @@ public partial class PosViewModel : ObservableObject
 {
     private const decimal TaxRate = 0.08m;
     private const string WalkInCustomerName = "Walk-in Customer";
-    private const string WalkInCustomerPhone = "0000000000";
+    private const string WalkInCustomerPhone = "";
     private const string DefaultPaymentMethod = "Cash";
 
     private readonly SportItemService _sportItemService;

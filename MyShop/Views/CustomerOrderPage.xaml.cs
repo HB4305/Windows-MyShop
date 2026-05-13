@@ -1,10 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
 using MyShop.Models;
 using MyShop.Services;
 using MyShop.ViewModels;
 using MyShop.Views.Dialogs;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using System.Diagnostics;
 
 namespace MyShop.Views;
@@ -403,5 +400,29 @@ public sealed partial class CustomerOrderPage : Page
         BtnPayPaidInactive.IsEnabled = enabled;
         BtnPayUnpaidActive.IsEnabled = enabled;
         BtnPayUnpaidInactive.IsEnabled = enabled;
+    }
+    private void ClearDateFilter_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.FromDate = null;
+        ViewModel.ToDate = null;
+    }
+
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var query = args.QueryText;
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            ViewModel.AddToHistoryCommand.Execute(query);
+        }
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
     }
 }

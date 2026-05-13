@@ -11,29 +11,25 @@ public class CurrencyFormatter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
-        if (value is decimal d)
+        decimal? d = value switch
         {
-            return FormatDollar(d);
+            decimal val => val,
+            double val => (decimal)val,
+            float val => (decimal)val,
+            int val => (decimal)val,
+            string text => decimal.TryParse(text.Trim().Replace("$", string.Empty), NumberStyles.Number, CultureInfo.InvariantCulture, out var p) ? p : (decimal?)null,
+            _ => null
+        };
+
+        if (parameter?.ToString() == "color")
+        {
+            if (d == null) return "#000000";
+            return d < 0 ? "#DC2626" : "#16A34A"; // Red for negative, Green for positive/zero
         }
 
-        if (value is double db)
+        if (d.HasValue)
         {
-            return FormatDollar((decimal)db);
-        }
-
-        if (value is float f)
-        {
-            return FormatDollar((decimal)f);
-        }
-
-        if (value is string text)
-        {
-            var normalized = text.Trim().Replace("$", string.Empty, StringComparison.Ordinal);
-            if (decimal.TryParse(normalized, NumberStyles.Number, CultureInfo.CurrentCulture, out var parsed) ||
-                decimal.TryParse(normalized, NumberStyles.Number, CultureInfo.InvariantCulture, out parsed))
-            {
-                return FormatDollar(parsed);
-            }
+            return FormatDollar(d.Value);
         }
 
         return value?.ToString() ?? string.Empty;
