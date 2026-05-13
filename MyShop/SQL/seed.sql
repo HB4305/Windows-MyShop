@@ -18,13 +18,13 @@ RESTART IDENTITY CASCADE;
 -- CATEGORIES
 -- ============================================================
 INSERT INTO categories (id, name, description) VALUES
-(1, 'Giày chạy bộ',    'Giày thể thao chuyên dụng cho chạy bộ'),
-(2, 'Giày bóng đá',    'Giày đinh và giày futsal'),
-(3, 'Giày bóng rổ',    'Giày cổ cao chuyên dụng'),
-(4, 'Giày tennis',     'Giày sân cứng và sân đất nện'),
-(5, 'Áo thể thao',     'Áo tập và áo thi đấu'),
-(6, 'Quần thể thao',   'Quần short và quần dài thể thao'),
-(7, 'Phụ kiện',        'Tất, băng tay, bình nước, túi gym');
+(1, 'Running Shoes',   'Performance footwear for running'),
+(2, 'Football Shoes',  'Cleats and futsal shoes'),
+(3, 'Basketball Shoes','High-top shoes for basketball'),
+(4, 'Tennis Shoes',    'Hard court and clay court shoes'),
+(5, 'Sport Tops',      'Training tops and jerseys'),
+(6, 'Sport Bottoms',   'Shorts and training pants'),
+(7, 'Accessories',     'Socks, headbands, bags, bottles, and more');
 
 SELECT setval('categories_id_seq', 7);
 
@@ -45,76 +45,76 @@ SELECT setval('suppliers_id_seq', 5);
 -- ============================================================
 INSERT INTO sportitems (id, category_id, name, cost_price, selling_price, stock_quantity, low_stock_threshold, image_urls, description) VALUES
 -- Giày chạy bộ
-(1,  1, 'Nike Air Zoom Pegasus 41',      1450000, 2890000, 0, 5,
+(1,  1, 'Nike Air Zoom Pegasus 41',           57.00, 113.00, 0, 5,
  ARRAY['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80'],
  'Giày chạy bộ hàng đầu với đệm ZoomX siêu nhẹ, phù hợp mọi địa hình'),
-(2,  1, 'Adidas Ultraboost 24',          1680000, 3290000, 0, 5,
+(2,  1, 'Adidas Ultraboost 24',               66.00, 129.00, 0, 5,
  ARRAY['https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&q=80'],
  'Boost midsole mang lại cảm giác đệm vượt trội, thiết kế upper Primeknit thoáng khí'),
-(3,  1, 'New Balance Fresh Foam X 1080v13',1520000,2990000, 0, 5,
+(3,  1, 'New Balance Fresh Foam X 1080v13',    60.00, 117.00, 0, 5,
  ARRAY['https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&q=80'],
  'Đệm Fresh Foam X cực êm, lý tưởng cho chạy đường dài'),
-(4,  1, 'Nike React Infinity Run Flyknit 3',1380000,2750000,0,5,
+(4,  1, 'Nike React Infinity Run Flyknit 3',   54.00, 108.00, 0, 5,
  ARRAY['https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600&q=80'],
  'Thiết kế giảm chấn thương, phù hợp runner mới bắt đầu'),
-(5,  1, 'Puma Velocity Nitro 2',          980000, 1990000, 0, 5,
+(5,  1, 'Puma Velocity Nitro 2',               38.00,  78.00, 0, 5,
  ARRAY['https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=80'],
  'Nitro foam nhẹ và bền bỉ, giá tốt cho người chạy hàng ngày'),
 
 -- Giày bóng đá
-(6,  2, 'Nike Mercurial Superfly 10 Elite FG', 2100000, 4290000, 0, 3,
+(6,  2, 'Nike Mercurial Superfly 10 Elite FG',  82.00, 168.00, 0, 3,
  ARRAY['https://images.unsplash.com/photo-1511886929837-354d827aae26?w=600&q=80'],
  'Đinh tự nhiên cao cấp, vải Vaporposite+ siêu nhẹ cho tốc độ tối đa'),
-(7,  2, 'Adidas Predator 24 Elite FG',    1980000, 3990000, 0, 3,
+(7,  2, 'Adidas Predator 24 Elite FG',          78.00, 156.00, 0, 3,
  ARRAY['https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=80'],
  'Công nghệ Zone Skin giúp kiểm soát bóng hoàn hảo'),
-(8,  2, 'Puma Future 7 Ultimate FG/AG',   1750000, 3490000, 0, 3,
+(8,  2, 'Puma Future 7 Ultimate FG/AG',         69.00, 137.00, 0, 3,
  ARRAY['https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&q=80'],
  'Dây buộc FUZIONFIT+ ôm sát chân, linh hoạt trên nhiều mặt sân'),
 
 -- Giày bóng rổ
-(9,  3, 'Nike LeBron XXII',              2350000, 4590000, 0, 3,
+(9,  3, 'Nike LeBron XXII',                     92.00, 180.00, 0, 3,
  ARRAY['https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=600&q=80'],
  'Đệm Air Max + Zoom Air kép, hỗ trợ cổ chân chuẩn bóng rổ chuyên nghiệp'),
-(10, 3, 'Adidas Harden Vol. 8',           1850000, 3690000, 0, 3,
+(10, 3, 'Adidas Harden Vol. 8',                 73.00, 145.00, 0, 3,
  ARRAY['https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&q=80'],
  'Boost toàn đế, ôm chân cực tốt cho guard tốc độ cao'),
 
 -- Giày tennis
-(11, 4, 'Nike Court Air Zoom Vapor Pro 2', 1250000, 2490000, 0, 5,
+(11, 4, 'Nike Court Air Zoom Vapor Pro 2',       49.00,  98.00, 0, 5,
  ARRAY['https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&q=80'],
  'Zoom Air mũi giày, phù hợp sân cứng indoor và outdoor'),
-(12, 4, 'Adidas Barricade 13',            1180000, 2290000, 0, 5,
+(12, 4, 'Adidas Barricade 13',                  46.00,  90.00, 0, 5,
  ARRAY['https://images.unsplash.com/photo-1540539234-c14a20fb7c7b?w=600&q=80'],
  'Đế ngoài ADITUFF siêu bền cho sân đất nện'),
 
 -- Áo thể thao
-(13, 5, 'Nike Dri-FIT ADV TechKnit Ultra', 450000,  890000, 0, 10,
+(13, 5, 'Nike Dri-FIT ADV TechKnit Ultra',       18.00,  35.00, 0, 10,
  ARRAY['https://supersports.com.vn/cdn/shop/files/HV5204-010-1.jpg?v=1742530809&width=1000','https://supersports.com.vn/cdn/shop/files/HV5204-100-1.jpg?v=1765428425&width=1000'],
  'Vải TechKnit thông thoáng, thoát mồ hôi nhanh'),
-(14, 5, 'Adidas Designed for Training Tee', 380000, 750000, 0, 10,
+(14, 5, 'Adidas Designed for Training Tee',      15.00,  29.00, 0, 10,
  ARRAY['https://images.unsplash.com/photo-1562157873-818bc0726f68?w=600&q=80'],
  'AEROREADY hút ẩm tức thì, phù hợp gym và outdoor'),
-(15, 5, 'Puma Run Favourite Running Tee',  320000,  620000, 0, 10,
+(15, 5, 'Puma Run Favourite Running Tee',         13.00,  24.00, 0, 10,
  ARRAY['https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_750,h_750/global/525058/21/fnd/PNA/fmt/png/RUN-FAVORITE-Men''s-Tee'],
  'Vải DryCell thoáng khí nhẹ nhàng cho buổi chạy hàng ngày'),
 
 -- Quần thể thao
-(16, 6, 'Nike Dri-FIT Challenger 5" Short', 320000, 650000, 0, 10,
+(16, 6, 'Nike Dri-FIT Challenger 5" Short',      13.00,  25.00, 0, 10,
  ARRAY['https://www.runningxpert.com/media/catalog/product/cache/e1bfa30f5f000aa573b2ee969a7a0fde/w/p/wp80r_bef-1391_80_.jpg'],
  'Quần short 5 inch nhẹ thoáng, lưới lót bên trong'),
-(17, 6, 'Adidas Own the Run Short',        290000,  580000, 0, 10,
+(17, 6, 'Adidas Own the Run Short',              11.00,  23.00, 0, 10,
  ARRAY['https://assets.adidas.com/images/e_trim:EAEEEF/c_lpad,w_iw,h_ih/b_rgb:EAEEEF/w_180,f_auto,q_auto,fl_lossy,c_fill,g_auto/5705e1c915c742ce858af1d607b55581_9366/Own_The_Run_Shorts_Blue_IY0706_000_plp_model.jpg'],
  'AEROREADY, thiết kế phản quang an toàn ban đêm'),
 
 -- Phụ kiện
-(18, 7, 'Nike Everyday Cushion Crew Socks (3 đôi)', 120000, 250000, 0, 15,
+(18, 7, 'Nike Everyday Cushion Crew Socks (3 đôi)',  5.00,  10.00, 0, 15,
  ARRAY['https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/dfa68bbe-e102-4e33-9b6e-6763e2a75f19/U+NK+EVERYDAY+CSH+CRW+3PR+132.png'],
  'Cotton cushion đệm gót và mũi, pack 3 đôi'),
-(19, 7, 'Adidas Linear Core Backpack',     580000, 1150000, 0, 8,
+(19, 7, 'Adidas Linear Core Backpack',           23.00,  45.00, 0, 8,
  ARRAY['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80'],
  'Ba lô 28L ngăn laptop 15.6", ngăn nước bên hông'),
-(20, 7, 'Nike Hyperfuel Water Bottle 1.9L', 280000,  550000, 0, 10,
+(20, 7, 'Nike Hyperfuel Water Bottle 1.9L',      11.00,  22.00, 0, 10,
  ARRAY['https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80'],
  'Bình nước BPA-free 1.9L, nắp xoắn chống rò rỉ');
 
@@ -128,10 +128,10 @@ SELECT setval('sportitems_id_seq', 20);
 
 -- Nike Air Zoom Pegasus 41 (id=1) - Black & White
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
-(1,'39','Black',8,'PEG41-39-BLK'),(1,'40','Black',12,'PEG41-40-BLK'),(1,'41','Black',15,'PEG41-41-BLK'),
-(1,'42','Black',14,'PEG41-42-BLK'),(1,'43','Black',10,'PEG41-43-BLK'),(1,'44','Black',6,'PEG41-44-BLK'),
-(1,'39','White',6,'PEG41-39-WHT'),(1,'40','White',10,'PEG41-40-WHT'),(1,'41','White',12,'PEG41-41-WHT'),
-(1,'42','White',11,'PEG41-42-WHT'),(1,'43','White',8,'PEG41-43-WHT'),(1,'44','White',4,'PEG41-44-WHT');
+(1,'39','Black',0,'PEG41-39-BLK'),(1,'40','Black',0,'PEG41-40-BLK'),(1,'41','Black',1,'PEG41-41-BLK'),
+(1,'42','Black',1,'PEG41-42-BLK'),(1,'43','Black',0,'PEG41-43-BLK'),(1,'44','Black',0,'PEG41-44-BLK'),
+(1,'39','White',0,'PEG41-39-WHT'),(1,'40','White',0,'PEG41-40-WHT'),(1,'41','White',1,'PEG41-41-WHT'),
+(1,'42','White',1,'PEG41-42-WHT'),(1,'43','White',0,'PEG41-43-WHT'),(1,'44','White',0,'PEG41-44-WHT');
 
 -- Adidas Ultraboost 24 (id=2) - Core Black & Cloud White
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
@@ -149,8 +149,8 @@ INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) 
 
 -- Nike React Infinity Run 3 (id=4)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
-(4,'39','Black/White',7,'RIF3-39-BW'),(4,'40','Black/White',11,'RIF3-40-BW'),(4,'41','Black/White',14,'RIF3-41-BW'),
-(4,'42','Black/White',13,'RIF3-42-BW'),(4,'43','Black/White',9,'RIF3-43-BW'),(4,'44','Black/White',5,'RIF3-44-BW');
+(4,'39','Black/White',0,'RIF3-39-BW'),(4,'40','Black/White',1,'RIF3-40-BW'),(4,'41','Black/White',1,'RIF3-41-BW'),
+(4,'42','Black/White',1,'RIF3-42-BW'),(4,'43','Black/White',0,'RIF3-43-BW'),(4,'44','Black/White',0,'RIF3-44-BW');
 
 -- Puma Velocity Nitro 2 (id=5)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
@@ -176,10 +176,10 @@ INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) 
 
 -- Nike LeBron XXII (id=9)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
-(9,'39','Black/Gold',3,'LBR22-39-BG'),(9,'40','Black/Gold',6,'LBR22-40-BG'),(9,'41','Black/Gold',8,'LBR22-41-BG'),
-(9,'42','Black/Gold',7,'LBR22-42-BG'),(9,'43','Black/Gold',5,'LBR22-43-BG'),(9,'44','Black/Gold',3,'LBR22-44-BG'),
-(9,'39','White/Red',2,'LBR22-39-WR'),(9,'40','White/Red',4,'LBR22-40-WR'),(9,'41','White/Red',6,'LBR22-41-WR'),
-(9,'42','White/Red',5,'LBR22-42-WR'),(9,'43','White/Red',3,'LBR22-43-WR'),(9,'44','White/Red',2,'LBR22-44-WR');
+(9,'39','Black/Gold',0,'LBR22-39-BG'),(9,'40','Black/Gold',0,'LBR22-40-BG'),(9,'41','Black/Gold',1,'LBR22-41-BG'),
+(9,'42','Black/Gold',0,'LBR22-42-BG'),(9,'43','Black/Gold',0,'LBR22-43-BG'),(9,'44','Black/Gold',0,'LBR22-44-BG'),
+(9,'39','White/Red',0,'LBR22-39-WR'),(9,'40','White/Red',0,'LBR22-40-WR'),(9,'41','White/Red',1,'LBR22-41-WR'),
+(9,'42','White/Red',0,'LBR22-42-WR'),(9,'43','White/Red',0,'LBR22-43-WR'),(9,'44','White/Red',0,'LBR22-44-WR');
 
 -- Adidas Harden Vol.8 (id=10)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
@@ -198,8 +198,8 @@ INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) 
 
 -- Áo Nike Dri-FIT (id=13)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
-(13,'S','Black',10,'NKDF-S-BLK'),(13,'M','Black',15,'NKDF-M-BLK'),(13,'L','Black',14,'NKDF-L-BLK'),(13,'XL','Black',10,'NKDF-XL-BLK'),
-(13,'S','White',8,'NKDF-S-WHT'),(13,'M','White',12,'NKDF-M-WHT'),(13,'L','White',11,'NKDF-L-WHT'),(13,'XL','White',7,'NKDF-XL-WHT');
+(13,'S','Black',1,'NKDF-S-BLK'),(13,'M','Black',2,'NKDF-M-BLK'),(13,'L','Black',1,'NKDF-L-BLK'),(13,'XL','Black',0,'NKDF-XL-BLK'),
+(13,'S','White',1,'NKDF-S-WHT'),(13,'M','White',2,'NKDF-M-WHT'),(13,'L','White',1,'NKDF-L-WHT'),(13,'XL','White',0,'NKDF-XL-WHT');
 
 -- Adidas Training Tee (id=14)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
@@ -208,7 +208,7 @@ INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) 
 
 -- Puma Run Tee (id=15)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
-(15,'S','Puma Black',10,'PMRT-S-BLK'),(15,'M','Puma Black',14,'PMRT-M-BLK'),(15,'L','Puma Black',13,'PMRT-L-BLK'),(15,'XL','Puma Black',9,'PMRT-XL-BLK');
+(15,'S','Puma Black',1,'PMRT-S-BLK'),(15,'M','Puma Black',2,'PMRT-M-BLK'),(15,'L','Puma Black',1,'PMRT-L-BLK'),(15,'XL','Puma Black',0,'PMRT-XL-BLK');
 
 -- Nike Shorts (id=16)
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
@@ -221,7 +221,7 @@ INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) 
 
 -- Socks (id=18) - one size fits all
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
-(18,'One Size','White',30,'NKSK-OS-WHT'),(18,'One Size','Black',30,'NKSK-OS-BLK');
+(18,'One Size','White',4,'NKSK-OS-WHT'),(18,'One Size','Black',3,'NKSK-OS-BLK');
 
 -- Backpack (id=19) - no size
 INSERT INTO sportitem_variants (sportitem_id, size, color, stock_quantity, sku) VALUES
