@@ -245,14 +245,56 @@
                       HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
           </Border>
-          <TextBox PlaceholderText="Phone"
-                   Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   CornerRadius="24"
-                   Style="{StaticResource ModernSearchTextBoxStyle}"/>
-          <TextBox PlaceholderText="Address"
-                   Text="{Binding CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                   CornerRadius="24"
-                   Style="{StaticResource ModernSearchTextBoxStyle}"/>
+          <Border x:Name="PhoneWrapper"
+                  Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderThickness="1"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  CornerRadius="24"
+                  Height="48"
+                  VerticalAlignment="Center">
+            <AutoSuggestBox x:Name="PhoneTextBox"
+                            PlaceholderText="Phone"
+                            Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            GotFocus="PhoneTextBox_GotFocus"
+                            LostFocus="PhoneTextBox_LostFocus"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="16,0"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
+              <AutoSuggestBox.Resources>
+                <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
+              </AutoSuggestBox.Resources>
+            </AutoSuggestBox>
+          </Border>
+          <Border x:Name="AddressWrapper"
+                  Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderThickness="1"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  CornerRadius="24"
+                  Height="48"
+                  VerticalAlignment="Center">
+            <AutoSuggestBox x:Name="AddressTextBox"
+                            PlaceholderText="Address"
+                            Text="{Binding CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            GotFocus="AddressTextBox_GotFocus"
+                            LostFocus="AddressTextBox_LostFocus"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="16,0"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
+              <AutoSuggestBox.Resources>
+                <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
+              </AutoSuggestBox.Resources>
+            </AutoSuggestBox>
+          </Border>
         </StackPanel>
       </Border>
 
@@ -343,9 +385,33 @@
                 <TextBlock Text="{Binding Total, Converter={StaticResource CurrencyFormatter}}" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Right"/>
               </Grid>
               <TextBlock Text="Payment Method" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
-              <ComboBox ItemsSource="{Binding PaymentMethodOptions}"
-                        SelectedItem="{Binding SelectedPaymentMethod, Mode=TwoWay}"
-                        MinHeight="40"/>
+              <Border x:Name="PaymentMethodWrapper"
+                      Background="{ThemeResource ControlFillColorDefaultBrush}"
+                      BorderThickness="1"
+                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                      CornerRadius="24"
+                      Height="48"
+                      VerticalAlignment="Center">
+                <ComboBox x:Name="PaymentMethodComboBox"
+                          ItemsSource="{Binding PaymentMethodOptions}"
+                          SelectedItem="{Binding SelectedPaymentMethod, Mode=TwoWay}"
+                          GotFocus="PaymentMethodComboBox_GotFocus"
+                          LostFocus="PaymentMethodComboBox_LostFocus"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          BorderThickness="0"
+                          Background="Transparent"
+                          Padding="16,0,0,0"
+                          CornerRadius="24">
+                  <ComboBox.Resources>
+                    <SolidColorBrush x:Key="ComboBoxBackground" Color="Transparent"/>
+                    <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="Transparent"/>
+                    <SolidColorBrush x:Key="ComboBoxBackgroundFocused" Color="Transparent"/>
+                    <Thickness x:Key="ComboBoxBorderThemeThickness">0</Thickness>
+                    <Thickness x:Key="ComboBoxBorderThemeThicknessFocused">0</Thickness>
+                  </ComboBox.Resources>
+                </ComboBox>
+              </Border>
               <StackPanel Visibility="{Binding IsCashPayment, Converter={StaticResource BoolToVisibilityConverter}}" Spacing="8">
                 <Grid ColumnSpacing="8">
                   <Grid.ColumnDefinitions>
@@ -354,20 +420,45 @@
                   </Grid.ColumnDefinitions>
                   <StackPanel Spacing="4">
                     <TextBlock Text="Cash Received" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
-                    <TextBox Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             PlaceholderText="0.00"
-                             Style="{StaticResource ModernSearchTextBoxStyle}"/>
+                    <Border x:Name="CashReceivedWrapper"
+                            Background="{ThemeResource ControlFillColorDefaultBrush}"
+                            BorderThickness="1"
+                            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                            CornerRadius="24"
+                            Height="48"
+                            VerticalAlignment="Center">
+                      <AutoSuggestBox x:Name="CashReceivedTextBox"
+                                      Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      PlaceholderText="0.00"
+                                      GotFocus="CashReceivedTextBox_GotFocus"
+                                      LostFocus="CashReceivedTextBox_LostFocus"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      Padding="16,0"
+                                      VerticalAlignment="Stretch"
+                                      VerticalContentAlignment="Center"
+                                      Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
+                        <AutoSuggestBox.Resources>
+                          <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                          <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                          <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
+                        </AutoSuggestBox.Resources>
+                      </AutoSuggestBox>
+                    </Border>
                   </StackPanel>
                   <StackPanel Grid.Column="1" Spacing="4">
                     <TextBlock Text="Change" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
                     <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                             BorderThickness="1"
-                            CornerRadius="8"
-                            Padding="12,8">
+                            CornerRadius="24"
+                            Height="48"
+                            VerticalAlignment="Center"
+                            Padding="16,0">
                       <TextBlock Text="{Binding ChangeAmount, Converter={StaticResource CurrencyFormatter}}"
                                  FontSize="18"
                                  FontWeight="Bold"
+                                 VerticalAlignment="Center"
                                  Foreground="#16A34A"/>
                     </Border>
                   </StackPanel>

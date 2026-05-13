@@ -28,7 +28,7 @@ public sealed partial class PosPage : Page
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(PosViewModel.CurrentPage) || 
+        if (e.PropertyName == nameof(PosViewModel.CurrentPage) ||
             e.PropertyName == nameof(PosViewModel.TotalPages))
         {
             BuildPagination();
@@ -158,6 +158,46 @@ public sealed partial class PosPage : Page
         CustomerSearchWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
     }
 
+    private void PhoneTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        PhoneWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void PhoneTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        PhoneWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
+    private void AddressTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        AddressWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void AddressTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        AddressWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
+    private void PaymentMethodComboBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        PaymentMethodWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void PaymentMethodComboBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        PaymentMethodWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
+    private void CashReceivedTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        CashReceivedWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void CashReceivedTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        CashReceivedWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
     private void Page_Tapped(object sender, TappedRoutedEventArgs e)
     {
         if (e.OriginalSource is not DependencyObject originalSource)
@@ -229,15 +269,15 @@ public sealed partial class PosPage : Page
         Grid.SetRow(HeaderPanel, 0);
         Grid.SetColumn(HeaderPanel, 0);
         Grid.SetColumnSpan(HeaderPanel, 2);
-    
+
         Grid.SetRow(ProductPanel, 1);
         Grid.SetColumn(ProductPanel, 0);
         Grid.SetColumnSpan(ProductPanel, 1);
-    
+
         Grid.SetRow(CheckoutScroller, 1);
         Grid.SetColumn(CheckoutScroller, 1);
         Grid.SetColumnSpan(CheckoutScroller, 1);
-    
+
         // Pagination only on product list side
         var paginationBorder = (FrameworkElement)VisualTreeHelper.GetParent(PaginationPanel);
         while (paginationBorder != null && paginationBorder is not Border)
