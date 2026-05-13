@@ -24,43 +24,51 @@
               FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
     </ComboBox>
 
-    <Grid Grid.Column="1">
-      <AutoSuggestBox x:Name="SearchAutoSuggestBox"
-                      PlaceholderText="{Binding SearchPlaceholderText, ElementName=Root}"
-                      Text="{Binding SearchText, ElementName=Root, Mode=TwoWay}"
-                      ItemsSource="{Binding SearchItemsSource, ElementName=Root}"
-                      TextChanged="SearchAutoSuggestBox_TextChanged"
-                      SuggestionChosen="SearchAutoSuggestBox_SuggestionChosen"
-                      QuerySubmitted="SearchAutoSuggestBox_QuerySubmitted"
-                      CornerRadius="24"
-                      Background="{ThemeResource ControlFillColorDefaultBrush}"
-                      BorderThickness="1"
-                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                      Padding="16,12,48,12"
-                      Height="48"
-                      VerticalAlignment="Stretch"
-                      VerticalContentAlignment="Center"
-                      FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+    <Border x:Name="SearchWrapper"
+            Grid.Column="1"
+            Background="{ThemeResource ControlFillColorDefaultBrush}"
+            BorderThickness="1"
+            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+            CornerRadius="24"
+            Height="48"
+            VerticalAlignment="Center">
+      <Grid>
+        <AutoSuggestBox x:Name="SearchAutoSuggestBox"
+                        PlaceholderText="{Binding SearchPlaceholderText, ElementName=Root}"
+                        Text="{Binding SearchText, ElementName=Root, Mode=TwoWay}"
+                        ItemsSource="{Binding SearchItemsSource, ElementName=Root}"
+                        TextChanged="SearchAutoSuggestBox_TextChanged"
+                        SuggestionChosen="SearchAutoSuggestBox_SuggestionChosen"
+                        QuerySubmitted="SearchAutoSuggestBox_QuerySubmitted"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="16,0,48,0"
+                        VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center"
+                        GotFocus="SearchAutoSuggestBox_GotFocus"
+                        LostFocus="SearchAutoSuggestBox_LostFocus"
+                        FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
           <AutoSuggestBox.Resources>
-              <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
-              <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{ThemeResource ControlStrokeColorDefault}"/>
+            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
           </AutoSuggestBox.Resources>
-      </AutoSuggestBox>
-
-      <Button Command="{Binding SearchCommand, ElementName=Root}"
-              Click="SearchButton_Click"
-              Content="&#xE721;" 
-              FontFamily="Segoe MDL2 Assets"
-              FontSize="16"
-              Background="Transparent" 
-              BorderThickness="0" 
-              Padding="12"
-              Margin="0,0,4,0"
-              HorizontalAlignment="Right"
-              VerticalAlignment="Center"
-              Foreground="{StaticResource AppPurpleBrush}" 
-              Style="{StaticResource ColorPreservingButtonStyle}"
-              ToolTipService.ToolTip="Search"/>
-    </Grid>
+        </AutoSuggestBox>
+  
+        <Button Command="{Binding SearchCommand, ElementName=Root}"
+                Click="SearchButton_Click"
+                Content="&#xE721;" 
+                FontFamily="Segoe MDL2 Assets"
+                FontSize="16"
+                Background="Transparent" 
+                BorderThickness="0" 
+                Padding="12"
+                Margin="0,0,4,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource AppPurpleBrush}" 
+                Style="{StaticResource ColorPreservingButtonStyle}"
+                ToolTipService.ToolTip="Search"/>
+      </Grid>
+    </Border>
   </Grid>
 </UserControl>

@@ -116,7 +116,7 @@
     </Style>
 
     <!-- ── Modern Search Styles ── -->
-    <Style x:Key="ModernSearchTextBoxStyle" TargetType="TextBox">
+    <Style x:Key="ModernSearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
       <Setter Property="CornerRadius" Value="24"/>
       <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
       <Setter Property="BorderThickness" Value="1"/>
@@ -124,32 +124,6 @@
       <Setter Property="Height" Value="48"/>
       <Setter Property="Padding" Value="16,12,72,12"/>
       <Setter Property="VerticalContentAlignment" Value="Center"/>
-    </Style>
-
-    <Style x:Key="ColorPreservingButtonStyle" TargetType="Button">
-      <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
-      <Setter Property="Padding" Value="0"/>
-      <Setter Property="HorizontalAlignment" Value="Stretch"/>
-      <Setter Property="VerticalAlignment" Value="Stretch"/>
-      <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-      <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-      <Setter Property="Template">
-        <Setter.Value>
-          <ControlTemplate TargetType="Button">
-            <ContentPresenter x:Name="ContentPresenter"
-                              Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              BorderThickness="{TemplateBinding BorderThickness}"
-                              Content="{TemplateBinding Content}"
-                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                              Padding="{TemplateBinding Padding}"
-                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                              CornerRadius="{TemplateBinding CornerRadius}"/>
-          </ControlTemplate>
-        </Setter.Value>
-      </Setter>
     </Style>
 
     <!-- ══ Text Styles ══ -->
@@ -181,8 +155,9 @@
 
     <!-- ══ ListViewItem: Selected Row Highlight ══ -->
     <Style x:Key="OrderListItemStyle" TargetType="ListViewItem">
-      <Setter Property="Padding" Value="0"/>
+      <Setter Property="Padding" Value="16,0"/>
       <Setter Property="Margin" Value="0"/>
+      <Setter Property="MinHeight" Value="64"/>
       <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
       <Setter Property="Background" Value="Transparent"/>
       <Setter Property="BorderThickness" Value="0"/>
@@ -191,8 +166,11 @@
           <ControlTemplate TargetType="ListViewItem">
             <Border x:Name="Root"
                     Background="Transparent"
-                    CornerRadius="8"
-                    BorderThickness="0">
+                    BorderThickness="0,0,0,1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    CornerRadius="0"
+                    Margin="0"
+                    MinHeight="64">
               <Grid>
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="4"/>
@@ -203,9 +181,7 @@
                 <Border x:Name="SelectionBar"
                         Grid.Column="0"
                         Width="4"
-                        CornerRadius="0,2,2,0"
                         Background="{StaticResource PurpleBrush}"
-                        Margin="0,4"
                         VerticalAlignment="Stretch"
                         Visibility="Collapsed"/>
 
@@ -218,7 +194,7 @@
                     <Storyboard>
                       <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root"
                                                      Storyboard.TargetProperty="Background">
-                        <DiscreteObjectKeyFrame KeyTime="0" Value="#F4F3FF"/>
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ControlFillColorTertiaryBrush}"/>
                       </ObjectAnimationUsingKeyFrames>
                       <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SelectionBar"
                                                      Storyboard.TargetProperty="Visibility">
@@ -231,7 +207,7 @@
                     <Storyboard>
                       <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root"
                                                      Storyboard.TargetProperty="Background">
-                        <DiscreteObjectKeyFrame KeyTime="0" Value="#F4F3FF"/>
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ControlFillColorTertiaryBrush}"/>
                       </ObjectAnimationUsingKeyFrames>
                       <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SelectionBar"
                                                      Storyboard.TargetProperty="Visibility">
@@ -246,7 +222,7 @@
                     <Storyboard>
                       <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root"
                                                      Storyboard.TargetProperty="Background">
-                        <DiscreteObjectKeyFrame KeyTime="0" Value="#FAFAFA"/>
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ControlFillColorSecondaryBrush}"/>
                       </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                   </VisualState>
@@ -262,13 +238,7 @@
 
     <!-- ══ DataTemplate: Order Row ══ -->
     <DataTemplate x:Key="OrderRowTemplate" x:DataType="m:CustomerOrder">
-      <Border x:Name="RowBorder"
-              Background="Transparent"
-              CornerRadius="8"
-              Padding="10,12"
-              Margin="0,0,0,4"
-              BorderThickness="0">
-        <Grid VerticalAlignment="Center">
+        <Grid VerticalAlignment="Center" Padding="12,14">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="110"/>
             <ColumnDefinition Width="*"/>
@@ -325,7 +295,6 @@
                        Foreground="{x:Bind PaymentStatus, Converter={StaticResource PayBadgeFgConverter}}"/>
           </Border>
         </Grid>
-      </Border>
     </DataTemplate>
 
     <!-- ══ DataTemplate: Order Item Row ══ -->
@@ -588,43 +557,48 @@
               </StackPanel>
             </ScrollViewer>
 
-            <!-- Search Bar (Synced with POS style) -->
-            <Grid Grid.Column="1" MinWidth="320" Height="48" Margin="16,0,0,0">
-                <AutoSuggestBox x:Name="OrderSearchBox"
+            <!-- Standardized Premium Search Bar -->
+            <Border x:Name="SearchWrapper"
+                    Grid.Column="1" 
+                    Width="450"
+                    Height="48"
+                    Margin="16,0,0,0"
+                    Background="{ThemeResource ControlFillColorDefaultBrush}"
+                    BorderThickness="1"
+                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                    CornerRadius="24"
+                    VerticalAlignment="Center">
+                <AutoSuggestBox x:Name="SearchBox"
+                                Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
                                 PlaceholderText="Search orders..."
-                                Text="{Binding SearchQuery, Mode=TwoWay}"
-                                ItemsSource="{Binding SearchHistory}"
-                                TextChanged="OrderSearchBox_TextChanged"
-                                QuerySubmitted="OrderSearchBox_QuerySubmitted"
-                                CornerRadius="24"
-                                Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                BorderThickness="1"
-                                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                Padding="16,12,48,12"
-                                Height="48"
+                                Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                QuerySubmitted="OnSearchQuerySubmitted"
+                                QueryIcon="Find"
                                 VerticalAlignment="Stretch"
-                                VerticalContentAlignment="Center">
+                                VerticalContentAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="16,0,12,0"
+                                GotFocus="SearchBox_GotFocus"
+                                LostFocus="SearchBox_LostFocus"
+                                FontFamily="{StaticResource AppDefaultFontFamily}">
                     <AutoSuggestBox.Resources>
-                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
-                        <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{ThemeResource ControlStrokeColorDefault}"/>
-                        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{ThemeResource ControlStrokeColorDefault}"/>
+                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        <!-- Style the internal search button -->
+                        <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                            <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Style>
+                        <!-- Targeted style to hide the clear button -->
+                        <Style TargetType="Button" x:Key="AutoSuggestBoxDeleteButtonStyle">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Width" Value="0"/>
+                        </Style>
                     </AutoSuggestBox.Resources>
                 </AutoSuggestBox>
-
-                <controls:ShimmerLoadingControl Width="20" Height="20" CornerRadius="10" 
-                                               IsShimmering="{Binding IsLoading}" 
-                                               Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
-                                               HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,48,0"/>
-                
-                <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                        FontSize="16"
-                        Background="Transparent" BorderThickness="0" Padding="12"
-                        Margin="0,0,4,0"
-                        HorizontalAlignment="Right" VerticalAlignment="Center"
-                        Foreground="{StaticResource AppPurpleBrush}" 
-                        Style="{StaticResource ColorPreservingButtonStyle}"
-                        ToolTipService.ToolTip="Search"/>
-            </Grid>
+            </Border>
           </Grid>
         </Border>
 
@@ -671,7 +645,7 @@
                           SelectionChanged="OrderList_SelectionChanged"
                           BorderThickness="0"
                           Background="Transparent"
-                          Padding="0,4"
+                          Padding="0"
                           Visibility="{Binding IsLoading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
                 <!-- Skeleton Loading State -->
@@ -694,7 +668,7 @@
                             VerticalAlignment="Center"
                             Spacing="10"
                             Canvas.ZIndex="10"
-                            Visibility="{Binding PaginatedOrders.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                            Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVisibilityConverter}}">
                   <Border Width="60" Height="60" CornerRadius="30"
                           Background="{StaticResource PurpleLightBrush}">
                     <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -721,10 +695,9 @@
         </Border>
 
         <!-- Pagination Footer -->
+        <!-- Pagination Footer -->
         <Border Grid.Row="2" 
-                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-                BorderThickness="0,1,0,0"
-                Margin="-24,12,-24,-12" Padding="24,12">
+                Margin="-24,0,-24,-20" Padding="24,12">
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
@@ -732,31 +705,28 @@
             </Grid.ColumnDefinitions>
 
             <!-- Showing text -->
-            <TextBlock Grid.Column="0"
-                       FontSize="12"
-                       FontFamily="{StaticResource AppSignatureFontFamily}"
-                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                       VerticalAlignment="Center">
-              <Run Text="Showing"/>
-              <Run Text=" "/>
-              <Run Text="{Binding StartIndex, Mode=OneWay}"/>
-              <Run Text=" "/>
-              <Run Text="to"/>
-              <Run Text=" "/>
-              <Run Text="{Binding EndIndex, Mode=OneWay}"/>
-              <Run Text=" "/>
-              <Run Text="of"/>
-              <Run Text=" "/>
-              <Run Text="{Binding FilteredCount, Mode=OneWay}"/>
-              <Run Text=" gear orders"/>
-            </TextBlock>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Spacing="4">
+              <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                         FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="{Binding StartIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                         FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                         FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="{Binding EndIndex}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                         FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                         FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="{Binding FilteredCount}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
+                         FontFamily="{StaticResource AppDefaultFontFamily}"/>
+              <TextBlock Text="orders" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
+                         FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            </StackPanel>
 
             <!-- Pagination Buttons -->
             <StackPanel Grid.Column="1"
                         Orientation="Horizontal"
                         Spacing="4"
                         x:Name="PaginationPanel"/>
-
           </Grid>
         </Border>
       </Grid>
@@ -920,7 +890,7 @@
                              Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                              HorizontalAlignment="Center"
                              Margin="0,4,0,0"
-                             Visibility="{Binding SelectedOrderDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                             Visibility="{Binding ShowEmptyDetailState, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                   <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
                           BorderThickness="0,1,0,0"

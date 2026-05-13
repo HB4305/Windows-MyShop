@@ -186,17 +186,20 @@ public sealed partial class SportItemPage : Page
         _ = ViewModel.ReloadWithCurrentSortAsync();
     }
 
-    private void OnSearchKeyDown(object sender, KeyRoutedEventArgs e)
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
-        if (e.Key != VirtualKey.Enter)
-            return;
-        e.Handled = true;
-
-        // Ensure the VM receives the exact typed string (some platforms don't flush binding on Enter).
-        if (sender is TextBox tb)
-            ViewModel.SearchKeyword = tb.Text ?? string.Empty;
-
+        ViewModel.SearchKeyword = args.QueryText ?? string.Empty;
         ViewModel.SearchCommand.Execute(null);
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchColSpan.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchColSpan.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
     }
 
     private void OnAddItemClick(object sender, RoutedEventArgs e)

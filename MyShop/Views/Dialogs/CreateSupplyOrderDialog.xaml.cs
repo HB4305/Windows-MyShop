@@ -213,6 +213,16 @@ public sealed partial class CreateSupplyOrderDialog : ContentDialog
         }
     }
 
+    private void ProductSearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void ProductSearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
     private void NumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
     {
         UpdateTotalCost();

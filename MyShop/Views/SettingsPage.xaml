@@ -45,17 +45,17 @@
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
-    <Style x:Key="SettingsInputTextBox" TargetType="TextBox">
+    <Style x:Key="SettingsInputTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
       <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="CornerRadius" Value="20"/>
     </Style>
 
-    <Style x:Key="SettingsInputPasswordBox" TargetType="PasswordBox">
+    <Style x:Key="SettingsInputPasswordBox" TargetType="PasswordBox" BasedOn="{StaticResource {x:Type PasswordBox}}">
       <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="CornerRadius" Value="20"/>
     </Style>
 
-    <Style x:Key="SettingsInputComboBox" TargetType="ComboBox">
+    <Style x:Key="SettingsInputComboBox" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
       <Setter Property="FontFamily" Value="{StaticResource AppDefaultFontFamily}"/>
       <Setter Property="CornerRadius" Value="20"/>
     </Style>

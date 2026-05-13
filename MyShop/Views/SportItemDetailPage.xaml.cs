@@ -32,23 +32,72 @@ public sealed partial class SportItemDetailPage : Page
 
     private async Task ShowImageDetailAsync(string url)
     {
-        if (string.IsNullOrWhiteSpace(url) || !System.Uri.TryCreate(url, System.UriKind.Absolute, out var uri))
+        if (string.IsNullOrWhiteSpace(url))
             return;
+
+        var grid = new Grid { ColumnSpacing = 12, Padding = new Thickness(0, 10, 0, 0) };
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto) });
 
         var image = new Image
         {
-            Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(uri),
-            Stretch = Microsoft.UI.Xaml.Media.Stretch.Uniform
+            Stretch = Microsoft.UI.Xaml.Media.Stretch.Uniform,
+            MaxWidth = 850,
+            MaxHeight = 650,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
         };
+
+        var binding = new Microsoft.UI.Xaml.Data.Binding
+        {
+            Path = new PropertyPath("PreviewImageUrl"),
+            Source = ViewModel,
+            Converter = (Microsoft.UI.Xaml.Data.IValueConverter)this.Resources["StringToImageConverter"]
+        };
+        image.SetBinding(Image.SourceProperty, binding);
+        Grid.SetColumn(image, 1);
+        grid.Children.Add(image);
+
+        var btnStyle = (Style)this.Resources["LocalColorPreservingButtonStyle"];
+        var purpleBrush = (Microsoft.UI.Xaml.Media.Brush)this.Resources["SportPurpleSoftBrush"];
+
+        var prevBtn = new Button
+        {
+            Content = new FontIcon { Glyph = "\uE76B", FontSize = 20 },
+            VerticalAlignment = VerticalAlignment.Center,
+            Command = ViewModel.SelectPreviousImageCommand,
+            Style = btnStyle,
+            Width = 48,
+            Height = 48,
+            CornerRadius = new CornerRadius(24),
+            Background = purpleBrush
+        };
+        Grid.SetColumn(prevBtn, 0);
+        grid.Children.Add(prevBtn);
+
+        var nextBtn = new Button
+        {
+            Content = new FontIcon { Glyph = "\uE76C", FontSize = 20 },
+            VerticalAlignment = VerticalAlignment.Center,
+            Command = ViewModel.SelectNextImageCommand,
+            Style = btnStyle,
+            Width = 48,
+            Height = 48,
+            CornerRadius = new CornerRadius(24),
+            Background = purpleBrush
+        };
+        Grid.SetColumn(nextBtn, 2);
+        grid.Children.Add(nextBtn);
 
         var dialog = new ContentDialog
         {
-            Title = "Image Preview",
-            Content = image,
-            CloseButtonText = "Close",
+            Title = "Product Gallery",
+            Content = grid,
+            CloseButtonText = "Done",
             XamlRoot = XamlRoot,
             MaxWidth = 1000,
-            MaxHeight = 800
+            MaxHeight = 850
         };
 
         await dialog.ShowAsync();

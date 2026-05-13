@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using MyShop.Models;
 using MyShop.Services;
 using MyShop.ViewModels;
@@ -220,20 +217,22 @@ public sealed partial class OrdersManagementPage : Page
         PaginationPanel.Children.Add(nextBtn);
     }
 
-    private void OrderSearchBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-    {
-        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-        {
-            _vm.SearchQuery = sender.Text;
-        }
-    }
-
-    private void OrderSearchBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
     {
         var query = args.QueryText;
         if (!string.IsNullOrWhiteSpace(query))
         {
             _vm.AddToHistoryCommand.Execute(query);
         }
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
     }
 }

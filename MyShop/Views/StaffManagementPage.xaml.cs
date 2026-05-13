@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 using MyShop.Models;
 using MyShop.Repositories;
 using MyShop.ViewModels;
@@ -35,6 +32,21 @@ public sealed partial class StaffManagementPage : Page
         await ViewModel.LoadStaffAsync();
         BuildPagination();
     }
+    
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        _ = ViewModel.LoadStaffAsync();
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+    }
 
     private async void AddStaff_Click(object sender, RoutedEventArgs e)
     {
@@ -46,7 +58,8 @@ public sealed partial class StaffManagementPage : Page
         var result = await dialog.ShowAsync();
         if (result == ContentDialogResult.Primary)
         {
-            await ViewModel.LoadStaffAsync();
+            var formData = dialog.GetFormData();
+            await ViewModel.CreateStaffCommand.ExecuteAsync(formData);
         }
     }
 
@@ -62,7 +75,8 @@ public sealed partial class StaffManagementPage : Page
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                await ViewModel.LoadStaffAsync();
+                var formData = dialog.GetFormData();
+                await ViewModel.UpdateStaffCommand.ExecuteAsync(formData);
             }
         }
     }

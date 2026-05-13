@@ -1,7 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
 using MyShop.ViewModels;
 
@@ -54,9 +50,24 @@ public sealed partial class CategoryPage : Page
         BuildPagination();
     }
 
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        ViewModel.SearchCommand.Execute(null);
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+    }
+
     private void EditCategory_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Category category)
+        if (sender is Button btn && btn.Tag is Category category)
         {
             _ = ViewModel.EditCategoryCommand.ExecuteAsync(category);
         }
@@ -64,7 +75,7 @@ public sealed partial class CategoryPage : Page
 
     private void DeleteCategory_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Category category)
+        if (sender is Button btn && btn.Tag is Category category)
         {
             _ = ViewModel.DeleteCategoryCommand.ExecuteAsync(category);
         }

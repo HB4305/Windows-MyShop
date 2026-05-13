@@ -60,15 +60,28 @@
 							   FontSize="13"
 							   Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 				</StackPanel>
-				<TextBox x:Name="CategoryNameTextBox"
-						 PlaceholderText="e.g. Running Shoes, Basketball..."
-						 TextChanged="CategoryNameTextBox_TextChanged"
-						 MaxLength="100"
-						 CornerRadius="24"
-						 Padding="12,10"
-						 Background="{ThemeResource ControlFillColorDefaultBrush}"
-						 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-						 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<Border x:Name="CategoryNameWrapper"
+						Background="{ThemeResource ControlFillColorDefaultBrush}"
+						BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+						BorderThickness="1"
+						CornerRadius="24">
+					<TextBox x:Name="CategoryNameTextBox"
+							 PlaceholderText="e.g. Running Shoes, Basketball..."
+							 TextChanged="CategoryNameTextBox_TextChanged"
+							 MaxLength="100"
+							 Background="Transparent"
+							 BorderThickness="0"
+							 Padding="16,10"
+							 Text="{x:Bind CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							 GotFocus="TextBox_GotFocus"
+							 LostFocus="TextBox_LostFocus"
+							 FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+						<TextBox.Resources>
+							<Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+						</TextBox.Resources>
+					</TextBox>
+				</Border>
 				<!-- Validation message -->
 				<Border Visibility="{x:Bind NameValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
 						Padding="0,2,0,0">
@@ -100,16 +113,30 @@
 								   Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
 					</Border>
 				</StackPanel>
-				<TextBox PlaceholderText="Brief description of this category..."
-						 TextWrapping="Wrap"
-						 AcceptsReturn="True"
-						 MinHeight="90"
-						 MaxLength="300"
-						 CornerRadius="24"
-						 Padding="12,10"
-						 Background="{ThemeResource ControlFillColorDefaultBrush}"
-						 Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-						 Text="{x:Bind CategoryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+				<Border x:Name="DescriptionWrapper"
+						Background="{ThemeResource ControlFillColorDefaultBrush}"
+						BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+						BorderThickness="1"
+						CornerRadius="24">
+					<TextBox x:Name="DescriptionTextBox"
+							 PlaceholderText="Brief description of this category..."
+							 TextWrapping="Wrap"
+							 AcceptsReturn="True"
+							 MinHeight="90"
+							 MaxLength="300"
+							 Background="Transparent"
+							 BorderThickness="0"
+							 Padding="16,10"
+							 Text="{x:Bind CategoryDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							 GotFocus="TextBox_GotFocus"
+							 LostFocus="TextBox_LostFocus"
+							 FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+						<TextBox.Resources>
+							<Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+							<Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+						</TextBox.Resources>
+					</TextBox>
+				</Border>
 			</StackPanel>
 		</StackPanel>
 

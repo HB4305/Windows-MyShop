@@ -1,7 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using MyShop.Models;
 using MyShop.ViewModels;
 using MyShop.Views.Dialogs;
@@ -37,12 +33,40 @@ public sealed partial class SuppliersPage : Page
         BuildOrderPagination();
     }
 
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        _ = ViewModel.LoadSuppliersAsync();
+    }
+
+    private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+    }
+
+    private void OnOrderSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        _ = ViewModel.LoadSupplyOrdersAsync();
+    }
+
+    private void OrderSearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        OrderSearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+    }
+
+    private void OrderSearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        OrderSearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+    }
+
     private void TabSuppliers_Click(object sender, RoutedEventArgs e)
     {
         SuppliersGrid.Visibility = Visibility.Visible;
         SupplyOrdersGrid.Visibility = Visibility.Collapsed;
-        SearchBox.PlaceholderText = "Search by name, phone...";
-        SearchBox.SetBinding(TextBox.TextProperty, new Microsoft.UI.Xaml.Data.Binding { Path = new PropertyPath("SearchSupplierKeyword"), Mode = Microsoft.UI.Xaml.Data.BindingMode.TwoWay, UpdateSourceTrigger = Microsoft.UI.Xaml.Data.UpdateSourceTrigger.PropertyChanged });
 
         TabSuppliers.Background = (SolidColorBrush)Application.Current.Resources["PurpleBrush"];
         TabSuppliers.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);
@@ -59,8 +83,6 @@ public sealed partial class SuppliersPage : Page
     {
         SuppliersGrid.Visibility = Visibility.Collapsed;
         SupplyOrdersGrid.Visibility = Visibility.Visible;
-        SearchBox.PlaceholderText = "Search supply history (Supplier name, Order ID)...";
-        SearchBox.SetBinding(TextBox.TextProperty, new Microsoft.UI.Xaml.Data.Binding { Path = new PropertyPath("SearchOrderKeyword"), Mode = Microsoft.UI.Xaml.Data.BindingMode.TwoWay, UpdateSourceTrigger = Microsoft.UI.Xaml.Data.UpdateSourceTrigger.PropertyChanged });
 
         TabSupplyOrders.Background = (SolidColorBrush)Application.Current.Resources["PurpleBrush"];
         TabSupplyOrders.Foreground = new SolidColorBrush(Microsoft.UI.Colors.White);

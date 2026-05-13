@@ -64,6 +64,11 @@ public partial class SportItemViewModel : ObservableObject
     [ObservableProperty]
     private string _searchKeyword = string.Empty;
 
+    partial void OnSearchKeywordChanged(string value)
+    {
+        SchedulePriceFilterSearch(); // Reuse the same debounce logic
+    }
+
     [ObservableProperty]
     private double? _minPrice;
 

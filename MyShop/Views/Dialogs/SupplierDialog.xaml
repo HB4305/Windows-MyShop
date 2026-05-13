@@ -42,45 +42,89 @@
 
         <!-- Form Fields -->
         <StackPanel Spacing="20">
-            <!-- Error Message -->
-            <Border Visibility="{Binding ElementName=ErrorText, Path=Visibility}"
-                    Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
-                    CornerRadius="8" Padding="12,8">
-                <TextBlock x:Name="ErrorText" 
-                           Foreground="{ThemeResource SystemFillColorCriticalBrush}" 
-                           FontSize="13"
-                           TextWrapping="Wrap" 
-                           Visibility="Collapsed" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-            </Border>
+            <!-- Errors removed here to be inline -->
 
             <!-- Name -->
-            <StackPanel Spacing="8">
-                <TextBlock Text="Supplier Name *" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <TextBox x:Name="NameTextBox" 
-                         PlaceholderText="e.g. ABC Sports Co., Ltd."
-                         CornerRadius="24" Padding="12,10"
-                         Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+            <StackPanel Spacing="6">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="Supplier name" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="*" FontSize="13" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                </StackPanel>
+                <Border x:Name="NameWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <TextBox x:Name="NameTextBox"
+                             PlaceholderText="e.g. ABC Sports Co., Ltd."
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,10"
+                             GotFocus="TextBox_GotFocus"
+                             LostFocus="TextBox_LostFocus">
+                        <TextBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
+                <Border Visibility="{x:Bind NameErrorText.Visibility, Mode=OneWay}" Padding="0,2,0,0">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="NameErrorText" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" Visibility="Collapsed" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
 
             <!-- Phone -->
-            <StackPanel Spacing="8">
-                <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <TextBox x:Name="PhoneTextBox" 
-                         PlaceholderText="e.g. 0912345678"
-                         CornerRadius="24" Padding="12,10"
-                         Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+            <StackPanel Spacing="6">
+                <TextBlock Text="Phone number" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <Border x:Name="PhoneWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <TextBox x:Name="PhoneTextBox"
+                             PlaceholderText="e.g. 0912345678"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,10"
+                             GotFocus="TextBox_GotFocus"
+                             LostFocus="TextBox_LostFocus">
+                        <TextBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
             </StackPanel>
 
             <!-- Type -->
-            <StackPanel Spacing="8">
-                <TextBlock Text="Type (Optional)" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <TextBox x:Name="TypeTextBox" 
-                         PlaceholderText="e.g. Wholesale, Retail"
-                         CornerRadius="24" Padding="12,10"
-                         Background="{ThemeResource ControlFillColorDefaultBrush}"
-                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+            <StackPanel Spacing="6">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Text="Type" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="24" Padding="6,1">
+                        <TextBlock Text="Optional" FontSize="10" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    </Border>
+                </StackPanel>
+                <Border x:Name="TypeWrapper"
+                        Background="{ThemeResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="24">
+                    <TextBox x:Name="TypeTextBox"
+                             PlaceholderText="e.g. Wholesale, Retail"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,10"
+                             GotFocus="TextBox_GotFocus"
+                             LostFocus="TextBox_LostFocus">
+                        <TextBox.Resources>
+                            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
             </StackPanel>
         </StackPanel>
 

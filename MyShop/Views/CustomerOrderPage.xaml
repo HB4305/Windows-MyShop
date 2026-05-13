@@ -79,8 +79,9 @@
     </Style>
 
     <!-- ══ Accent Colors ══ -->
+    <SolidColorBrush x:Key="AppPurpleBrush"    Color="#8B52FF"/>
     <SolidColorBrush x:Key="PurpleBrush"       Color="#8B52FF"/>
-    <SolidColorBrush x:Key="PurpleLightBrush"  Color="#1A8B52FF"/> <!-- Faint purple -->
+    <SolidColorBrush x:Key="PurpleLightBrush"  Color="#8B52FF" Opacity="0.12"/> <!-- Faint purple -->
     <SolidColorBrush x:Key="AmberBrush"        Color="#D97706"/>
     <SolidColorBrush x:Key="BlueBrush"         Color="#2563EB"/>
     <SolidColorBrush x:Key="GreenBrush"        Color="#059669"/>
@@ -147,11 +148,11 @@
       <Setter Property="CornerRadius" Value="8"/>
     </Style>
 
-    <Style x:Key="SearchBoxText" TargetType="TextBox">
+    <Style x:Key="SearchBoxText" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
       <Setter Property="FontSize" Value="13"/>
       <Setter Property="Padding" Value="0,8,10,8"/>
       <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="BorderThickness" Value="0,0,0,1"/>
       <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
     </Style>
 
@@ -770,18 +771,50 @@
             </StackPanel>
           </ScrollViewer>
 
-          <!-- Search Bar (Synced with global style) -->
-          <Grid Grid.Column="1"
-                MinWidth="280"
-                Margin="16,0,0,0">
-              <TextBox Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                       PlaceholderText="Search orders..."
-                       Style="{StaticResource ModernSearchTextBoxStyle}"/>
-              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                      Background="Transparent" BorderThickness="0" Padding="12" Margin="0,0,4,0"
-                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
-                      HorizontalAlignment="Right" VerticalAlignment="Center"/>
-          </Grid>
+          <!-- Standardized Premium Search Bar -->
+          <Border x:Name="SearchWrapper"
+                  Grid.Column="1" 
+                  VerticalAlignment="Center" 
+                  Margin="16,0,0,0" 
+                  Width="400"
+                  Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderThickness="1"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  CornerRadius="24"
+                  Height="48"
+                  Padding="16,0">
+              <AutoSuggestBox x:Name="SearchBox"
+                              PlaceholderText="Search orders..."
+                              Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              QuerySubmitted="OnSearchQuerySubmitted"
+                              QueryIcon="Find"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              VerticalAlignment="Center"
+                              VerticalContentAlignment="Center"
+                              GotFocus="SearchBox_GotFocus"
+                              LostFocus="SearchBox_LostFocus"
+                              FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                  <AutoSuggestBox.Resources>
+                      <!-- Style the internal search button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                          <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                          <Setter Property="Background" Value="Transparent"/>
+                          <Setter Property="BorderThickness" Value="0"/>
+                      </Style>
+                      <!-- Targeted style to hide the clear button -->
+                      <Style TargetType="Button" x:Key="AutoSuggestBoxDeleteButtonStyle">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                          <Setter Property="Width" Value="0"/>
+                      </Style>
+                      <!-- Remove default focus visual and border -->
+                      <Thickness x:Key="AutoSuggestBoxBorderThemeThickness">0</Thickness>
+                      <Thickness x:Key="AutoSuggestBoxBorderThemeThicknessFocused">0</Thickness>
+                      <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                      <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                  </AutoSuggestBox.Resources>
+              </AutoSuggestBox>
+          </Border>
 
         </Grid>
       </Border>
@@ -876,7 +909,7 @@
                             VerticalAlignment="Center"
                             Spacing="10"
                             Canvas.ZIndex="10"
-                            Visibility="{Binding PaginatedOrders.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                            Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVisibilityConverter}}">
                   <Border Width="60" Height="60" CornerRadius="30"
                           Background="{StaticResource PurpleLightBrush}" HorizontalAlignment="Center">
                     <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -1091,7 +1124,7 @@
 
                 <TextBlock Text="No items in this order."
                            FontSize="13" Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                           Visibility="{Binding CurrentDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                           Visibility="{Binding ShowEmptyDetailState, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                 <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
                         BorderThickness="0,1,0,0" Margin="0,8,0,0"/>

@@ -108,39 +108,66 @@
 
       <Border x:Name="Card1" Grid.Row="0" Grid.Column="0" Style="{StaticResource StatsCardStyle}">
         <StackPanel Spacing="8">
-          <TextBlock Text="Total Reports" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="Total Reports" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="{Binding TotalReports}" FontSize="24" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
         </StackPanel>
       </Border>
 
       <Border x:Name="Card2" Grid.Column="1" Style="{StaticResource StatsCardStyle}">
         <StackPanel Spacing="8">
-          <TextBlock Text="Issues/Losses" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="Issues/Losses" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="{Binding NegativeDiscrepancyReports}" FontSize="24" FontWeight="Bold" Foreground="{StaticResource DangerBrush}"/>
         </StackPanel>
       </Border>
 
       <Border x:Name="Card3" Grid.Column="2" Style="{StaticResource StatsCardStyle}">
         <StackPanel Spacing="8">
-          <TextBlock Text="Total Revenue" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+          <TextBlock Text="Total Revenue" FontSize="13" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormatter}}" FontSize="24" FontWeight="Bold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
         </StackPanel>
       </Border>
     </Grid>
 
-    <!-- Premium Search Bar -->
-    <Grid x:Name="ToolbarGridBorder" Grid.Row="2">
-       <TextBox PlaceholderText="Search by shift ID, staff, or notes..."
-                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Style="{StaticResource ModernSearchTextBoxStyle}"
+    <!-- Standardized Premium Search Bar (Matching Report Design) -->
+    <Grid x:Name="ToolbarGridBorder" Grid.Row="2" VerticalAlignment="Center">
+        <Border x:Name="SearchWrapper"
+                Background="{ThemeResource ControlFillColorDefaultBrush}"
+                BorderThickness="1"
+                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                 CornerRadius="24"
-                Padding="16,12,80,12"/>
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Spacing="4">
-        <controls:ShimmerLoadingControl Width="24" Height="24" CornerRadius="12" IsShimmering="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
-        <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                Background="Transparent" BorderThickness="0" Padding="12"
-                Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"/>
-      </StackPanel>
+                Height="48"
+                VerticalAlignment="Center">
+            <AutoSuggestBox x:Name="SearchBox"
+                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
+                            PlaceholderText="Search logs..."
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            QuerySubmitted="OnSearchQuerySubmitted"
+                            QueryIcon="Find"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="16,0,12,0"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            GotFocus="SearchBox_GotFocus"
+                            LostFocus="SearchBox_LostFocus"
+                            FontFamily="{StaticResource AppDefaultFontFamily}">
+                <AutoSuggestBox.Resources>
+                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                    <!-- Style the internal search button -->
+                    <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                        <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                    <!-- Targeted style to hide the clear button -->
+                    <Style TargetType="Button" x:Key="AutoSuggestBoxDeleteButtonStyle">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Setter Property="Width" Value="0"/>
+                    </Style>
+                </AutoSuggestBox.Resources>
+            </AutoSuggestBox>
+        </Border>
     </Grid>
 
     <!-- Main List Card -->
@@ -172,15 +199,15 @@
               <ColumnDefinition Width="100"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="ID" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-            <TextBlock Grid.Column="1" Text="STAFF" FontSize="11" FontWeight="SemiBold"/>
-            <TextBlock Grid.Column="2" Text="START" FontSize="11" FontWeight="SemiBold"/>
-            <TextBlock Grid.Column="3" Text="SUBMITTED" FontSize="11" FontWeight="SemiBold"/>
-            <TextBlock Grid.Column="4" Text="REVENUE" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
-            <TextBlock Grid.Column="5" Text="EXPECTED" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
-            <TextBlock Grid.Column="6" Text="ACTUAL" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
-            <TextBlock Grid.Column="7" Text="DIFF" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right"/>
-            <TextBlock Grid.Column="8" Text="NOTES" FontSize="11" FontWeight="SemiBold" Margin="20,0,0,0"/>
+            <TextBlock Grid.Column="0" Text="ID" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="1" Text="STAFF" FontSize="11" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="2" Text="START" FontSize="11" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="3" Text="SUBMITTED" FontSize="11" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="4" Text="REVENUE" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="5" Text="EXPECTED" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="6" Text="ACTUAL" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="7" Text="DIFF" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+            <TextBlock Grid.Column="8" Text="NOTES" FontSize="11" FontWeight="SemiBold" Margin="20,0,0,0" FontFamily="{StaticResource AppDefaultFontFamily}"/>
           </Grid>
         </Border>
 
@@ -209,16 +236,16 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
-                  <TextBlock Grid.Column="0" Text="{Binding ShiftId}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                  <TextBlock Grid.Column="1" Text="{Binding StaffEmail}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
-                  <TextBlock Grid.Column="2" Text="{Binding StartTime, Converter={StaticResource DateTimeOffsetConverter}}" VerticalAlignment="Center" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  <TextBlock Grid.Column="3" Text="{Binding EndTime, Converter={StaticResource DateTimeOffsetConverter}}" VerticalAlignment="Center" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                  <TextBlock Grid.Column="4" Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                  <TextBlock Grid.Column="5" Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                  <TextBlock Grid.Column="6" Text="{Binding ActualCashTotal, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <TextBlock Grid.Column="0" Text="{Binding ShiftId}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="1" Text="{Binding StaffEmail}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="2" Text="{Binding StartTime, Converter={StaticResource DateTimeOffsetConverter}}" VerticalAlignment="Center" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="3" Text="{Binding EndTime, Converter={StaticResource DateTimeOffsetConverter}}" VerticalAlignment="Center" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="4" Text="{Binding TotalRevenue, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="SemiBold" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="5" Text="{Binding ExpectedCash, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="6" Text="{Binding ActualCashTotal, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="{StaticResource AppDefaultFontFamily}"/>
                   <TextBlock Grid.Column="7" Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}" HorizontalAlignment="Right" VerticalAlignment="Center" 
-                             Foreground="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}, ConverterParameter='color'}"/>
-                  <TextBlock Grid.Column="8" Text="{Binding Notes}" VerticalAlignment="Center" Margin="20,0,0,0" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                             Foreground="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}, ConverterParameter='color'}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
+                  <TextBlock Grid.Column="8" Text="{Binding Notes}" VerticalAlignment="Center" Margin="20,0,0,0" TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource AppDefaultFontFamily}"/>
                 </Grid>
               </Border>
             </DataTemplate>
@@ -242,9 +269,7 @@
 
     <!-- Table Footer: Pagination (Docked to bottom) -->
     <Border Grid.Row="4" 
-            BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" 
-            BorderThickness="0,1,0,0"
-            Background="{ThemeResource ControlFillColorDefaultBrush}"
+            BorderThickness="0"
             Margin="-24,0,-24,-20" Padding="24,12">
       <Grid>
         <Grid.ColumnDefinitions>
@@ -253,19 +278,19 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Spacing="4">
           <TextBlock Text="Showing" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                     FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="{Binding DisplayFrom}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                     FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="to" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                     FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="{Binding DisplayTo}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                     FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="of" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                     FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="{Binding TotalFilteredItems}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                     FontFamily="{StaticResource AppDefaultFontFamily}"/>
           <TextBlock Text="logs" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="13" 
-                     FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                     FontFamily="{StaticResource AppDefaultFontFamily}"/>
         </StackPanel>
 
         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right" x:Name="ShiftLogsPaginationPanel"/>
