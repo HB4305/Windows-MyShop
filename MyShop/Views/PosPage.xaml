@@ -252,23 +252,23 @@
                   CornerRadius="24"
                   Height="48"
                   VerticalAlignment="Center">
-            <AutoSuggestBox x:Name="PhoneTextBox"
-                            PlaceholderText="Phone"
-                            Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            GotFocus="PhoneTextBox_GotFocus"
-                            LostFocus="PhoneTextBox_LostFocus"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Padding="16,0"
-                            VerticalAlignment="Stretch"
-                            VerticalContentAlignment="Center"
-                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
-              <AutoSuggestBox.Resources>
+            <TextBox x:Name="PhoneTextBox"
+                     PlaceholderText="Phone"
+                     Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     GotFocus="PhoneTextBox_GotFocus"
+                     LostFocus="PhoneTextBox_LostFocus"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Padding="16,14,16,10"
+                     VerticalAlignment="Stretch"
+                     VerticalContentAlignment="Center"
+                     Style="{StaticResource ModernSearchTextBoxStyle}">
+              <TextBox.Resources>
                 <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                 <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                 <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
-              </AutoSuggestBox.Resources>
-            </AutoSuggestBox>
+              </TextBox.Resources>
+            </TextBox>
           </Border>
           <Border x:Name="AddressWrapper"
                   Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -277,23 +277,23 @@
                   CornerRadius="24"
                   Height="48"
                   VerticalAlignment="Center">
-            <AutoSuggestBox x:Name="AddressTextBox"
-                            PlaceholderText="Address"
-                            Text="{Binding CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            GotFocus="AddressTextBox_GotFocus"
-                            LostFocus="AddressTextBox_LostFocus"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Padding="16,0"
-                            VerticalAlignment="Stretch"
-                            VerticalContentAlignment="Center"
-                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
-              <AutoSuggestBox.Resources>
+            <TextBox x:Name="AddressTextBox"
+                     PlaceholderText="Address"
+                     Text="{Binding CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     GotFocus="AddressTextBox_GotFocus"
+                     LostFocus="AddressTextBox_LostFocus"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     Padding="16,14,16,10"
+                     VerticalAlignment="Stretch"
+                     VerticalContentAlignment="Center"
+                     Style="{StaticResource ModernSearchTextBoxStyle}">
+              <TextBox.Resources>
                 <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                 <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                 <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
-              </AutoSuggestBox.Resources>
-            </AutoSuggestBox>
+              </TextBox.Resources>
+            </TextBox>
           </Border>
         </StackPanel>
       </Border>
@@ -427,23 +427,23 @@
                             CornerRadius="24"
                             Height="48"
                             VerticalAlignment="Center">
-                      <AutoSuggestBox x:Name="CashReceivedTextBox"
-                                      Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      PlaceholderText="0.00"
-                                      GotFocus="CashReceivedTextBox_GotFocus"
-                                      LostFocus="CashReceivedTextBox_LostFocus"
-                                      Background="Transparent"
-                                      BorderThickness="0"
-                                      Padding="16,0"
-                                      VerticalAlignment="Stretch"
-                                      VerticalContentAlignment="Center"
-                                      Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
-                        <AutoSuggestBox.Resources>
+                      <TextBox x:Name="CashReceivedTextBox"
+                               Text="{Binding ReceivedAmountText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               PlaceholderText="0.00"
+                               GotFocus="CashReceivedTextBox_GotFocus"
+                               LostFocus="CashReceivedTextBox_LostFocus"
+                               Background="Transparent"
+                               BorderThickness="0"
+                               Padding="16,14,16,10"
+                               VerticalAlignment="Stretch"
+                               VerticalContentAlignment="Center"
+                               Style="{StaticResource ModernSearchTextBoxStyle}">
+                        <TextBox.Resources>
                           <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                           <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                           <Thickness x:Key="TextControlBorderThemeThicknessPointerOver">0</Thickness>
-                        </AutoSuggestBox.Resources>
-                      </AutoSuggestBox>
+                        </TextBox.Resources>
+                      </TextBox>
                     </Border>
                   </StackPanel>
                   <StackPanel Grid.Column="1" Spacing="4">
