@@ -11,6 +11,8 @@ using MyShop.ViewModels;
 using MyShop.Views.Dialogs;
 using Windows.System;
 using Microsoft.UI.Xaml.Media;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MyShop.Views;
 
@@ -207,6 +209,33 @@ public sealed partial class SportItemPage : Page
         Frame.Navigate(typeof(SportItemDetailPage), null);
     }
 
+    private async void OnDownloadTemplateClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var excelService = new ExcelImportService();
+            byte[] content = excelService.GenerateTemplate();
+
+            var filePicker = App.Services.GetRequiredService<IFilePickerService>();
+            var path = await filePicker.PickSavePathAsync("ProSport_Product_Import_Template.xlsx", "Excel File", ".xlsx");
+
+            if (!string.IsNullOrEmpty(path))
+            {
+                await File.WriteAllBytesAsync(path, content);
+                
+                var successDialog = new SuccessDialog("Template Downloaded", "The import template has been saved successfully.");
+                successDialog.XamlRoot = this.XamlRoot;
+                await successDialog.ShowAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            var failDialog = new ConfirmationDialog("Download Error", $"Failed to save template: {ex.Message}");
+            failDialog.XamlRoot = this.XamlRoot;
+            await failDialog.ShowAsync();
+        }
+    }
+
     private async void OnBulkImportClick(object sender, RoutedEventArgs e)
     {
         var filePicker = App.Services.GetRequiredService<IFilePickerService>();
@@ -239,8 +268,12 @@ public sealed partial class SportItemPage : Page
 
             if (result == ContentDialogResult.Primary)
             {
+                ViewModel.IsLoading = true;
+                ViewModel.ErrorMessage = "Uploading local images and importing products...";
+
                 var itemRepo = App.Services.GetRequiredService<SportItemRepository>();
                 var categoryRepo = App.Services.GetRequiredService<CategoryRepository>();
+                var storageService = App.Services.GetRequiredService<SupabaseStorageService>();
 
                 var categories = await categoryRepo.GetAllAsync();
                 var categoryMap = categories
@@ -250,6 +283,32 @@ public sealed partial class SportItemPage : Page
                 var items = new List<SportItem>();
                 foreach (var row in validRows)
                 {
+                    // Handle local images: Upload them to Supabase
+                    var processedUrls = new List<string>();
+                    foreach (var pathOrUrl in row.ImageUrls)
+                    {
+                        if (File.Exists(pathOrUrl))
+                        {
+                            try
+                            {
+                                var bytes = await File.ReadAllBytesAsync(pathOrUrl);
+                                var fileName = Path.GetFileName(pathOrUrl);
+                                var publicUrl = await storageService.UploadFileAsync(bytes, fileName);
+                                processedUrls.Add(publicUrl);
+                            }
+                            catch (Exception uploadEx)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Failed to upload {pathOrUrl}: {uploadEx.Message}");
+                                // If upload fails, we skip this image or you could handle it differently
+                            }
+                        }
+                        else
+                        {
+                            processedUrls.Add(pathOrUrl);
+                        }
+                    }
+                    row.ImageUrls = processedUrls;
+
                     int catId = 0;
                     if (!string.IsNullOrWhiteSpace(row.CategoryName))
                     {
@@ -270,6 +329,9 @@ public sealed partial class SportItemPage : Page
                 }
 
                 var (inserted, errors) = await itemRepo.BulkInsertAsync(items, categoryMap);
+
+                ViewModel.IsLoading = false;
+                ViewModel.ErrorMessage = string.Empty;
 
                 var successDialog = new SuccessDialog(
                     "Bulk Import Success",
