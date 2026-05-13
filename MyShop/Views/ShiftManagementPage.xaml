@@ -239,14 +239,27 @@
                   <TextBlock Text="Starting Cash"
                              FontWeight="SemiBold"
                              Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-                  <TextBox Text="{Binding StartingCashText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                           PlaceholderText="0.00"
-                           MinHeight="42"
-                           CornerRadius="24"
-                           Padding="12,12"
-                           Background="{ThemeResource ControlFillColorDefaultBrush}"
-                           BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                           BorderThickness="1"/>
+                  <Border x:Name="StartingCashWrapper"
+                          Background="{ThemeResource ControlFillColorDefaultBrush}"
+                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                          BorderThickness="1"
+                          CornerRadius="24"
+                          Height="48">
+                    <TextBox Text="{Binding StartingCashText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             PlaceholderText="0.00"
+                             GotFocus="StartingCashTextBox_GotFocus"
+                             LostFocus="StartingCashTextBox_LostFocus"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,14,16,10"
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center">
+                      <TextBox.Resources>
+                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                      </TextBox.Resources>
+                    </TextBox>
+                  </Border>
                 </StackPanel>
                 <Button Command="{Binding OpenShiftCommand}"
                         Background="{StaticResource PurpleBrush}"
@@ -313,14 +326,27 @@
                     <FontIcon Glyph="&#xE8D2;" Foreground="{StaticResource SuccessBrush}" FontSize="16"/>
                     <TextBlock Text="Actual Cash" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                   </StackPanel>
-                  <TextBox Text="{Binding ActualCashTotalText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                           PlaceholderText="0.00"
-                           MinHeight="42"
-                           CornerRadius="24"
-                           Padding="12,12"
-                           Background="{ThemeResource ControlFillColorDefaultBrush}"
-                           BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                           BorderThickness="1"/>
+                  <Border x:Name="ActualCashWrapper"
+                          Background="{ThemeResource ControlFillColorDefaultBrush}"
+                          BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                          BorderThickness="1"
+                          CornerRadius="24"
+                          Height="48">
+                    <TextBox Text="{Binding ActualCashTotalText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             PlaceholderText="0.00"
+                             GotFocus="ActualCashTextBox_GotFocus"
+                             LostFocus="ActualCashTextBox_LostFocus"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Padding="16,14,16,10"
+                             VerticalAlignment="Stretch"
+                             VerticalContentAlignment="Center">
+                      <TextBox.Resources>
+                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                      </TextBox.Resources>
+                    </TextBox>
+                  </Border>
                 </StackPanel>
               </Border>
 
@@ -334,7 +360,7 @@
                     <TextBlock Text="{Binding Discrepancy, Converter={StaticResource CurrencyFormatter}}"
                                FontSize="26"
                                FontWeight="Bold"
-                               Foreground="{StaticResource WarningBrush}"
+                               Foreground="{ThemeResource WarningBrush}"
                                Visibility="{Binding IsBusy, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
                     <controls:ShimmerLoadingControl Width="120" Height="26" HorizontalAlignment="Left" IsShimmering="True"
                                                  Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}"/>
@@ -347,16 +373,27 @@
               <TextBlock Text="Notes"
                          FontWeight="SemiBold"
                          Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-              <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                       PlaceholderText="Add cash differences or shift notes..."
-                       AcceptsReturn="True"
-                       TextWrapping="Wrap"
-                       MinHeight="120"
-                       CornerRadius="24"
-                       Padding="12,12"
-                       Background="{ThemeResource ControlFillColorDefaultBrush}"
-                       BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                       BorderThickness="1"/>
+              <Border x:Name="NotesWrapper"
+                      Background="{ThemeResource ControlFillColorDefaultBrush}"
+                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                      BorderThickness="1"
+                      CornerRadius="24">
+                <TextBox Text="{Binding Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         PlaceholderText="Add cash differences or shift notes..."
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         MinHeight="120"
+                         GotFocus="NotesTextBox_GotFocus"
+                         LostFocus="NotesTextBox_LostFocus"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="16,14,16,10">
+                  <TextBox.Resources>
+                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                  </TextBox.Resources>
+                </TextBox>
+              </Border>
             </StackPanel>
 
             <Grid ColumnSpacing="12">

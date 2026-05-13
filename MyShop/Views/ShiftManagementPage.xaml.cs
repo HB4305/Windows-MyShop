@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using MyShop.ViewModels;
 using MyShop.Views.Dialogs;
 
@@ -48,5 +49,35 @@ public sealed partial class ShiftManagementPage : Page
     private void ViewReportLogs_Click(object sender, RoutedEventArgs e)
     {
         Frame.Navigate(typeof(ShiftReportLogsPage));
+    }
+
+    private void StartingCashTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        StartingCashWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void StartingCashTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        StartingCashWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
+    private void ActualCashTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        ActualCashWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void ActualCashTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        ActualCashWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
+    private void NotesTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        NotesWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void NotesTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        NotesWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
     }
 }
