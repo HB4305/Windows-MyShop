@@ -198,6 +198,17 @@ public sealed partial class PosPage : Page
         CashReceivedWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
     }
 
+    private void PhoneTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+    {
+        args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+    }
+
+    private void CashReceivedTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+    {
+        args.Cancel = args.NewText.Any(c => !char.IsDigit(c) && c != '.') ||
+                      args.NewText.Count(c => c == '.') > 1;
+    }
+
     private void Page_Tapped(object sender, TappedRoutedEventArgs e)
     {
         if (e.OriginalSource is not DependencyObject originalSource)
