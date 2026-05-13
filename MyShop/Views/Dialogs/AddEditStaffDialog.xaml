@@ -10,6 +10,12 @@
 
     <ContentDialog.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <Style x:Key="DetailFieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </Style>
     </ContentDialog.Resources>
 
     <StackPanel Spacing="24" Margin="4" Width="460">
@@ -42,11 +48,12 @@
         <Border Background="{ThemeResource ControlStrokeColorDefaultBrush}" Height="1" Margin="-4,0,-4,0"/>
 
         <StackPanel Spacing="18">
-            <StackPanel Spacing="8">
-                <TextBlock Text="Email"
-                           FontSize="14"
-                           FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <StackPanel Spacing="6">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="Email address"
+                               Style="{StaticResource DetailFieldLabelStyle}"/>
+                    <TextBlock Text="*" Style="{StaticResource DetailFieldLabelStyle}" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+                </StackPanel>
                 <Border x:Name="EmailWrapper"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
@@ -59,25 +66,24 @@
                              BorderThickness="0"
                              Padding="16,10"
                              GotFocus="TextBox_GotFocus"
-                             LostFocus="TextBox_LostFocus"
-                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                             LostFocus="TextBox_LostFocus">
                         <TextBox.Resources>
                             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                         </TextBox.Resources>
                     </TextBox>
                 </Border>
-                <TextBlock Text="{x:Bind EmailValidationMessage, Mode=OneWay}"
-                            FontSize="12"
-                            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
-                            Visibility="{x:Bind EmailValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <Border Visibility="{x:Bind EmailValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="0,2,0,0">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind EmailValidationMessage, Mode=OneWay}" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
 
-            <StackPanel Spacing="8">
-                <TextBlock Text="Role"
-                           FontSize="14"
-                           FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <StackPanel Spacing="6">
+                <TextBlock Text="Access role"
+                           Style="{StaticResource DetailFieldLabelStyle}"/>
                 <Border CornerRadius="24"
                         Padding="16,10"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -85,30 +91,29 @@
                         BorderThickness="1">
                     <TextBlock Text="SALE"
                                FontSize="14"
-                               FontWeight="SemiBold"
                                Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                 </Border>
             </StackPanel>
 
-            <StackPanel Spacing="8">
-                <TextBlock Text="Password"
-                           FontSize="14"
-                           FontWeight="SemiBold"
-                           Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <StackPanel Spacing="6">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <TextBlock Text="Password"
+                               Style="{StaticResource DetailFieldLabelStyle}"/>
+                    <TextBlock Text="*" Style="{StaticResource DetailFieldLabelStyle}" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
+                </StackPanel>
                 <Border x:Name="PasswordWrapper"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
                         BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
                         BorderThickness="1"
                         CornerRadius="24">
                     <PasswordBox x:Name="PasswordInput"
-                                  PlaceholderText="At least 6 characters"
-                                  PasswordChanged="PasswordInput_PasswordChanged"
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  Padding="16,10"
-                                  GotFocus="TextBox_GotFocus"
-                                  LostFocus="TextBox_LostFocus"
-                                  FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                                 PlaceholderText="At least 6 characters"
+                                 PasswordChanged="PasswordInput_PasswordChanged"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Padding="16,10"
+                                 GotFocus="PasswordBox_GotFocus"
+                                 LostFocus="PasswordBox_LostFocus">
                         <PasswordBox.Resources>
                             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
@@ -119,10 +124,12 @@
                            FontSize="12"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                            TextWrapping="Wrap" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                <TextBlock Text="{x:Bind PasswordValidationMessage, Mode=OneWay}"
-                            FontSize="12"
-                            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
-                            Visibility="{x:Bind PasswordValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <Border Visibility="{x:Bind PasswordValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="0,2,0,0">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind PasswordValidationMessage, Mode=OneWay}" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </StackPanel>
 

@@ -67,7 +67,7 @@ public sealed partial class CategoryPage : Page
 
     private void EditCategory_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Category category)
+        if (sender is Button btn && btn.Tag is Category category)
         {
             _ = ViewModel.EditCategoryCommand.ExecuteAsync(category);
         }
@@ -75,7 +75,7 @@ public sealed partial class CategoryPage : Page
 
     private void DeleteCategory_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Category category)
+        if (sender is Button btn && btn.Tag is Category category)
         {
             _ = ViewModel.DeleteCategoryCommand.ExecuteAsync(category);
         }

@@ -57,23 +57,31 @@ public sealed partial class CustomerPage : Page
         {
             var dialog = new AddEditCustomerDialog(null) { XamlRoot = this.XamlRoot };
             GlobalLoadingOverlay.Visibility = Visibility.Collapsed;
-            if (await dialog.ShowAsync() == ContentDialogResult.Primary) await ViewModel.LoadCustomersAsync();
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary) 
+            {
+                var customer = dialog.GetCustomer();
+                await ViewModel.SaveCustomerCommand.ExecuteAsync(customer);
+            }
         }
         finally { GlobalLoadingOverlay.Visibility = Visibility.Collapsed; }
     }
 
     private async void OnEditCustomerClick(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Customer customer)
+        if (sender is Button btn && btn.Tag is Customer customer)
         {
             var dialog = new AddEditCustomerDialog(customer) { XamlRoot = this.XamlRoot };
-            if (await dialog.ShowAsync() == ContentDialogResult.Primary) await ViewModel.LoadCustomersAsync();
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary) 
+            {
+                var updatedCustomer = dialog.GetCustomer();
+                await ViewModel.SaveCustomerCommand.ExecuteAsync(updatedCustomer);
+            }
         }
     }
 
     private async void OnDeleteCustomerClick(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.DataContext is Customer customer)
+        if (sender is Button btn && btn.Tag is Customer customer)
         {
             var dialog = new ConfirmationDialog("Delete Customer", $"Are you sure you want to delete {customer.Name}?");
             dialog.XamlRoot = this.XamlRoot;

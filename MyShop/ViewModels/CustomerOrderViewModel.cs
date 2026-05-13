@@ -38,6 +38,10 @@ public partial class CustomerOrderViewModel : ObservableObject
     [ObservableProperty]
     private string? _errorMessage;
 
+    public bool ShowEmptyState => !IsLoading && PaginatedOrders.Count == 0;
+
+    public bool ShowEmptyDetailState => !IsDetailLoading && CurrentDetails.Count == 0;
+
     [ObservableProperty]
     private bool _showDetailPanel = false;
 
@@ -424,4 +428,10 @@ public partial class CustomerOrderViewModel : ObservableObject
 
     /// <summary>Alias for CurrentDetails — used by XAML binding.</summary>
     public ObservableCollection<OrderDetail> SelectedOrderDetails => CurrentDetails;
+
+    partial void OnIsLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowEmptyState));
+    partial void OnPaginatedOrdersChanged(ObservableCollection<CustomerOrder> value) => OnPropertyChanged(nameof(ShowEmptyState));
+
+    partial void OnIsDetailLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowEmptyDetailState));
+    partial void OnCurrentDetailsChanged(ObservableCollection<OrderDetail> value) => OnPropertyChanged(nameof(ShowEmptyDetailState));
 }

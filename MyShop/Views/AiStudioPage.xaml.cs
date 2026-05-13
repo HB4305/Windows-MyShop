@@ -36,14 +36,4 @@ public sealed partial class AiStudioPage : Page
             }
         }
     }
-
-    private void InputBox_GotFocus(object sender, RoutedEventArgs e)
-    {
-        InputWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
-    }
-
-    private void InputBox_LostFocus(object sender, RoutedEventArgs e)
-    {
-        InputWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
-    }
 }

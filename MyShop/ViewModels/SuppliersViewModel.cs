@@ -33,9 +33,9 @@ public partial class SuppliersViewModel : ObservableObject
     private ObservableCollection<Supplier> _suppliers = [];
 
     [ObservableProperty]
-    private string _searchSupplierKeyword = string.Empty;
+    private string _searchQuery = string.Empty;
 
-    partial void OnSearchSupplierKeywordChanged(string value)
+    partial void OnSearchQueryChanged(string value)
     {
         SupplierCurrentPage = 1;
         _ = LoadSuppliersAsync();
@@ -69,7 +69,7 @@ public partial class SuppliersViewModel : ObservableObject
             IsLoadingSuppliers = true;
             SuppliersErrorMessage = string.Empty;
 
-            var (items, total) = await _supplierRepo.GetItemsAsync(SupplierCurrentPage, SupplierPageSize, SearchSupplierKeyword);
+            var (items, total) = await _supplierRepo.GetItemsAsync(SupplierCurrentPage, SupplierPageSize, SearchQuery);
             Suppliers = new ObservableCollection<Supplier>(items);
             SupplierTotalItems = total;
         }
@@ -143,9 +143,9 @@ public partial class SuppliersViewModel : ObservableObject
     private int _orderCurrentPage = 1;
 
     [ObservableProperty]
-    private string _searchOrderKeyword = string.Empty;
+    private string _searchOrderQuery = string.Empty;
 
-    partial void OnSearchOrderKeywordChanged(string value)
+    partial void OnSearchOrderQueryChanged(string value)
     {
         OrderCurrentPage = 1;
         _ = LoadSupplyOrdersAsync();
@@ -173,7 +173,7 @@ public partial class SuppliersViewModel : ObservableObject
             IsLoadingOrders = true;
             OrdersErrorMessage = string.Empty;
 
-            var (items, total) = await _supplyRepo.GetOrdersAsync(OrderCurrentPage, OrderPageSize, SearchOrderKeyword);
+            var (items, total) = await _supplyRepo.GetOrdersAsync(OrderCurrentPage, OrderPageSize, SearchOrderQuery);
             SupplyOrders = new ObservableCollection<SupplyOrder>(items);
             OrderTotalItems = total;
         }

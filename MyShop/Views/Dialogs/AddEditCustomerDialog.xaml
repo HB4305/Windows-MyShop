@@ -15,6 +15,13 @@
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <!-- Use ThemeResource for background to support dark mode, or force light if requested by branding -->
         <SolidColorBrush x:Key="ContentDialogBackground" Color="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+
+        <Style x:Key="DetailFieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
+            <Setter Property="FontFamily" Value="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+        </Style>
     </ContentDialog.Resources>
 
     <StackPanel Spacing="24" Margin="4,4,4,4" Width="460">
@@ -49,10 +56,10 @@
         <!-- Form Fields -->
         <StackPanel Spacing="20">
             <!-- Name -->
-            <StackPanel Spacing="8">
+            <StackPanel Spacing="6">
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="Full Name" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="Full name" Style="{StaticResource DetailFieldLabelStyle}"/>
+                    <TextBlock Text="*" Style="{StaticResource DetailFieldLabelStyle}" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
                 </StackPanel>
                 <Border x:Name="NameWrapper"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -64,30 +71,29 @@
                              MaxLength="255"
                              Background="Transparent"
                              BorderThickness="0"
-                             Padding="16,12"
-                             Text="{x:Bind CustomerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="16,10"
                              GotFocus="TextBox_GotFocus"
                              LostFocus="TextBox_LostFocus"
-                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                             Text="{x:Bind CustomerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.Resources>
                             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                         </TextBox.Resources>
                     </TextBox>
                 </Border>
-                <Border Visibility="{x:Bind NameValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="4,2,0,0">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <Border Visibility="{x:Bind NameValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="0,2,0,0">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind NameValidationMessage, Mode=OneWay}" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
 
             <!-- Phone -->
-            <StackPanel Spacing="8">
+            <StackPanel Spacing="6">
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <TextBlock Text="Phone Number" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <TextBlock Text="*" FontSize="14" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                    <TextBlock Text="Phone number" Style="{StaticResource DetailFieldLabelStyle}"/>
+                    <TextBlock Text="*" Style="{StaticResource DetailFieldLabelStyle}" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
                 </StackPanel>
                 <Border x:Name="PhoneWrapper"
                         Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -99,31 +105,30 @@
                              MaxLength="20"
                              Background="Transparent"
                              BorderThickness="0"
-                             Padding="16,12"
-                             Text="{x:Bind CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="16,10"
                              GotFocus="TextBox_GotFocus"
                              LostFocus="TextBox_LostFocus"
-                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                             Text="{x:Bind CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.Resources>
                             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
                         </TextBox.Resources>
                     </TextBox>
                 </Border>
-                <Border Visibility="{x:Bind PhoneValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="4,2,0,0">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind PhoneValidationMessage, Mode=OneWay}" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <Border Visibility="{x:Bind PhoneValidationMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}" Padding="0,2,0,0">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind PhoneValidationMessage, Mode=OneWay}" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
 
             <!-- Address -->
-            <StackPanel Spacing="8">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBlock Text="Address" FontSize="14" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                    <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="24" Padding="8,2">
-                        <TextBlock Text="Optional" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <StackPanel Spacing="6">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Text="Address" Style="{StaticResource DetailFieldLabelStyle}"/>
+                    <Border Background="{ThemeResource ControlFillColorSecondaryBrush}" CornerRadius="24" Padding="6,1">
+                        <TextBlock Text="Optional" FontSize="10" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
                     </Border>
                 </StackPanel>
                 <Border x:Name="AddressWrapper"
@@ -135,14 +140,13 @@
                              PlaceholderText="Enter shipping address..."
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
-                             MinHeight="100"
+                             MinHeight="90"
                              Background="Transparent"
                              BorderThickness="0"
-                             Padding="16,12"
-                             Text="{x:Bind CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Padding="16,10"
                              GotFocus="TextBox_GotFocus"
                              LostFocus="TextBox_LostFocus"
-                             FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans">
+                             Text="{x:Bind CustomerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.Resources>
                             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
                             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>

@@ -64,6 +64,7 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
         </Style>
+
     </Page.Resources>
 
     <Grid>
@@ -120,6 +121,15 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
+                            <!-- AI Error Indicator -->
+                            <Grid Margin="0,0,0,16" HorizontalAlignment="Center" Visibility="{Binding ChatError, Converter={StaticResource StringToVisibilityConverter}}">
+                                <Border CornerRadius="12" Padding="12,8" Background="{ThemeResource SystemFillColorCriticalBrush}" Opacity="0.1"/>
+                                <StackPanel Orientation="Horizontal" Spacing="8" Padding="12,8">
+                                    <FontIcon Glyph="&#xEA39;" FontSize="14" Foreground="{StaticResource DangerBrush}"/>
+                                    <TextBlock Text="{Binding ChatError}" FontSize="13" Foreground="{StaticResource DangerBrush}" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Grid>
+
                             <!-- AI Typing/Thinking Indicator -->
                             <Grid Margin="0,0,0,16" HorizontalAlignment="Left" Visibility="{Binding IsThinking, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <Border CornerRadius="16" Padding="16,12" Background="{ThemeResource ControlFillColorDefaultBrush}"
@@ -153,41 +163,39 @@
                     </ScrollViewer>
 
                     <!-- Input Area -->
-                    <Border Grid.Row="2" Padding="24" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Background="{ThemeResource ControlFillColorDefaultBrush}">
+                    <Border Grid.Row="2" Padding="24" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Background="Transparent">
                         <Grid ColumnSpacing="12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="48"/>
                             </Grid.ColumnDefinitions>
+                            
                             <!-- Standardized Premium Input Bar -->
-                            <Border x:Name="InputWrapper" 
-                                    Grid.Column="0" 
-                                    VerticalAlignment="Center"
-                                    Background="{ThemeResource ControlFillColorDefaultBrush}"
-                                    BorderThickness="1"
-                                    BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                                    CornerRadius="24"
-                                    Height="48"
-                                    Padding="16,0">
-                                <TextBox Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         PlaceholderText="Ask AI anything about your shop..."
-                                         Background="Transparent"
-                                         BorderThickness="0"
-                                         FontSize="14"
-                                         AcceptsReturn="False"
-                                         VerticalAlignment="Center"
-                                         VerticalContentAlignment="Center"
-                                         GotFocus="InputBox_GotFocus"
-                                         LostFocus="InputBox_LostFocus"
-                                         FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"
-                                         KeyDown="OnChatKeyDown">
-                                    <TextBox.Resources>
-                                        <!-- Remove default focus visual and border -->
-                                        <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
-                                        <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
-                                    </TextBox.Resources>
-                                </TextBox>
-                            </Border>
+                            <TextBox x:Name="ChatInputBox"
+                                     Grid.Column="0" 
+                                     Text="{Binding ChatInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource ModernSearchTextBoxStyle}"
+                                     PlaceholderText="Ask AI anything about your shop..."
+                                     FontSize="14"
+                                     AcceptsReturn="False"
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     BorderThickness="1"
+                                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                                     Background="Transparent"
+                                     CornerRadius="24"
+                                     Height="48"
+                                     KeyDown="OnChatKeyDown">
+                                <TextBox.Resources>
+                                    <Thickness x:Key="TextControlThemePadding">20,12,16,12</Thickness>
+                                    <Thickness x:Key="TextControlBorderThemeThickness">1</Thickness>
+                                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
+                                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#8B52FF"/>
+                                    <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+                                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+                                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+                                </TextBox.Resources>
+                            </TextBox>
                             
                             <Button Grid.Column="1" Command="{Binding SendChatCommand}"
                                     Background="{StaticResource AppPurpleBrush}" 

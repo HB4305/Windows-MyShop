@@ -194,39 +194,57 @@
               <TextBlock Text="Customer" FontSize="18" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
             </StackPanel>
           </Grid>
-          <Grid>
-            <AutoSuggestBox x:Name="CustomerSearchBox"
-                            PlaceholderText="Search customer by name..."
-                            Text="{Binding CustomerSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            ItemsSource="{Binding CustomerSuggestions}"
-                            TextChanged="CustomerSearchBox_TextChanged"
-                            SuggestionChosen="CustomerSearchBox_SuggestionChosen"
-                            QuerySubmitted="CustomerSearchBox_QuerySubmitted"
-                            CornerRadius="24"
-                            Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
-              <AutoSuggestBox.ItemTemplate>
-                <DataTemplate>
-                  <Grid ColumnSpacing="10" MinWidth="260">
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition Width="36"/>
-                      <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource PurpleLightBrush}">
-                      <FontIcon Glyph="&#xE77B;" FontSize="13" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <StackPanel Grid.Column="1" Spacing="1">
-                      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
-                      <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-                    </StackPanel>
-                  </Grid>
-                </DataTemplate>
-              </AutoSuggestBox.ItemTemplate>
-            </AutoSuggestBox>
-            <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
-                    Background="Transparent" BorderThickness="0" Padding="12" Margin="0,0,4,0"
-                    Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
-                    HorizontalAlignment="Right" VerticalAlignment="Center"/>
-          </Grid>
+          <Border x:Name="CustomerSearchWrapper"
+                  Background="{ThemeResource ControlFillColorDefaultBrush}"
+                  BorderThickness="1"
+                  BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                  CornerRadius="24"
+                  Height="48"
+                  VerticalAlignment="Center">
+            <Grid>
+              <AutoSuggestBox x:Name="CustomerSearchBox"
+                              PlaceholderText="Search customer by name..."
+                              Text="{Binding CustomerSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding CustomerSuggestions}"
+                              TextChanged="CustomerSearchBox_TextChanged"
+                              SuggestionChosen="CustomerSearchBox_SuggestionChosen"
+                              QuerySubmitted="CustomerSearchBox_QuerySubmitted"
+                              GotFocus="CustomerSearchBox_GotFocus"
+                              LostFocus="CustomerSearchBox_LostFocus"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              Padding="16,0,48,0"
+                              VerticalAlignment="Stretch"
+                              VerticalContentAlignment="Center"
+                              Style="{StaticResource ModernSearchAutoSuggestBoxStyle}">
+                <AutoSuggestBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid ColumnSpacing="10" MinWidth="260">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="36"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      <Border Width="32" Height="32" CornerRadius="16" Background="{StaticResource PurpleLightBrush}">
+                        <FontIcon Glyph="&#xE77B;" FontSize="13" Foreground="{StaticResource PurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                      </Border>
+                      <StackPanel Grid.Column="1" Spacing="1">
+                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}"/>
+                        <TextBlock Text="{Binding Phone}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                      </StackPanel>
+                    </Grid>
+                  </DataTemplate>
+                </AutoSuggestBox.ItemTemplate>
+                <AutoSuggestBox.Resources>
+                  <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                  <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                </AutoSuggestBox.Resources>
+              </AutoSuggestBox>
+              <Button Content="&#xE721;" FontFamily="Segoe MDL2 Assets" 
+                      Background="Transparent" BorderThickness="0" Padding="12" Margin="0,0,4,0"
+                      Foreground="{StaticResource AppPurpleBrush}" Style="{StaticResource ColorPreservingButtonStyle}"
+                      HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </Grid>
+          </Border>
           <TextBox PlaceholderText="Phone"
                    Text="{Binding CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    CornerRadius="24"

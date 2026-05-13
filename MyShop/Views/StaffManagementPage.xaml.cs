@@ -58,7 +58,8 @@ public sealed partial class StaffManagementPage : Page
         var result = await dialog.ShowAsync();
         if (result == ContentDialogResult.Primary)
         {
-            await ViewModel.LoadStaffAsync();
+            var formData = dialog.GetFormData();
+            await ViewModel.CreateStaffCommand.ExecuteAsync(formData);
         }
     }
 
@@ -74,7 +75,8 @@ public sealed partial class StaffManagementPage : Page
             var result = await dialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
             {
-                await ViewModel.LoadStaffAsync();
+                var formData = dialog.GetFormData();
+                await ViewModel.UpdateStaffCommand.ExecuteAsync(formData);
             }
         }
     }

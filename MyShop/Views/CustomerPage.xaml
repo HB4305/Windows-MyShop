@@ -93,7 +93,7 @@
                     VerticalAlignment="Center">
                 <AutoSuggestBox x:Name="SearchBox"
                                 PlaceholderText="Search customers..."
-                                Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 QuerySubmitted="OnSearchQuerySubmitted"
                                 QueryIcon="Find"
                                 Background="Transparent"
@@ -238,12 +238,12 @@
                                         <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center"
                                                     Visibility="{Binding DataContext.IsOwner, ElementName=SearchBox, Converter={StaticResource BoolToVisibilityConverter}}">
                                             <Button Background="Transparent" BorderThickness="0" Padding="4"
-                                                    Click="OnEditCustomerClick" ToolTipService.ToolTip="Edit"
+                                                    Click="OnEditCustomerClick" Tag="{x:Bind}" ToolTipService.ToolTip="Edit"
                   Style="{StaticResource ColorPreservingButtonStyle}">
                                                 <FontIcon Glyph="&#xE70F;" FontSize="14" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                                             </Button>
                                             <Button Background="Transparent" BorderThickness="0" Padding="4"
-                                                    Click="OnDeleteCustomerClick" ToolTipService.ToolTip="Delete"
+                                                    Click="OnDeleteCustomerClick" Tag="{x:Bind}" ToolTipService.ToolTip="Delete"
                   Style="{StaticResource ColorPreservingButtonStyle}">
                                                 <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="#DC2626"/>
                                             </Button>

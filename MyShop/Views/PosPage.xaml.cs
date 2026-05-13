@@ -148,6 +148,16 @@ public sealed partial class PosPage : Page
         }
     }
 
+    private void CustomerSearchBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        CustomerSearchWrapper.BorderBrush = (Brush)Application.Current.Resources["AppPurpleBrush"];
+    }
+
+    private void CustomerSearchBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        CustomerSearchWrapper.BorderBrush = (Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+    }
+
     private void Page_Tapped(object sender, TappedRoutedEventArgs e)
     {
         if (e.OriginalSource is not DependencyObject originalSource)

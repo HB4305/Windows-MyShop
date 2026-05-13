@@ -57,9 +57,9 @@ public partial class CustomerViewModel : ObservableObject
 
     // Searching
     [ObservableProperty]
-    private string _searchKeyword = string.Empty;
+    private string _searchQuery = string.Empty;
 
-    partial void OnSearchKeywordChanged(string value)
+    partial void OnSearchQueryChanged(string value)
     {
         CurrentPage = 1;
         _ = LoadCustomersAsync();
@@ -77,7 +77,7 @@ public partial class CustomerViewModel : ObservableObject
             var (items, totalCount) = await _service.GetCustomersAsync(
                 CurrentPage,
                 PageSize,
-                SearchKeyword);
+                SearchQuery);
 
             Customers = new ObservableCollection<Customer>(items);
             TotalItems = totalCount;
@@ -132,6 +132,22 @@ public partial class CustomerViewModel : ObservableObject
         catch (Exception ex)
         {
             ErrorMessage = $"Error deleting customer: {ex.Message}";
+        }
+    }
+
+    [RelayCommand]
+    public async Task SaveCustomerAsync(Customer customer)
+    {
+        if (customer == null) return;
+        
+        try
+        {
+            await _service.SaveCustomerAsync(customer);
+            await LoadCustomersAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error saving customer: {ex.Message}";
         }
     }
 }

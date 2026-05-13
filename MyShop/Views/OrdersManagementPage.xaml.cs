@@ -228,11 +228,11 @@ public sealed partial class OrdersManagementPage : Page
 
     private void SearchBox_GotFocus(object sender, RoutedEventArgs e)
     {
-        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+        SearchWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
     }
 
     private void SearchBox_LostFocus(object sender, RoutedEventArgs e)
     {
-        SearchWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+        SearchWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
     }
 }

@@ -88,9 +88,9 @@ public sealed partial class SupplierDialog : ContentDialog
     {
         if (sender is TextBox tb)
         {
-            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
-            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
-            else if (tb == TypeTextBox) TypeWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+            else if (tb == TypeTextBox) TypeWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
         }
     }
 
@@ -98,9 +98,9 @@ public sealed partial class SupplierDialog : ContentDialog
     {
         if (sender is TextBox tb)
         {
-            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
-            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
-            else if (tb == TypeTextBox) TypeWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+            else if (tb == TypeTextBox) TypeWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
         }
     }
 }

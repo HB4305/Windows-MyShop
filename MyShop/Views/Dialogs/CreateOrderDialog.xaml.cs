@@ -145,9 +145,9 @@ public sealed partial class CreateOrderDialog : ContentDialog
     {
         return sender switch
         {
+            TextBox textBox => textBox.Parent as Border,
             AutoSuggestBox searchBox => searchBox.Parent as Border,
             NumberBox numberBox => numberBox.Parent as Border,
-            MyShop.Controls.NumericTextBox numericTextBox => numericTextBox.Parent as Border,
             _ => null
         };
     }

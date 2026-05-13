@@ -124,6 +124,7 @@
               Height="48"
               VerticalAlignment="Center">
           <AutoSuggestBox x:Name="SearchBox"
+                          Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
                           PlaceholderText="Search products..."
                           Text="{Binding SearchKeyword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           QuerySubmitted="OnSearchQuerySubmitted"

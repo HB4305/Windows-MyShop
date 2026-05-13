@@ -61,11 +61,10 @@ public partial class CategoryViewModel : ObservableObject
     public int DisplayFrom => TotalItems == 0 ? 0 : (CurrentPage - 1) * PageSize + 1;
     public int DisplayTo => Math.Min(CurrentPage * PageSize, TotalItems);
 
-    // Searching
     [ObservableProperty]
-    private string _searchKeyword = string.Empty;
+    private string _searchQuery = string.Empty;
 
-    partial void OnSearchKeywordChanged(string value)
+    partial void OnSearchQueryChanged(string value)
     {
         CurrentPage = 1;
         _ = LoadCategoriesAsync();
@@ -86,7 +85,7 @@ public partial class CategoryViewModel : ObservableObject
             var (items, totalCount) = await _service.GetCategoriesAsync(
                 CurrentPage,
                 PageSize,
-                SearchKeyword);
+                SearchQuery);
 
             Categories = new ObservableCollection<Category>(items);
             TotalItems = totalCount;

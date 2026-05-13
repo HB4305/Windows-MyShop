@@ -20,12 +20,8 @@
       <Setter Property="FontSize" Value="16"/>
     </Style>
 
-    <Style x:Key="CreateOrderTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+    <Style x:Key="CreateOrderTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource ModernSearchTextBoxStyle}">
       <Setter Property="CornerRadius" Value="24"/>
-      <Setter Property="Padding" Value="12,12"/>
-      <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-      <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
-      <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
     <Style x:Key="CreateOrderAutoSuggestBoxStyle" TargetType="AutoSuggestBox" BasedOn="{StaticResource ModernSearchAutoSuggestBoxStyle}">
@@ -146,27 +142,27 @@
             <Border CornerRadius="24" 
                     Background="{ThemeResource ControlFillColorDefaultBrush}"
                     BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    Padding="0">
+                    BorderThickness="1">
               <AutoSuggestBox x:Name="ProductSearchBox"
+                      Style="{StaticResource ModernSearchAutoSuggestBoxStyle}"
                       PlaceholderText="Search product by name..."
                       QueryIcon="Find"
                       TextChanged="ProductSearchBox_TextChanged"
                       SuggestionChosen="ProductSearchBox_SuggestionChosen"
                       DisplayMemberPath="Name"
                       TextMemberPath="Name"
-                      BorderThickness="0"
-                      Background="Transparent"
                       GotFocus="Input_GotFocus"
                       LostFocus="Input_LostFocus"
                       Height="48"
                       VerticalContentAlignment="Center"
-                      Margin="0">
+                      FontFamily="{StaticResource AppDefaultFontFamily}">
                 <AutoSuggestBox.Resources>
-                  <ResourceDictionary>
-                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
-                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent"/>
-                  </ResourceDictionary>
+                  <!-- Style the internal search button -->
+                  <Style TargetType="Button" x:Key="AutoSuggestBoxQueryButtonStyle">
+                    <Setter Property="Foreground" Value="{StaticResource AppPurpleBrush}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                  </Style>
                 </AutoSuggestBox.Resources>
               </AutoSuggestBox>
             </Border>
@@ -182,75 +178,107 @@
           <StackPanel Grid.Row="1" Grid.Column="0" Spacing="8">
             <TextBlock Text="CUSTOMER INFORMATION" Style="{StaticResource HeaderStyle}" Margin="0"/>
 
-            <StackPanel Spacing="4">
-              <TextBox x:Name="CustomerNameBox"
-                       PlaceholderText="e.g. John Doe"
-                       Text="{x:Bind ViewModel.Order.CustomerName, Mode=TwoWay}"
-                       Style="{StaticResource CreateOrderTextBoxStyle}"
-                       GotFocus="Input_GotFocus"
-                       LostFocus="Input_LostFocus">
-                <TextBox.Header>
-                  <TextBlock Style="{StaticResource HeaderStyle}" Margin="0">
-                    <Run Text="Customer Name "/>
-                    <Run Text="*" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
-                  </TextBlock>
-                </TextBox.Header>
-              </TextBox>
-              <Border x:Name="CustomerNameErrorBorder" Visibility="Collapsed" Padding="4,2,0,0">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
-                  <TextBlock x:Name="CustomerNameErrorText" Text="" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                </StackPanel>
-              </Border>
-            </StackPanel>
-
-            <StackPanel Spacing="4">
-              <controls:NumericTextBox x:Name="CustomerPhoneBox"
-                       PlaceholderText="e.g. 0912345678"
-                       Text="{x:Bind ViewModel.Order.CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                       InputScope="TelephoneNumber"
-                       Style="{StaticResource CreateOrderTextBoxStyle}"
-                       GotFocus="Input_GotFocus"
-                       LostFocus="Input_LostFocus">
-                <controls:NumericTextBox.Header>
-                  <TextBlock Style="{StaticResource HeaderStyle}" Margin="0">
-                    <Run Text="Phone Number "/>
-                    <Run Text="*" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
-                  </TextBlock>
-                </controls:NumericTextBox.Header>
-              </controls:NumericTextBox>
-              <Border x:Name="CustomerPhoneErrorBorder" Visibility="Collapsed" Padding="4,2,0,0">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
-                  <TextBlock x:Name="CustomerPhoneErrorText" Text="" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
-                </StackPanel>
-              </Border>
-            </StackPanel>
-
-            <TextBox x:Name="CustomerAddressBox"
-                     PlaceholderText="Enter full address..."
-                     Text="{x:Bind ViewModel.Order.ShippingAddress, Mode=TwoWay}"
-                     Height="80"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                     Visibility="Collapsed"
-                     Style="{StaticResource CreateOrderTextBoxStyle}"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     GotFocus="Input_GotFocus"
-                     LostFocus="Input_LostFocus">
-              <TextBox.Header>
-                <TextBlock Style="{StaticResource HeaderStyle}" Margin="0">
-                  <Run Text="Shipping Address "/>
-                  <Run Text="*" Foreground="{ThemeResource SystemFillColorCriticalBrush}"/>
-                </TextBlock>
-              </TextBox.Header>
-            </TextBox>
-            <Border x:Name="CustomerAddressErrorBorder" Visibility="Collapsed" Padding="4,2,0,0">
-              <StackPanel Orientation="Horizontal" Spacing="6">
-                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
-                <TextBlock x:Name="CustomerAddressErrorText" Text="" FontSize="12" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+            <StackPanel Spacing="6">
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="Customer name" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="*" FontSize="13" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
               </StackPanel>
-            </Border>
+              <Border x:Name="CustomerNameWrapper"
+                      Background="{ThemeResource ControlFillColorDefaultBrush}"
+                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                      BorderThickness="1"
+                      CornerRadius="24">
+                <TextBox x:Name="CustomerNameBox"
+                         PlaceholderText="e.g. John Doe"
+                         Text="{x:Bind ViewModel.Order.CustomerName, Mode=TwoWay}"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="16,10"
+                         GotFocus="Input_GotFocus"
+                         LostFocus="Input_LostFocus">
+                  <TextBox.Resources>
+                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                  </TextBox.Resources>
+                </TextBox>
+              </Border>
+              <Border x:Name="CustomerNameErrorBorder" Visibility="Collapsed" Padding="0,2,0,0">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                  <TextBlock x:Name="CustomerNameErrorText" Text="" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="Phone number" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="*" FontSize="13" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              </StackPanel>
+              <Border x:Name="CustomerPhoneWrapper"
+                      Background="{ThemeResource ControlFillColorDefaultBrush}"
+                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                      BorderThickness="1"
+                      CornerRadius="24">
+                <controls:NumericTextBox x:Name="CustomerPhoneBox"
+                         PlaceholderText="e.g. 0912345678"
+                         Text="{x:Bind ViewModel.Order.CustomerPhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         InputScope="TelephoneNumber"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="16,10"
+                         GotFocus="Input_GotFocus"
+                         LostFocus="Input_LostFocus">
+                  <controls:NumericTextBox.Resources>
+                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                  </controls:NumericTextBox.Resources>
+                </controls:NumericTextBox>
+              </Border>
+              <Border x:Name="CustomerPhoneErrorBorder" Visibility="Collapsed" Padding="0,2,0,0">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                  <TextBlock x:Name="CustomerPhoneErrorText" Text="" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                </StackPanel>
+              </Border>
+            </StackPanel>
+
+            <StackPanel Spacing="6" Visibility="{x:Bind CustomerAddressBox.Visibility, Mode=OneWay}">
+              <StackPanel Orientation="Horizontal" Spacing="4">
+                <TextBlock Text="Shipping address" FontSize="13" FontWeight="SemiBold" Foreground="{ThemeResource TextFillColorPrimaryBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                <TextBlock Text="*" FontSize="13" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+              </StackPanel>
+              <Border x:Name="CustomerAddressWrapper"
+                      Background="{ThemeResource ControlFillColorDefaultBrush}"
+                      BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}"
+                      BorderThickness="1"
+                      CornerRadius="24">
+                <TextBox x:Name="CustomerAddressBox"
+                         PlaceholderText="Enter full address..."
+                         Text="{x:Bind ViewModel.Order.ShippingAddress, Mode=TwoWay}"
+                         Height="80"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Visibility="Visible"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         Padding="16,10"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         GotFocus="Input_GotFocus"
+                         LostFocus="Input_LostFocus">
+                  <TextBox.Resources>
+                    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+                    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                  </TextBox.Resources>
+                </TextBox>
+              </Border>
+              <Border x:Name="CustomerAddressErrorBorder" Visibility="Collapsed" Padding="0,2,0,0">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                  <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xEA39;" FontSize="10" Foreground="{ThemeResource SystemFillColorCriticalBrush}" VerticalAlignment="Center"/>
+                  <TextBlock x:Name="CustomerAddressErrorText" Text="" FontSize="11" Foreground="{ThemeResource SystemFillColorCriticalBrush}" FontFamily="ms-appx:///Assets/Fonts/MomoTrustSans-VariableFont_wght.ttf#Momo Trust Sans"/>
+                </StackPanel>
+              </Border>
+            </StackPanel>
           </StackPanel>
 
           <StackPanel Grid.Row="1" Grid.Column="1" Spacing="12">

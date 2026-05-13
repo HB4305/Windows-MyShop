@@ -140,7 +140,7 @@ Return ONLY the corrected JSON object. Do not add markdown or extra text.";
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception($"Gemini API error: {response.StatusCode} - {responseContent}");
+            throw new Exception($"Gemini API error: {response.StatusCode}. Details: {responseContent}");
         }
 
         var result = JsonSerializer.Deserialize<GeminiResponse>(responseContent, new JsonSerializerOptions
@@ -148,7 +148,18 @@ Return ONLY the corrected JSON object. Do not add markdown or extra text.";
             PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
         });
 
-        return result?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text ?? "No content generated.";
+        var candidate = result?.Candidates?.FirstOrDefault();
+        if (candidate == null)
+        {
+            return "No response from AI (Candidates list is empty). This might be due to safety filters.";
+        }
+
+        if (candidate.FinishReason != null && candidate.FinishReason != "STOP")
+        {
+            return $"AI stopped generating. Reason: {candidate.FinishReason}. This usually happens when content is blocked or safety filters are triggered.";
+        }
+
+        return candidate.Content?.Parts?.FirstOrDefault()?.Text ?? "No content generated.";
     }
 
     public async Task<Models.Ai.AiSearchFilter?> ParseSearchQueryAsync(string query)
@@ -221,5 +232,6 @@ Example 2: 'áo đá bóng từ 100k đến 300k' -> { ""keyword"": ""áo đá b
     private class GeminiCandidate
     {
         public GeminiContent? Content { get; set; }
+        public string? FinishReason { get; set; }
     }
 }

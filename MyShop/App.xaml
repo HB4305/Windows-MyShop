@@ -139,23 +139,40 @@
       <!-- ── Modern Search Styles ── -->
       <Style x:Key="ModernSearchTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="CornerRadius" Value="24"/>
-        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Height" Value="48"/>
         <Setter Property="Padding" Value="16,12"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="IsDeleteButtonVisible" Value="False"/>
+        <Setter Property="Resources">
+          <ResourceDictionary>
+            <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+          </ResourceDictionary>
+        </Setter>
       </Style>
 
       <Style x:Key="ModernSearchAutoSuggestBoxStyle" TargetType="AutoSuggestBox" BasedOn="{StaticResource {x:Type AutoSuggestBox}}">
         <Setter Property="CornerRadius" Value="24"/>
-        <Setter Property="Background" Value="{ThemeResource ControlFillColorDefaultBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{ThemeResource ControlStrokeColorDefaultBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Height" Value="48"/>
         <Setter Property="Padding" Value="16,12,48,12"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Resources">
+          <ResourceDictionary>
+            <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+            <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+            <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+            <Thickness x:Key="AutoSuggestBoxBorderThemeThickness">0</Thickness>
+          </ResourceDictionary>
+        </Setter>
       </Style>
 
       <!-- Global Implicit Styles for consistent focus effect -->
@@ -170,6 +187,10 @@
           <ResourceDictionary>
             <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
             <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#8B52FF"/>
+            <!-- Seamless transparency for internal parts -->
+            <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
           </ResourceDictionary>
         </Setter>
       </Style>
@@ -203,6 +224,10 @@
           <ResourceDictionary>
             <Thickness x:Key="TextControlBorderThemeThicknessFocused">1</Thickness>
             <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#8B52FF"/>
+            <!-- Seamless transparency for internal parts -->
+            <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+            <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
           </ResourceDictionary>
         </Setter>
       </Style>

@@ -86,4 +86,20 @@ public sealed partial class NegativeDiscrepancyReasonDialog : ContentDialog, INo
         storage = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb == ReasonTextBox)
+        {
+            ReasonWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+        }
+    }
+
+    private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox tb && tb == ReasonTextBox)
+        {
+            ReasonWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+        }
+    }
 }

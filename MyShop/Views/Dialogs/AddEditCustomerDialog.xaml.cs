@@ -110,27 +110,20 @@ public sealed partial class AddEditCustomerDialog : ContentDialog, INotifyProper
     public Customer GetCustomer() => _customer ?? new Customer();
 
     public ContentDialogResult Result { get; private set; } = ContentDialogResult.None;
-
+ 
     public new async Task<ContentDialogResult> ShowAsync()
     {
         await base.ShowAsync();
         return Result;
     }
 
-    private void SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (Equals(storage, value)) return;
-        storage = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
     private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
         if (sender is TextBox tb)
         {
-            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
-            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
-            else if (tb == AddressTextBox) AddressWrapper.BorderBrush = (Brush)ThemeResource.GetResource("AppPurpleBrush");
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
+            else if (tb == AddressTextBox) AddressWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["AppPurpleBrush"];
         }
     }
 
@@ -138,9 +131,16 @@ public sealed partial class AddEditCustomerDialog : ContentDialog, INotifyProper
     {
         if (sender is TextBox tb)
         {
-            if (tb == NameTextBox) NameWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
-            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
-            else if (tb == AddressTextBox) AddressWrapper.BorderBrush = (Brush)ThemeResource.GetResource("ControlStrokeColorDefaultBrush");
+            if (tb == NameTextBox) NameWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+            else if (tb == PhoneTextBox) PhoneWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
+            else if (tb == AddressTextBox) AddressWrapper.BorderBrush = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["ControlStrokeColorDefaultBrush"];
         }
+    }
+ 
+    private void SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (Equals(storage, value)) return;
+        storage = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

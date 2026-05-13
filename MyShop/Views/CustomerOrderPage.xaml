@@ -909,7 +909,7 @@
                             VerticalAlignment="Center"
                             Spacing="10"
                             Canvas.ZIndex="10"
-                            Visibility="{Binding PaginatedOrders.Count, Converter={StaticResource CountToVisibilityConverter}}">
+                            Visibility="{Binding ShowEmptyState, Converter={StaticResource BoolToVisibilityConverter}}">
                   <Border Width="60" Height="60" CornerRadius="30"
                           Background="{StaticResource PurpleLightBrush}" HorizontalAlignment="Center">
                     <TextBlock FontFamily="Segoe MDL2 Assets"
@@ -1124,7 +1124,7 @@
 
                 <TextBlock Text="No items in this order."
                            FontSize="13" Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                           Visibility="{Binding CurrentDetails.Count, Converter={StaticResource CountToVisibilityConverter}}"/>
+                           Visibility="{Binding ShowEmptyDetailState, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                 <Border BorderBrush="{ThemeResource ControlStrokeColorSecondaryBrush}"
                         BorderThickness="0,1,0,0" Margin="0,8,0,0"/>
